@@ -1,0 +1,6 @@
+
+INSERT INTO public.referencefamille VALUES (13, '2022-12-27 08:37:01.252', NULL, NULL, NULL, 'la famille reference de categorie famille', 'referenceFamilleCategorieVoyaeur', false, NULL, NULL);
+INSERT INTO public.referencefamille VALUES (14, '2022-12-27 08:37:01.253', NULL, NULL, NULL, 'la famille reference mode', 'referenceFamilleMode', false, NULL, NULL);
+INSERT INTO public.referencefamille VALUES (15, '2022-12-27 08:37:01.254', NULL, NULL, NULL, 'la famille reference du type de l''offre de voyage', 'referenceFamilleTypeOffreVoyage', false, NULL, NULL);
+INSERT INTO public.referencefamille VALUES (16, '2022-12-27 08:37:01.255', NULL, NULL, NULL, 'la famille reference du jour de la semaine', 'referenceFamilleJourSemaine', false, NULL, NULL);
+
