@@ -3,7 +3,7 @@ package com.africanb.africanb.utils.Constants;
 public class ProjectConstants {
 
     //Statuts Util Constants
-    public final static String COMPAGNIE_TRANSPORT_ENCOURS_TRAITEMENT = "compagnieTransportEncoursTraitement";
+    public final static String COMPAGNIE_TRANSPORT_ENCOURS_TRAITEMENT = "compagnieTransportEnCoursTraitement";
     public final static String COMPAGNIE_TRANSPORT_VALIDE = "compagnieTransportValide";
 
     //Type Propriete Constant

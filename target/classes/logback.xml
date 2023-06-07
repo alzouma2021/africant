@@ -5,9 +5,9 @@
         </encoder>
     </appender>
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>/home/alzouma/Documents/africanb/log/africanblog.log</file>
+        <file>D:\Projects SpringBoot\log\africanblog.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>/home/alzouma/Documents/africanb/log/africanblog-%d{yyyy-MM-dd}.log.gz</fileNamePattern>
+            <fileNamePattern>D:\Projects SpringBoot\log\africanblog-%d{yyyy-MM-dd}.log.gz</fileNamePattern>
             <maxHistory>30</maxHistory>
             <totalSizeCap>100MB</totalSizeCap>
         </rollingPolicy>
