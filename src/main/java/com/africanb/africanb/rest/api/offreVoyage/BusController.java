@@ -72,9 +72,9 @@ public class BusController {
         return response;
     }
 
-    @RequestMapping(value="/getBusbyOffrevoyage",method= RequestMethod.POST,consumes = {"application/json"},produces={"application/json"})
+    @RequestMapping(value="/getBusByOffreVoyage",method= RequestMethod.POST,consumes = {"application/json"},produces={"application/json"})
     public Response<BusDTO> get(@RequestBody Request<BusDTO> request) {
-        log.info("start method getBusbyOffrevoyage");
+        log.info("start method getBusByOffrevoyage");
         Response<BusDTO> response = new Response<BusDTO>();
         //requestBasic.setAttribute("CURRENT_LANGUAGE_IDENTIFIER", "fr");
         String languageID = (String) requestBasic.getAttribute("CURRENT_LANGUAGE_IDENTIFIER");

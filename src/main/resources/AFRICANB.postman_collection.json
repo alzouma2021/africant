@@ -1,8 +1,9 @@
 {
 	"info": {
-		"_postman_id": "3238504c-9bbb-4ba8-94dd-10caa463e8f7",
+		"_postman_id": "1b17ff8c-e4d7-452a-b5ef-17d0d0e1f65a",
 		"name": "AFRICANB",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "27783598"
 	},
 	"item": [
 		{
@@ -49,7 +50,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"datas\":[\n        {\n        \"designation\":\"France\",\n        \"description\":\"Un pays de de l'europe\"\n        }\n    ]\n}",
+							"raw": "{\n    \"datas\":[\n        {\n        \"designation\":\"France\",\n        \"description\":\"Un pays europeen\"\n        }\n    ]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -284,7 +285,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"datas\":[\n        {\n        \"designation\":\"Paris\",\n        \"paysId\": 79\n        }\n    ]\n}",
+							"raw": "{\n    \"datas\":[\n        {\n        \"designation\":\"Paris\",\n        \"paysId\": 8\n        }\n    ]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -379,7 +380,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"datas\":[\n        {\n        \"designation\":\"compagnieTransport_encoursTraitement\",\n        \"description\":\"Creation d'une compagnie de transport en cours de traitement\",\n        \"familleStatusUtilId\":27\n        }\n    ]\n}",
+							"raw": "{\n    \"datas\":[\n        {\n        \"designation\":\"compagnieTransportEnCoursTraitement\",\n        \"description\":\"Creation d'une compagnie de transport en cours de traitement\",\n        \"familleStatusUtilId\":3\n        }\n    ]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -412,7 +413,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"datas\":[\n        {\n            \"designation\":\"compagnieTransport03\",\n            \"description\":\"Compagnie de transport03\",\n            \"raisonSociale\":\"amm\",\n            \"telephone\":\"0565585741203\",\n            \"sigle\":\"CT000213\",\n            \"email\":\"alzoumamoussa18@univmetiers.ci\",\n            \"villeDesignation\":\"Abidjan\"\n        }\n    ]\n}\n    \n    \n    \n    \n    \n      ",
+							"raw": "{\n    \"datas\":[\n        {\n            \"designation\":\"compagnieTransport03\",\n            \"description\":\"Compagnie de transport03\",\n            \"raisonSociale\":\"amm\",\n            \"telephone\":\"0565585741203\",\n            \"sigle\":\"CT000213\",\n            \"email\":\"alzoumamoussa18@univmetiers.ci\",\n            \"villeDesignation\":\"Paris\"\n        }\n    ]\n}\n    \n    \n    \n    \n    \n      ",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -469,7 +470,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"data\":{\n        \"id\":3\n    }\n}",
+							"raw": "{\n    \"data\":{\n        \"id\": 10\n    }\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -539,12 +540,7 @@
 									"value": "\"amm14\"",
 									"type": "text"
 								}
-							],
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
+							]
 						},
 						"url": {
 							"raw": "http://localhost:8080/compagnieTransport/uploadAttestionTransport",
@@ -831,7 +827,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"datas\":[\n        {\n        \"designation\":\"AbidjanYamoussoukroCompagnieTransport\",\n        \"compagnieTransportRaisonSociale\":\"amm\",\n        \"typeOffreVoyageDesignation\":\"National\",\n        \"villeDepartDesignation\":\"Abidjan\",\n        \"villeDestinationDesignation\":\"Yamoussoukro\"\n        }\n    ]\n}",
+							"raw": "{\n    \"datas\":[\n        {\n        \"designation\":\"AbidjanYamoussoukroCompagnieTransport\",\n        \"compagnieTransportRaisonSociale\":\"amm\",\n        \"typeOffreVoyageDesignation\":\"National\",\n        \"villeDepartDesignation\":\"Paris\",\n        \"villeDestinationDesignation\":\"Paris\"\n        }\n    ]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1107,6 +1103,124 @@
 							"path": [
 								"prixOffreVoyages",
 								"getPrixTravelOfferByOffreVoyageDesignation"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "BUS",
+			"item": [
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"datas\":[\n        {\n        \"designation\":\"bus001\",\n        \"numeroBus\":\"10\",\n        \"nombrePlace\":10,\n        \"offreVoyageDesignation\":\"AbidjanYamoussoukroCompagnieTransport\"\n        }, \n        {\n        \"designation\":\"bus002\",\n        \"numeroBus\":\"11\",\n        \"nombrePlace\":10,\n        \"offreVoyageDesignation\":\"AbidjanYamoussoukroCompagnieTransport\"\n        }, \n        {\n        \"designation\":\"bus003\",\n        \"numeroBus\":\"14\",\n        \"nombrePlace\":15,\n        \"offreVoyageDesignation\":\"AbidjanYamoussoukroCompagnieTransport\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/bus",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"bus"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"datas\":[\n        {\n        \"id\":32,\n        \"prix\":10000\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/prixOffreVoyages",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"prixOffreVoyages"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update1",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"datas\":[\n        {\n            \"id\":32,\n            \"modeDesignation\":\"VIP\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/prixOffreVoyages",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"prixOffreVoyages"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getPrixByOffreVoyageDesignation",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"data\":\n        {\n            \"designation\":\"AbidjanYamoussoukroCompagnieTransport\"\n        }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/bus/getBusByOffreVoyage",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"bus",
+								"getBusByOffreVoyage"
 							]
 						}
 					},
