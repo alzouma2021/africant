@@ -21,6 +21,9 @@ public interface RoleFunctionalityRepository extends JpaRepository<RoleFunctiona
     @Query("select e from RoleFunctionality e where e.role.id= :roleId and e.functionality.id= :functionalityId and e.isDeleted= :isDeleted")
     RoleFunctionality findByRoleAndFunctionalityId(@Param("roleId") Integer roleId,@Param("functionalityId") Integer functionalityId, @Param("isDeleted") Boolean isDeleted);
 
+    @Query("select e from RoleFunctionality e where e.role.code= :roleCode and e.functionality.code= :functionalityCode and e.isDeleted= :isDeleted")
+    RoleFunctionality findByRoleAndFunctionalityCode(@Param("roleCode") String roleCode,@Param("functionalityCode") String functionalityCode, @Param("isDeleted") Boolean isDeleted);
+
     @Query("select e from RoleFunctionality e where e.role.id= :roleId and e.isDeleted= :isDeleted")
     List<RoleFunctionality> findByRoleId(@Param("roleId") Integer roleId, @Param("isDeleted") Boolean isDeleted);
 

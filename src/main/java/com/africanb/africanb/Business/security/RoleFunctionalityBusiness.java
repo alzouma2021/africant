@@ -64,29 +64,29 @@ public class RoleFunctionalityBusiness implements IBasicBusiness<Request<RoleFun
         List<RoleFunctionality> items = new ArrayList<RoleFunctionality>();
         for(RoleFunctionalityDTO dto : request.getDatas()){
             Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
-            fieldsToVerify.put("roleId", dto.getRoleId());
-            fieldsToVerify.put("functionalityId", dto.getFunctionalityId());
+            fieldsToVerify.put("roleCode", dto.getRoleCode());
+            fieldsToVerify.put("functionalityCode", dto.getFunctionalityCode());
             if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
                 response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
                 response.setHasError(true);
                 return response;
             }
             RoleFunctionality existingEntity = null;
-            existingEntity = roleFunctionalityRepository.findByRoleAndFunctionalityId(dto.getRoleId(),dto.getFunctionalityId(), false);
+            existingEntity = roleFunctionalityRepository.findByRoleAndFunctionalityCode(dto.getRoleCode(),dto.getFunctionalityCode(), false);
             if (existingEntity != null) {
-                response.setStatus(functionalError.DATA_EXIST("RoleFunctionality roleId -> " + dto.getRoleId() + "RoleFunctionality FunctionalityId -> " + dto.getFunctionalityId(), locale));
+                response.setStatus(functionalError.DATA_EXIST("RoleFunctionality roleCode -> " + dto.getRoleCode() + "RoleFunctionality FunctionalityCode -> " + dto.getFunctionalityCode(), locale));
                 response.setHasError(true);
                 return response;
             }
-            Role existingRole = roleRepository.findOne(dto.getRoleId(), false);
+            Role existingRole = roleRepository.findByCode(dto.getRoleCode(), false);
             if (existingRole == null) {
-                response.setStatus(functionalError.DATA_NOT_EXIST("Role roleId -> " + dto.getRoleId(), locale));
+                response.setStatus(functionalError.DATA_NOT_EXIST("Role roleCode -> " + dto.getRoleCode(), locale));
                 response.setHasError(true);
                 return response;
             }
-            Functionality existingFunctionality = functionalityRepository.findOne(dto.getFunctionalityId(), false);
+            Functionality existingFunctionality = functionalityRepository.findByCode(dto.getFunctionalityCode(), false);
             if (existingFunctionality == null) {
-                response.setStatus(functionalError.DATA_NOT_EXIST("Functionality FunctionalityId -> " + dto.getFunctionalityId() , locale));
+                response.setStatus(functionalError.DATA_NOT_EXIST("Functionality FunctionalityCode -> " + dto.getFunctionalityCode() , locale));
                 response.setHasError(true);
                 return response;
             }

@@ -112,8 +112,8 @@ public class RoleBusiness implements IBasicBusiness<Request<RoleDTO>, Response<R
                 List<RoleFunctionalityDTO> datasProfilFunctionality = new ArrayList<RoleFunctionalityDTO>();
                 dto.getDatasFunctionalities().forEach(f -> {
                     RoleFunctionalityDTO roleFunctionalityDto = new RoleFunctionalityDTO();
-                    roleFunctionalityDto.setRoleId(entitySaved.getId());
-                    roleFunctionalityDto.setFunctionalityId(f.getId());
+                    roleFunctionalityDto.setRoleCode(entitySaved.getCode());
+                    roleFunctionalityDto.setFunctionalityCode(f.getCode());
                     datasProfilFunctionality.add(roleFunctionalityDto);
                 });
                 Request<RoleFunctionalityDTO> subRequest = new Request<RoleFunctionalityDTO>();
