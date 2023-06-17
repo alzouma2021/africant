@@ -1142,6 +1142,34 @@
 					"response": []
 				},
 				{
+					"name": "create - https",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"datas\":[\n        {\n        \"designation\":\"bus006\",\n        \"numeroBus\":\"18\",\n        \"nombrePlace\":10,\n        \"offreVoyageDesignation\":\"AbidjanYamoussoukroCompagnieTransport\"\n        }, \n        {\n        \"designation\":\"bus007\",\n        \"numeroBus\":\"20\",\n        \"nombrePlace\":10,\n        \"offreVoyageDesignation\":\"AbidjanYamoussoukroCompagnieTransport\"\n        }, \n        {\n        \"designation\":\"bus008\",\n        \"numeroBus\":\"21\",\n        \"nombrePlace\":15,\n        \"offreVoyageDesignation\":\"AbidjanYamoussoukroCompagnieTransport\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:8443/bus",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8443",
+							"path": [
+								"bus"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "update",
 					"request": {
 						"method": "PUT",

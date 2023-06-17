@@ -517,6 +517,9 @@ public class Utilities {
     public static boolean isValidID(Long id) {
         return id != null && id > 0;
     }
+    public static boolean isValidIntegerID(Integer id) {
+        return id != null && id > 0;
+    }
 /*
     public static Integer getLoginUser() {//HttpRequest request doit etre en parametre
         return 1;
