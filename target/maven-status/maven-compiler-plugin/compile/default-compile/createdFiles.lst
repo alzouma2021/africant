@@ -24,6 +24,7 @@ com\africanb\africanb\dao\entity\compagnie\Bagage.class
 com\africanb\africanb\dao\entity\compagnie\CompagnieAttestionTransport.class
 com\africanb\africanb\Business\document\DocumentBusiness.class
 com\africanb\africanb\rest\api\offreVoyage\VilleEscaleController.class
+com\africanb\africanb\helper\dto\security\UsersDto.class
 com\africanb\africanb\dao\repository\offreVoyage\ValeurCaracteristiqueOffreVoyageRepository.class
 com\africanb\africanb\dao\entity\compagnie\ModePaiment\ModePaiementEnEspece.class
 com\africanb\africanb\dao\entity\compagnie\FamilleStatusUtil.class
@@ -76,6 +77,7 @@ com\africanb\africanb\helper\transformer\document\DocumentTransformer.class
 com\africanb\africanb\dao\entity\offreVoyage\JourSemaine.class
 com\africanb\africanb\helper\transformer\compagnie\ModePaiement\ModePaimentMtnMoneyTransformer.class
 com\africanb\africanb\helper\transformer\offrreVoyage\OffreVoyageTransformerImpl.class
+com\africanb\africanb\dao\repository\security\UsersRepository.class
 com\africanb\africanb\helper\contrat\FullTransformerQualifier.class
 com\africanb\africanb\helper\contrat\IBasicBusiness.class
 com\africanb\africanb\helper\status\Status.class
@@ -115,6 +117,7 @@ com\africanb\africanb\helper\FunctionalError.class
 com\africanb\africanb\rest\WebMvcConfig.class
 com\africanb\africanb\helper\dto\compagnie\ModePaiement\ModePaiementOrangeMoneyDTO.class
 com\africanb\africanb\dao\entity\compagnie\Ville.class
+com\africanb\africanb\utils\security\SecurityServices.class
 com\africanb\africanb\Business\offreVoyage\ValeurCaracteristiqueOffreVoyageLongBusiness.class
 com\africanb\africanb\dao\repository\compagnie\ModeAbonnementRepository.class
 com\africanb\africanb\dao\repository\compagnie\CompagnieAttestationTransportRepository.class
@@ -174,6 +177,7 @@ com\africanb\africanb\helper\transformer\offrreVoyage\ValeurCaracteristiqueOffre
 com\africanb\africanb\Business\compagnie\FamilleStatusUtilBusiness.class
 com\africanb\africanb\Business\security\RoleBusiness.class
 com\africanb\africanb\helper\dto\compagnie\StatusUtilDTO.class
+com\africanb\africanb\dao\entity\security\Users.class
 com\africanb\africanb\Business\security\RoleFunctionalityBusiness.class
 com\africanb\africanb\utils\Reference\ReferenceDTO.class
 com\africanb\africanb\Business\offreVoyage\BusBusiness.class

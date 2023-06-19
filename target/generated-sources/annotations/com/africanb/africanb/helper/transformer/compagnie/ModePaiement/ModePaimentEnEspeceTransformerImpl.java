@@ -12,7 +12,7 @@ import javax.annotation.processing.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-06-17T18:03:40+0000",
+    date = "2023-06-19T17:00:00+0000",
     comments = "version: 1.4.2.Final, compiler: javac, environment: Java 11.0.0.1 (Oracle Corporation)"
 )
 public class ModePaimentEnEspeceTransformerImpl implements ModePaimentEnEspeceTransformer {

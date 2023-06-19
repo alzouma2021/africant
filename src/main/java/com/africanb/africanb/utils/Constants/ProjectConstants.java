@@ -121,4 +121,20 @@ public class ProjectConstants {
     public final static String FUNCTIONNALITY_UPDATE_MODE_PAIEMENT="FunctionnalityUpdateModePaiement";
     public final static String FUNCTIONNALITY_DELETE_MODE_PAIEMENT="FunctionnalityDeleteModePaiement";
     public final static String FUNCTIONNALITY_LISTING_MODE_PAIEMENT="FunctionnalityListingModePaiement";
+
+    //Variables constantes authentication
+    public static final String SESSION_TOKEN_FIELD_SECRET_PHRASE = "asdfSFS34wfsdfsdfSDSD32dfsddDDerQSNCK34SOWEK5354fdgdf4";
+    public static final String SESSION_TOKEN_FILED_USER_ID = "id";
+    public static final String SESSION_TOKEN_FILED_USER_NOM = "nom";
+    public static final String SESSION_TOKEN_FILED_USER_PRENOM = "prenom";
+    public static final String SESSION_TOKEN_FILED_USER_MAIL = "mail";
+    public static final String SESSION_TOKEN_FILED_USER_LOGIN = "login";
+    public static final String SESSION_TOKEN_FILED_USER_ROLE = "role";
+
+    public static final String VERIFY_TOKEN_VALIDE = "valide";
+    public static final String VERIFY_TOKEN_EXPIRE = "expire";
+    public static final String VERIFY_TOKEN_INVALIDE = "invalide";
+    public static final String VERIFY_TOKEN_MAUVAIS = "mauvais";
+
+
 }
