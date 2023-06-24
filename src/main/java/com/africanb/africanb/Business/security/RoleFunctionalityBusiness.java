@@ -134,10 +134,10 @@ public class RoleFunctionalityBusiness implements IBasicBusiness<Request<RoleFun
                 response.setHasError(true);
                 return response;
             }
-            Integer entityToSaveId = entityToSave.getId();
+            Long entityToSaveId = entityToSave.getId();
             RoleFunctionalityDTO entityToSaveDto = RoleFunctionalityTransformer.INSTANCE.toDto(entityToSave);
             Role existingRole = entityToSave.getRole();
-            if (Utilities.isValidIntegerID(dto.getRoleId()) && !entityToSave.getRole().getId().equals(dto.getRoleId())) {
+            if (Utilities.isValidID(dto.getRoleId()) && !entityToSave.getRole().getId().equals(dto.getRoleId())) {
                 existingRole = roleRepository.findOne(dto.getRoleId(), false);
                 if (existingRole == null) {
                     response.setStatus(functionalError.DATA_NOT_EXIST("role roleId -> " + dto.getRoleId(), locale));
@@ -146,7 +146,7 @@ public class RoleFunctionalityBusiness implements IBasicBusiness<Request<RoleFun
                 }
             }
             Functionality existingFunctionality = entityToSave.getFunctionality();
-            if (Utilities.isValidIntegerID(dto.getFunctionalityId()) && !entityToSave.getFunctionality().getId().equals(dto.getFunctionalityId())) {
+            if (Utilities.isValidID(dto.getFunctionalityId()) && !entityToSave.getFunctionality().getId().equals(dto.getFunctionalityId())) {
                 existingFunctionality = functionalityRepository.findOne(dto.getFunctionalityId(), false);
                 if (existingFunctionality == null) {
                     response.setStatus(functionalError.DATA_NOT_EXIST("functionality functionalityId -> " + dto.getFunctionalityId(), locale));

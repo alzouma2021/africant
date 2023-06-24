@@ -2,12 +2,15 @@ package com.africanb.africanb.rest.fact;
 
 
 import com.africanb.africanb.Business.fact.BusinessFactory;
+import com.africanb.africanb.Business.fact.UsersBusinessFactory;
+import com.africanb.africanb.Business.security.UsersBusiness;
 import com.africanb.africanb.helper.ExceptionUtils;
 import com.africanb.africanb.helper.FunctionalError;
 import com.africanb.africanb.helper.contrat.IBasicBusiness;
 import com.africanb.africanb.helper.contrat.IController;
 import com.africanb.africanb.helper.contrat.Request;
 import com.africanb.africanb.helper.contrat.Response;
+import com.africanb.africanb.helper.dto.security.UsersDTO;
 import com.africanb.africanb.helper.enums.FunctionalityEnum;
 import com.africanb.africanb.helper.status.StatusCode;
 import com.africanb.africanb.helper.status.StatusMessage;
@@ -26,8 +29,8 @@ public class ControllerFactory<DTO> implements IController<DTO> {
 
     @Autowired
     private BusinessFactory<DTO> businessFactory;
- /*   @Autowired
-    private UsersBusinessFactory usersBusinessFactory;*/
+    @Autowired
+    private UsersBusinessFactory usersBusinessFactory;
     @Autowired
     private FunctionalError functionalError;
     @Autowired
@@ -184,13 +187,12 @@ public class ControllerFactory<DTO> implements IController<DTO> {
         return null;
     }
 
-  /*  public Response<UsersDto> login(UsersBusiness usersBusiness, Request<UsersDto> request, FunctionalityEnum functionalityEnum) {
-        Response<UsersDto> response   = new Response<UsersDto>();
+    public Response<UsersDTO> login(UsersBusiness usersBusiness, Request<UsersDTO> request, FunctionalityEnum functionalityEnum) {
+        Response<UsersDTO> response   = new Response<UsersDTO>();
         String        languageID = (String) requestBasic.getAttribute("CURRENT_LANGUAGE_IDENTIFIER");
         log.info("la langue "+ languageID);
         Locale        locale     = new Locale(languageID, "");
         try {
-
             response = usersBusinessFactory.login(usersBusiness, request, functionalityEnum, locale);
             if(response.isHasError()){
                 log.info(String.format("Erreur| code: {} -  message: {}", response.getStatus().getCode(), response.getStatus().getMessage()));
@@ -210,5 +212,5 @@ public class ControllerFactory<DTO> implements IController<DTO> {
             exceptionUtils.EXCEPTION(response, locale, e);
         }
         return response;
-    }*/
+    }
 }

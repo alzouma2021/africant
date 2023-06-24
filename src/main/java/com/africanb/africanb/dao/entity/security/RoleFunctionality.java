@@ -17,7 +17,7 @@ public class RoleFunctionality implements Serializable, Cloneable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "role_id")
@@ -31,7 +31,7 @@ public class RoleFunctionality implements Serializable, Cloneable {
     private Date createdAt;
     private Date updatedAt;
     private Date deletedAt;
-    private Integer createdBy;
-    private Integer updatedBy;
-    private Integer deletedBy;
+    private Long createdBy;
+    private Long updatedBy;
+    private Long deletedBy;
 }

@@ -11,12 +11,12 @@ import lombok.ToString;
 @JsonInclude(JsonInclude.Include.NON_NULL) @JsonPropertyOrder(alphabetic = true)
 public class RoleFunctionalityDTO {
 
-    private Integer id;
+    private Long id;
 
-    private Integer roleId;
+    private Long roleId;
     private String roleLibelle;
     private String roleCode;
-    private Integer functionalityId;
+    private Long functionalityId;
     private String functionalityLibelle;
     private String functionalityCode;
 
@@ -26,25 +26,25 @@ public class RoleFunctionalityDTO {
     private String updatedAt;
     private String deletedAt;
 
-    private Integer createdBy;
-    private Integer updatedBy;
-    private Integer deletedBy;
+    private Long createdBy;
+    private Long updatedBy;
+    private Long deletedBy;
 
     /// SEARCH PARAM//
 
-    private SearchParam<Integer> roleIdParam;
+    private SearchParam<Long> roleIdParam;
     private SearchParam<String>  roleLibelleParam;
     private SearchParam<String>  roleCodeParam;
-    private SearchParam<Integer>  functionalityIdParam;
+    private SearchParam<Long>  functionalityIdParam;
     private SearchParam<String>  functionalityLibelleParam;
     private SearchParam<String>  functionalityCodeParam;
     private SearchParam<Boolean> isDeletedParam;
     private SearchParam<String> createdAtParam;
     private SearchParam<String> updatedAtParam;
     private SearchParam<String> deletedAtParam;
-    private SearchParam<Integer> createdByParam;
-    private SearchParam<Integer> updatedByParam;
-    private SearchParam<Integer> deletedByParam;
+    private SearchParam<Long> createdByParam;
+    private SearchParam<Long> updatedByParam;
+    private SearchParam<Long> deletedByParam;
 
     // order param
     private String orderField;

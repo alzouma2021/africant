@@ -15,7 +15,7 @@ import org.springframework.data.repository.query.Param;
 public interface UsersRepository extends JpaRepository<Users, Integer> {
 
     @Query("select e from Users e where e.id= :id and e.isDeleted= :isDeleted")
-    Users findOne(@Param("id") Integer id, @Param("isDeleted") Boolean isDeleted);
+    Users findOne(@Param("id") Long id, @Param("isDeleted") Boolean isDeleted);
 
     @Query("select e from Users e where e.login= :login and e.isDeleted= :isDeleted")
     Users findByLogin(@Param("login")String login, @Param("isDeleted")Boolean isDeleted);
@@ -25,6 +25,9 @@ public interface UsersRepository extends JpaRepository<Users, Integer> {
 
     @Query("select e from Users e where e.matricule= :matricule and e.isDeleted= :isDeleted")
     Users findByMatricule(@Param("matricule") String matricule, @Param("isDeleted") Boolean isDeleted);
+
+    @Query("select e from Users e where e.email= :email and e.isDeleted= :isDeleted")
+    Users findByEmail(@Param("email") String email, @Param("isDeleted") Boolean isDeleted);
 
     @Query("select e from Users e where e.isDeleted= :isDeleted")
     List<Users> findByIsDeleted(@Param("isDeleted") Boolean isDeleted);

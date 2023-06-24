@@ -15,7 +15,7 @@ import java.util.*;
 public interface RoleRepository extends JpaRepository<Role, Integer> {
 
     @Query("select e from Role e where e.id= :id and e.isDeleted= :isDeleted")
-    Role findOne(@Param("id") Integer id, @Param("isDeleted") Boolean isDeleted);
+    Role findOne(@Param("id") Long id, @Param("isDeleted") Boolean isDeleted);
 
     @Query("select e from Role e where e.code= :code and e.isDeleted= :isDeleted")
     Role findByCode(@Param("code") String code, @Param("isDeleted") Boolean isDeleted);

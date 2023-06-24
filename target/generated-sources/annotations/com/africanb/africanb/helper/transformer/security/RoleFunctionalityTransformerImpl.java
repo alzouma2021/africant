@@ -12,7 +12,7 @@ import javax.annotation.processing.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-06-24T12:00:28+0000",
+    date = "2023-06-24T18:39:04+0000",
     comments = "version: 1.4.2.Final, compiler: javac, environment: Java 11.0.0.1 (Oracle Corporation)"
 )
 public class RoleFunctionalityTransformerImpl implements RoleFunctionalityTransformer {
@@ -110,7 +110,7 @@ public class RoleFunctionalityTransformerImpl implements RoleFunctionalityTransf
         return roleFunctionality;
     }
 
-    private Integer entityRoleId(RoleFunctionality roleFunctionality) {
+    private Long entityRoleId(RoleFunctionality roleFunctionality) {
         if ( roleFunctionality == null ) {
             return null;
         }
@@ -118,7 +118,7 @@ public class RoleFunctionalityTransformerImpl implements RoleFunctionalityTransf
         if ( role == null ) {
             return null;
         }
-        Integer id = role.getId();
+        Long id = role.getId();
         if ( id == null ) {
             return null;
         }
@@ -140,7 +140,7 @@ public class RoleFunctionalityTransformerImpl implements RoleFunctionalityTransf
         return libelle;
     }
 
-    private Integer entityFunctionalityId(RoleFunctionality roleFunctionality) {
+    private Long entityFunctionalityId(RoleFunctionality roleFunctionality) {
         if ( roleFunctionality == null ) {
             return null;
         }
@@ -148,7 +148,7 @@ public class RoleFunctionalityTransformerImpl implements RoleFunctionalityTransf
         if ( functionality == null ) {
             return null;
         }
-        Integer id = functionality.getId();
+        Long id = functionality.getId();
         if ( id == null ) {
             return null;
         }

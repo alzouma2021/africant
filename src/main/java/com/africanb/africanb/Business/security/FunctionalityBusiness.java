@@ -189,7 +189,7 @@ public class FunctionalityBusiness implements IBasicBusiness<Request<Functionali
                 response.setHasError(true);
                 return response;
             }
-            Integer entityToSaveId = entityToSave.getId();
+            Long entityToSaveId = entityToSave.getId();
             if (Utilities.isNotBlank(dto.getCode()) && !dto.getCode().equals(entityToSave.getCode())) {
                 Functionality existingEntity = functionalityRepository.findByCode(dto.getCode(), false);
                 if (existingEntity != null && !existingEntity.getId().equals(entityToSave.getId())) {

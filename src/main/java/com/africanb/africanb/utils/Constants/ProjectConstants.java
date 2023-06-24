@@ -34,7 +34,6 @@ public class ProjectConstants {
     public final static String ROLE_UTI_SIMPLE="RoleUtiSimple";
 
     //Differentes fonctionnalites
-
     public final static String FUNCTIONNALITY_CREATE_REFERENCE="FunctionnalityCreateReference";
     public final static String FUNCTIONNALITY_LISTING_REFERENCE="FunctionnalityListingReference";
     public final static String FUNCTIONNALITY_UPDATE_REFERENCE="FunctionnalityUpdateReference";
@@ -136,5 +135,7 @@ public class ProjectConstants {
     public static final String VERIFY_TOKEN_INVALIDE = "invalide";
     public static final String VERIFY_TOKEN_MAUVAIS = "mauvais";
 
+    //Default Password
+    public static final String USER_PASSWORD_DEFAULT="0123456789";
 
 }

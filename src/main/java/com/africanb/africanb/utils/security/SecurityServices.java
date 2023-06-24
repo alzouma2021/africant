@@ -116,7 +116,7 @@ public class SecurityServices {
     }*/
 
     public  boolean authenticateUser(Jws<Claims> token) {
-        Integer userId = Integer.valueOf(token.getBody().getId());
+        Long userId = Long.valueOf(token.getBody().getId());
         Users user = usersRepository.findOne(userId,false);
         if(user == null){
             return false;

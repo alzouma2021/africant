@@ -24,7 +24,6 @@ com\africanb\africanb\dao\entity\compagnie\Bagage.class
 com\africanb\africanb\dao\entity\compagnie\CompagnieAttestionTransport.class
 com\africanb\africanb\Business\document\DocumentBusiness.class
 com\africanb\africanb\rest\api\offreVoyage\VilleEscaleController.class
-com\africanb\africanb\helper\dto\security\UsersDto.class
 com\africanb\africanb\dao\repository\offreVoyage\ValeurCaracteristiqueOffreVoyageRepository.class
 com\africanb\africanb\dao\entity\compagnie\ModePaiment\ModePaiementEnEspece.class
 com\africanb\africanb\dao\entity\compagnie\FamilleStatusUtil.class
@@ -82,6 +81,7 @@ com\africanb\africanb\helper\contrat\FullTransformerQualifier.class
 com\africanb\africanb\helper\contrat\IBasicBusiness.class
 com\africanb\africanb\helper\status\Status.class
 com\africanb\africanb\helper\exceptions\exceptionCaptor.class
+com\africanb\africanb\helper\transformer\security\UsersTransformerImpl.class
 com\africanb\africanb\Business\offreVoyage\VilleEscaleBusiness.class
 com\africanb\africanb\utils\Reference\Reference.class
 com\africanb\africanb\helper\dto\compagnie\ModePaiement\ModePaiementDTO.class
@@ -143,6 +143,7 @@ com\africanb\africanb\dao\entity\offreVoyage\ValeurCaracteristiqueOffreVoyageLon
 com\africanb\africanb\helper\transformer\offrreVoyage\PrixOffreVoyageTransformer.class
 com\africanb\africanb\Business\compagnie\ModePaiement\ModePaiementMoovMoneyBusiness.class
 com\africanb\africanb\dao\entity\compagnie\CompagnieTransport.class
+com\africanb\africanb\rest\api\security\UsersController.class
 com\africanb\africanb\helper\transformer\offrreVoyage\ValeurCaracteristiqueOffreVoyageLongTransformerImpl.class
 com\africanb\africanb\dao\repository\compagnie\PaysRepository.class
 com\africanb\africanb\rest\api\reference\ReferenceController.class
@@ -157,6 +158,7 @@ com\africanb\africanb\Business\offreVoyage\OffreVoyageBusiness.class
 com\africanb\africanb\helper\transformer\offrreVoyage\PrixOffreVoyageTransformerImpl.class
 com\africanb\africanb\helper\transformer\offrreVoyage\ProgrammeTransformerImpl.class
 com\africanb\africanb\helper\dto\offreVoyage\PrixOffreVoyageDTO.class
+com\africanb\africanb\helper\dto\security\UsersDTO.class
 com\africanb\africanb\helper\transformer\compagnie\StatusUtilCompagnieTransportTransformer.class
 com\africanb\africanb\helper\transformer\compagnie\ModePaiement\ModePaimentWaveTransformerImpl.class
 com\africanb\africanb\helper\dto\security\FunctionalityDTO.class
@@ -187,6 +189,7 @@ com\africanb\africanb\helper\transformer\compagnie\CompagnieTransportTransformer
 com\africanb\africanb\helper\transformer\compagnie\AbonnementPeriodiqueTransformerImpl.class
 com\africanb\africanb\helper\transformer\compagnie\AbonnementPrelevementTransformer.class
 com\africanb\africanb\helper\transformer\compagnie\ModePaiement\ModePaimentOrangeMoneyTransformer.class
+com\africanb\africanb\Business\fact\UsersBusinessFactory.class
 com\africanb\africanb\utils\Reference\ReferenceFamilleDTO.class
 com\africanb\africanb\helper\transformer\offrreVoyage\VilleEscaleTransformerImpl.class
 com\africanb\africanb\dao\repository\offreVoyage\BusRepository.class
@@ -242,10 +245,13 @@ com\africanb\africanb\dao\entity\compagnie\ModePaiment\ModePaiementWave.class
 com\africanb\africanb\Business\offreVoyage\ValeurCaracteristiqueOffreVoyageBusiness.class
 com\africanb\africanb\dao\repository\Reference\ReferenceFamilleRepository.class
 com\africanb\africanb\Business\compagnie\PaysBusiness.class
+com\africanb\africanb\helper\dto\security\UsersPassWordDTO.class
 com\africanb\africanb\rest\api\offreVoyage\JourSemaineController.class
 com\africanb\africanb\rest\api\offreVoyage\PrixOffreVoyageController.class
 com\africanb\africanb\helper\transformer\compagnie\GareTransformer.class
+com\africanb\africanb\helper\transformer\security\UsersTransformer.class
 com\africanb\africanb\helper\dto\compagnie\ModeAbonnement\ModeAbonnementDTO.class
+com\africanb\africanb\Business\security\UsersBusiness.class
 com\africanb\africanb\dao\repository\compagnie\ModePaiement\ModePaiementRepository.class
 com\africanb\africanb\dao\entity\offreVoyage\ProprieteOffreVoyage.class
 com\africanb\africanb\dao\repository\offreVoyage\OffreVoyageRepository.class

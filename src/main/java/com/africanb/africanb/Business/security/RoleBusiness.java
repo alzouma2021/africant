@@ -190,7 +190,7 @@ public class RoleBusiness implements IBasicBusiness<Request<RoleDTO>, Response<R
                 response.setHasError(true);
                 return response;
             }
-            Integer entityToSaveId = entityToSave.getId();
+            Long entityToSaveId = entityToSave.getId();
             if (Utilities.isNotBlank(dto.getCode()) && !dto.getCode().equals(entityToSave.getCode())) { //verify code
                 Role existingEntity = roleRepository.findByCode(dto.getCode(), false);
                 if (existingEntity != null && !existingEntity.getId().equals(entityToSave.getId())) {
@@ -227,7 +227,7 @@ public class RoleBusiness implements IBasicBusiness<Request<RoleDTO>, Response<R
                 }
                 for (FunctionalityDTO f : dto.getDatasFunctionalities()) {
                     RoleFunctionalityDTO roleFunctionalityDto = new RoleFunctionalityDTO();
-                    roleFunctionalityDto.setRoleId(entityToSaveId);
+                    roleFunctionalityDto.setRoleId(Long.valueOf(entityToSaveId));
                     roleFunctionalityDto.setFunctionalityId(f.getId());
                     Request<RoleFunctionalityDTO> subRequests = new Request<RoleFunctionalityDTO>();
                     subRequests.setDatas(Arrays.asList(roleFunctionalityDto));

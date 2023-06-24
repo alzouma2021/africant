@@ -14,7 +14,7 @@ import java.util.List;
 @JsonPropertyOrder(alphabetic = true)
 public class RoleDTO {
 
-    private Integer id;
+    private Long id;
     private String code;
     private String libelle;
 
@@ -25,22 +25,22 @@ public class RoleDTO {
     private String updatedAt;
     private String deletedAt;
 
-    private Integer createdBy;
-    private Integer updatedBy;
-    private Integer deletedBy;
+    private Long createdBy;
+    private Long updatedBy;
+    private Long deletedBy;
 
     /// SEARCH PARAM//
 
-    private SearchParam<Integer> idParam;
+    private SearchParam<Long> idParam;
     private SearchParam<String> codeParam;
     private SearchParam<String> libelleParam;
     private SearchParam<Boolean> isDeletedParam;
     private SearchParam<String> createdAtParam;
     private SearchParam<String> updatedAtParam;
     private SearchParam<String> deletedAtParam;
-    private SearchParam<Integer> createdByParam;
-    private SearchParam<Integer> updatedByParam;
-    private SearchParam<Integer> deletedByParam;
+    private SearchParam<Long> createdByParam;
+    private SearchParam<Long> updatedByParam;
+    private SearchParam<Long> deletedByParam;
 
     // order param
     private String orderField;
