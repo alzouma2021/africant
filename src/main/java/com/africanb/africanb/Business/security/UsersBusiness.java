@@ -100,6 +100,7 @@ public class UsersBusiness implements IBasicBusiness<Request<UsersDTO>, Response
         usersRepository.save(existingEntity);
         //Generate token
         String token = SecurityServices.generateToken(existingEntity);
+        log.info("_103  Génération de token  :: "+token);
         existingEntityDto.setToken(token);
         //Return reponse
         response.setItem(existingEntityDto);

@@ -32,10 +32,10 @@ public class Users implements Serializable {
     @Column(length = 20)
     private String telephone;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne//(fetch = FetchType.EAGER)
     private Role role;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(cascade = CascadeType.ALL)
     private CompagnieTransport compagnieTransport;
 
     private Boolean isDeleted;
