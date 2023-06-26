@@ -354,7 +354,16 @@ public class RoleBusiness implements IBasicBusiness<Request<RoleDTO>, Response<R
 
     @Override
     public Response<RoleDTO> getAll(Locale locale) throws ParseException {
-        return null;
+        Response<RoleDTO> response = new Response<RoleDTO>();
+        Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+        List<Role> roles = null;
+        roles = roleRepository.findByIsDeleted(false);
+        List<RoleDTO> roleDtos = RoleTransformer.INSTANCE.toDtos(roles);
+        response.setItems(roleDtos);
+        response.setHasError(false);
+        response.setStatus(functionalError.SUCCESS("",locale));
+        log.info("----end get role -----");
+        return response;
     }
 
     private Response<RoleDTO> blockDuplicationDataUpdate(Request<RoleDTO> request, Locale locale, Response<RoleDTO> response, List<RoleDTO> itemsDtos) {

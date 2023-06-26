@@ -20,6 +20,7 @@ public interface FunctionalityRepository extends JpaRepository<Functionality, In
     @Query("select e from Functionality e where e.code= :code and e.isDeleted= :isDeleted")
     Functionality findByCode(@Param("code") String code, @Param("isDeleted") Boolean isDeleted);
 
+
     @Query("select e from Functionality e where e.libelle= :libelle and e.isDeleted= :isDeleted")
     Functionality findByLibelle(@Param("libelle") String libelle, @Param("isDeleted") Boolean isDeleted);
 

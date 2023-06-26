@@ -1,7 +1,6 @@
 package com.africanb.africanb.rest.api.security;
 
 import com.africanb.africanb.Business.security.FunctionalityBusiness;
-import com.africanb.africanb.Business.security.RoleBusiness;
 import com.africanb.africanb.helper.ExceptionUtils;
 import com.africanb.africanb.helper.FunctionalError;
 import com.africanb.africanb.helper.TechnicalError;
@@ -81,14 +80,40 @@ public class FunctionalityController {
         return response;
     }
 
-    @RequestMapping(value = "/getFunctionalities", method = RequestMethod.POST, consumes = {"application/json"}, produces = {"application/json"})
-    public Response<FunctionalityDTO> getFunctionalties(@RequestBody Request<RoleDTO> request) {
+    @RequestMapping(value = "/getFunctionalitiesByRole", method = RequestMethod.POST, consumes = {"application/json"}, produces = {"application/json"})
+    public Response<FunctionalityDTO> getFunctionalitiesByRole(@RequestBody Request<RoleDTO> request) {
         Response<FunctionalityDTO> response = new Response<FunctionalityDTO>();
         String languageID = (String) requestBasic.getAttribute("CURRENT_LANGUAGE_IDENTIFIER");
         log.info("la langue " + languageID);
         Locale locale = new Locale(languageID, "");
         try {
-            response = functionalityBusiness.getFunctionalities(request,locale) ; //Appel
+            response = functionalityBusiness.getFunctionalitiesByRole(request,locale) ; //Appel
+            if (response.isHasError()) {
+                log.info(String.format("Erreur| code: {} -  message: {}", response.getStatus().getCode(), response.getStatus().getMessage()));
+                return response;
+            }
+            log.info(String.format("code: {} -  message: {}", StatusCode.SUCCESS, StatusMessage.SUCCESS));
+        } catch (CannotCreateTransactionException e) {
+            exceptionUtils.CANNOT_CREATE_TRANSACTION_EXCEPTION(response, locale, e);
+        } catch (TransactionSystemException e) {
+            exceptionUtils.TRANSACTION_SYSTEM_EXCEPTION(response, locale, e);
+        } catch (RuntimeException e) {
+            exceptionUtils.RUNTIME_EXCEPTION(response, locale, e);
+        } catch (Exception e) {
+            exceptionUtils.EXCEPTION(response, locale, e);
+        }
+        return response;
+    }
+
+
+    @RequestMapping(value = "/getAll", method = RequestMethod.POST, consumes = {"application/json"}, produces = {"application/json"})
+    public Response<FunctionalityDTO> getAll(@RequestBody Request<FunctionalityDTO> request) {
+        Response<FunctionalityDTO> response = new Response<FunctionalityDTO>();
+        String languageID = (String) requestBasic.getAttribute("CURRENT_LANGUAGE_IDENTIFIER");
+        log.info("la langue " + languageID);
+        Locale locale = new Locale(languageID, "");
+        try {
+            response = functionalityBusiness.getAll(locale) ; //Appel
             if (response.isHasError()) {
                 log.info(String.format("Erreur| code: {} -  message: {}", response.getStatus().getCode(), response.getStatus().getMessage()));
                 return response;

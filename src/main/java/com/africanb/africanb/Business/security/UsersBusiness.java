@@ -1,6 +1,7 @@
 package com.africanb.africanb.Business.security;
 
 import com.africanb.africanb.dao.entity.compagnie.CompagnieTransport;
+import com.africanb.africanb.dao.entity.compagnie.StatusUtil;
 import com.africanb.africanb.dao.entity.security.Role;
 import com.africanb.africanb.dao.entity.security.Users;
 import com.africanb.africanb.dao.repository.compagnie.CompagnieTransportRepository;
@@ -13,12 +14,17 @@ import com.africanb.africanb.helper.TechnicalError;
 import com.africanb.africanb.helper.contrat.IBasicBusiness;
 import com.africanb.africanb.helper.contrat.Request;
 import com.africanb.africanb.helper.contrat.Response;
+import com.africanb.africanb.helper.dto.compagnie.CompagnieTransportDTO;
+import com.africanb.africanb.helper.dto.compagnie.StatusUtilCompagnieTransportDTO;
 import com.africanb.africanb.helper.dto.security.UsersDTO;
 import com.africanb.africanb.helper.dto.security.UsersPassWordDTO;
 import com.africanb.africanb.helper.searchFunctions.Utilities;
+import com.africanb.africanb.helper.transformer.compagnie.CompagnieTransportTransformer;
 import com.africanb.africanb.helper.transformer.security.UsersTransformer;
 import com.africanb.africanb.helper.validation.Validate;
 import com.africanb.africanb.utils.Constants.ProjectConstants;
+import com.africanb.africanb.utils.emailService.BodiesOfEmail;
+import com.africanb.africanb.utils.emailService.EmailDTO;
 import com.africanb.africanb.utils.security.SecurityServices;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -302,14 +308,16 @@ public class UsersBusiness implements IBasicBusiness<Request<UsersDTO>, Response
                 }
                 entityToSave.setMatricule(dto.getEmail());
             }
-            if (Utilities.isNotBlank(SecurityServices.encryptPassword(dto.getPassword())) && !SecurityServices.encryptPassword(dto.getPassword()).equals(entityToSave.getPassword())) {
-                try {
-                    entityToSave.setPassword(SecurityServices.encryptPassword(dto.getPassword()));
-                    if (entityToSave.getIsFirst() != null && entityToSave.getIsFirst()) {
-                        entityToSave.setIsFirst(Boolean.FALSE);
+            if (Utilities.isNotBlank(dto.getPassword()) && !dto.getEmail().equals(entityToSave.getPassword())) {
+                if (Utilities.isNotBlank(SecurityServices.encryptPassword(dto.getPassword())) && !SecurityServices.encryptPassword(dto.getPassword()).equals(entityToSave.getPassword())) {
+                    try {
+                        entityToSave.setPassword(SecurityServices.encryptPassword(dto.getPassword()));
+                        if (entityToSave.getIsFirst() != null && entityToSave.getIsFirst()) {
+                            entityToSave.setIsFirst(Boolean.FALSE);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                } catch (Exception e) {
-                     e.printStackTrace();
                 }
             }
             if (Utilities.isNotBlank(dto.getNom()) && !dto.getNom().equals(entityToSave.getNom())) {
@@ -461,6 +469,54 @@ public class UsersBusiness implements IBasicBusiness<Request<UsersDTO>, Response
             }
         }*/
         return false;
+    }
+
+    @Transactional(rollbackFor = {RuntimeException.class, Exception.class})
+    public  Response<UsersDTO> activeUser(Request<UsersDTO> request, Locale locale) throws ParseException {
+        Response<UsersDTO> response = new Response<UsersDTO>();
+        Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+        List<Users> items = new ArrayList<Users>();
+        CompagnieTransportDTO itemDTO= new CompagnieTransportDTO();
+        if(request.getData() == null){
+            response.setStatus(functionalError.DATA_NOT_EXIST("Aucune donnée définie ",locale));
+            response.setHasError(true);
+            return response;
+        }
+        fieldsToVerify.put("login",request.getData().getLogin());
+        if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
+            response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
+            response.setHasError(true);
+            return response;
+        }
+        Users existingEntity=null;
+        existingEntity=usersRepository.findByLogin(request.getData().getLogin(),false);
+        if (existingEntity == null) {
+            response.setStatus(functionalError.DATA_NOT_EXIST("Utilisateur inexistant", locale));
+            response.setHasError(true);
+            return response;
+        }
+        existingEntity.setIsActif(Boolean.TRUE);
+        //Send mail de validation
+        /*Runnable runnable = () -> {
+            BodiesOfEmail bodiesOfEmail= new BodiesOfEmail();
+            EmailDTO emailDTO = new EmailDTO();
+            Request<EmailDTO> subRequestEmail = new Request<EmailDTO>();
+
+            emailDTO.setSubject("Validation de compagnie de transport");
+            emailDTO.setMessage(bodiesOfEmail.bodyHtmlMailValidationCompagny());
+            emailDTO.setToAddress(entityUpdate.getEmail());
+            subRequestEmail.setData(emailDTO);
+
+            emailServiceBusiness.sendSimpleEmail(subRequestEmail,locale);
+        };
+        runnable.run();*/
+        UsersDTO itemDto = UsersTransformer.INSTANCE.toDto(existingEntity);
+        //response.setCount(count);
+        response.setItem(itemDto);
+        response.setHasError(false);
+        response.setStatus(functionalError.SUCCESS("", locale));
+        log.info("----end get user existing Entity-----");
+        return response;
     }
     public Role getRoleUserAuthenticated(Long userID){
         Long usersAuthenticatedId=userID;

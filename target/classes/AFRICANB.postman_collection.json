@@ -2073,6 +2073,125 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "USERS",
+			"item": [
+				{
+					"name": "userAdmin1",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"datas\":[\r\n        {\r\n        \"nom\": \"Alzouma Moussa\",\r\n        \"prenoms\": \"Mahamadou\",\r\n        \"login\": \"Alzouma2023\",\r\n        \"email\": \"alzoumamoussa18@univmetiers.ci\",\r\n        \"roleCode\": \"RoleAdminSocieteMere\"\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:8443/users",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8443",
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "userAdmin2",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"datas\":[\r\n        {\r\n        \"nom\": \"admin\",\r\n        \"prenoms\": \"admin\",\r\n        \"login\": \"admin2023\",\r\n        \"email\": \"admin@compagnietransport.com\",\r\n        \"roleCode\": \"RoleAdminCompagnieTransport\",\r\n        \"compagnieTransportRaisonSociale\": \"amm\"\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:8443/users",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8443",
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login1",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\":{\r\n        \"login\": \"Alzouma2023\",\r\n        \"password\": \"0123456789\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:8443/users/login",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8443",
+							"path": [
+								"users",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login2",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\":{\r\n        \"login\": \"admin2023\",\r\n        \"password\": \"0123456789\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:8443/users/login",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8443",
+							"path": [
+								"users",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	]
 }

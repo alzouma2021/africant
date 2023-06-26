@@ -343,11 +343,20 @@ public class FunctionalityBusiness implements IBasicBusiness<Request<Functionali
 
     @Override
     public Response<FunctionalityDTO> getAll(Locale locale) throws ParseException {
-        return null;
+        Response<FunctionalityDTO> response = new Response<FunctionalityDTO>();
+        Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+        List<Functionality> functionalities = null;
+        functionalities = functionalityRepository.findByIsDeleted(false);
+        List<FunctionalityDTO> functionalityDtos = FunctionalityTransformer.INSTANCE.toDtos(functionalities);
+        response.setItems(functionalityDtos);
+        response.setHasError(false);
+        response.setStatus(functionalError.SUCCESS("",locale));
+        log.info("----end get Functionalities -----");
+        return response;
     }
 
     @Transactional(rollbackFor = {RuntimeException.class, Exception.class})
-    public Response<FunctionalityDTO> getFunctionalities(Request<RoleDTO> request, Locale locale) throws Exception {
+    public Response<FunctionalityDTO> getFunctionalitiesByRole(Request<RoleDTO> request, Locale locale) throws Exception {
         Response<FunctionalityDTO> response = new Response<FunctionalityDTO>();
         if(request==null||request.getData()==null){
             response.setStatus(functionalError.FIELD_EMPTY("Aucune donnée", locale));

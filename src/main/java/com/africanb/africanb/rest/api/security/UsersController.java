@@ -5,6 +5,7 @@ import com.africanb.africanb.helper.ExceptionUtils;
 import com.africanb.africanb.helper.FunctionalError;
 import com.africanb.africanb.helper.contrat.Request;
 import com.africanb.africanb.helper.contrat.Response;
+import com.africanb.africanb.helper.dto.compagnie.CompagnieTransportDTO;
 import com.africanb.africanb.helper.dto.security.UsersDTO;
 import com.africanb.africanb.helper.dto.security.UsersPassWordDTO;
 import com.africanb.africanb.helper.enums.FunctionalityEnum;
@@ -99,6 +100,31 @@ public class UsersController {
             exceptionUtils.RUNTIME_EXCEPTION(response, locale, e);
         } catch (Exception e) {
             exceptionUtils.EXCEPTION(response, locale, e);
+        }
+        return response;
+    }
+
+    @RequestMapping(value="/activeUser",method= RequestMethod.POST,consumes = {"application/json"},produces={"application/json"})
+    public Response<UsersDTO> activeUser(@RequestBody Request<UsersDTO> request) {
+        log.info("start method active user");
+        Response<UsersDTO> response = new Response<UsersDTO>();
+        //requestBasic.setAttribute("CURRENT_LANGUAGE_IDENTIFIER", "fr");
+        String languageID = (String) requestBasic.getAttribute("CURRENT_LANGUAGE_IDENTIFIER");
+        Locale locale = new Locale(languageID, "");
+        try{
+            response=usersBusiness.activeUser(request,locale);
+            if(response.isHasError()){
+                log.info(String.format("Erreur | code: {}",response.getStatus(),response.getStatus().getMessage()));
+            }
+            log.info(String.format("Code: {} - message: {}", StatusCode.SUCCESS, StatusMessage.SUCCESS));
+        }catch (CannotCreateTransactionException e){
+            exceptionUtils.CANNOT_CREATE_TRANSACTION_EXCEPTION(response,locale,e);
+        }catch (TransactionSystemException e){
+            exceptionUtils.TRANSACTION_SYSTEM_EXCEPTION(response,locale,e);
+        }catch (RuntimeException e){
+            exceptionUtils.RUNTIME_EXCEPTION(response,locale,e);
+        }catch (Exception e){
+            exceptionUtils.EXCEPTION(response,locale,e);
         }
         return response;
     }
