@@ -2010,6 +2010,64 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "getAll",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\":{\r\n        \r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:8443/functionalities/getAll",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8443",
+							"path": [
+								"functionalities",
+								"getAll"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getFunctionnalitiesByRole",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\":{\r\n        \"code\":\"RoleAdminSocieteMere\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:8443/functionalities/getFunctionalitiesByRole",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8443",
+							"path": [
+								"functionalities",
+								"getFunctionalitiesByRole"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -2067,6 +2125,35 @@
 							"port": "8443",
 							"path": [
 								"roles"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getAll",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\":{\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:8443/roles/getAll",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8443",
+							"path": [
+								"roles",
+								"getAll"
 							]
 						}
 					},
@@ -2186,6 +2273,92 @@
 							"path": [
 								"users",
 								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "activeUser",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\":{\r\n        \"login\": \"admin2023\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:8443/users/activeUser",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8443",
+							"path": [
+								"users",
+								"activeUser"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "resetPasswordUser1",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\":{\r\n        \"email\": \"alzoumamoussa18@univmetiers.ci\",\r\n        \"oldPassWord\":\"0123456789\",\r\n        \"newPassWord\":\"Cr@yon#2020\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:8443/users/resetPasswordUser",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8443",
+							"path": [
+								"users",
+								"resetPasswordUser"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateUSer",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"datas\":[\r\n        {\r\n        \"id\": 228,\r\n        \"nom\": \"Keouvi\",\r\n        \"prenoms\": \"Emmanuel\",\r\n        \"login\": \"Keouvi2023\"\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:8443/users",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8443",
+							"path": [
+								"users"
 							]
 						}
 					},

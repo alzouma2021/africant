@@ -6,6 +6,7 @@ import com.africanb.africanb.helper.FunctionalError;
 import com.africanb.africanb.helper.contrat.Request;
 import com.africanb.africanb.helper.contrat.Response;
 import com.africanb.africanb.helper.dto.compagnie.CompagnieTransportDTO;
+import com.africanb.africanb.helper.dto.security.RoleDTO;
 import com.africanb.africanb.helper.dto.security.UsersDTO;
 import com.africanb.africanb.helper.dto.security.UsersPassWordDTO;
 import com.africanb.africanb.helper.enums.FunctionalityEnum;
@@ -125,6 +126,31 @@ public class UsersController {
             exceptionUtils.RUNTIME_EXCEPTION(response,locale,e);
         }catch (Exception e){
             exceptionUtils.EXCEPTION(response,locale,e);
+        }
+        return response;
+    }
+
+    @RequestMapping(value = "/getAll", method = RequestMethod.POST, consumes = {"application/json"}, produces = {"application/json"})
+    public Response<UsersDTO> getAll(@RequestBody Request<UsersDTO> request) {
+        Response<UsersDTO> response = new Response<UsersDTO>();
+        String languageID = (String) requestBasic.getAttribute("CURRENT_LANGUAGE_IDENTIFIER");
+        log.info("la langue " + languageID);
+        Locale locale = new Locale(languageID, "");
+        try {
+            response = usersBusiness.getAll(locale) ; //Appel
+            if (response.isHasError()) {
+                log.info(String.format("Erreur| code: {} -  message: {}", response.getStatus().getCode(), response.getStatus().getMessage()));
+                return response;
+            }
+            log.info(String.format("code: {} -  message: {}", StatusCode.SUCCESS, StatusMessage.SUCCESS));
+        } catch (CannotCreateTransactionException e) {
+            exceptionUtils.CANNOT_CREATE_TRANSACTION_EXCEPTION(response, locale, e);
+        } catch (TransactionSystemException e) {
+            exceptionUtils.TRANSACTION_SYSTEM_EXCEPTION(response, locale, e);
+        } catch (RuntimeException e) {
+            exceptionUtils.RUNTIME_EXCEPTION(response, locale, e);
+        } catch (Exception e) {
+            exceptionUtils.EXCEPTION(response, locale, e);
         }
         return response;
     }

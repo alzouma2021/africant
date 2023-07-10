@@ -16,10 +16,12 @@ import com.africanb.africanb.helper.contrat.Request;
 import com.africanb.africanb.helper.contrat.Response;
 import com.africanb.africanb.helper.dto.compagnie.CompagnieTransportDTO;
 import com.africanb.africanb.helper.dto.compagnie.StatusUtilCompagnieTransportDTO;
+import com.africanb.africanb.helper.dto.security.RoleDTO;
 import com.africanb.africanb.helper.dto.security.UsersDTO;
 import com.africanb.africanb.helper.dto.security.UsersPassWordDTO;
 import com.africanb.africanb.helper.searchFunctions.Utilities;
 import com.africanb.africanb.helper.transformer.compagnie.CompagnieTransportTransformer;
+import com.africanb.africanb.helper.transformer.security.RoleTransformer;
 import com.africanb.africanb.helper.transformer.security.UsersTransformer;
 import com.africanb.africanb.helper.validation.Validate;
 import com.africanb.africanb.utils.Constants.ProjectConstants;
@@ -413,7 +415,16 @@ public class UsersBusiness implements IBasicBusiness<Request<UsersDTO>, Response
 
     @Override
     public Response<UsersDTO> getAll(Locale locale) throws ParseException {
-        return null;
+        Response<UsersDTO> response = new Response<UsersDTO>();
+        Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+        List<Users> users = null;
+        users = usersRepository.findByIsDeleted(false);
+        List<UsersDTO> usersDtos = UsersTransformer.INSTANCE.toDtos(users);
+        response.setItems(usersDtos);
+        response.setHasError(false);
+        response.setStatus(functionalError.SUCCESS("",locale));
+        log.info("----end get role -----");
+        return response;
     }
 
     @Override

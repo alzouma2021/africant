@@ -22,8 +22,7 @@ public class FamilleStatusUtilController {
     private ControllerFactory<FamilleStatusUtilDTO> controllerFactory;
     @Autowired
     private FamilleStatusUtilBusiness familleStatusUtilBusiness;
-
-
+    
     @RequestMapping(value="",method= RequestMethod.POST,consumes = {"application/json"},produces={"application/json"})
     public Response<FamilleStatusUtilDTO> create(@RequestBody Request<FamilleStatusUtilDTO> request) {
         log.info("start method create");
