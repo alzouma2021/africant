@@ -68,6 +68,7 @@ com\africanb\africanb\helper\contrat\Request.class
 com\africanb\africanb\utils\Reference\ReferenceFamille.class
 com\africanb\africanb\dao\repository\security\FunctionalityRepository.class
 com\africanb\africanb\dao\repository\compagnie\ModePaiement\ModePaiementMoovMoneyRepository.class
+com\africanb\africanb\utils\security\IdentificationClient.class
 com\africanb\africanb\Business\offreVoyage\ProgrammeBusiness.class
 com\africanb\africanb\dao\entity\compagnie\ModeAbonnement\ModeAbonnement.class
 com\africanb\africanb\utils\Reference\ReferenceBusines.class
@@ -112,6 +113,7 @@ com\africanb\africanb\dao\entity\offreVoyage\ValeurCaracteristiqueOffreVoyage.cl
 com\africanb\africanb\helper\transformer\offrreVoyage\VilleEscaleTransformer.class
 com\africanb\africanb\utils\emailService\EmailServiceInterface.class
 com\africanb\africanb\rest\api\offreVoyage\ValeurCaracteristiqueOffreVoyageController.class
+com\africanb\africanb\utils\security\ParameterHeaderHttp.class
 com\africanb\africanb\dao\entity\offreVoyage\PrixOffreVoyage.class
 com\africanb\africanb\helper\FunctionalError.class
 com\africanb\africanb\rest\WebMvcConfig.class
@@ -193,6 +195,7 @@ com\africanb\africanb\Business\fact\UsersBusinessFactory.class
 com\africanb\africanb\utils\Reference\ReferenceFamilleDTO.class
 com\africanb\africanb\helper\transformer\offrreVoyage\VilleEscaleTransformerImpl.class
 com\africanb\africanb\dao\repository\offreVoyage\BusRepository.class
+com\africanb\africanb\utils\security\FilterAuthenticationClient.class
 com\africanb\africanb\helper\transformer\offrreVoyage\ProprieteOffreVoyageTransformerImpl.class
 com\africanb\africanb\dao\repository\compagnie\ModePaiement\ModePaiementMtnMoneyRepository.class
 com\africanb\africanb\helper\transformer\offrreVoyage\BusTransformerImpl.class
