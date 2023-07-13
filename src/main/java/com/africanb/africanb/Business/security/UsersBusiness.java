@@ -32,6 +32,7 @@ import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.persistence.EntityManager;
 import java.text.ParseException;
@@ -115,6 +116,17 @@ public class UsersBusiness implements IBasicBusiness<Request<UsersDTO>, Response
         response.setHasError(Boolean.FALSE);
         response.setStatus(functionalError.SUCCESS("", locale));
         log.info("----end login-----");
+        return response;
+    }
+
+    @Transactional(rollbackFor = {RuntimeException.class, Exception.class})
+    public Response<UsersDTO> logout(@RequestBody Request<UsersDTO> request,Locale locale) throws Exception {
+        log.info("----begin logout-----");
+        Response<UsersDTO> response = new Response<UsersDTO>();
+        UsersDTO usersDTO = new UsersDTO();
+        response.setItem(usersDTO);
+        response.setHasError(Boolean.FALSE);
+        response.setStatus(functionalError.SUCCESS("", locale));
         return response;
     }
 

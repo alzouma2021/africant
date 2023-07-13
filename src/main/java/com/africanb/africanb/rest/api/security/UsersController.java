@@ -155,4 +155,30 @@ public class UsersController {
         return response;
     }
 
+    @RequestMapping(value = "/logout", method = RequestMethod.POST, consumes = {"application/json"}, produces = {"application/json"})
+    public Response<UsersDTO> logout(@RequestBody Request<UsersDTO> request) {
+        Response<UsersDTO> response = new Response<UsersDTO>();
+        String languageID = (String) requestBasic.getAttribute("CURRENT_LANGUAGE_IDENTIFIER");
+        log.info("la langue " + languageID);
+        Locale locale = new Locale(languageID, "");
+        try {
+            response = usersBusiness.logout(request,locale) ; //Appel
+            if (response.isHasError()) {
+                log.info(String.format("Erreur| code: {} -  message: {}", response.getStatus().getCode(), response.getStatus().getMessage()));
+                return response;
+            }
+            log.info(String.format("code: {} -  message: {}", StatusCode.SUCCESS, StatusMessage.SUCCESS));
+        } catch (CannotCreateTransactionException e) {
+            exceptionUtils.CANNOT_CREATE_TRANSACTION_EXCEPTION(response, locale, e);
+        } catch (TransactionSystemException e) {
+            exceptionUtils.TRANSACTION_SYSTEM_EXCEPTION(response, locale, e);
+        } catch (RuntimeException e) {
+            exceptionUtils.RUNTIME_EXCEPTION(response, locale, e);
+        } catch (Exception e) {
+            exceptionUtils.EXCEPTION(response, locale, e);
+        }
+        return response;
+    }
+
+
 }
