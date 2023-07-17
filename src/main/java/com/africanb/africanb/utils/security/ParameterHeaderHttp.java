@@ -13,7 +13,7 @@ public class ParameterHeaderHttp {
     public static  void initializeResponseParamHeaders(HttpServletResponse response) {
         HttpServletResponse res = response;
         res.setHeader("Access-Control-Allow-Origin","*");
-        res.setHeader("Access-Control-Allow-Methods", "POST,GET,PUT,DELETE");
+        res.setHeader("Access-Control-Allow-Methods", "POST,GET,PUT,DELETE,OPTIONS");
         res.setHeader("Access-Control-Allow-Credentials","true");
         res.setHeader("Access-Control-Allow-Headers","Origin, Access-Control-Allow-Methods, " +
                 "Accept, X-Requested-With, Content-Type, Access-Control-Allow-Origin, Access-Control-Request-Method, Authorization," +
