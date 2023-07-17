@@ -51,6 +51,11 @@ public class FilterAuthenticationClient extends HttpFilter {
         IdentificationClient identificationClient = new IdentificationClient();
         String serverIdConsumer =  serverId;
         String clientIdConsumer =  clientId;
+        //Check Options
+        if( servletRequest.getMethod().toUpperCase().equalsIgnoreCase("OPTIONS")){
+            chain.doFilter(servletRequest, servletResponse);
+            return;
+        }
         //Check
         if(Utilities.isBlank(serverIdProvider) || Utilities.isBlank(clientIdProvider)){
                 servletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // HTTP 401.
