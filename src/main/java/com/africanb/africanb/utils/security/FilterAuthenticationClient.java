@@ -31,7 +31,6 @@ public class FilterAuthenticationClient extends HttpFilter {
     private FunctionalError functionalError;
     private ExceptionUtils exceptionUtils;
 
-
     @Autowired
     public FilterAuthenticationClient(FunctionalError functionalError, ExceptionUtils exceptionUtils) {
         this.functionalError = functionalError;
@@ -52,10 +51,7 @@ public class FilterAuthenticationClient extends HttpFilter {
         String serverIdConsumer =  serverId;
         String clientIdConsumer =  clientId;
         //Check Options
-        if( servletRequest.getMethod().toUpperCase().equalsIgnoreCase("OPTIONS")){
-            chain.doFilter(servletRequest, servletResponse);
-            return;
-        }
+        if (SecurityServices.checkIfRequestHasNotNeedAuthentication(servletRequest, servletResponse, chain)) return;
         //Check
         if(Utilities.isBlank(serverIdProvider) || Utilities.isBlank(clientIdProvider)){
                 servletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // HTTP 401.
@@ -73,4 +69,13 @@ public class FilterAuthenticationClient extends HttpFilter {
         }
         chain.doFilter(servletRequest, servletResponse); // (4)
     }
+
+    /*private static boolean checkIfRequestHasNotNeedAuthentication(HttpServletRequest servletRequest, HttpServletResponse servletResponse, FilterChain chain) throws IOException, ServletException {
+        String path = servletRequest.getServletPath();
+        if( servletRequest.getMethod().toUpperCase().equalsIgnoreCase("OPTIONS") ||  path.contains("swagger") || path.contains("/v2")){
+            chain.doFilter(servletRequest, servletResponse);
+            return true;
+        }
+        return false;
+    }*/
 }

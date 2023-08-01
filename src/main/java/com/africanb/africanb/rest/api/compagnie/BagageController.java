@@ -10,6 +10,7 @@ import com.africanb.africanb.helper.enums.FunctionalityEnum;
 import com.africanb.africanb.helper.status.StatusCode;
 import com.africanb.africanb.helper.status.StatusMessage;
 import com.africanb.africanb.rest.fact.ControllerFactory;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.CannotCreateTransactionException;
@@ -38,6 +39,7 @@ public class BagageController {
     private HttpServletRequest requestBasic;
 
     @RequestMapping(value="",method= RequestMethod.POST,consumes = {"application/json"},produces={"application/json"})
+    @ApiOperation("Création de bagages")
     public Response<BagageDTO> create(@RequestBody Request<BagageDTO> request) {
         log.info("start method create");
         Response<BagageDTO> response = controllerFactory.create(bagageBusiness, request, FunctionalityEnum.CREATE_PRIXOFFREVOYAGE);
@@ -46,6 +48,7 @@ public class BagageController {
     }
 
     @RequestMapping(value="",method=RequestMethod.PUT,consumes = {"application/json"},produces={"application/json"})
+    @ApiOperation("Modification de bagages")
     public Response<BagageDTO> update(@RequestBody Request<BagageDTO> request) {
         log.info("start method update");
         Response<BagageDTO> response = controllerFactory.update(bagageBusiness, request, FunctionalityEnum.UPDATE_PRIXOFFREVOYAGE);
@@ -70,6 +73,7 @@ public class BagageController {
     }
 
     @RequestMapping(value="/getBagageByCompagnieTransportRaisonSociale",method= RequestMethod.POST,consumes = {"application/json"},produces={"application/json"})
+    @ApiOperation("Obtenir la liste de bagages d'une compagnie de transport en fonction de sa raison sociale")
     public Response<BagageDTO> getBagageByCompagnieTransportRaisonSociale(@RequestBody Request<BagageDTO> request) {
         Response<BagageDTO> response = new Response<BagageDTO>();
         //requestBasic.setAttribute("CURRENT_LANGUAGE_IDENTIFIER", "fr");

@@ -6,13 +6,18 @@ import com.africanb.africanb.dao.repository.security.UsersRepository;
 import com.africanb.africanb.utils.Constants.ProjectConstants;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.SignatureException;
+import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.crypto.spec.SecretKeySpec;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.math.BigInteger;
 import java.security.Key;
 import java.security.MessageDigest;
@@ -43,6 +48,7 @@ public class SecurityServices {
                 .claim(ProjectConstants.SESSION_TOKEN_FILED_USER_LOGIN, users.getLogin() != null ? users.getLogin() : null)
                 .claim(ProjectConstants.SESSION_TOKEN_FILED_USER_LOGIN, users.getEmail() != null ? users.getEmail() : null)
                 .claim(ProjectConstants.SESSION_TOKEN_FILED_USER_ROLE, users.getRole() != null ? users.getRole().getId() :  null)
+                .claim(ProjectConstants.SESSION_TOKEN_FILED_USER_COMPAGNIE, users.getCompagnieTransport() != null ? users.getCompagnieTransport().getRaisonSociale() :  null)
                 .setSubject(users.getNom())
                 .setId(users.getId().toString())
                 .setIssuedAt(Date.from(now))
@@ -68,6 +74,35 @@ public class SecurityServices {
        }catch (MalformedJwtException mje){
            return ProjectConstants.VERIFY_TOKEN_MAUVAIS;
        }
+    }
+
+    public static Token decodeAndValidateToken(String token){
+        Jws<Claims> jwt = null ;
+        Token tokenInstance=new Token();
+        try{
+            extractedClaimsToken(token, tokenInstance);
+        }catch (ExpiredJwtException eje){
+            tokenInstance.setStatus(ProjectConstants.VERIFY_TOKEN_EXPIRE);
+            return  tokenInstance;
+        }catch (SignatureException se){
+            tokenInstance.setStatus(ProjectConstants.VERIFY_TOKEN_INVALIDE);
+            return  tokenInstance;
+        }catch (MalformedJwtException mje){
+            tokenInstance.setStatus(ProjectConstants.VERIFY_TOKEN_MAUVAIS);
+            return  tokenInstance;
+        }
+        return tokenInstance;
+    }
+
+    private static void extractedClaimsToken(String token, Token tokenInstance) {
+        Jws<Claims> jwt;
+        Key hmacKey = new SecretKeySpec(Base64.getDecoder().decode(ProjectConstants.SESSION_TOKEN_FIELD_SECRET_PHRASE),
+                SignatureAlgorithm.HS256.getJcaName());
+        jwt = Jwts.parserBuilder()
+                .setSigningKey(hmacKey)
+                .build()
+                .parseClaimsJws(token);
+        tokenInstance.setJwt(jwt);
     }
 
     // Méthode pour générer automatiquement un mot de passe
@@ -101,10 +136,10 @@ public class SecurityServices {
     }
 
 
-    /*    public static String generateCode1(){
-        String formatted = null;
-        formatted = RandomStringUtils.randomAlphanumeric(8).toUpperCase();
-        return formatted;
+    /*public static String generateCode1(){
+      String formatted = null;
+      formatted = RandomStringUtils.randomAlphanumeric(8).toUpperCase();
+      return formatted;
     }*/
 
     /*    public static String generateCode2(){
@@ -146,6 +181,24 @@ public class SecurityServices {
         } else {
             req.setAttribute("CURRENT_LANGUAGE_IDENTIFIER", defaultLanguage);
         }
+    }
+
+    @SneakyThrows
+    public static boolean checkIfRequestHasNotNeedAuthentication(HttpServletRequest servletRequest, HttpServletResponse servletResponse, FilterChain chain) throws IOException, ServletException {
+        /*String path = servletRequest.getServletPath();
+        if( servletRequest.getMethod().toUpperCase().equalsIgnoreCase("OPTIONS")
+                        ||  path.contains("swagger") || path.contains("/v2") || path.contains("/users/login")){
+            chain.doFilter(servletRequest, servletResponse);
+            return true;
+        }
+        return false;*/
+        String servletPath = servletRequest.getServletPath();
+        if (servletRequest.getMethod().equalsIgnoreCase("OPTIONS") || servletPath.contains("swagger") || servletPath.contains("/v2") || servletPath.contains("/users/login")) {
+            chain.doFilter(servletRequest, servletResponse);
+            return true;
+        }
+        return false;
+
     }
 
 }

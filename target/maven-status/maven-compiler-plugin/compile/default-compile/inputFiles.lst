@@ -61,6 +61,7 @@ D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\helper\trans
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\helper\transformer\offrreVoyage\ValeurCaracteristiqueOffreVoyageStringTransformer.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\helper\dto\security\UsersDTO.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\helper\contrat\Request.java
+D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\utils\security\SecurityServletFilter.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\helper\dto\compagnie\ModePaiement\ModePaiementDTO.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\utils\Reference\RechercherReferenceDTO.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\dao\repository\compagnie\VilleRepository.java
@@ -93,6 +94,7 @@ D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\Business\sec
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\dao\entity\compagnie\ModePaiment\ModePaiementEnEspece.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\dao\entity\compagnie\ModePaiment\ModePaiementMoovMoney.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\helper\transformer\compagnie\ModePaiement\ModePaimentWaveTransformer.java
+D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\utils\security\Token.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\rest\api\compagnie\GareController.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\dao\repository\Reference\ReferenceRepository.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\utils\Constants\ProjectConstants.java

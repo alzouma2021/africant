@@ -25,6 +25,12 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Locale;
 
+/**
+ * @Author ALZOUMA MOUSSA MAHAMADOU
+ *
+ * Cette classe implemente toutes les APIs REST faisant reference à la des compagnies de transport
+ *
+ */
 
 @Log
 @CrossOrigin("*")

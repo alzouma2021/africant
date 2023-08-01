@@ -129,6 +129,7 @@ public class ProjectConstants {
     public static final String SESSION_TOKEN_FILED_USER_MAIL = "mail";
     public static final String SESSION_TOKEN_FILED_USER_LOGIN = "login";
     public static final String SESSION_TOKEN_FILED_USER_ROLE = "role";
+    public static final String SESSION_TOKEN_FILED_USER_COMPAGNIE = "raisonSociale";
 
     public static final String VERIFY_TOKEN_VALIDE = "valide";
     public static final String VERIFY_TOKEN_EXPIRE = "expire";

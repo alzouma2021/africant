@@ -242,6 +242,7 @@ com\africanb\africanb\dao\entity\security\Role.class
 com\africanb\africanb\helper\transformer\offrreVoyage\ValeurCaracteristiqueOffreVoyageLongTransformer.class
 com\africanb\africanb\Business\compagnie\CompagnieAttestionTransportBusiness.class
 com\africanb\africanb\helper\transformer\offrreVoyage\JourSemaineTransformerImpl.class
+com\africanb\africanb\utils\security\Token.class
 com\africanb\africanb\rest\api\compagnie\GareController.class
 com\africanb\africanb\dao\repository\offreVoyage\VilleEscaleRepository.class
 com\africanb\africanb\dao\entity\compagnie\ModePaiment\ModePaiementWave.class
@@ -268,6 +269,7 @@ com\africanb\africanb\helper\searchFunctions\SearchParam.class
 com\africanb\africanb\helper\transformer\security\FunctionalityTransformer.class
 com\africanb\africanb\dao\entity\offreVoyage\Programme.class
 com\africanb\africanb\dao\entity\offreVoyage\OffreVoyage.class
+com\africanb\africanb\utils\security\SecurityServletFilter.class
 com\africanb\africanb\helper\transformer\offrreVoyage\ProgrammeTransformer.class
 com\africanb\africanb\dao\repository\offreVoyage\ValeurCaracteristiqueOffreVoyageLongRepository.class
 com\africanb\africanb\rest\api\compagnie\BagageController.class
