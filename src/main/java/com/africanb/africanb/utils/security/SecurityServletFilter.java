@@ -50,6 +50,7 @@ public class SecurityServletFilter extends HttpFilter {
         log.info(request.getRequestURI());
 
         SecurityServices.languageManager(request);
+        ParameterHeaderHttp.initializeResponseParamHeaders(response);
         String        languageID = (String) request.getAttribute("CURRENT_LANGUAGE_IDENTIFIER");
         Locale locale     = new Locale(languageID, "");
         Response<UsersDTO> resp = new Response<UsersDTO>();
