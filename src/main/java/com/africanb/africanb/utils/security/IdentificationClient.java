@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class IdentificationClient {
-
     @Value("${server.id}")
     private String serverId;
     @Value("${client.id}")
