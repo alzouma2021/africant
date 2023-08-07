@@ -87,6 +87,7 @@ com\africanb\africanb\Business\offreVoyage\VilleEscaleBusiness.class
 com\africanb\africanb\utils\Reference\Reference.class
 com\africanb\africanb\helper\dto\compagnie\ModePaiement\ModePaiementDTO.class
 com\africanb\africanb\dao\entity\compagnie\ModePaiment\ModePaiement.class
+com\africanb\africanb\utils\security\AuthenticationClientFilter.class
 com\africanb\africanb\helper\transformer\compagnie\GareTransformerImpl.class
 com\africanb\africanb\dao\repository\compagnie\StatusUtilCompagnieTransportRepository.class
 com\africanb\africanb\dao\entity\compagnie\Gare.class
@@ -195,7 +196,6 @@ com\africanb\africanb\Business\fact\UsersBusinessFactory.class
 com\africanb\africanb\utils\Reference\ReferenceFamilleDTO.class
 com\africanb\africanb\helper\transformer\offrreVoyage\VilleEscaleTransformerImpl.class
 com\africanb\africanb\dao\repository\offreVoyage\BusRepository.class
-com\africanb\africanb\utils\security\FilterAuthenticationClient.class
 com\africanb\africanb\helper\transformer\offrreVoyage\ProprieteOffreVoyageTransformerImpl.class
 com\africanb\africanb\dao\repository\compagnie\ModePaiement\ModePaiementMtnMoneyRepository.class
 com\africanb\africanb\helper\transformer\offrreVoyage\BusTransformerImpl.class
@@ -228,6 +228,7 @@ com\africanb\africanb\dao\repository\compagnie\StatusUtilRepository.class
 com\africanb\africanb\Business\compagnie\GareBusiness.class
 com\africanb\africanb\dao\repository\offreVoyage\ValeurCaracteristiqueOffreVoyageBooleanRepository.class
 com\africanb\africanb\helper\transformer\security\RoleFunctionalityTransformerImpl.class
+com\africanb\africanb\utils\security\ParamResponseHeaderFilter.class
 com\africanb\africanb\helper\transformer\compagnie\AbonnementPrelevementTransformerImpl.class
 com\africanb\africanb\helper\transformer\compagnie\CompagnieAttestionTransportTransformerImpl.class
 com\africanb\africanb\dao\repository\offreVoyage\ValeurCaracteristiqueOffreVoyageStringRepository.class

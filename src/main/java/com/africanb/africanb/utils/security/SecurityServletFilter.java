@@ -30,7 +30,7 @@ import java.util.*;
 @Slf4j
 @Component
 @WebFilter(filterName = "Filter", urlPatterns = {"/roles"})
-@Order(2)
+@Order(3)
 public class SecurityServletFilter extends HttpFilter {
 
     @Autowired

@@ -21,8 +21,8 @@ import java.util.Locale;
 
 @Slf4j
 @Component
-@Order(1)
-public class FilterAuthenticationClient extends HttpFilter {
+@Order(2)
+public class AuthenticationClientFilter extends HttpFilter {
 
     @Value("${server.id}")
     private String serverId;
@@ -32,7 +32,7 @@ public class FilterAuthenticationClient extends HttpFilter {
     private ExceptionUtils exceptionUtils;
 
     @Autowired
-    public FilterAuthenticationClient(FunctionalError functionalError, ExceptionUtils exceptionUtils) {
+    public AuthenticationClientFilter(FunctionalError functionalError, ExceptionUtils exceptionUtils) {
         this.functionalError = functionalError;
         this.exceptionUtils = exceptionUtils;
 
@@ -44,7 +44,7 @@ public class FilterAuthenticationClient extends HttpFilter {
         Response<UsersDTO> resp = new Response<UsersDTO>();
         Locale locale     = new Locale("Fr", "");
         //Initialize Headers
-        ParameterHeaderHttp.initializeResponseParamHeaders(servletResponse);
+       // ParameterHeaderHttp.initializeResponseParamHeaders(servletResponse);
         String serverIdProvider = servletRequest.getHeader("server_id");
         String clientIdProvider = servletRequest.getHeader("client_id");
         IdentificationClient identificationClient = new IdentificationClient();
