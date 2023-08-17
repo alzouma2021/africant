@@ -76,6 +76,11 @@ public class UsersBusiness implements IBasicBusiness<Request<UsersDTO>, Response
         Response<UsersDTO> response = new Response<UsersDTO>();
         List<Users> items = new ArrayList<Users>();
         UsersDTO dto = request.getData();
+        if(Utilities.checkForSQLInjection(dto) == false){
+            response.setStatus(functionalError.SAVE_FAIL("Donnée non correcte", locale));
+            response.setHasError(true);
+            return response;
+        }
         Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
         fieldsToVerify.put("login", dto.getLogin());
         fieldsToVerify.put("password", dto.getPassword());

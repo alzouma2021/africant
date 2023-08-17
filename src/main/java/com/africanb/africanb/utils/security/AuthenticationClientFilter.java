@@ -35,7 +35,6 @@ public class AuthenticationClientFilter extends HttpFilter {
     public AuthenticationClientFilter(FunctionalError functionalError, ExceptionUtils exceptionUtils) {
         this.functionalError = functionalError;
         this.exceptionUtils = exceptionUtils;
-
     }
 
     @Override
@@ -44,12 +43,13 @@ public class AuthenticationClientFilter extends HttpFilter {
         Response<UsersDTO> resp = new Response<UsersDTO>();
         Locale locale     = new Locale("Fr", "");
         //Initialize Headers
-       // ParameterHeaderHttp.initializeResponseParamHeaders(servletResponse);
         String serverIdProvider = servletRequest.getHeader("server_id");
         String clientIdProvider = servletRequest.getHeader("client_id");
         IdentificationClient identificationClient = new IdentificationClient();
         String serverIdConsumer =  serverId;
         String clientIdConsumer =  clientId;
+        //
+
         //Check Options
         if (SecurityServices.checkIfRequestHasNotNeedAuthentication(servletRequest, servletResponse, chain)) return;
         //Check
@@ -69,13 +69,4 @@ public class AuthenticationClientFilter extends HttpFilter {
         }
         chain.doFilter(servletRequest, servletResponse); // (4)
     }
-
-    /*private static boolean checkIfRequestHasNotNeedAuthentication(HttpServletRequest servletRequest, HttpServletResponse servletResponse, FilterChain chain) throws IOException, ServletException {
-        String path = servletRequest.getServletPath();
-        if( servletRequest.getMethod().toUpperCase().equalsIgnoreCase("OPTIONS") ||  path.contains("swagger") || path.contains("/v2")){
-            chain.doFilter(servletRequest, servletResponse);
-            return true;
-        }
-        return false;
-    }*/
 }

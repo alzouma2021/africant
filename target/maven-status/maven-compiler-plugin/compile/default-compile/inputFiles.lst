@@ -24,7 +24,6 @@ D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\helper\contr
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\helper\transformer\offrreVoyage\JourSemaineTransformer.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\dao\entity\compagnie\ModeAbonnement\AbonnementPrelevement.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\rest\fact\ControllerFactory.java
-D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\utils\security\ParameterHeaderHttp.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\dao\repository\offreVoyage\VilleEscaleRepository.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\helper\transformer\compagnie\AbonnementPrelevementTransformer.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\dao\entity\document\Document.java
@@ -118,6 +117,7 @@ D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\helper\trans
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\Business\fact\UsersBusinessFactory.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\Business\compagnie\ModePaiement\ModePaiementWaveBusiness.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\Business\compagnie\ModePaiement\ModePaiementOrangeMoneyBusiness.java
+D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\utils\security\AuthenticationClientFilter.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\helper\transformer\compagnie\CompagnieTransportTransformer.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\dao\entity\offreVoyage\Programme.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\helper\dto\compagnie\CompagnieTransportDTO.java
@@ -133,13 +133,13 @@ D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\helper\contr
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\dao\entity\compagnie\CompagnieAttestionTransport.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\dao\entity\offreVoyage\ValeurCaracteristiqueOffreVoyage.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\dao\repository\security\FunctionalityRepository.java
-D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\utils\security\FilterAuthenticationClient.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\utils\document\DocumentUtils.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\dao\entity\compagnie\Gare.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\helper\enums\OperatorEnum.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\helper\transformer\security\RoleTransformer.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\AfricanbApplication.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\dao\entity\compagnie\ModePaiment\ModePaiementOrangeMoney.java
+D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\utils\security\ParamResponseHeaderFilter.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\helper\transformer\compagnie\GareTransformer.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\helper\dto\offreVoyage\ValeurCaracteristiqueOffreVoyageLongDTO.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\dao\entity\offreVoyage\JourSemaine.java

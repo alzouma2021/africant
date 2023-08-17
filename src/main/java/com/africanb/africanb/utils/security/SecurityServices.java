@@ -185,20 +185,12 @@ public class SecurityServices {
 
     @SneakyThrows
     public static boolean checkIfRequestHasNotNeedAuthentication(HttpServletRequest servletRequest, HttpServletResponse servletResponse, FilterChain chain) throws IOException, ServletException {
-        /*String path = servletRequest.getServletPath();
-        if( servletRequest.getMethod().toUpperCase().equalsIgnoreCase("OPTIONS")
-                        ||  path.contains("swagger") || path.contains("/v2") || path.contains("/users/login")){
-            chain.doFilter(servletRequest, servletResponse);
-            return true;
-        }
-        return false;*/
         String servletPath = servletRequest.getServletPath();
         if (servletRequest.getMethod().equalsIgnoreCase("OPTIONS") || servletPath.contains("swagger") || servletPath.contains("/v2") || servletPath.contains("/users/login")) {
             chain.doFilter(servletRequest, servletResponse);
             return true;
         }
         return false;
-
     }
 
 }

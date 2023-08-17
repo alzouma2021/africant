@@ -114,7 +114,6 @@ com\africanb\africanb\dao\entity\offreVoyage\ValeurCaracteristiqueOffreVoyage.cl
 com\africanb\africanb\helper\transformer\offrreVoyage\VilleEscaleTransformer.class
 com\africanb\africanb\utils\emailService\EmailServiceInterface.class
 com\africanb\africanb\rest\api\offreVoyage\ValeurCaracteristiqueOffreVoyageController.class
-com\africanb\africanb\utils\security\ParameterHeaderHttp.class
 com\africanb\africanb\dao\entity\offreVoyage\PrixOffreVoyage.class
 com\africanb\africanb\helper\FunctionalError.class
 com\africanb\africanb\rest\WebMvcConfig.class

@@ -16,6 +16,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -378,6 +380,39 @@ public class Utilities {
     public static <T> boolean isEmpty(List<T> list) {
         return (list == null || list.isEmpty());
     }
+
+    public static boolean checkForSQLInjection(Object object) throws IllegalAccessException {
+        Class<?> clazz = object.getClass();
+        Field[] fields = clazz.getDeclaredFields();
+        if(fields.length == 0) return true;
+        for (Field field : fields) {
+            field.setAccessible(true);
+            Object fieldValue = field.get(object);
+            if (fieldValue instanceof String) {
+                String fieldValueStr = (String) fieldValue;
+                if (containsSQLInjection(fieldValueStr)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private static boolean containsSQLInjection(String value) {
+        String[] dangerousKeywords = {
+                "SELECT", "INSERT", "UPDATE", "DELETE", "DROP", "ALTER", "EXECUTE",
+                "UNION", "JOIN", "HAVING", "FROM", "WHERE", "OR", "AND", "LIKE",
+                "--", "/*", "*/", ";"
+        };
+        return Arrays.stream(dangerousKeywords)
+                .anyMatch(keyword -> containsWord(value, keyword));
+    }
+
+    private static boolean containsWord(String text, String word) {
+        String pattern = "\\b" + word + "\\b";
+        return text.matches(".*" + pattern + ".*");
+    }
+
 
    /*public static boolean notBlank(String str) {
         return str != null && !str.isEmpty() && !str.equals("\n")
