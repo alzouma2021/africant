@@ -11,18 +11,13 @@ import com.africanb.africanb.helper.dto.offreVoyage.ValeurCaracteristiqueOffreVo
 import com.africanb.africanb.helper.dto.offreVoyage.ValeurCaracteristiqueOffreVoyageLongDTO;
 import com.africanb.africanb.helper.dto.offreVoyage.ValeurCaracteristiqueOffreVoyageStringDTO;
 import com.africanb.africanb.utils.Constants.ProjectConstants;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.lang.reflect.Field;
-import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.DayOfWeek;
+import java.time.format.TextStyle;
 import java.util.*;
-import java.util.logging.LogManager;
-import java.util.logging.Logger;
 
 //@Slf4j
 public class Utilities {
@@ -554,6 +549,15 @@ public class Utilities {
     }
     public static boolean isValidIntegerID(Integer id) {
         return id != null && id > 0;
+    }
+
+    public static String getFrenchDayOfWeek(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+        String[] daysOfWeek = {"Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"};
+        String dayOfWeekName = daysOfWeek[dayOfWeek - 1];
+        return dayOfWeekName;
     }
 /*
     public static Integer getLoginUser() {//HttpRequest request doit etre en parametre

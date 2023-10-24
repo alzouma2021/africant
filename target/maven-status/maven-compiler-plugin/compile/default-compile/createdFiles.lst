@@ -133,6 +133,7 @@ com\africanb\africanb\utils\Reference\ReferenceFamilleTransformer.class
 com\africanb\africanb\helper\enums\FunctionalityEnum.class
 com\africanb\africanb\helper\transformer\offrreVoyage\ProprieteOffreVoyageTransformer.class
 com\africanb\africanb\Business\offreVoyage\ValeurCaracteristiqueOffreVoyageStringBusiness.class
+com\africanb\africanb\helper\dto\offreVoyage\RechercheCritereOffreVoyageDTO.class
 com\africanb\africanb\Business\offreVoyage\JourSemaineBusiness.class
 com\africanb\africanb\dao\entity\compagnie\ModeAbonnement\AbonnementPrelevement.class
 com\africanb\africanb\utils\emailService\EmailDTO.class

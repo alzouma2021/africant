@@ -27,6 +27,7 @@ D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\rest\fact\Co
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\dao\repository\offreVoyage\VilleEscaleRepository.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\helper\transformer\compagnie\AbonnementPrelevementTransformer.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\dao\entity\document\Document.java
+D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\helper\dto\offreVoyage\RechercheCritereOffreVoyageDTO.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\Business\offreVoyage\OffreVoyageBusiness.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\utils\Reference\Reference.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\utils\Reference\ReferenceFamilleDTO.java

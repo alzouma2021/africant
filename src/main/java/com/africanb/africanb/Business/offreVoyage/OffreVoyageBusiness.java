@@ -34,7 +34,9 @@ import org.springframework.util.CollectionUtils;
 import javax.persistence.EntityManager;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @Author ALZOUMA MOUSSA MAHAAMADOU
@@ -718,6 +720,54 @@ public class OffreVoyageBusiness implements IBasicBusiness<Request<OffreVoyageDT
         return response;
     }
 
+    @Transactional(rollbackFor = {RuntimeException.class, Exception.class})
+    public Response<OffreVoyageDTO> getOffreVoyageByCriteria(Request<RechercheCritereOffreVoyageDTO> request, Locale locale) throws ParseException {
+        Response<OffreVoyageDTO> response = new Response<OffreVoyageDTO>();
+        List<OffreVoyage> items = new ArrayList<OffreVoyage>();
+        List<OffreVoyage> itemsResponse = new ArrayList<OffreVoyage>();
+        if (request.getData() == null ) {
+            response.setStatus(functionalError.DATA_NOT_EXIST("Aucune donnée definie", locale));
+            response.setHasError(true);
+            return response;
+        }
+        Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+        fieldsToVerify.put("villeDepart", request.getData().getVilleDepart());
+        fieldsToVerify.put("villeDestination", request.getData().getVilleDepart());
+        fieldsToVerify.put("dateDepart", request.getData().getVilleDepart());
+        if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
+            response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
+            response.setHasError(true);
+            return response;
+        }
+        Date dateDepart=Utilities.convertStringToDate(request.getData().getDateDepart());
+        String villeDepart=request.getData().getVilleDepart();
+        String villeDestination=request.getData().getVilleDestination();
+        String jourSemaine=Utilities.getFrenchDayOfWeek(dateDepart);
+        log.info("_742 Jour semaine :: jourSemaine "+jourSemaine);
+        items=offreVoyageRepository.getOffreVoyageByCriteria(villeDepart,villeDestination,false);
+        items.forEach(offreVoyage -> {
+            List<JourSemaine> jourSemaines=jourSemaines=jourSemaineRepository.findAllByOffreVoyageDesignation(offreVoyage.getDesignation(),false);
+            for (JourSemaine js: jourSemaines) {
+                if(js !=null && js.getJourSemaine()!=null &&
+                        js.getJourSemaine().getDesignation()!=null &&
+                        js.getJourSemaine().getDesignation().equals(jourSemaine)){
+
+                    List<Programme> programmes=programmes=programmeRepository.findByJourSemaine(jourSemaine,false);
+
+                    for(Programme prog: programmes)
+                        if(prog!=null && prog.getDateDepart()==dateDepart) itemsResponse.add(js.getOffreVoyage());
+                }
+            }
+        });
+        List<OffreVoyageDTO> itemsDto = (Utilities.isTrue(request.getIsSimpleLoading()))
+                ? OffreVoyageTransformer.INSTANCE.toLiteDtos(itemsResponse)
+                : OffreVoyageTransformer.INSTANCE.toDtos(itemsResponse);
+        response.setItems(itemsDto);
+        response.setHasError(false);
+        response.setStatus(functionalError.SUCCESS("", locale));
+        log.info("----end update l'offre de voyage-----");
+        return response;
+    }
 
     private Response<Boolean> verifierSiPrixOffreVoyageEstDifferentDeZero(Locale
     locale, Response < Boolean > response, List < PrixOffreVoyage > existingEntityPrixOffreVoyageList){

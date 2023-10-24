@@ -9,6 +9,7 @@ import com.africanb.africanb.helper.contrat.Response;
 import com.africanb.africanb.helper.dto.compagnie.CompagnieTransportDTO;
 import com.africanb.africanb.helper.dto.offreVoyage.OffreVoyageDTO;
 import com.africanb.africanb.helper.dto.offreVoyage.PrixOffreVoyageDTO;
+import com.africanb.africanb.helper.dto.offreVoyage.RechercheCritereOffreVoyageDTO;
 import com.africanb.africanb.helper.enums.FunctionalityEnum;
 import com.africanb.africanb.helper.status.StatusCode;
 import com.africanb.africanb.helper.status.StatusMessage;
@@ -107,6 +108,31 @@ public class OffreVoyageController {
         Locale locale = new Locale(languageID, "");
         try{
             response=offreVoyageBusiness.getTravelOfferByCompagnieTransport(request,locale);
+            if(response.isHasError()){
+                log.info(String.format("Erreur | code: {}",response.getStatus(),response.getStatus().getMessage()));
+            }
+            log.info(String.format("Code: {} - message: {}", StatusCode.SUCCESS, StatusMessage.SUCCESS));
+        }catch (CannotCreateTransactionException e){
+            exceptionUtils.CANNOT_CREATE_TRANSACTION_EXCEPTION(response,locale,e);
+        }catch (TransactionSystemException e){
+            exceptionUtils.TRANSACTION_SYSTEM_EXCEPTION(response,locale,e);
+        }catch (RuntimeException e){
+            exceptionUtils.RUNTIME_EXCEPTION(response,locale,e);
+        }catch (Exception e){
+            exceptionUtils.EXCEPTION(response,locale,e);
+        }
+        return response;
+    }
+
+
+    @RequestMapping(value="/getOffreVoyageByCriteria",method= RequestMethod.POST,consumes = {"application/json"},produces={"application/json"})
+    public Response<OffreVoyageDTO> getOffreVoyageByCriteria(@RequestBody Request<RechercheCritereOffreVoyageDTO> request) {
+        Response<OffreVoyageDTO> response = new Response<OffreVoyageDTO>();
+        //requestBasic.setAttribute("CURRENT_LANGUAGE_IDENTIFIER", "fr");
+        String languageID = (String) requestBasic.getAttribute("CURRENT_LANGUAGE_IDENTIFIER");
+        Locale locale = new Locale(languageID, "");
+        try{
+            response=offreVoyageBusiness.getOffreVoyageByCriteria(request,locale);
             if(response.isHasError()){
                 log.info(String.format("Erreur | code: {}",response.getStatus(),response.getStatus().getMessage()));
             }

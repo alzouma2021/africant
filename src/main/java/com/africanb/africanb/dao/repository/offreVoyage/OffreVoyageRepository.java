@@ -19,4 +19,7 @@ public interface OffreVoyageRepository extends JpaRepository<OffreVoyage,Long> {
 
     @Query("select ov from OffreVoyage ov where ov.compagnieTransport.raisonSociale = :raisonSocialeCompagnieTransport and ov.isDeleted= :isDeleted")
     List<OffreVoyage> getTravelOfferByCompagnieTransport(@Param("raisonSocialeCompagnieTransport") String raisonSocialeCompagnieTransport, @Param("isDeleted") Boolean isDeleted);
+
+    @Query("select ov from OffreVoyage ov where ov.villeDepart.designation = :villeDepart and ov.villeDestination.designation = :villeDestination and ov.isDeleted= :isDeleted")
+    List<OffreVoyage> getOffreVoyageByCriteria(@Param("villeDepart") String villeDepart, @Param("villeDestination") String villeDestination, @Param("isDeleted") Boolean isDeleted);
 }
