@@ -751,9 +751,7 @@ public class OffreVoyageBusiness implements IBasicBusiness<Request<OffreVoyageDT
                 if(js !=null && js.getJourSemaine()!=null &&
                         js.getJourSemaine().getDesignation()!=null &&
                         js.getJourSemaine().getDesignation().equals(jourSemaine)){
-
                     List<Programme> programmes=programmes=programmeRepository.findByJourSemaine(jourSemaine,false);
-
                     for(Programme prog: programmes)
                         if(prog!=null && prog.getDateDepart()==dateDepart) itemsResponse.add(js.getOffreVoyage());
                 }

@@ -12,7 +12,7 @@ import javax.annotation.processing.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-10-24T11:04:17+0000",
+    date = "2023-10-25T17:27:05+0000",
     comments = "version: 1.4.2.Final, compiler: javac, environment: Java 11.0.0.1 (Oracle Corporation)"
 )
 public class RoleFunctionalityTransformerImpl implements RoleFunctionalityTransformer {

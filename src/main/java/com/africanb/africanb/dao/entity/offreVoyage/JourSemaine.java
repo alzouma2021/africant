@@ -34,7 +34,7 @@ public class JourSemaine implements Serializable {
     private String description;
 
     @ManyToOne
-    OffreVoyage offreVoyage;
+    private OffreVoyage offreVoyage;
     @ManyToOne
     private Reference jourSemaine;  //FamilleReferenceJourSemaine
 
