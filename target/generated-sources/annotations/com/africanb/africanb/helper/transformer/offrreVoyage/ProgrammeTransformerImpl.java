@@ -11,7 +11,7 @@ import javax.annotation.processing.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-10-25T17:27:05+0000",
+    date = "2023-10-26T17:40:12+0000",
     comments = "version: 1.4.2.Final, compiler: javac, environment: Java 11.0.0.1 (Oracle Corporation)"
 )
 public class ProgrammeTransformerImpl implements ProgrammeTransformer {
@@ -27,6 +27,7 @@ public class ProgrammeTransformerImpl implements ProgrammeTransformer {
         programmeDTO.setId( entity.getId() );
         programmeDTO.setDesignation( entity.getDesignation() );
         programmeDTO.setDescription( entity.getDescription() );
+        programmeDTO.setNombrePlaceDisponible( entity.getNombrePlaceDisponible() );
         if ( entity.getDateDepart() != null ) {
             programmeDTO.setDateDepart( new SimpleDateFormat( "dd/MM/yyyy" ).format( entity.getDateDepart() ) );
         }
@@ -79,6 +80,7 @@ public class ProgrammeTransformerImpl implements ProgrammeTransformer {
             programme.setId( dto.getId() );
             programme.setDesignation( dto.getDesignation() );
             programme.setDescription( dto.getDescription() );
+            programme.setNombrePlaceDisponible( dto.getNombrePlaceDisponible() );
             if ( dto.getDateDepart() != null ) {
                 programme.setDateDepart( new SimpleDateFormat( "dd/MM/yyyy" ).parse( dto.getDateDepart() ) );
             }

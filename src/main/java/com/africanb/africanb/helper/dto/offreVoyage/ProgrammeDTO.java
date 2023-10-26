@@ -25,6 +25,7 @@ public class ProgrammeDTO {
     private String dateArrivee;
     private String HeureDepart;
     private String HeureArrivee;
+    private Integer nombrePlaceDisponible;
 
     private String  jourSemaineDesignation;
 

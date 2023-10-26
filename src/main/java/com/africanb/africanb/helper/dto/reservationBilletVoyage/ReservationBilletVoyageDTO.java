@@ -28,8 +28,9 @@ public class ReservationBilletVoyageDTO {
     private String gareDesignation;
     private String offreVoyageDesignation;
     private String programmeDesignation;
-    private String statusReservationCode; //RESERVATION-PAYEE-VOYAGE-NON-EFFECTUE ou RESERVATION-PAYEE-VOYAGE-EFFECTUE
     private String userEmail;
+    private String categorieVoyageur;  // Enfant ou Adulte.
+    private String statusActualDesignation;
 
     private Boolean isDeleted;
     private String updatedAt;

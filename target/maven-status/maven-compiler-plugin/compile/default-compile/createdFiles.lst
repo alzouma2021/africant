@@ -40,6 +40,7 @@ com\africanb\africanb\dao\entity\document\Document.class
 com\africanb\africanb\Business\compagnie\AbonnementPeriodiqueBusiness.class
 com\africanb\africanb\helper\transformer\compagnie\FamilleStatusUtilTransformerImpl.class
 com\africanb\africanb\Business\compagnie\ModePaiement\ModePaiementWaveBusiness.class
+com\africanb\africanb\dao\repository\reservationBilletVoyage\StatusUtilReservationBilletVoyageRepository.class
 com\africanb\africanb\helper\status\StatusCode.class
 com\africanb\africanb\dao\repository\compagnie\BagageRepository.class
 com\africanb\africanb\rest\EncryptFilter.class
@@ -125,6 +126,7 @@ com\africanb\africanb\utils\security\SecurityServices.class
 com\africanb\africanb\Business\offreVoyage\ValeurCaracteristiqueOffreVoyageLongBusiness.class
 com\africanb\africanb\dao\repository\compagnie\ModeAbonnementRepository.class
 com\africanb\africanb\dao\repository\compagnie\CompagnieAttestationTransportRepository.class
+com\africanb\africanb\dao\entity\reservationBilletVoyage\StatusUtilReservationBilletVoyage.class
 com\africanb\africanb\helper\dto\compagnie\VilleDTO.class
 com\africanb\africanb\dao\repository\compagnie\AbonnementPrelevementRepository.class
 com\africanb\africanb\helper\transformer\reservationBilletVoyage\ReservationBilletVoyageTransformerImpl.class
@@ -137,6 +139,7 @@ com\africanb\africanb\utils\Reference\ReferenceFamilleTransformer.class
 com\africanb\africanb\helper\enums\FunctionalityEnum.class
 com\africanb\africanb\helper\transformer\offrreVoyage\ProprieteOffreVoyageTransformer.class
 com\africanb\africanb\Business\offreVoyage\ValeurCaracteristiqueOffreVoyageStringBusiness.class
+com\africanb\africanb\dao\repository\reservationBilletVoyage\ReservationBilletVoyageRepository.class
 com\africanb\africanb\helper\dto\offreVoyage\RechercheCritereOffreVoyageDTO.class
 com\africanb\africanb\Business\offreVoyage\JourSemaineBusiness.class
 com\africanb\africanb\dao\entity\compagnie\ModeAbonnement\AbonnementPrelevement.class
@@ -156,6 +159,7 @@ com\africanb\africanb\dao\repository\compagnie\PaysRepository.class
 com\africanb\africanb\helper\dto\reservationBilletVoyage\ReservationBilletVoyageDTO.class
 com\africanb\africanb\rest\api\reference\ReferenceController.class
 com\africanb\africanb\helper\dto\offreVoyage\ValeurCaracteristiqueOffreVoyageStringDTO.class
+com\africanb\africanb\helper\dto\reservationBilletVoyage\StatusUtilReservationBilletVoyageDTO.class
 com\africanb\africanb\dao\repository\offreVoyage\ProprieteOffreVoyageRepository.class
 com\africanb\africanb\helper\dto\compagnie\CompagnieTransportDTO.class
 com\africanb\africanb\dao\entity\compagnie\Pays.class
@@ -190,12 +194,14 @@ com\africanb\africanb\Business\security\RoleBusiness.class
 com\africanb\africanb\helper\dto\compagnie\StatusUtilDTO.class
 com\africanb\africanb\dao\entity\security\Users.class
 com\africanb\africanb\Business\security\RoleFunctionalityBusiness.class
+com\africanb\africanb\helper\transformer\reservationBilletVoyage\StatusUtilReservationBilletVoyageTransformerImpl.class
 com\africanb\africanb\utils\Reference\ReferenceDTO.class
 com\africanb\africanb\Business\offreVoyage\BusBusiness.class
 com\africanb\africanb\helper\transformer\security\RoleFunctionalityTransformer.class
 com\africanb\africanb\dao\repository\security\RoleRepository.class
 com\africanb\africanb\helper\transformer\compagnie\CompagnieTransportTransformerImpl.class
 com\africanb\africanb\helper\transformer\compagnie\AbonnementPeriodiqueTransformerImpl.class
+com\africanb\africanb\Business\reservationBilletVoyage\StatusUtilRservationBilletVoyageBusiness.class
 com\africanb\africanb\helper\transformer\compagnie\AbonnementPrelevementTransformer.class
 com\africanb\africanb\helper\transformer\compagnie\ModePaiement\ModePaimentOrangeMoneyTransformer.class
 com\africanb\africanb\Business\fact\UsersBusinessFactory.class
@@ -261,6 +267,7 @@ com\africanb\africanb\helper\dto\security\UsersPassWordDTO.class
 com\africanb\africanb\rest\api\offreVoyage\JourSemaineController.class
 com\africanb\africanb\rest\api\offreVoyage\PrixOffreVoyageController.class
 com\africanb\africanb\helper\transformer\compagnie\GareTransformer.class
+com\africanb\africanb\Business\reservationBilletVoyage\ReservationBilletVoyageBusiness.class
 com\africanb\africanb\helper\transformer\security\UsersTransformer.class
 com\africanb\africanb\helper\dto\compagnie\ModeAbonnement\ModeAbonnementDTO.class
 com\africanb\africanb\Business\security\UsersBusiness.class
@@ -270,6 +277,7 @@ com\africanb\africanb\dao\entity\reservationBilletVoyage\HistoriquePaiement.clas
 com\africanb\africanb\dao\repository\offreVoyage\OffreVoyageRepository.class
 com\africanb\africanb\dao\entity\security\Functionality.class
 com\africanb\africanb\helper\dto\security\RoleDTO.class
+com\africanb\africanb\helper\transformer\reservationBilletVoyage\StatusUtilReservationBilletVoyageTransformer.class
 com\africanb\africanb\helper\dto\offreVoyage\JourSemaineDTO.class
 com\africanb\africanb\helper\transformer\compagnie\BagageTransformerImpl.class
 com\africanb\africanb\dao\entity\offreVoyage\VilleEscale.class

@@ -15,7 +15,7 @@ import javax.annotation.processing.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-10-25T17:27:05+0000",
+    date = "2023-10-26T17:40:13+0000",
     comments = "version: 1.4.2.Final, compiler: javac, environment: Java 11.0.0.1 (Oracle Corporation)"
 )
 public class ReservationBilletVoyageTransformerImpl implements ReservationBilletVoyageTransformer {
@@ -40,8 +40,8 @@ public class ReservationBilletVoyageTransformerImpl implements ReservationBillet
         reservationBilletVoyageDTO.setGareDesignation( entityGareDesignation( entity ) );
         reservationBilletVoyageDTO.setOffreVoyageDesignation( entityOffreVoyageDesignation( entity ) );
         reservationBilletVoyageDTO.setProgrammeDesignation( entityProgrammeDesignation( entity ) );
-        reservationBilletVoyageDTO.setStatusReservationCode( entityStatusReservationDesignation( entity ) );
         reservationBilletVoyageDTO.setUserEmail( entityUsersEmail( entity ) );
+        reservationBilletVoyageDTO.setStatusActualDesignation( entityStatusUtilActualDesignation( entity ) );
         if ( entity.getUpdatedAt() != null ) {
             reservationBilletVoyageDTO.setUpdatedAt( new SimpleDateFormat( "dd/MM/yyyy" ).format( entity.getUpdatedAt() ) );
         }
@@ -74,8 +74,8 @@ public class ReservationBilletVoyageTransformerImpl implements ReservationBillet
     }
 
     @Override
-    public ReservationBilletVoyage toEntity(ReservationBilletVoyageDTO dto, Gare gare, OffreVoyage offreVoyage, Programme programme, StatusUtil statusReservation, Users users) throws ParseException {
-        if ( dto == null && gare == null && offreVoyage == null && programme == null && statusReservation == null && users == null ) {
+    public ReservationBilletVoyage toEntity(ReservationBilletVoyageDTO dto, Gare gare, OffreVoyage offreVoyage, Programme programme, Users users, StatusUtil statusUtilActual) throws ParseException {
+        if ( dto == null && gare == null && offreVoyage == null && programme == null && users == null && statusUtilActual == null ) {
             return null;
         }
 
@@ -114,11 +114,11 @@ public class ReservationBilletVoyageTransformerImpl implements ReservationBillet
         if ( programme != null ) {
             reservationBilletVoyage.setProgramme( programme );
         }
-        if ( statusReservation != null ) {
-            reservationBilletVoyage.setStatusReservation( statusReservation );
-        }
         if ( users != null ) {
             reservationBilletVoyage.setUsers( users );
+        }
+        if ( statusUtilActual != null ) {
+            reservationBilletVoyage.setStatusUtilActual( statusUtilActual );
         }
 
         return reservationBilletVoyage;
@@ -169,21 +169,6 @@ public class ReservationBilletVoyageTransformerImpl implements ReservationBillet
         return designation;
     }
 
-    private String entityStatusReservationDesignation(ReservationBilletVoyage reservationBilletVoyage) {
-        if ( reservationBilletVoyage == null ) {
-            return null;
-        }
-        StatusUtil statusReservation = reservationBilletVoyage.getStatusReservation();
-        if ( statusReservation == null ) {
-            return null;
-        }
-        String designation = statusReservation.getDesignation();
-        if ( designation == null ) {
-            return null;
-        }
-        return designation;
-    }
-
     private String entityUsersEmail(ReservationBilletVoyage reservationBilletVoyage) {
         if ( reservationBilletVoyage == null ) {
             return null;
@@ -197,5 +182,20 @@ public class ReservationBilletVoyageTransformerImpl implements ReservationBillet
             return null;
         }
         return email;
+    }
+
+    private String entityStatusUtilActualDesignation(ReservationBilletVoyage reservationBilletVoyage) {
+        if ( reservationBilletVoyage == null ) {
+            return null;
+        }
+        StatusUtil statusUtilActual = reservationBilletVoyage.getStatusUtilActual();
+        if ( statusUtilActual == null ) {
+            return null;
+        }
+        String designation = statusUtilActual.getDesignation();
+        if ( designation == null ) {
+            return null;
+        }
+        return designation;
     }
 }

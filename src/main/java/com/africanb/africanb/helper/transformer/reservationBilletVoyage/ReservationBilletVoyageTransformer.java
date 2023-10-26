@@ -44,8 +44,8 @@ public interface ReservationBilletVoyageTransformer {
             @Mapping(source = "entity.gare.designation", target = "gareDesignation"),
             @Mapping(source = "entity.offreVoyage.designation", target = "offreVoyageDesignation"),
             @Mapping(source = "entity.programme.designation", target = "programmeDesignation"),
-            @Mapping(source = "entity.statusReservation.designation", target = "statusReservationCode"),
             @Mapping(source = "entity.users.email", target = "userEmail"),
+            @Mapping(source = "entity.statusUtilActual.designation", target = "statusActualDesignation"),
 
             @Mapping(source = "entity.updatedAt", dateFormat="dd/MM/yyyy",target="updatedAt"),
             @Mapping(source = "entity.createdAt", dateFormat="dd/MM/yyyy",target="createdAt"),
@@ -104,8 +104,8 @@ public interface ReservationBilletVoyageTransformer {
             @Mapping(source="offreVoyage", target="offreVoyage"),
             @Mapping(source="programme", target="programme"),
             @Mapping(source="gare", target="gare"),
-            @Mapping(source="statusReservation", target="statusReservation"),
+            @Mapping(source="statusUtilActual", target="statusUtilActual"),
             @Mapping(source="users", target="users")
     })
-    ReservationBilletVoyage toEntity(ReservationBilletVoyageDTO dto, Gare gare, OffreVoyage offreVoyage, Programme programme, StatusUtil statusReservation, Users users) throws ParseException;
+    ReservationBilletVoyage toEntity(ReservationBilletVoyageDTO dto, Gare gare, OffreVoyage offreVoyage, Programme programme,  Users users,StatusUtil statusUtilActual) throws ParseException;
 }

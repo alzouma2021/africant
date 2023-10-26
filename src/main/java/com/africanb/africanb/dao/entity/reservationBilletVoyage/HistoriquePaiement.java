@@ -35,4 +35,7 @@ public class HistoriquePaiement implements Serializable {
 
     @ManyToOne
     private ModePaiement modePaiement;
+    @ManyToOne
+    private ReservationBilletVoyage reservationBilletVoyage;
+
 }

@@ -51,8 +51,8 @@ public class ReservationBilletVoyage implements Serializable {
     private Programme programme;
     @ManyToOne
     private Users users;
-    @OneToOne
-    private StatusUtil statusReservation; //RESERVATION-PAYEE-VOYAGE-NON-EFFECTUE ou RESERVATION-PAYEE-VOYAGE-EFFECTUE
+    @ManyToOne
+    private StatusUtil statusUtilActual;
 
     @Column(name="is_deleted")
     private Boolean    isDeleted ;

@@ -25,7 +25,7 @@ public interface ProgrammeTransformer {
             @Mapping(source = "entity.id", target = "id"),
             @Mapping(source = "entity.designation", target = "designation"),
             @Mapping(source = "entity.description", target = "description"),
-
+            @Mapping(source = "entity.nombrePlaceDisponible", target = "nombrePlaceDisponible"),
             @Mapping(source = "entity.dateDepart", dateFormat="dd/MM/yyyy",target = "dateDepart"),
             @Mapping(source = "entity.dateArrivee", dateFormat="dd/MM/yyyy",target = "dateArrivee"),
             @Mapping(source = "entity.heureDepart", target = "heureDepart"),
@@ -74,6 +74,7 @@ public interface ProgrammeTransformer {
             @Mapping(source = "dto.designation", target = "designation"),
             @Mapping(source = "dto.description", target = "description"),
 
+            @Mapping(source = "dto.nombrePlaceDisponible", target = "nombrePlaceDisponible"),
             @Mapping(source = "dto.dateDepart", dateFormat="dd/MM/yyyy",target = "dateDepart"),
             @Mapping(source = "dto.dateArrivee", dateFormat="dd/MM/yyyy",target = "dateArrivee"),
             @Mapping(source = "dto.heureDepart", target = "heureDepart"),

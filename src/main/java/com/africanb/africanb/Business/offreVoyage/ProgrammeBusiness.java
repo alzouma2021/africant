@@ -73,7 +73,7 @@ public class ProgrammeBusiness implements IBasicBusiness<Request<ProgrammeDTO>, 
             Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
             fieldsToVerify.put("designation", dto.getDesignation());
             //fieldsToVerify.put("dateArrivee", dto.getDateArrivee());
-            //fieldsToVerify.put("dateDepart", dto.getDateDepart());
+            fieldsToVerify.put("nombrePlaceDisponible", dto.getNombrePlaceDisponible());
             fieldsToVerify.put("heureArrivee", dto.getHeureArrivee());
             fieldsToVerify.put("heureDepart", dto.getHeureDepart());
             fieldsToVerify.put("jourSemaineDesignation", dto.getJourSemaineDesignation());

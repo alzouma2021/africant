@@ -27,6 +27,11 @@ public class ProjectConstants {
     public final static String REF_ELEMENT_MODE_PAIEMENT_WAVE_MONEY="ModePaiementWaveMoney";
     public final static String REF_ELEMENT_MODE_PAIEMENT_EN_ESPECE="ModePaiementEnEspece";
 
+    //ReservationBillet
+    public final static String REF_ELEMENT_RESERVATION_CREE="ReservationCree";
+    public final static String REF_ELEMENT_RESERVATION_PAYEE_ET_NON_EFFECTIVE="ReservationPayeeEtNonEffective";
+    public final static String REF_ELEMENT_RESERVATION_PAYEE_ET_EFFECTIVE="ReservationPayeeEtEffective";
+
     //Differents roles
     public final static String ROLE_ADMIN_SOCIETE_MERE="RoleAdminSocieteMere";
     public final static String ROLE_ADMIN_COMPAGNIE_TRANSPORT="RoleAdminCompagnieTransport";

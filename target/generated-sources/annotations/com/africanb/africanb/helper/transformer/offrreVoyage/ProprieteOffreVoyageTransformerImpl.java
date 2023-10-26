@@ -11,7 +11,7 @@ import javax.annotation.processing.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-10-25T17:27:04+0000",
+    date = "2023-10-26T17:40:12+0000",
     comments = "version: 1.4.2.Final, compiler: javac, environment: Java 11.0.0.1 (Oracle Corporation)"
 )
 public class ProprieteOffreVoyageTransformerImpl implements ProprieteOffreVoyageTransformer {

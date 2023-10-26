@@ -17,5 +17,6 @@ public class HistoriquePaiementDTO  {
     private String description;
     private String dateTimePayment;
     private String modePaiementDesignation;
+    private String reservationBilletVoyageDesignation;
 
 }

@@ -39,6 +39,7 @@ public class Programme implements Serializable {
     private Date dateArrivee;
     private String HeureDepart;
     private String HeureArrivee;
+    private Integer nombrePlaceDisponible; //Ce nombre de place sera impacté par le nombre de réservatioo
 
     @Column(name="is_deleted")
     private Boolean    isDeleted ;
