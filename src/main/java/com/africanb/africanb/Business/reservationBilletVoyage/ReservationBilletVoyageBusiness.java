@@ -1,6 +1,7 @@
 package com.africanb.africanb.Business.reservationBilletVoyage;
 
 
+import com.africanb.africanb.dao.entity.compagnie.CompagnieTransport;
 import com.africanb.africanb.dao.entity.compagnie.Gare;
 import com.africanb.africanb.dao.entity.compagnie.StatusUtil;
 import com.africanb.africanb.dao.entity.offreVoyage.OffreVoyage;
@@ -30,6 +31,7 @@ import com.africanb.africanb.utils.Constants.ProjectConstants;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import javax.persistence.EntityManager;
@@ -63,6 +65,8 @@ public class ReservationBilletVoyageBusiness implements IBasicBusiness<Request<R
     private StatusUtilRepository statusUtilRepository;
     @Autowired
     private UsersRepository usersRepository;
+    @Autowired
+    private CompagnieTransportRepository compagnieTransportRepository;
     @Autowired
     private ReservationBilletVoyageRepository reservationBilletVoyageRepository;
     @Autowired
@@ -106,32 +110,37 @@ public class ReservationBilletVoyageBusiness implements IBasicBusiness<Request<R
             response.setHasError(true);
             return response;
         }
-        Users existingUser= usersRepository.findOne(Long.valueOf(request.userID),false);
+        Users existingUser = usersRepository.findOne(Long.valueOf(request.userID),false);
+        if (existingUser==null) {
+            response.setStatus(functionalError.SAVE_FAIL("user inexistant !!!!", locale));
+            response.setHasError(true);
+            return response;
+        }
         OffreVoyage existingOffreVoyage = null;
         existingOffreVoyage = offreVoyageRepository.findByDesignation(dto.getOffreVoyageDesignation(),false);
         if (existingOffreVoyage==null) {
-            response.setStatus(functionalError.DATA_EXIST("Offre de voyage inexistante !!!!", locale));
+            response.setStatus(functionalError.SAVE_FAIL("Offre de voyage inexistante !!!!", locale));
             response.setHasError(true);
             return response;
         }
         Gare existingGare = null;
         existingGare = gareRepository.findByDesignation(dto.getGareDesignation(),false);
         if (existingGare==null) {
-            response.setStatus(functionalError.DATA_EXIST("gare inexistante !!!!", locale));
+            response.setStatus(functionalError.SAVE_FAIL("gare inexistante !!!!", locale));
             response.setHasError(true);
             return response;
         }
         Programme existingProgramme = null;
         existingProgramme = programmeRepository.findByDesignation(dto.getProgrammeDesignation(),false);
         if (existingProgramme==null) {
-            response.setStatus(functionalError.DATA_EXIST("programme inexistant !!!!", locale));
+            response.setStatus(functionalError.SAVE_FAIL("programme inexistant !!!!", locale));
             response.setHasError(true);
             return response;
         }
         StatusUtil existingStatusUtilActual = null;
         existingStatusUtilActual = statusUtilRepository.findByDesignation(ProjectConstants.REF_ELEMENT_RESERVATION_CREE,false);
         if (existingStatusUtilActual==null) {
-            response.setStatus(functionalError.DATA_EXIST("programme inexistant !!!!", locale));
+            response.setStatus(functionalError.SAVE_FAIL("programme inexistant !!!!", locale));
             response.setHasError(true);
             return response;
         }
@@ -189,6 +198,133 @@ public class ReservationBilletVoyageBusiness implements IBasicBusiness<Request<R
         response.setItems(itemsDto);
         response.setHasError(false);
         response.setStatus(functionalError.SUCCESS("", locale));
+        return response;
+    }
+
+
+    @Transactional(rollbackFor = {RuntimeException.class, Exception.class})
+    public Response<ReservationBilletVoyageDTO> getReservationBilletVoyageBySampleUser(Request<ReservationBilletVoyageDTO> request, Locale locale) throws ParseException {
+        Response<ReservationBilletVoyageDTO> response = new Response<ReservationBilletVoyageDTO>();
+        List<ReservationBilletVoyage> items = new ArrayList<ReservationBilletVoyage>();
+        Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+        //get users connected
+        Users existingUser = usersRepository.findOne(Long.valueOf(request.userID),false);
+        if (existingUser==null || existingUser.getRole()==null || existingUser.getRole().getCode()==null) {
+            response.setStatus(functionalError.SAVE_FAIL("user inexistant !!!!", locale));
+            response.setHasError(true);
+            return response;
+        }
+        if(existingUser.getRole().getCode().equalsIgnoreCase(ProjectConstants.ROLE_UTI_SIMPLE)){
+            response.setStatus(functionalError.SAVE_FAIL("Autorisation insuffisante !!!!", locale));
+            response.setHasError(true);
+            return response;
+        }
+        items=reservationBilletVoyageRepository.findByUsersSample(existingUser.getEmail(),false);
+        if (CollectionUtils.isEmpty(items)) {
+            response.setStatus(functionalError.DATA_NOT_EXIST("Aucune reservation de billet !!!!", locale));
+            response.setHasError(true);
+            return response;
+        }
+        List<ReservationBilletVoyageDTO> itemsDto = (Utilities.isTrue(request.getIsSimpleLoading()))
+                ? ReservationBilletVoyageTransformer.INSTANCE.toLiteDtos(items)
+                : ReservationBilletVoyageTransformer.INSTANCE.toDtos(items);
+        response.setItems(itemsDto);
+        response.setHasError(false);
+        response.setStatus(functionalError.SUCCESS("", locale));
+        log.info("----end get reservationBilletVoyage-----");
+        return response;
+    }
+
+    @Transactional(rollbackFor = {RuntimeException.class, Exception.class})
+    public Response<ReservationBilletVoyageDTO> getReservationBilletVoyageByUserGareCompagnieTransport(Request<ReservationBilletVoyageDTO> request, Locale locale) throws ParseException {
+        Response<ReservationBilletVoyageDTO> response = new Response<ReservationBilletVoyageDTO>();
+        List<ReservationBilletVoyage> items = new ArrayList<ReservationBilletVoyage>();
+        Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+        //get users connected
+        Users existingUser = usersRepository.findOne(Long.valueOf(request.userID),false);
+        if (existingUser==null || existingUser.getRole()==null || existingUser.getRole().getCode()==null) {
+            response.setStatus(functionalError.SAVE_FAIL("user inexistant !!!!", locale));
+            response.setHasError(true);
+            return response;
+        }
+        if(!existingUser.getRole().getCode().equalsIgnoreCase(ProjectConstants.ROLE_UTI_GARE_COMPAGNIE_TRANSPORT)){
+            response.setStatus(functionalError.SAVE_FAIL("Autorisation insuffisante !!!!", locale));
+            response.setHasError(true);
+            return response;
+        }
+        Gare existingGare=null;
+        if(existingUser.getGareDesignation()==null){
+            response.setStatus(functionalError.SAVE_FAIL("Gare utilisateur non trouvée !!!!", locale));
+            response.setHasError(true);
+            return response;
+        }else{
+            existingGare = gareRepository.findByDesignation(existingUser.getGareDesignation(),false);
+            if (existingGare == null) {
+                response.setStatus(functionalError.SAVE_FAIL("Gare utilisateur inexistante !!!", locale));
+                response.setHasError(true);
+                return response;
+            }
+        }
+        items=reservationBilletVoyageRepository.findByUserGareCompagnieTransport(existingGare.getDesignation(),false);
+        if (CollectionUtils.isEmpty(items)) {
+            response.setStatus(functionalError.DATA_NOT_EXIST("Aucune reservation de billet !!!!", locale));
+            response.setHasError(true);
+            return response;
+        }
+        List<ReservationBilletVoyageDTO> itemsDto = (Utilities.isTrue(request.getIsSimpleLoading()))
+                ? ReservationBilletVoyageTransformer.INSTANCE.toLiteDtos(items)
+                : ReservationBilletVoyageTransformer.INSTANCE.toDtos(items);
+        response.setItems(itemsDto);
+        response.setHasError(false);
+        response.setStatus(functionalError.SUCCESS("", locale));
+        log.info("----end get reservationBilletVoyage-----");
+        return response;
+    }
+
+
+    @Transactional(rollbackFor = {RuntimeException.class, Exception.class})
+    public Response<ReservationBilletVoyageDTO> getReservationBilletVoyageByAdminCompagnieTransport(Request<ReservationBilletVoyageDTO> request, Locale locale) throws ParseException {
+        Response<ReservationBilletVoyageDTO> response = new Response<ReservationBilletVoyageDTO>();
+        List<ReservationBilletVoyage> items = new ArrayList<ReservationBilletVoyage>();
+        Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+        //get users connected
+        Users existingUser = usersRepository.findOne(Long.valueOf(request.userID),false);
+        if (existingUser==null || existingUser.getRole()==null || existingUser.getRole().getCode()==null) {
+            response.setStatus(functionalError.SAVE_FAIL("user inexistant !!!!", locale));
+            response.setHasError(true);
+            return response;
+        }
+        if(!existingUser.getRole().getCode().equalsIgnoreCase(ProjectConstants.ROLE_ADMIN_COMPAGNIE_TRANSPORT)){
+            response.setStatus(functionalError.SAVE_FAIL("Autorisation insuffisante !!!!", locale));
+            response.setHasError(true);
+            return response;
+        }
+        CompagnieTransport existingCompagnieTransport=null;
+        if(existingUser.getCompagnieTransport()==null || existingUser.getCompagnieTransport().getRaisonSociale()==null){
+            response.setStatus(functionalError.SAVE_FAIL("Compagnie transport non trouvée !!!!", locale));
+            response.setHasError(true);
+            return response;
+        }else{
+            existingCompagnieTransport = compagnieTransportRepository.findByRaisonSociale(existingUser.getCompagnieTransport().getRaisonSociale(),false);
+            if (existingCompagnieTransport == null) {
+                response.setStatus(functionalError.SAVE_FAIL("Compagnie transport inexistante !!!", locale));
+                response.setHasError(true);
+                return response;
+            }
+        }
+        items=reservationBilletVoyageRepository.findByAdminCompagnieTransport(existingCompagnieTransport.getRaisonSociale(),false);
+        if (CollectionUtils.isEmpty(items)) {
+            response.setStatus(functionalError.DATA_NOT_EXIST("Aucune reservation de billet !!!!", locale));
+            response.setHasError(true);
+            return response;
+        }
+        List<ReservationBilletVoyageDTO> itemsDto = (Utilities.isTrue(request.getIsSimpleLoading()))
+                ? ReservationBilletVoyageTransformer.INSTANCE.toLiteDtos(items)
+                : ReservationBilletVoyageTransformer.INSTANCE.toDtos(items);
+        response.setItems(itemsDto);
+        response.setHasError(false);
+        response.setStatus(functionalError.SUCCESS("", locale));
+        log.info("----end get reservationBilletVoyage-----");
         return response;
     }
 

@@ -16,7 +16,7 @@ public class RequestBase {
     protected String businessLineCode;
     protected String caseEngine;
     protected Boolean isAnd;
-    public static Integer userID;
+    public static Long userID;
     protected String compagnieRaisonSociale;
     protected Boolean isSimpleLoading;
     protected String[] datasElasticSearchIndices;

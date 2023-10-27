@@ -1,10 +1,12 @@
 package com.africanb.africanb.Business.security;
 
 import com.africanb.africanb.dao.entity.compagnie.CompagnieTransport;
+import com.africanb.africanb.dao.entity.compagnie.Gare;
 import com.africanb.africanb.dao.entity.compagnie.StatusUtil;
 import com.africanb.africanb.dao.entity.security.Role;
 import com.africanb.africanb.dao.entity.security.Users;
 import com.africanb.africanb.dao.repository.compagnie.CompagnieTransportRepository;
+import com.africanb.africanb.dao.repository.compagnie.GareRepository;
 import com.africanb.africanb.dao.repository.security.RoleFunctionalityRepository;
 import com.africanb.africanb.dao.repository.security.RoleRepository;
 import com.africanb.africanb.dao.repository.security.UsersRepository;
@@ -49,6 +51,8 @@ public class UsersBusiness implements IBasicBusiness<Request<UsersDTO>, Response
     private UsersRepository usersRepository;
     @Autowired
     private RoleRepository roleRepository;
+    @Autowired
+    private GareRepository gareRepository;
     @Autowired
     private CompagnieTransportRepository compagnieTransportRepository;
     @Autowired
@@ -222,15 +226,30 @@ public class UsersBusiness implements IBasicBusiness<Request<UsersDTO>, Response
             Users existingEntity = null;
             existingEntity = usersRepository.findByLogin(dto.getLogin(), false); //verification du login
             if (existingEntity != null) {
-                response.setStatus(functionalError.DATA_EXIST("Utilisateur existe !!!" + dto.getLogin(), locale));
+                response.setStatus(functionalError.SAVE_FAIL("Utilisateur existe !!!" + dto.getLogin(), locale));
                 response.setHasError(true);
                 return response;
+            }
+            if(dto.getRoleCode().equalsIgnoreCase(ProjectConstants.ROLE_UTI_GARE_COMPAGNIE_TRANSPORT) && dto.getGareDesignation()==null){
+                response.setStatus(functionalError.SAVE_FAIL("Gare utilisateur non indiquée !!!", locale));
+                response.setHasError(true);
+                return response;
+            }else if (dto.getRoleCode().equalsIgnoreCase(ProjectConstants.ROLE_UTI_GARE_COMPAGNIE_TRANSPORT) && dto.getGareDesignation()!=null){
+                Gare existingGare = null;
+                existingGare = gareRepository.findByDesignation(dto.getGareDesignation(),false);
+                if (existingGare == null) {
+                    response.setStatus(functionalError.SAVE_FAIL("Gare utilisateur inexistante !!!", locale));
+                    response.setHasError(true);
+                    return response;
+                }
+            }else{
+                //TODO A ajouter
             }
             CompagnieTransport existingCompagnieTransport =  new CompagnieTransport();
             if(dto.getCompagnieTransportRaisonSociale() != null){
                 existingCompagnieTransport = compagnieTransportRepository.findByRaisonSociale(dto.getCompagnieTransportRaisonSociale(), Boolean.FALSE);
                 if (existingCompagnieTransport == null) {
-                    response.setStatus(functionalError.DATA_NOT_EXIST("Compagnie Transport inexistante !!!", locale));
+                    response.setStatus(functionalError.SAVE_FAIL("Compagnie Transport inexistante !!!", locale));
                     response.setHasError(true);
                     return response;
                 }
@@ -238,7 +257,7 @@ public class UsersBusiness implements IBasicBusiness<Request<UsersDTO>, Response
             Role existingRole = null;
             existingRole = roleRepository.findByCode(dto.getRoleCode(), false);
             if (existingRole == null) {
-                response.setStatus(functionalError.DATA_NOT_EXIST("Role inexistant !!!", locale));
+                response.setStatus(functionalError.SAVE_FAIL("Role inexistant !!!", locale));
                 response.setHasError(true);
                 return response;
             }
@@ -258,7 +277,7 @@ public class UsersBusiness implements IBasicBusiness<Request<UsersDTO>, Response
             items.add(entityToSave);
         }
         if( items==null || items.isEmpty()){
-            response.setStatus(functionalError.DATA_NOT_EXIST("Liste vide", locale));
+            response.setStatus(functionalError.SAVE_FAIL("Liste vide", locale));
             response.setHasError(true);
             return response;
         }

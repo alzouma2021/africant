@@ -12,7 +12,7 @@ import javax.annotation.processing.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-10-26T17:40:12+0000",
+    date = "2023-10-27T12:05:18+0000",
     comments = "version: 1.4.2.Final, compiler: javac, environment: Java 11.0.0.1 (Oracle Corporation)"
 )
 public class UsersTransformerImpl implements UsersTransformer {
@@ -39,6 +39,7 @@ public class UsersTransformerImpl implements UsersTransformer {
         usersDTO.setCompagnieTransportId( entityCompagnieTransportId( entity ) );
         usersDTO.setCompagnieTransportDesignation( entityCompagnieTransportDesignation( entity ) );
         usersDTO.setCompagnieTransportRaisonSociale( entityCompagnieTransportRaisonSociale( entity ) );
+        usersDTO.setGareDesignation( entity.getGareDesignation() );
         if ( entity.getUpdatedAt() != null ) {
             usersDTO.setUpdatedAt( new SimpleDateFormat( "dd/MM/yyyy HH:mm:ss" ).format( entity.getUpdatedAt() ) );
         }
@@ -127,6 +128,7 @@ public class UsersTransformerImpl implements UsersTransformer {
             users.setCreatedBy( dto.getCreatedBy() );
             users.setDeletedBy( dto.getDeletedBy() );
             users.setIsDeleted( dto.getIsDeleted() );
+            users.setGareDesignation( dto.getGareDesignation() );
         }
         if ( role != null ) {
             users.setRole( role );

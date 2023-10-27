@@ -246,6 +246,7 @@ com\africanb\africanb\helper\transformer\compagnie\CompagnieAttestionTransportTr
 com\africanb\africanb\dao\repository\offreVoyage\ValeurCaracteristiqueOffreVoyageStringRepository.class
 com\africanb\africanb\helper\contrat\ResponseBase.class
 com\africanb\africanb\helper\transformer\compagnie\StatusUtilCompagnieTransportTransformerImpl.class
+com\africanb\africanb\rest\api\reservationBilletVoyage\ReservationBilletVoyageController.class
 com\africanb\africanb\Business\compagnie\ModeAbonnementBusiness.class
 com\africanb\africanb\helper\dto\compagnie\GareDTO.class
 com\africanb\africanb\dao\entity\offreVoyage\ValeurCaracteristiqueOffreVoyageBoolean.class

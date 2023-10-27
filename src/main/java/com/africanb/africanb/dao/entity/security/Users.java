@@ -1,6 +1,7 @@
 package com.africanb.africanb.dao.entity.security;
 
 import com.africanb.africanb.dao.entity.compagnie.CompagnieTransport;
+import com.africanb.africanb.dao.entity.compagnie.Gare;
 import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -31,10 +32,10 @@ public class Users implements Serializable {
     private String email;
     @Column(length = 20)
     private String telephone;
+    private String gareDesignation;
 
     @ManyToOne//(fetch = FetchType.EAGER)
     private Role role;
-
     @ManyToOne(cascade = CascadeType.ALL)
     private CompagnieTransport compagnieTransport;
 

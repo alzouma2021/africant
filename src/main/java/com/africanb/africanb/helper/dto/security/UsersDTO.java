@@ -40,6 +40,7 @@ public class UsersDTO {
     private Long  compagnieTransportId;
     private String compagnieTransportDesignation;
     private String compagnieTransportRaisonSociale;
+    private String gareDesignation;
 
     private Boolean isActif;
     private Boolean isFirst;

@@ -114,7 +114,7 @@ public class SecurityServletFilter extends HttpFilter {
                     response.getWriter().write(String.valueOf(resp));
                     return;
                 }
-                RequestBase.userID = Integer.valueOf(entityToken.getJwt().getBody().getId());
+                RequestBase.userID = Long.valueOf(entityToken.getJwt().getBody().getId());
                 chain.doFilter(request, response);
             }
         } catch (IOException | ServletException e) {

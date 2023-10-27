@@ -34,6 +34,7 @@ public interface UsersTransformer {
             @Mapping(source = "entity.compagnieTransport.id", target = "compagnieTransportId"),
             @Mapping(source = "entity.compagnieTransport.designation", target = "compagnieTransportDesignation"),
             @Mapping(source = "entity.compagnieTransport.raisonSociale", target = "compagnieTransportRaisonSociale"),
+            @Mapping(source = "entity.gareDesignation", target = "gareDesignation"),
             @Mapping(source="entity.updatedAt", dateFormat="dd/MM/yyyy HH:mm:ss",target="updatedAt"),
             @Mapping(source="entity.createdAt", dateFormat="dd/MM/yyyy HH:mm:ss",target="createdAt"),
             @Mapping(source="entity.deletedAt", dateFormat="dd/MM/yyyy HH:mm:ss",target="deletedAt"),
@@ -93,6 +94,7 @@ public interface UsersTransformer {
             @Mapping(source="dto.createdBy", target="createdBy"),
             @Mapping(source="dto.deletedBy", target="deletedBy"),
             @Mapping(source="dto.isDeleted", target="isDeleted"),
+            @Mapping(source = "dto.gareDesignation", target = "gareDesignation"),
             @Mapping(source = "role", target = "role"),
             @Mapping(source = "compagnieTransport", target = "compagnieTransport"),
     })
