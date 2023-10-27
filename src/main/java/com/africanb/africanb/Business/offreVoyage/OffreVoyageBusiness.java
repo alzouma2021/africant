@@ -745,8 +745,10 @@ public class OffreVoyageBusiness implements IBasicBusiness<Request<OffreVoyageDT
         String jourSemaine=Utilities.getFrenchDayOfWeek(dateDepart);
         log.info("_742 Jour semaine :: jourSemaine "+jourSemaine);
         items=offreVoyageRepository.getOffreVoyageByCriteria(villeDepart,villeDestination,false);
+        log.info("_748 Affaichage des offres de voyage="+items.toString());
         items.forEach(offreVoyage -> {
             List<JourSemaine> jourSemaines=jourSemaines=jourSemaineRepository.findAllByOffreVoyageDesignation(offreVoyage.getDesignation(),false);
+            log.info("_751 Affaichage des jourSemaine de l'offre de voyage="+jourSemaines.toString());
             for (JourSemaine js: jourSemaines) {
                 if(js !=null && js.getJourSemaine()!=null &&
                         js.getJourSemaine().getDesignation()!=null &&

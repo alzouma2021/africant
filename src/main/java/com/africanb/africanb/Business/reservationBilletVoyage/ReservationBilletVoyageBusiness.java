@@ -104,6 +104,7 @@ public class ReservationBilletVoyageBusiness implements IBasicBusiness<Request<R
         fieldsToVerify.put("gare", dto.getGareDesignation());
         fieldsToVerify.put("offreVoyage", dto.getOffreVoyageDesignation());
         fieldsToVerify.put("programme", dto.getProgrammeDesignation());
+        fieldsToVerify.put("categorieVoyageur", dto.getCategorieVoyageur());
         fieldsToVerify.put("nombrePlace", dto.getNombrePlace());
         if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
             response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
@@ -140,7 +141,7 @@ public class ReservationBilletVoyageBusiness implements IBasicBusiness<Request<R
         StatusUtil existingStatusUtilActual = null;
         existingStatusUtilActual = statusUtilRepository.findByDesignation(ProjectConstants.REF_ELEMENT_RESERVATION_CREE,false);
         if (existingStatusUtilActual==null) {
-            response.setStatus(functionalError.SAVE_FAIL("programme inexistant !!!!", locale));
+            response.setStatus(functionalError.SAVE_FAIL("Status inexistant !!!!", locale));
             response.setHasError(true);
             return response;
         }
@@ -153,7 +154,7 @@ public class ReservationBilletVoyageBusiness implements IBasicBusiness<Request<R
         }
         //Calculate montantTotalReservation
         PrixOffreVoyage existingPrixOffreVoyage=prixOffreVoyageRepository.findByOffreVoyageAndCategorieVoyageur(existingOffreVoyage.getDesignation(),dto.getCategorieVoyageur(),false);
-        if(Optional.of(existingPrixOffreVoyage).isEmpty()){
+        if(existingPrixOffreVoyage==null){
             response.setStatus(functionalError.SAVE_FAIL("Aucun prix fixé pour la catégorie du voyageur !!!", locale));
             response.setHasError(true);
             return response;

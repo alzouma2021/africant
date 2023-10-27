@@ -20,5 +20,5 @@ public interface PrixOffreVoyageRepository extends JpaRepository<PrixOffreVoyage
     List<PrixOffreVoyage> findAllByOffreVoyageDesignation(@Param("offreVoyageDesignation") String offreVoyageDesignation, @Param("isDeleted") Boolean isDeleted);
 
     @Query("select pov from PrixOffreVoyage pov where pov.offreVoyage.designation = :offreVoyageDesignation and pov.categorieVoyageur.designation = :categorieVoyageurDesignation and pov.isDeleted= :isDeleted")
-    PrixOffreVoyage findByOffreVoyageAndCategorieVoyageur(@Param("offreVoyageDesignation") String offreVoyageDesignation,@Param("categorieVoyageur") String categorieVoyageurDesignation , @Param("isDeleted") Boolean isDeleted);
+    PrixOffreVoyage findByOffreVoyageAndCategorieVoyageur(@Param("offreVoyageDesignation") String offreVoyageDesignation,@Param("categorieVoyageurDesignation") String categorieVoyageurDesignation , @Param("isDeleted") Boolean isDeleted);
 }

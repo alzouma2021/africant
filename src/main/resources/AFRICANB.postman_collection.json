@@ -281,11 +281,32 @@
 				{
 					"name": "create",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MjMwLCJsb2dpbiI6ImFkbWluQGNvbXBhZ25pZXRyYW5zcG9ydC5jb20iLCJyb2xlIjoxODcsInJhaXNvblNvY2lhbGUiOiJhbW0iLCJzdWIiOiJhZG1pbiIsImp0aSI6IjIzMCIsImlhdCI6MTY5ODQyNDM2NCwiZXhwIjoxNjk4NjA0MzY0fQ.NN_HfwxkBrquXFH_PaFtgfKm14qnsCkd6UcOgKRW_yA",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "server_id",
+								"value": "backend@africanb",
+								"type": "text"
+							},
+							{
+								"key": "client_id",
+								"value": "frontend@africanb",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"datas\":[\n        {\n        \"designation\":\"Paris\",\n        \"paysId\": 8\n        }\n    ]\n}",
+							"raw": "{\n    \"datas\":[\n        {\n        \"designation\":\"Abidjan\",\n        \"paysId\": 7\n        },\n         {\n        \"designation\":\"Yamousskro\",\n        \"paysId\": 7\n        }\n    ]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -293,12 +314,12 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/villes",
-							"protocol": "http",
+							"raw": "https://localhost:8443/villes",
+							"protocol": "https",
 							"host": [
 								"localhost"
 							],
-							"port": "8080",
+							"port": "8443",
 							"path": [
 								"villes"
 							]
@@ -343,11 +364,32 @@
 				{
 					"name": "create",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MjMwLCJsb2dpbiI6ImFkbWluQGNvbXBhZ25pZXRyYW5zcG9ydC5jb20iLCJyb2xlIjoxODcsInJhaXNvblNvY2lhbGUiOiJhbW0iLCJzdWIiOiJhZG1pbiIsImp0aSI6IjIzMCIsImlhdCI6MTY5ODQyNDM2NCwiZXhwIjoxNjk4NjA0MzY0fQ.NN_HfwxkBrquXFH_PaFtgfKm14qnsCkd6UcOgKRW_yA",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "server_id",
+								"value": "backend@africanb",
+								"type": "text"
+							},
+							{
+								"key": "client_id",
+								"value": "frontend@africanb",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"datas\":[\n        {\n        \"designation\":\"referenceFamilleCompagnieTransport\",\n        \"description\":\"Ensemeble des status liés à la gestion d'une compagnie de transport\"\n        }\n    ]\n}",
+							"raw": "{\n    \"datas\":[\n        {\n        \"designation\":\"referenceFamilleReservationBilletVoyage\",\n        \"description\":\"Ensemeble des status liés à la gestion d'une compagnie de transport\"\n        }\n    ]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -355,12 +397,12 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/familleStatusUtil",
-							"protocol": "http",
+							"raw": "https://localhost:8443/familleStatusUtil",
+							"protocol": "https",
 							"host": [
 								"localhost"
 							],
-							"port": "8080",
+							"port": "8443",
 							"path": [
 								"familleStatusUtil"
 							]
@@ -376,11 +418,32 @@
 				{
 					"name": "create",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MjMwLCJsb2dpbiI6ImFkbWluQGNvbXBhZ25pZXRyYW5zcG9ydC5jb20iLCJyb2xlIjoxODcsInJhaXNvblNvY2lhbGUiOiJhbW0iLCJzdWIiOiJhZG1pbiIsImp0aSI6IjIzMCIsImlhdCI6MTY5ODQyNDM2NCwiZXhwIjoxNjk4NjA0MzY0fQ.NN_HfwxkBrquXFH_PaFtgfKm14qnsCkd6UcOgKRW_yA",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "server_id",
+								"value": "backend@africanb",
+								"type": "text"
+							},
+							{
+								"key": "client_id",
+								"value": "frontend@africanb",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"datas\":[\n        {\n        \"designation\":\"compagnieTransportEnCoursTraitement\",\n        \"description\":\"Creation d'une compagnie de transport en cours de traitement\",\n        \"familleStatusUtilId\":3\n        }\n    ]\n}",
+							"raw": "{\n    \"datas\":[\n        {\n        \"designation\":\"ReservationCree\",\n        \"description\":\"Création reservation billet voyage\",\n        \"familleStatusUtilId\":247\n        },\n        {\n        \"designation\":\"ReservationPayeeEtNonEffective\",\n        \"description\":\"Reservation payée, et voyage non effectué\",\n        \"familleStatusUtilId\":247\n        },\n        {\n        \"designation\":\"ReservationPayeeEtEffective\",\n        \"description\":\"Reservation payée, et voyage effectué\",\n        \"familleStatusUtilId\":247\n        }\n    ]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -388,12 +451,12 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/statusUtil",
-							"protocol": "http",
+							"raw": "https://localhost:8443/statusUtil",
+							"protocol": "https",
 							"host": [
 								"localhost"
 							],
-							"port": "8080",
+							"port": "8443",
 							"path": [
 								"statusUtil"
 							]
@@ -989,6 +1052,35 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "getOffreVoyageCriteria",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"data\":{\n        \"villeDepart\": \"Abidjan\",\n        \"villeDestination\": \"Yamousskro\",\n        \"dateDepart\": \"10/10/2022\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:8443/offreVoyages/getOffreVoyageCriteria",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8443",
+							"path": [
+								"offreVoyages",
+								"getOffreVoyageCriteria"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -1262,8 +1354,29 @@
 				{
 					"name": "create",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MjMwLCJsb2dpbiI6ImFkbWluQGNvbXBhZ25pZXRyYW5zcG9ydC5jb20iLCJyb2xlIjoxODcsInJhaXNvblNvY2lhbGUiOiJhbW0iLCJzdWIiOiJhZG1pbiIsImp0aSI6IjIzMCIsImlhdCI6MTY5ODQyNDM2NCwiZXhwIjoxNjk4NjA0MzY0fQ.NN_HfwxkBrquXFH_PaFtgfKm14qnsCkd6UcOgKRW_yA",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "server_id",
+								"value": "backend@africanb",
+								"type": "text"
+							},
+							{
+								"key": "client_id",
+								"value": "frontend@africanb",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\n    \"datas\":[\n        {\n        \"designation\":\"jourSemaine001\",\n        \"jourSemaineDesignation\":\"Lundi\",\n        \"offreVoyageDesignation\":\"AbidjanYamoussoukroCompagnieTransport\"\n        },\n        {\n        \"designation\":\"jourSemaine002\",\n        \"jourSemaineDesignation\":\"Mardi\",\n        \"offreVoyageDesignation\":\"AbidjanYamoussoukroCompagnieTransport\"\n        },\n        {\n        \"designation\":\"jourSemaine003\",\n        \"jourSemaineDesignation\":\"Mercredi\",\n        \"offreVoyageDesignation\":\"AbidjanYamoussoukroCompagnieTransport\"\n        },\n        {\n        \"designation\":\"jourSemaine004\",\n        \"jourSemaineDesignation\":\"Jeudi\",\n        \"offreVoyageDesignation\":\"AbidjanYamoussoukroCompagnieTransport\"\n        },\n        {\n        \"designation\":\"jourSemaine005\",\n        \"jourSemaineDesignation\":\"Vendredi\",\n        \"offreVoyageDesignation\":\"AbidjanYamoussoukroCompagnieTransport\"\n        },\n        {\n        \"designation\":\"jourSemaine006\",\n        \"jourSemaineDesignation\":\"Samedi\",\n        \"offreVoyageDesignation\":\"AbidjanYamoussoukroCompagnieTransport\"\n        },\n        {\n        \"designation\":\"jourSemaine007\",\n        \"jourSemaineDesignation\":\"Dimanche\",\n        \"offreVoyageDesignation\":\"AbidjanYamoussoukroCompagnieTransport\"\n        }\n    ]\n}",
@@ -1274,12 +1387,12 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/jourSemaines",
-							"protocol": "http",
+							"raw": "https://localhost:8443/jourSemaines",
+							"protocol": "https",
 							"host": [
 								"localhost"
 							],
-							"port": "8080",
+							"port": "8443",
 							"path": [
 								"jourSemaines"
 							]
@@ -1380,11 +1493,32 @@
 				{
 					"name": "create",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MjMwLCJsb2dpbiI6ImFkbWluQGNvbXBhZ25pZXRyYW5zcG9ydC5jb20iLCJyb2xlIjoxODcsInJhaXNvblNvY2lhbGUiOiJhbW0iLCJzdWIiOiJhZG1pbiIsImp0aSI6IjIzMCIsImlhdCI6MTY5ODQyNDM2NCwiZXhwIjoxNjk4NjA0MzY0fQ.NN_HfwxkBrquXFH_PaFtgfKm14qnsCkd6UcOgKRW_yA",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "server_id",
+								"value": "backend@africanb",
+								"type": "text"
+							},
+							{
+								"key": "client_id",
+								"value": "frontend@africanb",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": " { \n    \"datas\":[\n        {\n        \"designation\":\"programme600\",\n        \"jourSemaineDesignation\":\"jourSemaine003\",\n        \"dateArrivee\":\"30/12/2022\",\n        \"dateDepart\":\"30/12/2022\",\n        \"heureDepart\":\"08H00\",\n        \"heureArrivee\":\"11H00\"\n        },\n        {\n        \"designation\":\"programme700\",\n        \"jourSemaineDesignation\":\"jourSemaine003\",\n        \"dateArrivee\":\"30/12/2022\",\n        \"dateDepart\":\"30/12/2022\",\n        \"heureDepart\":\"12H00\",\n        \"heureArrivee\":\"15H00\"\n        },\n        {\n        \"designation\":\"programme800\",\n        \"jourSemaineDesignation\":\"jourSemaine003\",\n        \"dateArrivee\":\"30/12/2022\",\n        \"dateDepart\":\"30/12/2022\",\n        \"heureDepart\":\"15H00\",\n        \"heureArrivee\":\"18H00\"\n        }\n    ]\n}",
+							"raw": " { \n    \"datas\":[\n        {\n        \"designation\":\"programme600\",\n        \"jourSemaineDesignation\":\"jourSemaine005\",\n        \"dateArrivee\":\"30/12/2022\",\n        \"dateDepart\":\"30/12/2022\",\n        \"heureDepart\":\"08H00\",\n        \"nombrePlaceDisponible\":\"50\",\n        \"heureArrivee\":\"11H00\"\n        },\n        {\n        \"designation\":\"programme700\",\n        \"jourSemaineDesignation\":\"jourSemaine005\",\n        \"dateArrivee\":\"30/12/2022\",\n        \"dateDepart\":\"30/12/2022\",\n        \"heureDepart\":\"12H00\",\n         \"nombrePlaceDisponible\":\"50\",\n        \"heureArrivee\":\"15H00\"\n        },\n        {\n        \"designation\":\"programme800\",\n        \"jourSemaineDesignation\":\"jourSemaine005\",\n        \"dateArrivee\":\"30/12/2022\",\n        \"dateDepart\":\"30/12/2022\",\n        \"heureDepart\":\"15H00\",\n         \"nombrePlaceDisponible\":\"50\",\n        \"heureArrivee\":\"18H00\"\n        }\n    ]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1392,12 +1526,12 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/programmes",
-							"protocol": "http",
+							"raw": "https://localhost:8443/programmes",
+							"protocol": "https",
 							"host": [
 								"localhost"
 							],
-							"port": "8080",
+							"port": "8443",
 							"path": [
 								"programmes"
 							]
@@ -1688,8 +1822,29 @@
 				{
 					"name": "create",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MjMwLCJsb2dpbiI6ImFkbWluQGNvbXBhZ25pZXRyYW5zcG9ydC5jb20iLCJyb2xlIjoxODcsInJhaXNvblNvY2lhbGUiOiJhbW0iLCJzdWIiOiJhZG1pbiIsImp0aSI6IjIzMCIsImlhdCI6MTY5ODQyNDM2NCwiZXhwIjoxNjk4NjA0MzY0fQ.NN_HfwxkBrquXFH_PaFtgfKm14qnsCkd6UcOgKRW_yA",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "server_id",
+								"value": "backend@africanb",
+								"type": "text"
+							},
+							{
+								"key": "client_id",
+								"value": "frontend@africanb",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\n    \"datas\":[\n        {\n        \"designation\":\"gare001\",\n        \"email\":\"gare001@gmail.com\",\n        \"telephone1\":\"0101010101\",\n        \"telephone2\":\"0202020202\",\n        \"adresseLocalisation\":\"TreichVille\",\n        \"compagnieTransportRaisonSociale\":\"amm\"\n        },\n        {\n        \"designation\":\"gare002\",\n        \"email\":\"gare002@gmail.com\",\n        \"telephone1\":\"0101010101\",\n        \"telephone2\":\"0202020202\",\n        \"adresseLocalisation\":\"Marcory\",\n        \"compagnieTransportRaisonSociale\":\"amm\"\n        },\n        {\n        \"designation\":\"gare003\",\n        \"email\":\"gare003@gmail.com\",\n        \"telephone1\":\"0101010101\",\n        \"telephone2\":\"0202020202\",\n        \"adresseLocalisation\":\"Koumassi\",\n        \"compagnieTransportRaisonSociale\":\"amm\"\n        }\n    ]\n}",
@@ -1700,12 +1855,12 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/gares",
-							"protocol": "http",
+							"raw": "https://localhost:8443/gares",
+							"protocol": "https",
 							"host": [
 								"localhost"
 							],
-							"port": "8080",
+							"port": "8443",
 							"path": [
 								"gares"
 							]
@@ -2903,6 +3058,110 @@
 							"path": [
 								"actuator",
 								"health"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "RESERVATIONBILLETVOYAGE",
+			"item": [
+				{
+					"name": "getOffreVoyageByCriteria",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MjMwLCJsb2dpbiI6ImFkbWluQGNvbXBhZ25pZXRyYW5zcG9ydC5jb20iLCJyb2xlIjoxODcsInJhaXNvblNvY2lhbGUiOiJhbW0iLCJzdWIiOiJhZG1pbiIsImp0aSI6IjIzMCIsImlhdCI6MTY5ODQyNDM2NCwiZXhwIjoxNjk4NjA0MzY0fQ.NN_HfwxkBrquXFH_PaFtgfKm14qnsCkd6UcOgKRW_yA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "server_id",
+								"value": "backend@africanb",
+								"type": "text"
+							},
+							{
+								"key": "client_id",
+								"value": "frontend@africanb",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\":{\r\n        \"villeDepart\":\"Abidjan\",\r\n        \"villeDestination\":\"Yamousskro\",\r\n        \"dateDepart\":\"30/12/2022\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:8443/offreVoyages/getOffreVoyageByCriteria",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8443",
+							"path": [
+								"offreVoyages",
+								"getOffreVoyageByCriteria"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "reservationBilletVoyage",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MjMwLCJsb2dpbiI6ImFkbWluQGNvbXBhZ25pZXRyYW5zcG9ydC5jb20iLCJyb2xlIjoxODcsInJhaXNvblNvY2lhbGUiOiJhbW0iLCJzdWIiOiJhZG1pbiIsImp0aSI6IjIzMCIsImlhdCI6MTY5ODQyNDM2NCwiZXhwIjoxNjk4NjA0MzY0fQ.NN_HfwxkBrquXFH_PaFtgfKm14qnsCkd6UcOgKRW_yA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "server_id",
+								"value": "backend@africanb",
+								"type": "text"
+							},
+							{
+								"key": "client_id",
+								"value": "frontend@africanb",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\":{\r\n        \"programmeDesignation\":\"programme600\",\r\n        \"nombrePlace\":2,\r\n        \"categorieVoyageur\":\"Adulte\",\r\n        \"gareDesignation\":\"gare001\",\r\n        \"offreVoyageDesignation\":\"AbidjanYamoussoukroCompagnieTransport\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:8443/reservationBilletVoyages",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8443",
+							"path": [
+								"reservationBilletVoyages"
 							]
 						}
 					},

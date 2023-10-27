@@ -36,7 +36,7 @@ public class FunctionalityBusiness implements IBasicBusiness<Request<Functionali
     private Response<FunctionalityDTO> response;
     @Autowired
     private FunctionalityRepository functionalityRepository;
-   // @Autowired
+    // @Autowired
     //private UsersBusiness usersBusiness;
     @Autowired
     private RoleFunctionalityRepository roleFunctionalityRepository;
