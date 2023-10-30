@@ -5,6 +5,7 @@ import com.africanb.africanb.helper.ExceptionUtils;
 import com.africanb.africanb.helper.TechnicalError;
 import com.africanb.africanb.helper.contrat.Request;
 import com.africanb.africanb.helper.contrat.Response;
+import com.africanb.africanb.helper.dto.compagnie.GareDTO;
 import com.africanb.africanb.helper.dto.reservationBilletVoyage.ReservationBilletVoyageDTO;
 import com.africanb.africanb.helper.enums.FunctionalityEnum;
 import com.africanb.africanb.helper.status.StatusCode;
@@ -126,6 +127,31 @@ public class ReservationBilletVoyageController {
         Locale locale = new Locale(languageID, "");
         try{
             response= reservationBilletVoyageBusiness.getReservationBilletVoyageByAdminCompagnieTransport(request,locale);
+            if(response.isHasError()){
+                log.info(String.format("Erreur | code: {}",response.getStatus(),response.getStatus().getMessage()));
+            }
+            log.info(String.format("Code: {} - message: {}", StatusCode.SUCCESS, StatusMessage.SUCCESS));
+        }catch (CannotCreateTransactionException e){
+            exceptionUtils.CANNOT_CREATE_TRANSACTION_EXCEPTION(response,locale,e);
+        }catch (TransactionSystemException e){
+            exceptionUtils.TRANSACTION_SYSTEM_EXCEPTION(response,locale,e);
+        }catch (RuntimeException e){
+            exceptionUtils.RUNTIME_EXCEPTION(response,locale,e);
+        }catch (Exception e){
+            exceptionUtils.EXCEPTION(response,locale,e);
+        }
+        return response;
+    }
+
+
+    @RequestMapping(value="/getReservationByAdminCompagnieTransportAndGare",method= RequestMethod.POST,consumes = {"application/json"},produces={"application/json"})
+    public Response<ReservationBilletVoyageDTO> getReservationByAdminCompagnieTransportAndGare(@RequestBody Request<GareDTO> request) {
+        Response<ReservationBilletVoyageDTO> response = new Response<ReservationBilletVoyageDTO>();
+        //requestBasic.setAttribute("CURRENT_LANGUAGE_IDENTIFIER", "fr");
+        String languageID = (String) requestBasic.getAttribute("CURRENT_LANGUAGE_IDENTIFIER");
+        Locale locale = new Locale(languageID, "");
+        try{
+            response= reservationBilletVoyageBusiness.getReservationBilletVoyageByAdminCompagnieTransportAndGare(request,locale);
             if(response.isHasError()){
                 log.info(String.format("Erreur | code: {}",response.getStatus(),response.getStatus().getMessage()));
             }

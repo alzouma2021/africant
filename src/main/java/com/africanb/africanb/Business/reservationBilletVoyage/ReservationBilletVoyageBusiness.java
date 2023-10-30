@@ -22,6 +22,7 @@ import com.africanb.africanb.helper.TechnicalError;
 import com.africanb.africanb.helper.contrat.IBasicBusiness;
 import com.africanb.africanb.helper.contrat.Request;
 import com.africanb.africanb.helper.contrat.Response;
+import com.africanb.africanb.helper.dto.compagnie.GareDTO;
 import com.africanb.africanb.helper.dto.reservationBilletVoyage.ReservationBilletVoyageDTO;
 import com.africanb.africanb.helper.dto.reservationBilletVoyage.StatusUtilReservationBilletVoyageDTO;
 import com.africanb.africanb.helper.searchFunctions.Utilities;
@@ -38,6 +39,7 @@ import javax.persistence.EntityManager;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @Author ALZOUMA MOUSSA MAHAAMADOU
@@ -194,8 +196,8 @@ public class ReservationBilletVoyageBusiness implements IBasicBusiness<Request<R
             return response;
         }
         List<ReservationBilletVoyageDTO> itemsDto = (Utilities.isTrue(request.getIsSimpleLoading()))
-                                    ? ReservationBilletVoyageTransformer.INSTANCE.toLiteDtos(items)
-                                    : ReservationBilletVoyageTransformer.INSTANCE.toDtos(items);
+                ? ReservationBilletVoyageTransformer.INSTANCE.toLiteDtos(items)
+                : ReservationBilletVoyageTransformer.INSTANCE.toDtos(items);
         response.setItems(itemsDto);
         response.setHasError(false);
         response.setStatus(functionalError.SUCCESS("", locale));
@@ -319,6 +321,62 @@ public class ReservationBilletVoyageBusiness implements IBasicBusiness<Request<R
             response.setHasError(true);
             return response;
         }
+        List<ReservationBilletVoyageDTO> itemsDto = (Utilities.isTrue(request.getIsSimpleLoading()))
+                ? ReservationBilletVoyageTransformer.INSTANCE.toLiteDtos(items)
+                : ReservationBilletVoyageTransformer.INSTANCE.toDtos(items);
+        response.setItems(itemsDto);
+        response.setHasError(false);
+        response.setStatus(functionalError.SUCCESS("", locale));
+        log.info("----end get reservationBilletVoyage-----");
+        return response;
+    }
+
+
+    @Transactional(rollbackFor = {RuntimeException.class, Exception.class})
+    public Response<ReservationBilletVoyageDTO> getReservationBilletVoyageByAdminCompagnieTransportAndGare(Request<GareDTO> request, Locale locale) throws ParseException {
+        Response<ReservationBilletVoyageDTO> response = new Response<ReservationBilletVoyageDTO>();
+        List<ReservationBilletVoyage> items = new ArrayList<ReservationBilletVoyage>();
+        Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+        //Gare
+        if(request==null || request.getData()==null){
+            response.setStatus(functionalError.SAVE_FAIL("Gare non renseignée!!!!", locale));
+            response.setHasError(true);
+            return response;
+        }
+        //get users connected
+        Users existingUser = usersRepository.findOne(Long.valueOf(request.userID),false);
+        if (existingUser==null || existingUser.getRole()==null || existingUser.getRole().getCode()==null) {
+            response.setStatus(functionalError.SAVE_FAIL("user inexistant !!!!", locale));
+            response.setHasError(true);
+            return response;
+        }
+        if(!existingUser.getRole().getCode().equalsIgnoreCase(ProjectConstants.ROLE_ADMIN_COMPAGNIE_TRANSPORT)){
+            response.setStatus(functionalError.SAVE_FAIL("Autorisation insuffisante !!!!", locale));
+            response.setHasError(true);
+            return response;
+        }
+        CompagnieTransport existingCompagnieTransport=null;
+        if(existingUser.getCompagnieTransport()==null || existingUser.getCompagnieTransport().getRaisonSociale()==null){
+            response.setStatus(functionalError.SAVE_FAIL("Compagnie transport non trouvée !!!!", locale));
+            response.setHasError(true);
+            return response;
+        }else{
+            existingCompagnieTransport = compagnieTransportRepository.findByRaisonSociale(existingUser.getCompagnieTransport().getRaisonSociale(),false);
+            if (existingCompagnieTransport == null) {
+                response.setStatus(functionalError.SAVE_FAIL("Compagnie transport inexistante !!!", locale));
+                response.setHasError(true);
+                return response;
+            }
+        }
+        items=reservationBilletVoyageRepository.findByAdminCompagnieTransport(existingCompagnieTransport.getRaisonSociale(),false);
+        if (CollectionUtils.isEmpty(items)) {
+            response.setStatus(functionalError.DATA_NOT_EXIST("Aucune reservation de billet !!!!", locale));
+            response.setHasError(true);
+            return response;
+        }
+        items=items.stream()
+                .filter(item->item.getDesignation().equalsIgnoreCase(request.getData().getDesignation()))
+                .collect(Collectors.toList());
         List<ReservationBilletVoyageDTO> itemsDto = (Utilities.isTrue(request.getIsSimpleLoading()))
                 ? ReservationBilletVoyageTransformer.INSTANCE.toLiteDtos(items)
                 : ReservationBilletVoyageTransformer.INSTANCE.toDtos(items);
@@ -609,7 +667,7 @@ public class ReservationBilletVoyageBusiness implements IBasicBusiness<Request<R
 
     @Override
     public Response<ReservationBilletVoyageDTO> getAll(Locale locale) throws ParseException {
-       return null;
+        return null;
     }
 
     @Override
