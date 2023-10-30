@@ -105,14 +105,6 @@ public class ModePaiementBusiness implements IBasicBusiness<Request<ModePaiement
                     response.setHasError(true);
                     return response;
                 }
-                //Check the compagny mode abonnement
-                /*List<ModeAbonnement> exitingModeAbonnementList=null;
-                exitingModeAbonnementList=modeAbonnementRepository.findByCompagnieTransport(dto.getCompagnieTransportRaisonSociale(),false);
-                if(CollectionUtils.isEmpty(exitingModeAbonnementList)){
-                    response.setStatus(functionalError.SAVE_FAIL("La compagnie ne dispose pas de mode abonnement", locale));
-                    response.setHasError(true);
-                    return response;
-                }*/
                 itemsDtos.add(dto);
             }
         }
@@ -418,7 +410,7 @@ public class ModePaiementBusiness implements IBasicBusiness<Request<ModePaiement
 
     public ModePaiementDTO saveModePaiementEnFonctionDeLaClasseFilleCorrespondante(ModePaiementDTO modePaiementDTO, Locale locale) throws ParseException {
 
-        if(modePaiementDTO instanceof ModePaiementMtnMoneyDTO){
+        if(modePaiementDTO instanceof ModePaiementMtnMoneyDTO ){
             Request<ModePaiementMtnMoneyDTO> subRequest = new Request<ModePaiementMtnMoneyDTO>();
             List<ModePaiementMtnMoneyDTO> itemsDTO = Collections.synchronizedList(new ArrayList<ModePaiementMtnMoneyDTO>());
             ModePaiementMtnMoneyDTO modePaiementMtnMoneyDTO = (ModePaiementMtnMoneyDTO) modePaiementDTO;

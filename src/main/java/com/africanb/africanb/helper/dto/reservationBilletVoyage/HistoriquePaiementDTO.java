@@ -11,12 +11,10 @@ import lombok.ToString;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder(alphabetic = true)
 public class HistoriquePaiementDTO  {
-
     private Long id;
     private String identifiantUnique;
     private String description;
     private String dateTimePayment;
     private String modePaiementDesignation;
     private String reservationBilletVoyageDesignation;
-
 }

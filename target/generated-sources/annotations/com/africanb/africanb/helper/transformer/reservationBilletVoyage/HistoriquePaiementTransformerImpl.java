@@ -11,10 +11,10 @@ import javax.annotation.processing.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-10-30T16:54:36+0000",
+    date = "2023-10-30T18:17:51+0000",
     comments = "version: 1.4.2.Final, compiler: javac, environment: Java 11.0.0.1 (Oracle Corporation)"
 )
-public class HsitoriquePaiementTransformerImpl implements HistoriquePaiementTransformer {
+public class HistoriquePaiementTransformerImpl implements HistoriquePaiementTransformer {
 
     @Override
     public HistoriquePaiementDTO toDto(HistoriquePaiement entity) throws ParseException {
@@ -28,7 +28,7 @@ public class HsitoriquePaiementTransformerImpl implements HistoriquePaiementTran
         historiquePaiementDTO.setIdentifiantUnique( entity.getIdentifiantUnique() );
         historiquePaiementDTO.setDescription( entity.getDescription() );
         historiquePaiementDTO.setDateTimePayment( entity.getDateTimePayment() );
-        historiquePaiementDTO.setTypeModePaiementDesignation( entityModePaiementDesignation( entity ) );
+        historiquePaiementDTO.setModePaiementDesignation( entityModePaiementDesignation( entity ) );
         historiquePaiementDTO.setReservationBilletVoyageDesignation( entityReservationBilletVoyageDesignation( entity ) );
 
         return historiquePaiementDTO;

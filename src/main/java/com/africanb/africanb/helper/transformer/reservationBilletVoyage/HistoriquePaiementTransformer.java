@@ -1,17 +1,10 @@
 package com.africanb.africanb.helper.transformer.reservationBilletVoyage;
 
-
-import com.africanb.africanb.dao.entity.compagnie.Gare;
 import com.africanb.africanb.dao.entity.compagnie.ModePaiment.ModePaiement;
-import com.africanb.africanb.dao.entity.compagnie.StatusUtil;
-import com.africanb.africanb.dao.entity.offreVoyage.OffreVoyage;
-import com.africanb.africanb.dao.entity.offreVoyage.Programme;
 import com.africanb.africanb.dao.entity.reservationBilletVoyage.HistoriquePaiement;
 import com.africanb.africanb.dao.entity.reservationBilletVoyage.ReservationBilletVoyage;
-import com.africanb.africanb.dao.entity.security.Users;
 import com.africanb.africanb.helper.contrat.FullTransformerQualifier;
 import com.africanb.africanb.helper.dto.reservationBilletVoyage.HistoriquePaiementDTO;
-import com.africanb.africanb.helper.dto.reservationBilletVoyage.ReservationBilletVoyageDTO;
 import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -23,9 +16,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Mapper
-public interface HsitoriquePaiementTransformer {
+public interface HistoriquePaiementTransformer {
 
-    HsitoriquePaiementTransformer INSTANCE = Mappers.getMapper(HsitoriquePaiementTransformer.class);
+    HistoriquePaiementTransformer INSTANCE = Mappers.getMapper(HistoriquePaiementTransformer.class);
 
     @FullTransformerQualifier
     @Mappings({
@@ -33,7 +26,8 @@ public interface HsitoriquePaiementTransformer {
             @Mapping(source = "entity.identifiantUnique", target = "identifiantUnique"),
             @Mapping(source = "entity.description", target = "description"),
             @Mapping(source = "entity.dateTimePayment", target = "dateTimePayment"),
-            @Mapping(source = "entity.modePaiement.designation", target = "modePaiementDesignation")
+            @Mapping(source = "entity.modePaiement.designation", target = "modePaiementDesignation"),
+            @Mapping(source = "entity.reservationBilletVoyage.designation", target = "reservationBilletVoyageDesignation")
     })
     HistoriquePaiementDTO toDto(HistoriquePaiement entity) throws ParseException;;
 
@@ -67,9 +61,9 @@ public interface HsitoriquePaiementTransformer {
             @Mapping(source = "dto.identifiantUnique", target = "identifiantUnique"),
             @Mapping(source = "dto.description", target = "description"),
             @Mapping(source = "dto.dateTimePayment", target = "dateTimePayment"),
-
-            @Mapping(source="modePaiement", target="modePaiement")
+            @Mapping(source="modePaiement", target="modePaiement"),
+            @Mapping(source="reservationBilletVoyage", target="reservationBilletVoyage")
     })
-    HistoriquePaiement toEntity(HistoriquePaiementDTO dto, ModePaiement modePaiement) throws ParseException;
+    HistoriquePaiement toEntity(HistoriquePaiementDTO dto, ModePaiement modePaiement, ReservationBilletVoyage reservationBilletVoyage) throws ParseException;
 
 }

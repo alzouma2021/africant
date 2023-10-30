@@ -18,4 +18,9 @@ public interface ModePaiementRepository extends JpaRepository<ModePaiement,Long>
     @Query("select mp from  ModePaiement mp where mp.id.id = :id and mp.isDeleted= :isDeleted")
     ModePaiement findOne(@Param("id") long id, @Param("isDeleted") Boolean isDeleted);
 
+
+    @Query("select mp from  ModePaiement mp where mp.designation = :modePaiementDesignation and mp.isDeleted= :isDeleted")
+    ModePaiement findByDesignation(@Param("modePaiementDesignation") String modePaiementDesignation, @Param("isDeleted") Boolean isDeleted);
+
+
 }

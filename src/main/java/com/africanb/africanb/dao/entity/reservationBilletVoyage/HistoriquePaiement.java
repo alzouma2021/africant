@@ -1,8 +1,6 @@
 package com.africanb.africanb.dao.entity.reservationBilletVoyage;
 
 import com.africanb.africanb.dao.entity.compagnie.ModePaiment.ModePaiement;
-import com.africanb.africanb.dao.entity.offreVoyage.OffreVoyage;
-import com.africanb.africanb.utils.Reference.Reference;
 import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,8 +9,6 @@ import lombok.ToString;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.LocalDateTime;
-import java.util.Date;
 
 @Entity
 @Table(name = "hsitoriquepaiment")
@@ -35,7 +31,6 @@ public class HistoriquePaiement implements Serializable {
 
     @ManyToOne
     private ModePaiement modePaiement;
-    @ManyToOne
+    @OneToOne
     private ReservationBilletVoyage reservationBilletVoyage;
-
 }
