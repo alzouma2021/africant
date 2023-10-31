@@ -13,7 +13,6 @@ import com.africanb.africanb.helper.status.StatusCode;
 import com.africanb.africanb.helper.status.StatusMessage;
 import com.africanb.africanb.rest.fact.ControllerFactory;
 import lombok.extern.java.Log;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.CannotCreateTransactionException;
 import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.bind.annotation.*;
@@ -28,16 +27,20 @@ import java.util.Locale;
 @RequestMapping(value="/prixOffreVoyages")
 public class PrixOffreVoyageController {
 
-    @Autowired
-    private ControllerFactory<PrixOffreVoyageDTO> controllerFactory;
-    @Autowired
-    private PrixOffreVoyageBusiness prixOffreVoyageBusiness;
-    @Autowired
-    private TechnicalError technicalError;
-    @Autowired
-    private ExceptionUtils exceptionUtils;
-    @Autowired
-    private HttpServletRequest requestBasic;
+
+    private final ControllerFactory<PrixOffreVoyageDTO> controllerFactory;
+    private final PrixOffreVoyageBusiness prixOffreVoyageBusiness;
+    private final TechnicalError technicalError;
+    private final ExceptionUtils exceptionUtils;
+    private final HttpServletRequest requestBasic;
+
+    public PrixOffreVoyageController(ControllerFactory<PrixOffreVoyageDTO> controllerFactory, PrixOffreVoyageBusiness prixOffreVoyageBusiness, TechnicalError technicalError, ExceptionUtils exceptionUtils, HttpServletRequest requestBasic) {
+        this.controllerFactory = controllerFactory;
+        this.prixOffreVoyageBusiness = prixOffreVoyageBusiness;
+        this.technicalError = technicalError;
+        this.exceptionUtils = exceptionUtils;
+        this.requestBasic = requestBasic;
+    }
 
     @RequestMapping(value="",method= RequestMethod.POST,consumes = {"application/json"},produces={"application/json"})
     public Response<PrixOffreVoyageDTO> create(@RequestBody Request<PrixOffreVoyageDTO> request) {

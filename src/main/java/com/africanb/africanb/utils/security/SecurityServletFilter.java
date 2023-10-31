@@ -12,13 +12,11 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.ServletSecurity;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpFilter;
 import javax.servlet.http.HttpServletRequest;
@@ -33,15 +31,18 @@ import java.util.*;
 @Order(3)
 public class SecurityServletFilter extends HttpFilter {
 
-    @Autowired
-    private FunctionalError functionalError;
-    @Autowired
-    private ExceptionUtils exceptionUtils;
-    @Autowired
-    private UsersRepository usersRepository;
+    private final FunctionalError functionalError;
+    private final ExceptionUtils exceptionUtils;
+    private final UsersRepository usersRepository;
 
     private static String	defaultTenant	= "null";
     private static String defaultLanguage = "fr";
+
+    public SecurityServletFilter(FunctionalError functionalError, ExceptionUtils exceptionUtils, UsersRepository usersRepository) {
+        this.functionalError = functionalError;
+        this.exceptionUtils = exceptionUtils;
+        this.usersRepository = usersRepository;
+    }
 
     @SneakyThrows
     @Override

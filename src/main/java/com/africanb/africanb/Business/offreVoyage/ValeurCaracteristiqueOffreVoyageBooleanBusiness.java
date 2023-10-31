@@ -4,7 +4,6 @@ package com.africanb.africanb.Business.offreVoyage;
 import com.africanb.africanb.dao.entity.offreVoyage.OffreVoyage;
 import com.africanb.africanb.dao.entity.offreVoyage.ProprieteOffreVoyage;
 import com.africanb.africanb.dao.entity.offreVoyage.ValeurCaracteristiqueOffreVoyageBoolean;
-import com.africanb.africanb.dao.entity.offreVoyage.ValeurCaracteristiqueOffreVoyageLong;
 import com.africanb.africanb.dao.repository.offreVoyage.OffreVoyageRepository;
 import com.africanb.africanb.dao.repository.offreVoyage.ProprieteOffreVoyageRepository;
 import com.africanb.africanb.dao.repository.offreVoyage.ValeurCaracteristiqueOffreVoyageBooleanRepository;
@@ -15,13 +14,9 @@ import com.africanb.africanb.helper.contrat.IBasicBusiness;
 import com.africanb.africanb.helper.contrat.Request;
 import com.africanb.africanb.helper.contrat.Response;
 import com.africanb.africanb.helper.dto.offreVoyage.ValeurCaracteristiqueOffreVoyageBooleanDTO;
-import com.africanb.africanb.helper.dto.offreVoyage.ValeurCaracteristiqueOffreVoyageDTO;
-import com.africanb.africanb.helper.dto.offreVoyage.ValeurCaracteristiqueOffreVoyageLongDTO;
 import com.africanb.africanb.helper.searchFunctions.Utilities;
 import com.africanb.africanb.helper.transformer.offrreVoyage.ValeurCaracteristiqueOffreVoyageBooleanTransformer;
-import com.africanb.africanb.helper.transformer.offrreVoyage.ValeurCaracteristiqueOffreVoyageLongTransformer;
 import lombok.extern.java.Log;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -42,25 +37,25 @@ public class ValeurCaracteristiqueOffreVoyageBooleanBusiness implements IBasicBu
 
     private Response<ValeurCaracteristiqueOffreVoyageBooleanDTO> response;
 
-    @Autowired
-    ValeurCaracteristiqueOffreVoyageBooleanRepository valeurCaracteristiqueOffreVoyageBooleanRepository;
-    @Autowired
-    private FunctionalError functionalError;
-    @Autowired
-    OffreVoyageRepository offreVoyageRepository;
-    @Autowired
-    ProprieteOffreVoyageRepository proprieteOffreVoyageRepository;
-    @Autowired
-    private TechnicalError technicalError;
-    @Autowired
-    private ExceptionUtils exceptionUtils;
-    @Autowired
-    private EntityManager em;
+    private final ValeurCaracteristiqueOffreVoyageBooleanRepository valeurCaracteristiqueOffreVoyageBooleanRepository;
+    private final FunctionalError functionalError;
+    private final OffreVoyageRepository offreVoyageRepository;
+    private final ProprieteOffreVoyageRepository proprieteOffreVoyageRepository;
+    private final TechnicalError technicalError;
+    private final ExceptionUtils exceptionUtils;
+    private final EntityManager em;
 
     private final SimpleDateFormat dateFormat;
     private final SimpleDateFormat dateTimeFormat;
 
-    public ValeurCaracteristiqueOffreVoyageBooleanBusiness() {
+    public ValeurCaracteristiqueOffreVoyageBooleanBusiness(ValeurCaracteristiqueOffreVoyageBooleanRepository valeurCaracteristiqueOffreVoyageBooleanRepository, FunctionalError functionalError, OffreVoyageRepository offreVoyageRepository, ProprieteOffreVoyageRepository proprieteOffreVoyageRepository, TechnicalError technicalError, ExceptionUtils exceptionUtils, EntityManager em) {
+        this.valeurCaracteristiqueOffreVoyageBooleanRepository = valeurCaracteristiqueOffreVoyageBooleanRepository;
+        this.functionalError = functionalError;
+        this.offreVoyageRepository = offreVoyageRepository;
+        this.proprieteOffreVoyageRepository = proprieteOffreVoyageRepository;
+        this.technicalError = technicalError;
+        this.exceptionUtils = exceptionUtils;
+        this.em = em;
         dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         dateTimeFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
     }

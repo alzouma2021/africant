@@ -30,7 +30,6 @@ import com.africanb.africanb.helper.transformer.reservationBilletVoyage.Reservat
 import com.africanb.africanb.helper.validation.Validate;
 import com.africanb.africanb.utils.Constants.ProjectConstants;
 import lombok.extern.java.Log;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -51,42 +50,43 @@ public class ReservationBilletVoyageBusiness implements IBasicBusiness<Request<R
 
     private Response<ReservationBilletVoyageDTO> response;
 
-    @Autowired
-    private ReferenceRepository referenceRepository;
-    @Autowired
-    private ProgrammeRepository programmeRepository;
-    @Autowired
-    private OffreVoyageRepository offreVoyageRepository;
-    @Autowired
-    private GareRepository gareRepository;
-    @Autowired
-    private ModeAbonnementRepository modeAbonnementRepository;
-    @Autowired
-    private PrixOffreVoyageRepository prixOffreVoyageRepository;
-    @Autowired
-    private StatusUtilRepository statusUtilRepository;
-    @Autowired
-    private UsersRepository usersRepository;
-    @Autowired
-    private CompagnieTransportRepository compagnieTransportRepository;
-    @Autowired
-    private ReservationBilletVoyageRepository reservationBilletVoyageRepository;
-    @Autowired
-    private StatusUtilRservationBilletVoyageBusiness statusUtilRservationBilletVoyageBusiness;
 
-    @Autowired
-    private FunctionalError functionalError;
-    @Autowired
-    private TechnicalError technicalError;
-    @Autowired
-    private ExceptionUtils exceptionUtils;
-    @Autowired
-    private EntityManager em;
+    private final ReferenceRepository referenceRepository;
+    private final ProgrammeRepository programmeRepository;
+    private final OffreVoyageRepository offreVoyageRepository;
+    private final GareRepository gareRepository;
+    private final ModeAbonnementRepository modeAbonnementRepository;
+    private final PrixOffreVoyageRepository prixOffreVoyageRepository;
+    private final StatusUtilRepository statusUtilRepository;
+    private final UsersRepository usersRepository;
+    private final CompagnieTransportRepository compagnieTransportRepository;
+    private final ReservationBilletVoyageRepository reservationBilletVoyageRepository;
+    private final StatusUtilRservationBilletVoyageBusiness statusUtilRservationBilletVoyageBusiness;
+
+    private final FunctionalError functionalError;
+    private final TechnicalError technicalError;
+    private final ExceptionUtils exceptionUtils;
+    private final EntityManager em;
 
     private final SimpleDateFormat dateFormat;
     private final SimpleDateFormat dateTimeFormat;
 
-    public ReservationBilletVoyageBusiness() {
+    public ReservationBilletVoyageBusiness(ReferenceRepository referenceRepository, ProgrammeRepository programmeRepository, OffreVoyageRepository offreVoyageRepository, GareRepository gareRepository, ModeAbonnementRepository modeAbonnementRepository, PrixOffreVoyageRepository prixOffreVoyageRepository, StatusUtilRepository statusUtilRepository, UsersRepository usersRepository, CompagnieTransportRepository compagnieTransportRepository, ReservationBilletVoyageRepository reservationBilletVoyageRepository, StatusUtilRservationBilletVoyageBusiness statusUtilRservationBilletVoyageBusiness, FunctionalError functionalError, TechnicalError technicalError, ExceptionUtils exceptionUtils, EntityManager em) {
+        this.referenceRepository = referenceRepository;
+        this.programmeRepository = programmeRepository;
+        this.offreVoyageRepository = offreVoyageRepository;
+        this.gareRepository = gareRepository;
+        this.modeAbonnementRepository = modeAbonnementRepository;
+        this.prixOffreVoyageRepository = prixOffreVoyageRepository;
+        this.statusUtilRepository = statusUtilRepository;
+        this.usersRepository = usersRepository;
+        this.compagnieTransportRepository = compagnieTransportRepository;
+        this.reservationBilletVoyageRepository = reservationBilletVoyageRepository;
+        this.statusUtilRservationBilletVoyageBusiness = statusUtilRservationBilletVoyageBusiness;
+        this.functionalError = functionalError;
+        this.technicalError = technicalError;
+        this.exceptionUtils = exceptionUtils;
+        this.em = em;
         dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         dateTimeFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
     }

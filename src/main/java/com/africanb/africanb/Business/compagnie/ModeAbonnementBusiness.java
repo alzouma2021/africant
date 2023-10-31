@@ -21,7 +21,6 @@ import com.africanb.africanb.helper.validation.Validate;
 import com.africanb.africanb.utils.Constants.ProjectConstants;
 import com.africanb.africanb.utils.Reference.Reference;
 import lombok.extern.java.Log;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -40,29 +39,29 @@ public class ModeAbonnementBusiness implements IBasicBusiness<Request<ModeAbonne
 
     private Response<ModeAbonnementDTO> response;
 
-    @Autowired
-    private FunctionalError functionalError;
-    @Autowired
-    private CompagnieTransportRepository compagnieTransportRepository;
-    @Autowired
-    private ReferenceRepository referenceRepository;
-    @Autowired
-    private AbonnementPeriodiqueBusiness abonnementPeriodiqueBusiness;
-    @Autowired
-    private ModeAbonnementRepository modeAbonnementRepository;
-    @Autowired
-    private AbonnementPrelevementBusiness abonnementPrelevementBusiness;
-    @Autowired
-    private TechnicalError technicalError;
-    @Autowired
-    private ExceptionUtils exceptionUtils;
-    @Autowired
-    private EntityManager em;
+    private final FunctionalError functionalError;
+    private final CompagnieTransportRepository compagnieTransportRepository;
+    private final ReferenceRepository referenceRepository;
+    private final AbonnementPeriodiqueBusiness abonnementPeriodiqueBusiness;
+    private final ModeAbonnementRepository modeAbonnementRepository;
+    private final AbonnementPrelevementBusiness abonnementPrelevementBusiness;
+    private final TechnicalError technicalError;
+    private final ExceptionUtils exceptionUtils;
+    private final EntityManager em;
 
     private final SimpleDateFormat dateFormat;
     private final SimpleDateFormat dateTimeFormat;
 
-    public ModeAbonnementBusiness() {
+    public ModeAbonnementBusiness(FunctionalError functionalError, CompagnieTransportRepository compagnieTransportRepository, ReferenceRepository referenceRepository, AbonnementPeriodiqueBusiness abonnementPeriodiqueBusiness, ModeAbonnementRepository modeAbonnementRepository, AbonnementPrelevementBusiness abonnementPrelevementBusiness, TechnicalError technicalError, ExceptionUtils exceptionUtils, EntityManager em) {
+        this.functionalError = functionalError;
+        this.compagnieTransportRepository = compagnieTransportRepository;
+        this.referenceRepository = referenceRepository;
+        this.abonnementPeriodiqueBusiness = abonnementPeriodiqueBusiness;
+        this.modeAbonnementRepository = modeAbonnementRepository;
+        this.abonnementPrelevementBusiness = abonnementPrelevementBusiness;
+        this.technicalError = technicalError;
+        this.exceptionUtils = exceptionUtils;
+        this.em = em;
         dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         dateTimeFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
     }

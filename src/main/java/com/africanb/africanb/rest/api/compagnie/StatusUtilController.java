@@ -8,7 +8,6 @@ import com.africanb.africanb.helper.dto.compagnie.StatusUtilDTO;
 import com.africanb.africanb.helper.enums.FunctionalityEnum;
 import com.africanb.africanb.rest.fact.ControllerFactory;
 import lombok.extern.java.Log;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -18,10 +17,14 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value="/statusUtil")
 public class StatusUtilController {
 
-    @Autowired
-    private ControllerFactory<StatusUtilDTO> controllerFactory;
-    @Autowired
-    private StatusUtilBusiness statusUtilBusiness;
+
+    private final ControllerFactory<StatusUtilDTO> controllerFactory;
+    private final StatusUtilBusiness statusUtilBusiness;
+
+    public StatusUtilController(ControllerFactory<StatusUtilDTO> controllerFactory, StatusUtilBusiness statusUtilBusiness) {
+        this.controllerFactory = controllerFactory;
+        this.statusUtilBusiness = statusUtilBusiness;
+    }
 
 
     @RequestMapping(value="",method= RequestMethod.POST,consumes = {"application/json"},produces={"application/json"})

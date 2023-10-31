@@ -3,8 +3,6 @@ package com.africanb.africanb.Business.compagnie;
 
 import com.africanb.africanb.dao.entity.compagnie.CompagnieAttestionTransport;
 import com.africanb.africanb.dao.entity.compagnie.CompagnieTransport;
-import com.africanb.africanb.dao.entity.compagnie.StatusUtil;
-import com.africanb.africanb.dao.entity.compagnie.StatusUtilCompagnieTransport;
 import com.africanb.africanb.dao.entity.document.Document;
 import com.africanb.africanb.dao.repository.compagnie.CompagnieAttestationTransportRepository;
 import com.africanb.africanb.dao.repository.compagnie.CompagnieTransportRepository;
@@ -16,13 +14,10 @@ import com.africanb.africanb.helper.contrat.IBasicBusiness;
 import com.africanb.africanb.helper.contrat.Request;
 import com.africanb.africanb.helper.contrat.Response;
 import com.africanb.africanb.helper.dto.compagnie.CompagnieAttestionTransportDTO;
-import com.africanb.africanb.helper.dto.compagnie.StatusUtilCompagnieTransportDTO;
 import com.africanb.africanb.helper.searchFunctions.Utilities;
 import com.africanb.africanb.helper.transformer.compagnie.CompagnieAttestionTransportTransformer;
-import com.africanb.africanb.helper.transformer.compagnie.StatusUtilCompagnieTransportTransformer;
 import com.africanb.africanb.helper.validation.Validate;
 import lombok.extern.java.Log;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -36,27 +31,26 @@ import java.util.*;
 public class CompagnieAttestionTransportBusiness implements IBasicBusiness<Request<CompagnieAttestionTransportDTO>, Response<CompagnieAttestionTransportDTO>> {
 
     private Response<CompagnieAttestionTransportDTO> response;
-    @Autowired
-    private CompagnieAttestationTransportRepository compagnieAttestionTransportRepository;
-    @Autowired
-    private DocumentRepository documentRepository;
-    @Autowired
-    private CompagnieTransportRepository compagnieTransportRepository;
 
-    @Autowired
-    private FunctionalError functionalError;
-    @Autowired
-    private TechnicalError technicalError;
-    @Autowired
-    private ExceptionUtils exceptionUtils;
-
-    @Autowired
-    private EntityManager em;
+    private final CompagnieAttestationTransportRepository compagnieAttestionTransportRepository;
+    private final DocumentRepository documentRepository;
+    private final CompagnieTransportRepository compagnieTransportRepository;
+    private final FunctionalError functionalError;
+    private final TechnicalError technicalError;
+    private final ExceptionUtils exceptionUtils;
+    private final EntityManager em;
 
     private final SimpleDateFormat dateFormat;
     private final SimpleDateFormat dateTimeFormat;
 
-    public CompagnieAttestionTransportBusiness() {
+    public CompagnieAttestionTransportBusiness(CompagnieAttestationTransportRepository compagnieAttestionTransportRepository, DocumentRepository documentRepository, CompagnieTransportRepository compagnieTransportRepository, FunctionalError functionalError, TechnicalError technicalError, ExceptionUtils exceptionUtils, EntityManager em) {
+        this.compagnieAttestionTransportRepository = compagnieAttestionTransportRepository;
+        this.documentRepository = documentRepository;
+        this.compagnieTransportRepository = compagnieTransportRepository;
+        this.functionalError = functionalError;
+        this.technicalError = technicalError;
+        this.exceptionUtils = exceptionUtils;
+        this.em = em;
         dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         dateTimeFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
     }

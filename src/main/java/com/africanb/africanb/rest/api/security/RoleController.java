@@ -7,14 +7,12 @@ import com.africanb.africanb.helper.FunctionalError;
 import com.africanb.africanb.helper.TechnicalError;
 import com.africanb.africanb.helper.contrat.Request;
 import com.africanb.africanb.helper.contrat.Response;
-import com.africanb.africanb.helper.dto.security.FunctionalityDTO;
 import com.africanb.africanb.helper.dto.security.RoleDTO;
 import com.africanb.africanb.helper.enums.FunctionalityEnum;
 import com.africanb.africanb.helper.status.StatusCode;
 import com.africanb.africanb.helper.status.StatusMessage;
 import com.africanb.africanb.rest.fact.ControllerFactory;
 import lombok.extern.java.Log;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.CannotCreateTransactionException;
 import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.bind.annotation.*;
@@ -28,19 +26,21 @@ import java.util.Locale;
 @RequestMapping(value="/roles")
 public class RoleController {
 
-    @Autowired
-    private ControllerFactory<RoleDTO> controllerFactory;
-    @Autowired
-    private RoleBusiness roleBusiness;
+    private final ControllerFactory<RoleDTO> controllerFactory;
+    private final RoleBusiness roleBusiness;
+    private final FunctionalError functionalError;
+    private final TechnicalError technicalError;
+    private final ExceptionUtils exceptionUtils;
+    private final HttpServletRequest requestBasic;
 
-    @Autowired
-    private FunctionalError functionalError;
-    @Autowired
-    private TechnicalError technicalError;
-    @Autowired
-    private ExceptionUtils exceptionUtils;
-    @Autowired
-    private HttpServletRequest requestBasic;
+    public RoleController(ControllerFactory<RoleDTO> controllerFactory, RoleBusiness roleBusiness, FunctionalError functionalError, TechnicalError technicalError, ExceptionUtils exceptionUtils, HttpServletRequest requestBasic) {
+        this.controllerFactory = controllerFactory;
+        this.roleBusiness = roleBusiness;
+        this.functionalError = functionalError;
+        this.technicalError = technicalError;
+        this.exceptionUtils = exceptionUtils;
+        this.requestBasic = requestBasic;
+    }
 
 
     @RequestMapping(value="",method= RequestMethod.POST,consumes = {"application/json"},produces={"application/json"})

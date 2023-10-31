@@ -28,8 +28,8 @@ public class AuthenticationClientFilter extends HttpFilter {
     private String serverId;
     @Value("${client.id}")
     private String clientId;
-    private FunctionalError functionalError;
-    private ExceptionUtils exceptionUtils;
+    private final FunctionalError functionalError;
+    private final ExceptionUtils exceptionUtils;
 
     @Autowired
     public AuthenticationClientFilter(FunctionalError functionalError, ExceptionUtils exceptionUtils) {

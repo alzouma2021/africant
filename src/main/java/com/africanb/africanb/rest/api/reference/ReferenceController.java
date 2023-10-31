@@ -12,9 +12,7 @@ import com.africanb.africanb.rest.fact.ControllerFactory;
 import com.africanb.africanb.utils.Reference.RechercherReferenceDTO;
 import com.africanb.africanb.utils.Reference.ReferenceBusines;
 import com.africanb.africanb.utils.Reference.ReferenceDTO;
-import com.africanb.africanb.utils.emailService.EmailDTO;
 import lombok.extern.java.Log;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.CannotCreateTransactionException;
 import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.bind.annotation.*;
@@ -29,17 +27,19 @@ import java.util.Locale;
 @RequestMapping(value="/references")
 public class ReferenceController {
 
-    @Autowired
-    private ControllerFactory<ReferenceDTO> controllerFactory;
-    @Autowired
-    private ReferenceBusines referenceBusines;
+    private final ControllerFactory<ReferenceDTO> controllerFactory;
+    private final ReferenceBusines referenceBusines;
+    private final TechnicalError technicalError;
+    private final ExceptionUtils exceptionUtils;
+    private final HttpServletRequest requestBasic;
 
-    @Autowired
-    private TechnicalError technicalError;
-    @Autowired
-    private ExceptionUtils exceptionUtils;
-    @Autowired
-    private HttpServletRequest requestBasic;
+    public ReferenceController(ControllerFactory<ReferenceDTO> controllerFactory, ReferenceBusines referenceBusines, TechnicalError technicalError, ExceptionUtils exceptionUtils, HttpServletRequest requestBasic) {
+        this.controllerFactory = controllerFactory;
+        this.referenceBusines = referenceBusines;
+        this.technicalError = technicalError;
+        this.exceptionUtils = exceptionUtils;
+        this.requestBasic = requestBasic;
+    }
 
     @RequestMapping(value="",method= RequestMethod.POST,consumes = {"application/json"},produces={"application/json"})
     public Response<ReferenceDTO> create(@RequestBody Request<ReferenceDTO> request) {

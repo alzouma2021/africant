@@ -6,12 +6,10 @@ import com.africanb.africanb.helper.ExceptionUtils;
 import com.africanb.africanb.helper.TechnicalError;
 import com.africanb.africanb.helper.contrat.Request;
 import com.africanb.africanb.helper.contrat.Response;
-import com.africanb.africanb.helper.dto.offreVoyage.PrixOffreVoyageDTO;
 import com.africanb.africanb.helper.dto.offreVoyage.ProgrammeDTO;
 import com.africanb.africanb.helper.enums.FunctionalityEnum;
 import com.africanb.africanb.rest.fact.ControllerFactory;
 import lombok.extern.java.Log;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,16 +21,20 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping(value="/programmes")
 public class ProgrammeController {
 
-    @Autowired
-    private ControllerFactory<ProgrammeDTO> controllerFactory;
-    @Autowired
-    private ProgrammeBusiness programmeBusiness;
-    @Autowired
-    private TechnicalError technicalError;
-    @Autowired
-    private ExceptionUtils exceptionUtils;
-    @Autowired
-    private HttpServletRequest requestBasic;
+
+    private final ControllerFactory<ProgrammeDTO> controllerFactory;
+    private final ProgrammeBusiness programmeBusiness;
+    private final TechnicalError technicalError;
+    private final ExceptionUtils exceptionUtils;
+    private final HttpServletRequest requestBasic;
+
+    public ProgrammeController(ControllerFactory<ProgrammeDTO> controllerFactory, ProgrammeBusiness programmeBusiness, TechnicalError technicalError, ExceptionUtils exceptionUtils, HttpServletRequest requestBasic) {
+        this.controllerFactory = controllerFactory;
+        this.programmeBusiness = programmeBusiness;
+        this.technicalError = technicalError;
+        this.exceptionUtils = exceptionUtils;
+        this.requestBasic = requestBasic;
+    }
 
     @RequestMapping(value="",method= RequestMethod.POST,consumes = {"application/json"},produces={"application/json"})
     public Response<ProgrammeDTO> create(@RequestBody Request<ProgrammeDTO> request) {

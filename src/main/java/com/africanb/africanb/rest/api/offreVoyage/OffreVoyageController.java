@@ -6,16 +6,13 @@ import com.africanb.africanb.helper.ExceptionUtils;
 import com.africanb.africanb.helper.TechnicalError;
 import com.africanb.africanb.helper.contrat.Request;
 import com.africanb.africanb.helper.contrat.Response;
-import com.africanb.africanb.helper.dto.compagnie.CompagnieTransportDTO;
 import com.africanb.africanb.helper.dto.offreVoyage.OffreVoyageDTO;
-import com.africanb.africanb.helper.dto.offreVoyage.PrixOffreVoyageDTO;
 import com.africanb.africanb.helper.dto.offreVoyage.RechercheCritereOffreVoyageDTO;
 import com.africanb.africanb.helper.enums.FunctionalityEnum;
 import com.africanb.africanb.helper.status.StatusCode;
 import com.africanb.africanb.helper.status.StatusMessage;
 import com.africanb.africanb.rest.fact.ControllerFactory;
 import lombok.extern.java.Log;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.CannotCreateTransactionException;
 import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.bind.annotation.*;
@@ -30,16 +27,19 @@ import java.util.Locale;
 @RequestMapping(value="/offreVoyages")
 public class OffreVoyageController {
 
-    @Autowired
-    private ControllerFactory<OffreVoyageDTO> controllerFactory;
-    @Autowired
-    private OffreVoyageBusiness offreVoyageBusiness;
-    @Autowired
-    private TechnicalError technicalError;
-    @Autowired
-    private ExceptionUtils exceptionUtils;
-    @Autowired
-    private HttpServletRequest requestBasic;
+    private final ControllerFactory<OffreVoyageDTO> controllerFactory;
+    private final OffreVoyageBusiness offreVoyageBusiness;
+    private final TechnicalError technicalError;
+    private final ExceptionUtils exceptionUtils;
+    private final HttpServletRequest requestBasic;
+
+    public OffreVoyageController(ControllerFactory<OffreVoyageDTO> controllerFactory, OffreVoyageBusiness offreVoyageBusiness, TechnicalError technicalError, ExceptionUtils exceptionUtils, HttpServletRequest requestBasic) {
+        this.controllerFactory = controllerFactory;
+        this.offreVoyageBusiness = offreVoyageBusiness;
+        this.technicalError = technicalError;
+        this.exceptionUtils = exceptionUtils;
+        this.requestBasic = requestBasic;
+    }
 
     @RequestMapping(value="",method= RequestMethod.POST,consumes = {"application/json"},produces={"application/json"})
     public Response<OffreVoyageDTO> create(@RequestBody Request<OffreVoyageDTO> request) {

@@ -18,7 +18,6 @@ import com.africanb.africanb.helper.transformer.compagnie.AbonnementPrelevementT
 import com.africanb.africanb.helper.validation.Validate;
 import com.africanb.africanb.utils.Reference.Reference;
 import lombok.extern.java.Log;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -36,27 +35,26 @@ public class AbonnementPrelevementBusiness implements IBasicBusiness<Request<Abo
 
     private Response<AbonnementPrelevementDTO> response;
 
-    @Autowired
-    AbonnementPrelevementRepository abonnementPrelevementRepository;
-    @Autowired
-    ModeAbonnementRepository modeAbonnementRepository;
-    @Autowired
-    private FunctionalError functionalError;
-    @Autowired
-    CompagnieTransportRepository compagnieTransportRepository;
-    @Autowired
-    ReferenceRepository periodiciteAbonnementRepository;
-    @Autowired
-    private TechnicalError technicalError;
-    @Autowired
-    private ExceptionUtils exceptionUtils;
-    @Autowired
-    private EntityManager em;
-
+    private final AbonnementPrelevementRepository abonnementPrelevementRepository;
+    private final ModeAbonnementRepository modeAbonnementRepository;
+    private final FunctionalError functionalError;
+    private final CompagnieTransportRepository compagnieTransportRepository;
+    private final ReferenceRepository periodiciteAbonnementRepository;
+    private final TechnicalError technicalError;
+    private final ExceptionUtils exceptionUtils;
+    private final EntityManager em;
     private final SimpleDateFormat dateFormat;
     private final SimpleDateFormat dateTimeFormat;
 
-    public AbonnementPrelevementBusiness() {
+    public AbonnementPrelevementBusiness(AbonnementPrelevementRepository abonnementPrelevementRepository, ModeAbonnementRepository modeAbonnementRepository, FunctionalError functionalError, CompagnieTransportRepository compagnieTransportRepository, ReferenceRepository periodiciteAbonnementRepository, TechnicalError technicalError, ExceptionUtils exceptionUtils, EntityManager em) {
+        this.abonnementPrelevementRepository = abonnementPrelevementRepository;
+        this.modeAbonnementRepository = modeAbonnementRepository;
+        this.functionalError = functionalError;
+        this.compagnieTransportRepository = compagnieTransportRepository;
+        this.periodiciteAbonnementRepository = periodiciteAbonnementRepository;
+        this.technicalError = technicalError;
+        this.exceptionUtils = exceptionUtils;
+        this.em = em;
         dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         dateTimeFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
     }

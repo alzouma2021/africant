@@ -19,7 +19,6 @@ import com.africanb.africanb.helper.transformer.security.FunctionalityTransforme
 import com.africanb.africanb.helper.transformer.security.RoleFunctionalityTransformer;
 import com.africanb.africanb.helper.validation.Validate;
 import lombok.extern.java.Log;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,27 +33,26 @@ import java.util.stream.Collectors;
 public class FunctionalityBusiness implements IBasicBusiness<Request<FunctionalityDTO>, Response<FunctionalityDTO>> {
 
     private Response<FunctionalityDTO> response;
-    @Autowired
-    private FunctionalityRepository functionalityRepository;
-    // @Autowired
-    //private UsersBusiness usersBusiness;
-    @Autowired
-    private RoleFunctionalityRepository roleFunctionalityRepository;
-    @Autowired
-    private FunctionalError functionalError;
-    @Autowired
-    private TechnicalError technicalError;
-    @Autowired
-    private ExceptionUtils exceptionUtils;
-    @Autowired
-    private EntityManager em;
 
-    @Autowired
-    private RoleFunctionalityBusiness roleFunctionalityBusiness;
+    private final FunctionalityRepository functionalityRepository;
+
+    private final RoleFunctionalityRepository roleFunctionalityRepository;
+    private final FunctionalError functionalError;
+    private final TechnicalError technicalError;
+    private final ExceptionUtils exceptionUtils;
+    private final EntityManager em;
+    private final RoleFunctionalityBusiness roleFunctionalityBusiness;
     private final SimpleDateFormat dateFormat;
     private final SimpleDateFormat dateTimeFormat;
 
-    public FunctionalityBusiness() {
+    public FunctionalityBusiness(FunctionalityRepository functionalityRepository, RoleFunctionalityRepository roleFunctionalityRepository, FunctionalError functionalError, TechnicalError technicalError, ExceptionUtils exceptionUtils, EntityManager em, RoleFunctionalityBusiness roleFunctionalityBusiness) {
+        this.functionalityRepository = functionalityRepository;
+        this.roleFunctionalityRepository = roleFunctionalityRepository;
+        this.functionalError = functionalError;
+        this.technicalError = technicalError;
+        this.exceptionUtils = exceptionUtils;
+        this.em = em;
+        this.roleFunctionalityBusiness = roleFunctionalityBusiness;
         dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         dateTimeFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
     }

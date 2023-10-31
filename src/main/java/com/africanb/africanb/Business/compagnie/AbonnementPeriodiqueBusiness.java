@@ -18,7 +18,6 @@ import com.africanb.africanb.helper.transformer.compagnie.AbonnementPeriodiqueTr
 import com.africanb.africanb.helper.validation.Validate;
 import com.africanb.africanb.utils.Reference.Reference;
 import lombok.extern.java.Log;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -37,25 +36,24 @@ public class AbonnementPeriodiqueBusiness implements IBasicBusiness<Request<Abon
 
     private Response<AbonnementPeriodiqueDTO> response;
 
-    @Autowired
-    AbonnementPeriodiqueRepository abonnementPeriodiqueRepository;
-    @Autowired
-    private FunctionalError functionalError;
-    @Autowired
-    CompagnieTransportRepository compagnieTransportRepository;
-    @Autowired
-    ReferenceRepository periodiciteAbonnementRepository;
-    @Autowired
-    private TechnicalError technicalError;
-    @Autowired
-    private ExceptionUtils exceptionUtils;
-    @Autowired
-    private EntityManager em;
-
+    private final AbonnementPeriodiqueRepository abonnementPeriodiqueRepository;
+    private final FunctionalError functionalError;
+    private final CompagnieTransportRepository compagnieTransportRepository;
+    private final ReferenceRepository periodiciteAbonnementRepository;
+    private final TechnicalError technicalError;
+    private final ExceptionUtils exceptionUtils;
+    private final EntityManager em;
     private final SimpleDateFormat dateFormat;
     private final SimpleDateFormat dateTimeFormat;
 
-    public AbonnementPeriodiqueBusiness() {
+    public AbonnementPeriodiqueBusiness(AbonnementPeriodiqueRepository abonnementPeriodiqueRepository, FunctionalError functionalError, CompagnieTransportRepository compagnieTransportRepository, ReferenceRepository periodiciteAbonnementRepository, TechnicalError technicalError, ExceptionUtils exceptionUtils, EntityManager em) {
+        this.abonnementPeriodiqueRepository = abonnementPeriodiqueRepository;
+        this.functionalError = functionalError;
+        this.compagnieTransportRepository = compagnieTransportRepository;
+        this.periodiciteAbonnementRepository = periodiciteAbonnementRepository;
+        this.technicalError = technicalError;
+        this.exceptionUtils = exceptionUtils;
+        this.em = em;
         dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         dateTimeFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
     }

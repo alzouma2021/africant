@@ -1,13 +1,9 @@
 package com.africanb.africanb.Business.reservationBilletVoyage;
 
 
-import com.africanb.africanb.dao.entity.compagnie.CompagnieTransport;
 import com.africanb.africanb.dao.entity.compagnie.StatusUtil;
-import com.africanb.africanb.dao.entity.compagnie.StatusUtilCompagnieTransport;
 import com.africanb.africanb.dao.entity.reservationBilletVoyage.ReservationBilletVoyage;
 import com.africanb.africanb.dao.entity.reservationBilletVoyage.StatusUtilReservationBilletVoyage;
-import com.africanb.africanb.dao.repository.compagnie.CompagnieTransportRepository;
-import com.africanb.africanb.dao.repository.compagnie.StatusUtilCompagnieTransportRepository;
 import com.africanb.africanb.dao.repository.compagnie.StatusUtilRepository;
 import com.africanb.africanb.dao.repository.reservationBilletVoyage.ReservationBilletVoyageRepository;
 import com.africanb.africanb.dao.repository.reservationBilletVoyage.StatusUtilReservationBilletVoyageRepository;
@@ -17,14 +13,11 @@ import com.africanb.africanb.helper.TechnicalError;
 import com.africanb.africanb.helper.contrat.IBasicBusiness;
 import com.africanb.africanb.helper.contrat.Request;
 import com.africanb.africanb.helper.contrat.Response;
-import com.africanb.africanb.helper.dto.compagnie.StatusUtilCompagnieTransportDTO;
 import com.africanb.africanb.helper.dto.reservationBilletVoyage.StatusUtilReservationBilletVoyageDTO;
 import com.africanb.africanb.helper.searchFunctions.Utilities;
-import com.africanb.africanb.helper.transformer.compagnie.StatusUtilCompagnieTransportTransformer;
 import com.africanb.africanb.helper.transformer.reservationBilletVoyage.StatusUtilReservationBilletVoyageTransformer;
 import com.africanb.africanb.helper.validation.Validate;
 import lombok.extern.java.Log;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -40,29 +33,26 @@ public class StatusUtilRservationBilletVoyageBusiness implements IBasicBusiness<
 
     private Response<StatusUtilReservationBilletVoyageDTO> response;
 
-    @Autowired
-    private StatusUtilReservationBilletVoyageRepository statusUtilReservationBilletVoyageRepository;
-    @Autowired
-    private StatusUtilRepository statusUtilRepository;
-    @Autowired
-    private ReservationBilletVoyageRepository reservationBilletVoyageRepository;
 
-    @Autowired
-    private FunctionalError functionalError;
-
-    @Autowired
-    private TechnicalError technicalError;
-
-    @Autowired
-    private ExceptionUtils exceptionUtils;
-
-    @Autowired
-    private EntityManager em;
-
+    private final StatusUtilReservationBilletVoyageRepository statusUtilReservationBilletVoyageRepository;
+    private final StatusUtilRepository statusUtilRepository;
+    private final ReservationBilletVoyageRepository reservationBilletVoyageRepository;
+    private final FunctionalError functionalError;
+    private final TechnicalError technicalError;
+    private final ExceptionUtils exceptionUtils;
+    private final EntityManager em;
     private final SimpleDateFormat dateFormat;
     private final SimpleDateFormat dateTimeFormat;
 
-    public StatusUtilRservationBilletVoyageBusiness() {
+
+    public StatusUtilRservationBilletVoyageBusiness(StatusUtilReservationBilletVoyageRepository statusUtilReservationBilletVoyageRepository, StatusUtilRepository statusUtilRepository, ReservationBilletVoyageRepository reservationBilletVoyageRepository, FunctionalError functionalError, TechnicalError technicalError, ExceptionUtils exceptionUtils, EntityManager em) {
+        this.statusUtilReservationBilletVoyageRepository = statusUtilReservationBilletVoyageRepository;
+        this.statusUtilRepository = statusUtilRepository;
+        this.reservationBilletVoyageRepository = reservationBilletVoyageRepository;
+        this.functionalError = functionalError;
+        this.technicalError = technicalError;
+        this.exceptionUtils = exceptionUtils;
+        this.em = em;
         dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         dateTimeFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
     }

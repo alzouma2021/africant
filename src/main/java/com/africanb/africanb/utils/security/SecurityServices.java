@@ -8,11 +8,8 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.SignatureException;
 import lombok.SneakyThrows;
 import lombok.extern.java.Log;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.crypto.spec.SecretKeySpec;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -36,8 +33,11 @@ public class SecurityServices {
     private static String	defaultTenant = "null";
     private static String defaultLanguage = "fr";
 
-    @Autowired
-    UsersRepository usersRepository;
+    private final UsersRepository usersRepository;
+
+    public SecurityServices(UsersRepository usersRepository) {
+        this.usersRepository = usersRepository;
+    }
 
     public static String generateToken(Users users){
         Key hmacKey = new SecretKeySpec(Base64.getDecoder().decode(ProjectConstants.SESSION_TOKEN_FIELD_SECRET_PHRASE),

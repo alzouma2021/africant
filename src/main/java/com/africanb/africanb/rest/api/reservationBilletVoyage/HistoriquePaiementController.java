@@ -12,7 +12,6 @@ import com.africanb.africanb.helper.status.StatusCode;
 import com.africanb.africanb.helper.status.StatusMessage;
 import com.africanb.africanb.rest.fact.ControllerFactory;
 import lombok.extern.java.Log;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.CannotCreateTransactionException;
 import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.bind.annotation.*;
@@ -26,17 +25,20 @@ import java.util.Locale;
 @RequestMapping(value="/historiquePaiement")
 public class HistoriquePaiementController {
 
-    @Autowired
-    private ControllerFactory<HistoriquePaiementDTO> controllerFactory;
-    @Autowired
-    private HistoriquePaiementBusiness historiquePaiementBusiness;
 
-    @Autowired
-    private TechnicalError technicalError;
-    @Autowired
-    private ExceptionUtils exceptionUtils;
-    @Autowired
-    private HttpServletRequest requestBasic;
+    private final ControllerFactory<HistoriquePaiementDTO> controllerFactory;
+    private final HistoriquePaiementBusiness historiquePaiementBusiness;
+    private final TechnicalError technicalError;
+    private final ExceptionUtils exceptionUtils;
+    private final HttpServletRequest requestBasic;
+
+    public HistoriquePaiementController(ControllerFactory<HistoriquePaiementDTO> controllerFactory, HistoriquePaiementBusiness historiquePaiementBusiness, TechnicalError technicalError, ExceptionUtils exceptionUtils, HttpServletRequest requestBasic) {
+        this.controllerFactory = controllerFactory;
+        this.historiquePaiementBusiness = historiquePaiementBusiness;
+        this.technicalError = technicalError;
+        this.exceptionUtils = exceptionUtils;
+        this.requestBasic = requestBasic;
+    }
 
     @RequestMapping(value="",method= RequestMethod.POST,consumes = {"application/json"},produces={"application/json"})
     public Response<HistoriquePaiementDTO> create(@RequestBody Request<HistoriquePaiementDTO> request) {

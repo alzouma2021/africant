@@ -13,13 +13,10 @@ import com.africanb.africanb.helper.contrat.IBasicBusiness;
 import com.africanb.africanb.helper.contrat.Request;
 import com.africanb.africanb.helper.contrat.Response;
 import com.africanb.africanb.helper.dto.offreVoyage.BusDTO;
-import com.africanb.africanb.helper.dto.offreVoyage.PrixOffreVoyageDTO;
 import com.africanb.africanb.helper.searchFunctions.Utilities;
 import com.africanb.africanb.helper.transformer.offrreVoyage.BusTransformer;
-import com.africanb.africanb.helper.transformer.offrreVoyage.PrixOffreVoyageTransformer;
 import com.africanb.africanb.helper.validation.Validate;
 import lombok.extern.java.Log;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -39,23 +36,23 @@ public class BusBusiness implements IBasicBusiness<Request<BusDTO>, Response<Bus
 
     private Response<BusDTO> response;
 
-    @Autowired
-    private BusRepository busRepository;
-    @Autowired
-    private OffreVoyageRepository offreVoyageRepository;
-    @Autowired
-    private FunctionalError functionalError;
-    @Autowired
-    private TechnicalError technicalError;
-    @Autowired
-    private ExceptionUtils exceptionUtils;
-    @Autowired
-    private EntityManager em;
+    private final BusRepository busRepository;
+    private final OffreVoyageRepository offreVoyageRepository;
+    private final FunctionalError functionalError;
+    private final TechnicalError technicalError;
+    private final ExceptionUtils exceptionUtils;
+    private final EntityManager em;
 
     private final SimpleDateFormat dateFormat;
     private final SimpleDateFormat dateTimeFormat;
 
-    public BusBusiness() {
+    public BusBusiness(BusRepository busRepository, OffreVoyageRepository offreVoyageRepository, FunctionalError functionalError, TechnicalError technicalError, ExceptionUtils exceptionUtils, EntityManager em) {
+        this.busRepository = busRepository;
+        this.offreVoyageRepository = offreVoyageRepository;
+        this.functionalError = functionalError;
+        this.technicalError = technicalError;
+        this.exceptionUtils = exceptionUtils;
+        this.em = em;
         dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         dateTimeFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
     }

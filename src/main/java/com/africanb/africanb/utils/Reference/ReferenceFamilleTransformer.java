@@ -1,9 +1,7 @@
 package com.africanb.africanb.utils.Reference;
 
 
-import com.africanb.africanb.dao.entity.compagnie.FamilleStatusUtil;
 import com.africanb.africanb.helper.contrat.FullTransformerQualifier;
-import com.africanb.africanb.helper.dto.compagnie.FamilleStatusUtilDTO;
 import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

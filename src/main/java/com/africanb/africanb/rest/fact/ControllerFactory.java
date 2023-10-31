@@ -15,7 +15,6 @@ import com.africanb.africanb.helper.enums.FunctionalityEnum;
 import com.africanb.africanb.helper.status.StatusCode;
 import com.africanb.africanb.helper.status.StatusMessage;
 import lombok.extern.java.Log;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.CannotCreateTransactionException;
 import org.springframework.transaction.TransactionSystemException;
@@ -27,16 +26,19 @@ import java.util.Locale;
 @Component
 public class ControllerFactory<DTO> implements IController<DTO> {
 
-    @Autowired
-    private BusinessFactory<DTO> businessFactory;
-    @Autowired
-    private UsersBusinessFactory usersBusinessFactory;
-    @Autowired
-    private FunctionalError functionalError;
-    @Autowired
-    private ExceptionUtils exceptionUtils;
-    @Autowired
-    private HttpServletRequest requestBasic;
+    private final BusinessFactory<DTO> businessFactory;
+    private final UsersBusinessFactory usersBusinessFactory;
+    private final FunctionalError functionalError;
+    private final ExceptionUtils exceptionUtils;
+    private final HttpServletRequest requestBasic;
+
+    public ControllerFactory(BusinessFactory<DTO> businessFactory, UsersBusinessFactory usersBusinessFactory, FunctionalError functionalError, ExceptionUtils exceptionUtils, HttpServletRequest requestBasic) {
+        this.businessFactory = businessFactory;
+        this.usersBusinessFactory = usersBusinessFactory;
+        this.functionalError = functionalError;
+        this.exceptionUtils = exceptionUtils;
+        this.requestBasic = requestBasic;
+    }
 
     @Override
     public Response<DTO> create(IBasicBusiness iBasicBusiness, Request<DTO> request, FunctionalityEnum functionalityEnum) {

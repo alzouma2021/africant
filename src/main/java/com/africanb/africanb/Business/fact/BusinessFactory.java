@@ -6,7 +6,6 @@ import com.africanb.africanb.helper.contrat.IBasicBusiness;
 import com.africanb.africanb.helper.contrat.Request;
 import com.africanb.africanb.helper.contrat.Response;
 import com.africanb.africanb.helper.enums.FunctionalityEnum;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.dao.PermissionDeniedDataAccessException;
@@ -16,18 +15,20 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Locale;
 import java.util.logging.Logger;
 
-import static java.lang.Character.getName;
-
 
 @Component
 public class BusinessFactory<DTO> {
 
-    @Autowired
-    private FunctionalError functionalError;
-    @Autowired
-    private ExceptionUtils exceptionUtils;
+
+    private final FunctionalError functionalError;
+    private final ExceptionUtils exceptionUtils;
 
     private  final static Logger log = Logger.getLogger("");
+
+    public BusinessFactory(FunctionalError functionalError, ExceptionUtils exceptionUtils) {
+        this.functionalError = functionalError;
+        this.exceptionUtils = exceptionUtils;
+    }
 
     /**
      * create entity by using dto as object.

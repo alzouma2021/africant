@@ -17,7 +17,6 @@ import com.africanb.africanb.helper.transformer.compagnie.StatusUtilTransformer;
 import com.africanb.africanb.helper.searchFunctions.Utilities;
 import com.africanb.africanb.helper.validation.Validate;
 import lombok.extern.java.Log;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -37,23 +36,23 @@ public class StatusUtilBusiness implements IBasicBusiness<Request<StatusUtilDTO>
 
 
     private Response<VilleDTO> response;
-    @Autowired
-    private StatusUtilRepository statusUtilRepository;
-    @Autowired
-    private FamilleStatusUtilRepository familleStatusUtilRepository;
-    @Autowired
-    private FunctionalError functionalError;
-    @Autowired
-    private TechnicalError technicalError;
-    @Autowired
-    private ExceptionUtils exceptionUtils;
-    @Autowired
-    private EntityManager em;
 
+    private final StatusUtilRepository statusUtilRepository;
+    private final FamilleStatusUtilRepository familleStatusUtilRepository;
+    private final FunctionalError functionalError;
+    private final TechnicalError technicalError;
+    private final ExceptionUtils exceptionUtils;
+    private final EntityManager em;
     private final SimpleDateFormat dateFormat;
     private final SimpleDateFormat dateTimeFormat;
 
-    public StatusUtilBusiness() {
+    public StatusUtilBusiness(StatusUtilRepository statusUtilRepository, FamilleStatusUtilRepository familleStatusUtilRepository, FunctionalError functionalError, TechnicalError technicalError, ExceptionUtils exceptionUtils, EntityManager em) {
+        this.statusUtilRepository = statusUtilRepository;
+        this.familleStatusUtilRepository = familleStatusUtilRepository;
+        this.functionalError = functionalError;
+        this.technicalError = technicalError;
+        this.exceptionUtils = exceptionUtils;
+        this.em = em;
         dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         dateTimeFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
     }

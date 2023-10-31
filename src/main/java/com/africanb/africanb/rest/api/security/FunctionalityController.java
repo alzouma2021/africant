@@ -13,7 +13,6 @@ import com.africanb.africanb.helper.status.StatusCode;
 import com.africanb.africanb.helper.status.StatusMessage;
 import com.africanb.africanb.rest.fact.ControllerFactory;
 import lombok.extern.java.Log;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.CannotCreateTransactionException;
 import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.bind.annotation.*;
@@ -27,18 +26,22 @@ import java.util.Locale;
 @RequestMapping(value="/functionalities")
 public class FunctionalityController {
 
-    @Autowired
-    private ControllerFactory<FunctionalityDTO> controllerFactory;
-    @Autowired
-    private FunctionalityBusiness functionalityBusiness;
-    @Autowired
-    private FunctionalError functionalError;
-    @Autowired
-    private TechnicalError technicalError;
-    @Autowired
-    private ExceptionUtils exceptionUtils;
-    @Autowired
-    private HttpServletRequest requestBasic;
+
+    private final ControllerFactory<FunctionalityDTO> controllerFactory;
+    private final FunctionalityBusiness functionalityBusiness;
+    private final FunctionalError functionalError;
+    private final TechnicalError technicalError;
+    private final ExceptionUtils exceptionUtils;
+    private final HttpServletRequest requestBasic;
+
+    public FunctionalityController(ControllerFactory<FunctionalityDTO> controllerFactory, FunctionalityBusiness functionalityBusiness, FunctionalError functionalError, TechnicalError technicalError, ExceptionUtils exceptionUtils, HttpServletRequest requestBasic) {
+        this.controllerFactory = controllerFactory;
+        this.functionalityBusiness = functionalityBusiness;
+        this.functionalError = functionalError;
+        this.technicalError = technicalError;
+        this.exceptionUtils = exceptionUtils;
+        this.requestBasic = requestBasic;
+    }
 
     @RequestMapping(value="",method= RequestMethod.POST,consumes = {"application/json"},produces={"application/json"})
     public Response<FunctionalityDTO> create(@RequestBody Request<FunctionalityDTO> request) {

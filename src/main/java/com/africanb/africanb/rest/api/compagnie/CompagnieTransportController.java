@@ -7,8 +7,6 @@ import com.africanb.africanb.helper.TechnicalError;
 import com.africanb.africanb.helper.contrat.Request;
 import com.africanb.africanb.helper.contrat.Response;
 import com.africanb.africanb.helper.dto.compagnie.CompagnieTransportDTO;
-import com.africanb.africanb.helper.dto.compagnie.PaysDTO;
-import com.africanb.africanb.helper.dto.compagnie.VilleDTO;
 import com.africanb.africanb.helper.dto.document.DocumentDTO;
 import com.africanb.africanb.helper.dto.document.DocumentReponseDTO;
 import com.africanb.africanb.helper.enums.FunctionalityEnum;
@@ -16,7 +14,6 @@ import com.africanb.africanb.helper.status.StatusCode;
 import com.africanb.africanb.helper.status.StatusMessage;
 import com.africanb.africanb.rest.fact.ControllerFactory;
 import lombok.extern.java.Log;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.CannotCreateTransactionException;
 import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.bind.annotation.*;
@@ -38,17 +35,20 @@ import java.util.Locale;
 @RequestMapping(value="/compagnieTransport")
 public class CompagnieTransportController {
 
-    @Autowired
-    private ControllerFactory<CompagnieTransportDTO> controllerFactory;
-    @Autowired
-    private CompagnieTransportBusiness compagnieTransportBusiness;
 
-    @Autowired
-    private TechnicalError technicalError;
-    @Autowired
-    private ExceptionUtils exceptionUtils;
-    @Autowired
-    private HttpServletRequest requestBasic;
+    private final ControllerFactory<CompagnieTransportDTO> controllerFactory;
+    private final CompagnieTransportBusiness compagnieTransportBusiness;
+    private final TechnicalError technicalError;
+    private final ExceptionUtils exceptionUtils;
+    private final HttpServletRequest requestBasic;
+
+    public CompagnieTransportController(ControllerFactory<CompagnieTransportDTO> controllerFactory, CompagnieTransportBusiness compagnieTransportBusiness, TechnicalError technicalError, ExceptionUtils exceptionUtils, HttpServletRequest requestBasic) {
+        this.controllerFactory = controllerFactory;
+        this.compagnieTransportBusiness = compagnieTransportBusiness;
+        this.technicalError = technicalError;
+        this.exceptionUtils = exceptionUtils;
+        this.requestBasic = requestBasic;
+    }
 
     @RequestMapping(value="",method= RequestMethod.POST,consumes = {"application/json"},produces={"application/json"})
     public Response<CompagnieTransportDTO> create(@RequestBody Request<CompagnieTransportDTO> request) {

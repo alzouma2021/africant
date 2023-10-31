@@ -18,7 +18,6 @@ import com.africanb.africanb.helper.searchFunctions.Utilities;
 import com.africanb.africanb.helper.transformer.security.RoleFunctionalityTransformer;
 import com.africanb.africanb.helper.validation.Validate;
 import lombok.extern.java.Log;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
@@ -36,24 +35,24 @@ public class RoleFunctionalityBusiness implements IBasicBusiness<Request<RoleFun
 
     private Response<RoleFunctionalityDTO> response;
 
-    @Autowired
-    private RoleFunctionalityRepository roleFunctionalityRepository;
-    @Autowired
-    private RoleRepository roleRepository;
-    @Autowired
-    private FunctionalityRepository functionalityRepository;
-    @Autowired
-    private FunctionalError functionalError;
-    @Autowired
-    private TechnicalError technicalError;
-    @Autowired
-    private ExceptionUtils exceptionUtils;
-    @Autowired
-    private EntityManager em;
+    private final RoleFunctionalityRepository roleFunctionalityRepository;
+    private final RoleRepository roleRepository;
+    private final FunctionalityRepository functionalityRepository;
+    private final FunctionalError functionalError;
+    private final TechnicalError technicalError;
+    private final ExceptionUtils exceptionUtils;
+    private final EntityManager em;
     private final SimpleDateFormat dateFormat;
     private final SimpleDateFormat dateTimeFormat;
 
-    public RoleFunctionalityBusiness() {
+    public RoleFunctionalityBusiness(RoleFunctionalityRepository roleFunctionalityRepository, RoleRepository roleRepository, FunctionalityRepository functionalityRepository, FunctionalError functionalError, TechnicalError technicalError, ExceptionUtils exceptionUtils, EntityManager em) {
+        this.roleFunctionalityRepository = roleFunctionalityRepository;
+        this.roleRepository = roleRepository;
+        this.functionalityRepository = functionalityRepository;
+        this.functionalError = functionalError;
+        this.technicalError = technicalError;
+        this.exceptionUtils = exceptionUtils;
+        this.em = em;
         dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         dateTimeFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
     }

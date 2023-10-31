@@ -8,7 +8,6 @@ import com.africanb.africanb.helper.dto.compagnie.FamilleStatusUtilDTO;
 import com.africanb.africanb.helper.enums.FunctionalityEnum;
 import com.africanb.africanb.rest.fact.ControllerFactory;
 import lombok.extern.java.Log;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -18,11 +17,14 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value="/familleStatusUtil")
 public class FamilleStatusUtilController {
 
-    @Autowired
-    private ControllerFactory<FamilleStatusUtilDTO> controllerFactory;
-    @Autowired
-    private FamilleStatusUtilBusiness familleStatusUtilBusiness;
-    
+    private final ControllerFactory<FamilleStatusUtilDTO> controllerFactory;
+    private final FamilleStatusUtilBusiness familleStatusUtilBusiness;
+
+    public FamilleStatusUtilController(ControllerFactory<FamilleStatusUtilDTO> controllerFactory, FamilleStatusUtilBusiness familleStatusUtilBusiness) {
+        this.controllerFactory = controllerFactory;
+        this.familleStatusUtilBusiness = familleStatusUtilBusiness;
+    }
+
     @RequestMapping(value="",method= RequestMethod.POST,consumes = {"application/json"},produces={"application/json"})
     public Response<FamilleStatusUtilDTO> create(@RequestBody Request<FamilleStatusUtilDTO> request) {
         log.info("start method create");

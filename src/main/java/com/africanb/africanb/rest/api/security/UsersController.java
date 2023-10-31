@@ -1,12 +1,11 @@
 package com.africanb.africanb.rest.api.security;
 
+
 import com.africanb.africanb.Business.security.UsersBusiness;
 import com.africanb.africanb.helper.ExceptionUtils;
 import com.africanb.africanb.helper.FunctionalError;
 import com.africanb.africanb.helper.contrat.Request;
 import com.africanb.africanb.helper.contrat.Response;
-import com.africanb.africanb.helper.dto.compagnie.CompagnieTransportDTO;
-import com.africanb.africanb.helper.dto.security.RoleDTO;
 import com.africanb.africanb.helper.dto.security.UsersDTO;
 import com.africanb.africanb.helper.dto.security.UsersPassWordDTO;
 import com.africanb.africanb.helper.enums.FunctionalityEnum;
@@ -14,7 +13,6 @@ import com.africanb.africanb.helper.status.StatusCode;
 import com.africanb.africanb.helper.status.StatusMessage;
 import com.africanb.africanb.rest.fact.ControllerFactory;
 import lombok.extern.java.Log;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.CannotCreateTransactionException;
 import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.bind.annotation.*;
@@ -30,16 +28,19 @@ import java.util.Locale;
 @RequestMapping(value="/users")
 public class UsersController {
 
-    @Autowired
-    private ControllerFactory<UsersDTO> controllerFactory;
-    @Autowired
-    private com.africanb.africanb.Business.security.UsersBusiness usersBusiness;
-    @Autowired
-    private FunctionalError functionalError;
-    @Autowired
-    private ExceptionUtils exceptionUtils;
-    @Autowired
-    private HttpServletRequest requestBasic;
+    private final ControllerFactory<UsersDTO> controllerFactory;
+    private final com.africanb.africanb.Business.security.UsersBusiness usersBusiness;
+    private final FunctionalError functionalError;
+    private final ExceptionUtils exceptionUtils;
+    private final HttpServletRequest requestBasic;
+
+    public UsersController(ControllerFactory<UsersDTO> controllerFactory, UsersBusiness usersBusiness, FunctionalError functionalError, ExceptionUtils exceptionUtils, HttpServletRequest requestBasic) {
+        this.controllerFactory = controllerFactory;
+        this.usersBusiness = usersBusiness;
+        this.functionalError = functionalError;
+        this.exceptionUtils = exceptionUtils;
+        this.requestBasic = requestBasic;
+    }
 
     @RequestMapping(value="",method= RequestMethod.POST,consumes = {"application/json"},produces={"application/json"})
     public Response<UsersDTO> create(@RequestBody Request<UsersDTO> request) {

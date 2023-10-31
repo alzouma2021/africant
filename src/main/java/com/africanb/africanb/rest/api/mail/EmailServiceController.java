@@ -11,7 +11,6 @@ import com.africanb.africanb.utils.emailService.EmailDTO;
 import com.africanb.africanb.utils.emailService.EmailServiceInterface;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.CannotCreateTransactionException;
 import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.bind.annotation.*;
@@ -27,14 +26,17 @@ public class EmailServiceController {
 
     private static final Logger log = LoggerFactory.getLogger(EmailServiceController.class);
 
-    @Autowired
-    EmailServiceInterface emailServiceInterface;
-    @Autowired
-    private TechnicalError technicalError;
-    @Autowired
-    private ExceptionUtils exceptionUtils;
-    @Autowired
-    private HttpServletRequest requestBasic;
+    private final EmailServiceInterface emailServiceInterface;
+    private final TechnicalError technicalError;
+    private final ExceptionUtils exceptionUtils;
+    private final HttpServletRequest requestBasic;
+
+    public EmailServiceController(EmailServiceInterface emailServiceInterface, TechnicalError technicalError, ExceptionUtils exceptionUtils, HttpServletRequest requestBasic) {
+        this.emailServiceInterface = emailServiceInterface;
+        this.technicalError = technicalError;
+        this.exceptionUtils = exceptionUtils;
+        this.requestBasic = requestBasic;
+    }
 
     @RequestMapping(value="/sendSimpleEmail",method= RequestMethod.POST,consumes = {"application/json"},produces={"application/json"})
     public Response<EmailDTO> sendSimpleEmail(@RequestBody Request<EmailDTO> request) {

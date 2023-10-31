@@ -9,7 +9,6 @@ import com.africanb.africanb.helper.contrat.Response;
 import com.africanb.africanb.helper.dto.security.UsersDTO;
 import com.africanb.africanb.helper.enums.FunctionalityEnum;
 import lombok.extern.java.Log;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.dao.PermissionDeniedDataAccessException;
@@ -22,10 +21,14 @@ import java.util.Locale;
 @Component
 public class UsersBusinessFactory {
 
-    @Autowired
-    private FunctionalError functionalError;
-    @Autowired
-    private ExceptionUtils exceptionUtils;
+
+    private final FunctionalError functionalError;
+    private final ExceptionUtils exceptionUtils;
+
+    public UsersBusinessFactory(FunctionalError functionalError, ExceptionUtils exceptionUtils) {
+        this.functionalError = functionalError;
+        this.exceptionUtils = exceptionUtils;
+    }
 
     @Transactional(rollbackFor = {RuntimeException.class, Exception.class})
     public Response<UsersDTO> login(UsersBusiness usersBusiness, Request<UsersDTO> request, FunctionalityEnum functionalityEnum, Locale locale) {

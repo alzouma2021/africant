@@ -2,7 +2,6 @@ package com.africanb.africanb.Business.compagnie.ModePaiement;
 
 
 import com.africanb.africanb.dao.entity.compagnie.CompagnieTransport;
-import com.africanb.africanb.dao.entity.compagnie.ModeAbonnement.AbonnementPeriodique;
 import com.africanb.africanb.dao.entity.compagnie.ModeAbonnement.AbonnementPrelevement;
 import com.africanb.africanb.dao.entity.compagnie.ModeAbonnement.ModeAbonnement;
 import com.africanb.africanb.dao.entity.compagnie.ModePaiment.*;
@@ -16,15 +15,12 @@ import com.africanb.africanb.helper.TechnicalError;
 import com.africanb.africanb.helper.contrat.IBasicBusiness;
 import com.africanb.africanb.helper.contrat.Request;
 import com.africanb.africanb.helper.contrat.Response;
-import com.africanb.africanb.helper.dto.compagnie.ModeAbonnement.ModeAbonnementDTO;
 import com.africanb.africanb.helper.dto.compagnie.ModePaiement.*;
 import com.africanb.africanb.helper.searchFunctions.Utilities;
 import com.africanb.africanb.helper.validation.Validate;
 import com.africanb.africanb.utils.Constants.ProjectConstants;
 import com.africanb.africanb.utils.Reference.Reference;
 import lombok.extern.java.Log;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -43,37 +39,37 @@ public class ModePaiementBusiness implements IBasicBusiness<Request<ModePaiement
 
     private Response<ModePaiementDTO> response;
 
-    @Autowired
-    private FunctionalError functionalError;
-    @Autowired
-    private ModePaiementRepository modePaiementRepository;
-    @Autowired
-    private ModeAbonnementRepository modeAbonnementRepository;
-    @Autowired
-    private CompagnieTransportRepository compagnieTransportRepository;
-    @Autowired
-    private ReferenceRepository typeModePaiementRepository;
-    @Autowired
-    private ModePaiementEnEspeceBusiness modePaiementEnEspeceBusiness;
-    @Autowired
-    private ModePaiementMoovMoneyBusiness modePaiementMoovMoneyBusiness;
-    @Autowired
-    private ModePaiementOrangeMoneyBusiness modePaiementOrangeMoneyBusiness;
-    @Autowired
-    private ModePaiementMtnMoneyBusiness modePaiementMtnMoneyBusiness;
-    @Autowired
-    private ModePaiementWaveBusiness modePaiementWaveBusiness;
-    @Autowired
-    private TechnicalError technicalError;
-    @Autowired
-    private ExceptionUtils exceptionUtils;
-    @Autowired
-    private EntityManager em;
+    private final FunctionalError functionalError;
+    private final ModePaiementRepository modePaiementRepository;
+    private final ModeAbonnementRepository modeAbonnementRepository;
+    private final CompagnieTransportRepository compagnieTransportRepository;
+    private final ReferenceRepository typeModePaiementRepository;
+    private final ModePaiementEnEspeceBusiness modePaiementEnEspeceBusiness;
+    private final ModePaiementMoovMoneyBusiness modePaiementMoovMoneyBusiness;
+    private final ModePaiementOrangeMoneyBusiness modePaiementOrangeMoneyBusiness;
+    private final ModePaiementMtnMoneyBusiness modePaiementMtnMoneyBusiness;
+    private final ModePaiementWaveBusiness modePaiementWaveBusiness;
+    private final TechnicalError technicalError;
+    private final ExceptionUtils exceptionUtils;
+    private final EntityManager em;
 
     private final SimpleDateFormat dateFormat;
     private final SimpleDateFormat dateTimeFormat;
 
-    public ModePaiementBusiness() {
+    public ModePaiementBusiness(FunctionalError functionalError, ModePaiementRepository modePaiementRepository, ModeAbonnementRepository modeAbonnementRepository, CompagnieTransportRepository compagnieTransportRepository, ReferenceRepository typeModePaiementRepository, ModePaiementEnEspeceBusiness modePaiementEnEspeceBusiness, ModePaiementMoovMoneyBusiness modePaiementMoovMoneyBusiness, ModePaiementOrangeMoneyBusiness modePaiementOrangeMoneyBusiness, ModePaiementMtnMoneyBusiness modePaiementMtnMoneyBusiness, ModePaiementWaveBusiness modePaiementWaveBusiness, TechnicalError technicalError, ExceptionUtils exceptionUtils, EntityManager em) {
+        this.functionalError = functionalError;
+        this.modePaiementRepository = modePaiementRepository;
+        this.modeAbonnementRepository = modeAbonnementRepository;
+        this.compagnieTransportRepository = compagnieTransportRepository;
+        this.typeModePaiementRepository = typeModePaiementRepository;
+        this.modePaiementEnEspeceBusiness = modePaiementEnEspeceBusiness;
+        this.modePaiementMoovMoneyBusiness = modePaiementMoovMoneyBusiness;
+        this.modePaiementOrangeMoneyBusiness = modePaiementOrangeMoneyBusiness;
+        this.modePaiementMtnMoneyBusiness = modePaiementMtnMoneyBusiness;
+        this.modePaiementWaveBusiness = modePaiementWaveBusiness;
+        this.technicalError = technicalError;
+        this.exceptionUtils = exceptionUtils;
+        this.em = em;
         dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         dateTimeFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
     }
@@ -107,16 +103,6 @@ public class ModePaiementBusiness implements IBasicBusiness<Request<ModePaiement
                 }
                 itemsDtos.add(dto);
             }
-        }
-        for(ModePaiementDTO dto: itemsDtos){
-            //Check the compagny mode abonnement
-                /*List<ModeAbonnement> exitingModeAbonnementList=null;
-                exitingModeAbonnementList=modeAbonnementRepository.findByCompagnieTransport(dto.getCompagnieTransportRaisonSociale(),false);
-                if(CollectionUtils.isEmpty(exitingModeAbonnementList)){
-                    response.setStatus(functionalError.SAVE_FAIL("La compagnie ne dispose pas de mode abonnement", locale));
-                    response.setHasError(true);
-                    return response;
-                }*/
         }
         for(ModePaiementDTO itemDto : itemsDtos){
             //Verify Compagnie transport

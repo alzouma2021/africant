@@ -26,7 +26,6 @@ import com.africanb.africanb.helper.searchFunctions.Utilities;
 import com.africanb.africanb.helper.validation.Validate;
 import com.africanb.africanb.utils.Reference.Reference;
 import lombok.extern.java.Log;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -34,9 +33,7 @@ import org.springframework.util.CollectionUtils;
 import javax.persistence.EntityManager;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * @Author ALZOUMA MOUSSA MAHAAMADOU
@@ -46,41 +43,42 @@ import java.util.stream.Collectors;
 public class OffreVoyageBusiness implements IBasicBusiness<Request<OffreVoyageDTO>, Response<OffreVoyageDTO>> {
 
     private Response<OffreVoyageDTO> response;
-    @Autowired
-    private ReferenceRepository referenceRepository;
-    @Autowired
-    private VilleRepository villeRepository;
-    @Autowired
-    private ProgrammeRepository programmeRepository;
-    @Autowired
-    private JourSemaineRepository jourSemaineRepository;
-    @Autowired
-    private CompagnieTransportRepository compagnieTransportRepository;
-    @Autowired
-    private OffreVoyageRepository offreVoyageRepository;
-    @Autowired
-    private PrixOffreVoyageRepository prixOffreVoyageRepository;
-    @Autowired
-    private PrixOffreVoyageBusiness prixOffreVoyageBusiness;
-    @Autowired
-    private VilleEscaleBusiness villeEscaleBusiness;
-    @Autowired
-    private JourSemaineBusiness jourSemaineBusinesse;
-    @Autowired
-    private ValeurCaracteristiqueOffreVoyageBusiness valeurCaracteristiqueOffreVoyageBusiness;
-    @Autowired
-    private FunctionalError functionalError;
-    @Autowired
-    private TechnicalError technicalError;
-    @Autowired
-    private ExceptionUtils exceptionUtils;
-    @Autowired
-    private EntityManager em;
+
+    private final ReferenceRepository referenceRepository;
+    private final VilleRepository villeRepository;
+    private final ProgrammeRepository programmeRepository;
+    private final JourSemaineRepository jourSemaineRepository;
+    private final CompagnieTransportRepository compagnieTransportRepository;
+    private final OffreVoyageRepository offreVoyageRepository;
+    private final PrixOffreVoyageRepository prixOffreVoyageRepository;
+    private final PrixOffreVoyageBusiness prixOffreVoyageBusiness;
+    private final VilleEscaleBusiness villeEscaleBusiness;
+    private final JourSemaineBusiness jourSemaineBusinesse;
+    private final ValeurCaracteristiqueOffreVoyageBusiness valeurCaracteristiqueOffreVoyageBusiness;
+    private final FunctionalError functionalError;
+    private final TechnicalError technicalError;
+    private final ExceptionUtils exceptionUtils;
+    private final EntityManager em;
 
     private final SimpleDateFormat dateFormat;
     private final SimpleDateFormat dateTimeFormat;
 
-    public OffreVoyageBusiness() {
+    public OffreVoyageBusiness(ReferenceRepository referenceRepository, VilleRepository villeRepository, ProgrammeRepository programmeRepository, JourSemaineRepository jourSemaineRepository, CompagnieTransportRepository compagnieTransportRepository, OffreVoyageRepository offreVoyageRepository, PrixOffreVoyageRepository prixOffreVoyageRepository, PrixOffreVoyageBusiness prixOffreVoyageBusiness, VilleEscaleBusiness villeEscaleBusiness, JourSemaineBusiness jourSemaineBusinesse, ValeurCaracteristiqueOffreVoyageBusiness valeurCaracteristiqueOffreVoyageBusiness, FunctionalError functionalError, TechnicalError technicalError, ExceptionUtils exceptionUtils, EntityManager em) {
+        this.referenceRepository = referenceRepository;
+        this.villeRepository = villeRepository;
+        this.programmeRepository = programmeRepository;
+        this.jourSemaineRepository = jourSemaineRepository;
+        this.compagnieTransportRepository = compagnieTransportRepository;
+        this.offreVoyageRepository = offreVoyageRepository;
+        this.prixOffreVoyageRepository = prixOffreVoyageRepository;
+        this.prixOffreVoyageBusiness = prixOffreVoyageBusiness;
+        this.villeEscaleBusiness = villeEscaleBusiness;
+        this.jourSemaineBusinesse = jourSemaineBusinesse;
+        this.valeurCaracteristiqueOffreVoyageBusiness = valeurCaracteristiqueOffreVoyageBusiness;
+        this.functionalError = functionalError;
+        this.technicalError = technicalError;
+        this.exceptionUtils = exceptionUtils;
+        this.em = em;
         dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         dateTimeFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
     }

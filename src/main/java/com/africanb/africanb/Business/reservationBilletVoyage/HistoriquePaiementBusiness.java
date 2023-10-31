@@ -26,7 +26,6 @@ import com.africanb.africanb.helper.validation.Validate;
 import com.africanb.africanb.utils.Constants.ProjectConstants;
 import lombok.extern.java.Log;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,31 +44,34 @@ public class HistoriquePaiementBusiness implements IBasicBusiness<Request<Histor
 
     private Response<HistoriquePaiementDTO> response;
 
-    @Autowired
-    private ModePaiementRepository modePaiementRepository;
-    @Autowired
-    private ProgrammeRepository programmeRepository;
-    @Autowired
-    private ReservationBilletVoyageRepository reservationBilletVoyageRepository;
-    @Autowired
-    private HistoriquePaiementRepository historiquePaiementRepository;
-    @Autowired
-    private StatusUtilRepository statusUtilRepository;
-    @Autowired
-    private StatusUtilRservationBilletVoyageBusiness statusUtilReservationBilletVoyageBusiness;
 
-    private FunctionalError functionalError;
-    @Autowired
-    private TechnicalError technicalError;
-    @Autowired
-    private ExceptionUtils exceptionUtils;
-    @Autowired
-    private EntityManager em;
+    private final ModePaiementRepository modePaiementRepository;
+    private final ProgrammeRepository programmeRepository;
+    private final ReservationBilletVoyageRepository reservationBilletVoyageRepository;
+    private final HistoriquePaiementRepository historiquePaiementRepository;
+
+    private final StatusUtilRepository statusUtilRepository;
+    private final StatusUtilRservationBilletVoyageBusiness statusUtilReservationBilletVoyageBusiness;
+
+    private final FunctionalError functionalError;
+    private final TechnicalError technicalError;
+    private final ExceptionUtils exceptionUtils;
+    private final EntityManager em;
 
     private final SimpleDateFormat dateFormat;
     private final SimpleDateFormat dateTimeFormat;
 
-    public HistoriquePaiementBusiness() {
+    public HistoriquePaiementBusiness(ModePaiementRepository modePaiementRepository, ProgrammeRepository programmeRepository, ReservationBilletVoyageRepository reservationBilletVoyageRepository, HistoriquePaiementRepository historiquePaiementRepository, StatusUtilRepository statusUtilRepository, StatusUtilRservationBilletVoyageBusiness statusUtilReservationBilletVoyageBusiness, FunctionalError functionalError, TechnicalError technicalError, ExceptionUtils exceptionUtils, EntityManager em) {
+        this.modePaiementRepository = modePaiementRepository;
+        this.programmeRepository = programmeRepository;
+        this.reservationBilletVoyageRepository = reservationBilletVoyageRepository;
+        this.historiquePaiementRepository = historiquePaiementRepository;
+        this.statusUtilRepository = statusUtilRepository;
+        this.statusUtilReservationBilletVoyageBusiness = statusUtilReservationBilletVoyageBusiness;
+        this.functionalError = functionalError;
+        this.technicalError = technicalError;
+        this.exceptionUtils = exceptionUtils;
+        this.em = em;
         dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         dateTimeFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
     }

@@ -17,7 +17,6 @@ import com.africanb.africanb.helper.searchFunctions.Utilities;
 import com.africanb.africanb.helper.validation.Validate;
 import com.africanb.africanb.utils.Reference.Reference;
 import lombok.extern.java.Log;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -36,27 +35,27 @@ public class ProprieteOffreVoyageBusiness implements IBasicBusiness<Request<Prop
 
 
     private Response<ProprieteOffreVoyageDTO> response;
-    @Autowired
-    private ReferenceRepository referenceRepository;
-    @Autowired
-    private ProprieteOffreVoyageRepository proprieteOffreVoyageRepository;
-    @Autowired
-    private ProgrammeBusiness programmeBusiness;
-    @Autowired
-    private OffreVoyageRepository offreVoyageRepository;
-    @Autowired
-    private FunctionalError functionalError;
-    @Autowired
-    private TechnicalError technicalError;
-    @Autowired
-    private ExceptionUtils exceptionUtils;
-    @Autowired
-    private EntityManager em;
 
+    private ReferenceRepository referenceRepository;
+    private final ProprieteOffreVoyageRepository proprieteOffreVoyageRepository;
+    private final ProgrammeBusiness programmeBusiness;
+    private final OffreVoyageRepository offreVoyageRepository;
+    private final FunctionalError functionalError;
+    private final TechnicalError technicalError;
+    private final ExceptionUtils exceptionUtils;
+    private final EntityManager em;
     private final SimpleDateFormat dateFormat;
     private final SimpleDateFormat dateTimeFormat;
 
-    public ProprieteOffreVoyageBusiness() {
+    public ProprieteOffreVoyageBusiness(ReferenceRepository referenceRepository, ProprieteOffreVoyageRepository proprieteOffreVoyageRepository, ProgrammeBusiness programmeBusiness, OffreVoyageRepository offreVoyageRepository, FunctionalError functionalError, TechnicalError technicalError, ExceptionUtils exceptionUtils, EntityManager em) {
+        this.referenceRepository = referenceRepository;
+        this.proprieteOffreVoyageRepository = proprieteOffreVoyageRepository;
+        this.programmeBusiness = programmeBusiness;
+        this.offreVoyageRepository = offreVoyageRepository;
+        this.functionalError = functionalError;
+        this.technicalError = technicalError;
+        this.exceptionUtils = exceptionUtils;
+        this.em = em;
         dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         dateTimeFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
     }

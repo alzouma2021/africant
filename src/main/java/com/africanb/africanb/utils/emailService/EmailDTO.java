@@ -5,10 +5,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Data;
 import lombok.ToString;
 
-/**
- * @Author ALZOUMA MOUSSA MAHAMADOU
- * This class JAVA is used to send all informations mail
- */
+
 @Data
 @ToString
 @JsonInclude(JsonInclude.Include.NON_NULL)

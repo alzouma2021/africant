@@ -1,9 +1,7 @@
 package com.africanb.africanb.Business.document;
 
 
-import com.africanb.africanb.dao.entity.compagnie.Pays;
 import com.africanb.africanb.dao.entity.document.Document;
-import com.africanb.africanb.dao.repository.compagnie.PaysRepository;
 import com.africanb.africanb.dao.repository.document.DocumentRepository;
 import com.africanb.africanb.helper.ExceptionUtils;
 import com.africanb.africanb.helper.FunctionalError;
@@ -14,14 +12,11 @@ import com.africanb.africanb.helper.contrat.Response;
 import com.africanb.africanb.helper.dto.compagnie.PaysDTO;
 import com.africanb.africanb.helper.dto.document.DocumentDTO;
 import com.africanb.africanb.helper.searchFunctions.Utilities;
-import com.africanb.africanb.helper.transformer.compagnie.PaysTransformer;
 import com.africanb.africanb.helper.transformer.document.DocumentTransformer;
 import com.africanb.africanb.helper.validation.Validate;
 import lombok.extern.java.Log;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
 
 import javax.persistence.EntityManager;
 import java.text.ParseException;
@@ -39,21 +34,22 @@ public class DocumentBusiness implements IBasicBusiness<Request<DocumentDTO>, Re
 
 
     private Response<DocumentDTO> response;
-    @Autowired
-    private FunctionalError functionalError;
-    @Autowired
-    private DocumentRepository documentRepository;
-    @Autowired
-    private TechnicalError technicalError;
-    @Autowired
-    private ExceptionUtils exceptionUtils;
-    @Autowired
-    private EntityManager em;
+
+    private final FunctionalError functionalError;
+    private final DocumentRepository documentRepository;
+    private final TechnicalError technicalError;
+    private final ExceptionUtils exceptionUtils;
+    private final EntityManager em;
 
     private final SimpleDateFormat dateFormat;
     private final SimpleDateFormat dateTimeFormat;
 
-    public DocumentBusiness() {
+    public DocumentBusiness(FunctionalError functionalError, DocumentRepository documentRepository, TechnicalError technicalError, ExceptionUtils exceptionUtils, EntityManager em) {
+        this.functionalError = functionalError;
+        this.documentRepository = documentRepository;
+        this.technicalError = technicalError;
+        this.exceptionUtils = exceptionUtils;
+        this.em = em;
         dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         dateTimeFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
     }

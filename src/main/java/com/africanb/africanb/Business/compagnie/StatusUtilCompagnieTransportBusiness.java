@@ -18,7 +18,6 @@ import com.africanb.africanb.helper.transformer.compagnie.StatusUtilCompagnieTra
 import com.africanb.africanb.helper.searchFunctions.Utilities;
 import com.africanb.africanb.helper.validation.Validate;
 import lombok.extern.java.Log;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -32,31 +31,26 @@ import java.util.*;
 public class StatusUtilCompagnieTransportBusiness implements IBasicBusiness<Request<StatusUtilCompagnieTransportDTO>, Response<StatusUtilCompagnieTransportDTO>> {
 
     private Response<StatusUtilCompagnieTransportDTO> response;
-    @Autowired
-    private StatusUtilCompagnieTransportRepository statusUtilCompagnieTransportRepository;
 
-    @Autowired
-    private StatusUtilRepository statusUtilRepository;
-
-    @Autowired
-    private CompagnieTransportRepository compagnieTransportRepository;
-
-    @Autowired
-    private FunctionalError functionalError;
-
-    @Autowired
-    private TechnicalError technicalError;
-
-    @Autowired
-    private ExceptionUtils exceptionUtils;
-
-    @Autowired
-    private EntityManager em;
+    private final StatusUtilCompagnieTransportRepository statusUtilCompagnieTransportRepository;
+    private final StatusUtilRepository statusUtilRepository;
+    private final CompagnieTransportRepository compagnieTransportRepository;
+    private final FunctionalError functionalError;
+    private final TechnicalError technicalError;
+    private final ExceptionUtils exceptionUtils;
+    private final EntityManager em;
 
     private final SimpleDateFormat dateFormat;
     private final SimpleDateFormat dateTimeFormat;
 
-    public StatusUtilCompagnieTransportBusiness() {
+    public StatusUtilCompagnieTransportBusiness(StatusUtilCompagnieTransportRepository statusUtilCompagnieTransportRepository, StatusUtilRepository statusUtilRepository, CompagnieTransportRepository compagnieTransportRepository, FunctionalError functionalError, TechnicalError technicalError, ExceptionUtils exceptionUtils, EntityManager em) {
+        this.statusUtilCompagnieTransportRepository = statusUtilCompagnieTransportRepository;
+        this.statusUtilRepository = statusUtilRepository;
+        this.compagnieTransportRepository = compagnieTransportRepository;
+        this.functionalError = functionalError;
+        this.technicalError = technicalError;
+        this.exceptionUtils = exceptionUtils;
+        this.em = em;
         dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         dateTimeFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
     }

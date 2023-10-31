@@ -17,7 +17,6 @@ import com.africanb.africanb.helper.transformer.offrreVoyage.ProgrammeTransforme
 import com.africanb.africanb.helper.searchFunctions.Utilities;
 import com.africanb.africanb.helper.validation.Validate;
 import lombok.extern.java.Log;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -33,26 +32,28 @@ import java.util.*;
 @Component
 public class ProgrammeBusiness implements IBasicBusiness<Request<ProgrammeDTO>, Response<ProgrammeDTO>> {
 
-    private Response<ProgrammeDTO> response;
-    @Autowired
-    private JourSemaineRepository jourSemaineRepository;
-    @Autowired
-    private ProgrammeRepository programmeRepository;
-    @Autowired
-    private OffreVoyageRepository offreVoyageRepository;
-    @Autowired
-    private FunctionalError functionalError;
-    @Autowired
-    private TechnicalError technicalError;
-    @Autowired
-    private ExceptionUtils exceptionUtils;
-    @Autowired
-    private EntityManager em;
 
+    private Response<ProgrammeDTO> response;
+
+    private final JourSemaineRepository jourSemaineRepository;
+    private final ProgrammeRepository programmeRepository;
+    private final OffreVoyageRepository offreVoyageRepository;
+    private final FunctionalError functionalError;
+    private final TechnicalError technicalError;
+    private final ExceptionUtils exceptionUtils;
+    private final EntityManager em;
     private final SimpleDateFormat dateFormat;
     private final SimpleDateFormat dateTimeFormat;
 
-    public ProgrammeBusiness() {
+
+    public ProgrammeBusiness(JourSemaineRepository jourSemaineRepository, ProgrammeRepository programmeRepository, OffreVoyageRepository offreVoyageRepository, FunctionalError functionalError, TechnicalError technicalError, ExceptionUtils exceptionUtils, EntityManager em) {
+        this.jourSemaineRepository = jourSemaineRepository;
+        this.programmeRepository = programmeRepository;
+        this.offreVoyageRepository = offreVoyageRepository;
+        this.functionalError = functionalError;
+        this.technicalError = technicalError;
+        this.exceptionUtils = exceptionUtils;
+        this.em = em;
         dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         dateTimeFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
     }

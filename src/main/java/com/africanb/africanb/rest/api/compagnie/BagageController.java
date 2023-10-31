@@ -12,7 +12,6 @@ import com.africanb.africanb.helper.status.StatusMessage;
 import com.africanb.africanb.rest.fact.ControllerFactory;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.java.Log;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.CannotCreateTransactionException;
 import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.bind.annotation.*;
@@ -27,16 +26,20 @@ import java.util.Locale;
 @RequestMapping(value="/bagages")
 public class BagageController {
 
-    @Autowired
-    private ControllerFactory<BagageDTO> controllerFactory;
-    @Autowired
-    private BagageBusiness bagageBusiness;
-    @Autowired
-    private TechnicalError technicalError;
-    @Autowired
-    private ExceptionUtils exceptionUtils;
-    @Autowired
-    private HttpServletRequest requestBasic;
+
+    private final ControllerFactory<BagageDTO> controllerFactory;
+    private final BagageBusiness bagageBusiness;
+    private final TechnicalError technicalError;
+    private final ExceptionUtils exceptionUtils;
+    private final HttpServletRequest requestBasic;
+
+    public BagageController(ControllerFactory<BagageDTO> controllerFactory, BagageBusiness bagageBusiness, TechnicalError technicalError, ExceptionUtils exceptionUtils, HttpServletRequest requestBasic) {
+        this.controllerFactory = controllerFactory;
+        this.bagageBusiness = bagageBusiness;
+        this.technicalError = technicalError;
+        this.exceptionUtils = exceptionUtils;
+        this.requestBasic = requestBasic;
+    }
 
     @RequestMapping(value="",method= RequestMethod.POST,consumes = {"application/json"},produces={"application/json"})
     @ApiOperation("Création de bagages")

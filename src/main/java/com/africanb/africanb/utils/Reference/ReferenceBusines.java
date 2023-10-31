@@ -12,7 +12,6 @@ import com.africanb.africanb.helper.contrat.Response;
 import com.africanb.africanb.helper.searchFunctions.Utilities;
 import com.africanb.africanb.helper.validation.Validate;
 import lombok.extern.java.Log;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -28,23 +27,22 @@ import java.util.*;
 public class ReferenceBusines implements IBasicBusiness<Request<ReferenceDTO>, Response<ReferenceDTO>> {
 
 
-    @Autowired
-    private ReferenceRepository referenceRepository;
-    @Autowired
-    private ReferenceFamilleRepository referenceFamilleRepository;
-    @Autowired
-    private FunctionalError functionalError;
-    @Autowired
-    private TechnicalError technicalError;
-    @Autowired
-    private ExceptionUtils exceptionUtils;
-    @Autowired
-    private EntityManager em;
-
+    private final ReferenceRepository referenceRepository;
+    private final ReferenceFamilleRepository referenceFamilleRepository;
+    private final FunctionalError functionalError;
+    private final TechnicalError technicalError;
+    private final ExceptionUtils exceptionUtils;
+    private final EntityManager em;
     private final SimpleDateFormat dateFormat;
     private final SimpleDateFormat dateTimeFormat;
 
-    public ReferenceBusines() {
+    public ReferenceBusines(ReferenceRepository referenceRepository, ReferenceFamilleRepository referenceFamilleRepository, FunctionalError functionalError, TechnicalError technicalError, ExceptionUtils exceptionUtils, EntityManager em) {
+        this.referenceRepository = referenceRepository;
+        this.referenceFamilleRepository = referenceFamilleRepository;
+        this.functionalError = functionalError;
+        this.technicalError = technicalError;
+        this.exceptionUtils = exceptionUtils;
+        this.em = em;
         dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         dateTimeFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
     }

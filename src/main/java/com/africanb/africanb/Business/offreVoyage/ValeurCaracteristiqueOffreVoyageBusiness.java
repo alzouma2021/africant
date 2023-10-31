@@ -1,8 +1,6 @@
 package com.africanb.africanb.Business.offreVoyage;
 
 
-import ch.qos.logback.core.util.StringCollectionUtil;
-import com.africanb.africanb.dao.entity.compagnie.CompagnieTransport;
 import com.africanb.africanb.dao.entity.offreVoyage.*;
 import com.africanb.africanb.dao.repository.offreVoyage.OffreVoyageRepository;
 import com.africanb.africanb.dao.repository.offreVoyage.ProprieteOffreVoyageRepository;
@@ -15,12 +13,8 @@ import com.africanb.africanb.helper.contrat.Request;
 import com.africanb.africanb.helper.contrat.Response;
 import com.africanb.africanb.helper.dto.offreVoyage.*;
 import com.africanb.africanb.helper.searchFunctions.Utilities;
-import com.africanb.africanb.helper.transformer.offrreVoyage.OffreVoyageTransformer;
-import com.africanb.africanb.helper.transformer.offrreVoyage.ValeurCaracteristiqueOffreVoyageBooleanTransformer;
 import com.africanb.africanb.helper.validation.Validate;
-import com.africanb.africanb.utils.Constants.ProjectConstants;
 import lombok.extern.java.Log;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -37,34 +31,32 @@ import java.util.*;
 @Component
 public class ValeurCaracteristiqueOffreVoyageBusiness implements IBasicBusiness<Request<ValeurCaracteristiqueOffreVoyageDTO>, Response<ValeurCaracteristiqueOffreVoyageDTO>>,ValeurCaracteristiqueOffreVoyageInterface {
 
-
     private Response<ValeurCaracteristiqueOffreVoyageDTO> response;
 
-    @Autowired
-    private FunctionalError functionalError;
-    @Autowired
-    private OffreVoyageRepository offreVoyageRepository;
-    @Autowired
-    private ProprieteOffreVoyageRepository proprieteOffreVoyageRepository;
-    @Autowired
-    private ValeurCaracteristiqueOffreVoyageRepository valeurCaracteristiqueOffreVoyageRepository;
-    @Autowired
-    private ValeurCaracteristiqueOffreVoyageBooleanBusiness valeurCaracteristiqueOffreVoyageBooleanBusiness;
-    @Autowired
-    private ValeurCaracteristiqueOffreVoyageLongBusiness valeurCaracteristiqueOffreVoyageLongBusiness;
-    @Autowired
-    private ValeurCaracteristiqueOffreVoyageStringBusiness valeurCaracteristiqueOffreVoyageStringBusiness;
-    @Autowired
-    private TechnicalError technicalError;
-    @Autowired
-    private ExceptionUtils exceptionUtils;
-    @Autowired
-    private EntityManager em;
-
+    private final FunctionalError functionalError;
+    private final OffreVoyageRepository offreVoyageRepository;
+    private final ProprieteOffreVoyageRepository proprieteOffreVoyageRepository;
+    private final ValeurCaracteristiqueOffreVoyageRepository valeurCaracteristiqueOffreVoyageRepository;
+    private final ValeurCaracteristiqueOffreVoyageBooleanBusiness valeurCaracteristiqueOffreVoyageBooleanBusiness;
+    private final ValeurCaracteristiqueOffreVoyageLongBusiness valeurCaracteristiqueOffreVoyageLongBusiness;
+    private final ValeurCaracteristiqueOffreVoyageStringBusiness valeurCaracteristiqueOffreVoyageStringBusiness;
+    private final TechnicalError technicalError;
+    private final  ExceptionUtils exceptionUtils;
+    private final EntityManager em;
     private final SimpleDateFormat dateFormat;
     private final SimpleDateFormat dateTimeFormat;
 
-    public ValeurCaracteristiqueOffreVoyageBusiness() {
+    public ValeurCaracteristiqueOffreVoyageBusiness(FunctionalError functionalError, OffreVoyageRepository offreVoyageRepository, ProprieteOffreVoyageRepository proprieteOffreVoyageRepository, ValeurCaracteristiqueOffreVoyageRepository valeurCaracteristiqueOffreVoyageRepository, ValeurCaracteristiqueOffreVoyageBooleanBusiness valeurCaracteristiqueOffreVoyageBooleanBusiness, ValeurCaracteristiqueOffreVoyageLongBusiness valeurCaracteristiqueOffreVoyageLongBusiness, ValeurCaracteristiqueOffreVoyageStringBusiness valeurCaracteristiqueOffreVoyageStringBusiness, TechnicalError technicalError, ExceptionUtils exceptionUtils, EntityManager em) {
+        this.functionalError = functionalError;
+        this.offreVoyageRepository = offreVoyageRepository;
+        this.proprieteOffreVoyageRepository = proprieteOffreVoyageRepository;
+        this.valeurCaracteristiqueOffreVoyageRepository = valeurCaracteristiqueOffreVoyageRepository;
+        this.valeurCaracteristiqueOffreVoyageBooleanBusiness = valeurCaracteristiqueOffreVoyageBooleanBusiness;
+        this.valeurCaracteristiqueOffreVoyageLongBusiness = valeurCaracteristiqueOffreVoyageLongBusiness;
+        this.valeurCaracteristiqueOffreVoyageStringBusiness = valeurCaracteristiqueOffreVoyageStringBusiness;
+        this.technicalError = technicalError;
+        this.exceptionUtils = exceptionUtils;
+        this.em = em;
         dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         dateTimeFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
     }

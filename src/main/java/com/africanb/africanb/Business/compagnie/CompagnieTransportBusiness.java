@@ -32,7 +32,6 @@ import com.africanb.africanb.utils.emailService.BodiesOfEmail;
 import com.africanb.africanb.utils.emailService.EmailDTO;
 import com.africanb.africanb.utils.emailService.EmailServiceBusiness;
 import lombok.extern.java.Log;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
@@ -61,39 +60,37 @@ public class CompagnieTransportBusiness implements IBasicBusiness<Request<Compag
     @Value("${racine.document.path}")
     private String racineDocumentPath;
 
-    @Autowired
-    private StatusUtilRepository statusUtilRepository;
-    @Autowired
-    private CompagnieTransportRepository compagnieTransportRepository;
-    @Autowired
-    private VilleRepository villeRepository;
-    @Autowired
-    private DocumentBusiness documentBusiness;
-    @Autowired
-    private CompagnieAttestionTransportBusiness compagnieAttestionTransportBusiness;
-
-    @Autowired
-    private CompagnieAttestationTransportRepository compagnieAttestationTransportRepository;
-    @Autowired
-    private StatusUtilCompagnieTransportRepository statusUtilCompagnieTransportRepository;
-    @Autowired
-    private FunctionalError functionalError;
-    @Autowired
-    private TechnicalError technicalError;
-    @Autowired
-    private ExceptionUtils exceptionUtils;
-    @Autowired
-    private EntityManager em;
-    @Autowired
-    private EmailServiceBusiness emailServiceBusiness;
+    private final StatusUtilRepository statusUtilRepository;
+    private final CompagnieTransportRepository compagnieTransportRepository;
+    private final VilleRepository villeRepository;
+    private final DocumentBusiness documentBusiness;
+    private final CompagnieAttestionTransportBusiness compagnieAttestionTransportBusiness;
+    private final CompagnieAttestationTransportRepository compagnieAttestationTransportRepository;
+    private final StatusUtilCompagnieTransportRepository statusUtilCompagnieTransportRepository;
+    private final FunctionalError functionalError;
+    private final TechnicalError technicalError;
+    private final ExceptionUtils exceptionUtils;
+    private final EntityManager em;
+    private final EmailServiceBusiness emailServiceBusiness;
+    private final StatusUtilCompagnieTransportBusiness statusUtilCompagnieTransportBusiness;
 
     private SimpleDateFormat dateFormat;
     private SimpleDateFormat dateTimeFormat;
 
-    @Autowired
-    private StatusUtilCompagnieTransportBusiness statusUtilCompagnieTransportBusiness;
-
-    public CompagnieTransportBusiness() {
+    public CompagnieTransportBusiness(StatusUtilRepository statusUtilRepository, CompagnieTransportRepository compagnieTransportRepository, VilleRepository villeRepository, DocumentBusiness documentBusiness, CompagnieAttestionTransportBusiness compagnieAttestionTransportBusiness, CompagnieAttestationTransportRepository compagnieAttestationTransportRepository, StatusUtilCompagnieTransportRepository statusUtilCompagnieTransportRepository, FunctionalError functionalError, TechnicalError technicalError, ExceptionUtils exceptionUtils, EntityManager em, EmailServiceBusiness emailServiceBusiness, StatusUtilCompagnieTransportBusiness statusUtilCompagnieTransportBusiness) {
+        this.statusUtilRepository = statusUtilRepository;
+        this.compagnieTransportRepository = compagnieTransportRepository;
+        this.villeRepository = villeRepository;
+        this.documentBusiness = documentBusiness;
+        this.compagnieAttestionTransportBusiness = compagnieAttestionTransportBusiness;
+        this.compagnieAttestationTransportRepository = compagnieAttestationTransportRepository;
+        this.statusUtilCompagnieTransportRepository = statusUtilCompagnieTransportRepository;
+        this.functionalError = functionalError;
+        this.technicalError = technicalError;
+        this.exceptionUtils = exceptionUtils;
+        this.em = em;
+        this.emailServiceBusiness = emailServiceBusiness;
+        this.statusUtilCompagnieTransportBusiness = statusUtilCompagnieTransportBusiness;
         dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         dateTimeFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
     }

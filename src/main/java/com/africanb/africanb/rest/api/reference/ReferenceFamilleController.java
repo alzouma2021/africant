@@ -8,7 +8,6 @@ import com.africanb.africanb.rest.fact.ControllerFactory;
 import com.africanb.africanb.utils.Reference.ReferenceFamilleBusines;
 import com.africanb.africanb.utils.Reference.ReferenceFamilleDTO;
 import lombok.extern.java.Log;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -18,10 +17,14 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value="/referencesFamille")
 public class ReferenceFamilleController {
 
-    @Autowired
-    private ControllerFactory<ReferenceFamilleDTO> controllerFactory;
-    @Autowired
-    private ReferenceFamilleBusines referenceFamilleBusines;
+
+    private final ControllerFactory<ReferenceFamilleDTO> controllerFactory;
+    private final ReferenceFamilleBusines referenceFamilleBusines;
+
+    public ReferenceFamilleController(ControllerFactory<ReferenceFamilleDTO> controllerFactory, ReferenceFamilleBusines referenceFamilleBusines) {
+        this.controllerFactory = controllerFactory;
+        this.referenceFamilleBusines = referenceFamilleBusines;
+    }
 
     @RequestMapping(value="",method= RequestMethod.POST,consumes = {"application/json"},produces={"application/json"})
     public Response<ReferenceFamilleDTO> create(@RequestBody Request<ReferenceFamilleDTO> request) {

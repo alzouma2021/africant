@@ -1,7 +1,6 @@
 package com.africanb.africanb.Business.offreVoyage;
 
 
-import com.africanb.africanb.dao.entity.compagnie.Ville;
 import com.africanb.africanb.dao.entity.offreVoyage.JourSemaine;
 import com.africanb.africanb.dao.entity.offreVoyage.OffreVoyage;
 import com.africanb.africanb.dao.entity.offreVoyage.Programme;
@@ -15,19 +14,15 @@ import com.africanb.africanb.helper.TechnicalError;
 import com.africanb.africanb.helper.contrat.IBasicBusiness;
 import com.africanb.africanb.helper.contrat.Request;
 import com.africanb.africanb.helper.contrat.Response;
-import com.africanb.africanb.helper.dto.compagnie.VilleDTO;
 import com.africanb.africanb.helper.dto.offreVoyage.JourSemaineDTO;
 import com.africanb.africanb.helper.dto.offreVoyage.OffreVoyageDTO;
 import com.africanb.africanb.helper.dto.offreVoyage.ProgrammeDTO;
-import com.africanb.africanb.helper.transformer.compagnie.VilleTransformer;
 import com.africanb.africanb.helper.transformer.offrreVoyage.JourSemaineTransformer;
 import com.africanb.africanb.helper.searchFunctions.Utilities;
-import com.africanb.africanb.helper.transformer.offrreVoyage.OffreVoyageTransformer;
 import com.africanb.africanb.helper.transformer.offrreVoyage.ProgrammeTransformer;
 import com.africanb.africanb.helper.validation.Validate;
 import com.africanb.africanb.utils.Reference.Reference;
 import lombok.extern.java.Log;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -46,29 +41,29 @@ public class JourSemaineBusiness implements IBasicBusiness<Request<JourSemaineDT
 
 
     private Response<JourSemaineDTO> response;
-    @Autowired
-    private ReferenceRepository referenceRepository;
-    @Autowired
-    private JourSemaineRepository jourSemaineRepository;
-    @Autowired
-    private ProgrammeBusiness programmeBusiness;
-    @Autowired
-    private OffreVoyageRepository offreVoyageRepository;
-    @Autowired
-    private ProgrammeRepository programmeRepository;
-    @Autowired
-    private FunctionalError functionalError;
-    @Autowired
-    private TechnicalError technicalError;
-    @Autowired
-    private ExceptionUtils exceptionUtils;
-    @Autowired
-    private EntityManager em;
 
+    private final ReferenceRepository referenceRepository;
+    private final JourSemaineRepository jourSemaineRepository;
+    private final ProgrammeBusiness programmeBusiness;
+    private final OffreVoyageRepository offreVoyageRepository;
+    private final ProgrammeRepository programmeRepository;
+    private final FunctionalError functionalError;
+    private final TechnicalError technicalError;
+    private final ExceptionUtils exceptionUtils;
+    private final EntityManager em;
     private final SimpleDateFormat dateFormat;
     private final SimpleDateFormat dateTimeFormat;
 
-    public JourSemaineBusiness() {
+    public JourSemaineBusiness(ReferenceRepository referenceRepository, JourSemaineRepository jourSemaineRepository, ProgrammeBusiness programmeBusiness, OffreVoyageRepository offreVoyageRepository, ProgrammeRepository programmeRepository, FunctionalError functionalError, TechnicalError technicalError, ExceptionUtils exceptionUtils, EntityManager em) {
+        this.referenceRepository = referenceRepository;
+        this.jourSemaineRepository = jourSemaineRepository;
+        this.programmeBusiness = programmeBusiness;
+        this.offreVoyageRepository = offreVoyageRepository;
+        this.programmeRepository = programmeRepository;
+        this.functionalError = functionalError;
+        this.technicalError = technicalError;
+        this.exceptionUtils = exceptionUtils;
+        this.em = em;
         dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         dateTimeFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
     }

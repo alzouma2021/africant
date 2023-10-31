@@ -2,7 +2,6 @@ package com.africanb.africanb.Business.security;
 
 import com.africanb.africanb.dao.entity.compagnie.CompagnieTransport;
 import com.africanb.africanb.dao.entity.compagnie.Gare;
-import com.africanb.africanb.dao.entity.compagnie.StatusUtil;
 import com.africanb.africanb.dao.entity.security.Role;
 import com.africanb.africanb.dao.entity.security.Users;
 import com.africanb.africanb.dao.repository.compagnie.CompagnieTransportRepository;
@@ -17,21 +16,14 @@ import com.africanb.africanb.helper.contrat.IBasicBusiness;
 import com.africanb.africanb.helper.contrat.Request;
 import com.africanb.africanb.helper.contrat.Response;
 import com.africanb.africanb.helper.dto.compagnie.CompagnieTransportDTO;
-import com.africanb.africanb.helper.dto.compagnie.StatusUtilCompagnieTransportDTO;
-import com.africanb.africanb.helper.dto.security.RoleDTO;
 import com.africanb.africanb.helper.dto.security.UsersDTO;
 import com.africanb.africanb.helper.dto.security.UsersPassWordDTO;
 import com.africanb.africanb.helper.searchFunctions.Utilities;
-import com.africanb.africanb.helper.transformer.compagnie.CompagnieTransportTransformer;
-import com.africanb.africanb.helper.transformer.security.RoleTransformer;
 import com.africanb.africanb.helper.transformer.security.UsersTransformer;
 import com.africanb.africanb.helper.validation.Validate;
 import com.africanb.africanb.utils.Constants.ProjectConstants;
-import com.africanb.africanb.utils.emailService.BodiesOfEmail;
-import com.africanb.africanb.utils.emailService.EmailDTO;
 import com.africanb.africanb.utils.security.SecurityServices;
 import lombok.extern.java.Log;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -47,29 +39,29 @@ import java.util.*;
 public class UsersBusiness implements IBasicBusiness<Request<UsersDTO>, Response<UsersDTO>> {
 
     private Response<UsersDTO> response;
-    @Autowired
-    private UsersRepository usersRepository;
-    @Autowired
-    private RoleRepository roleRepository;
-    @Autowired
-    private GareRepository gareRepository;
-    @Autowired
-    private CompagnieTransportRepository compagnieTransportRepository;
-    @Autowired
-    private RoleFunctionalityRepository roleFunctionalityRepository;
-    @Autowired
-    private FunctionalError functionalError;
-    @Autowired
-    private TechnicalError technicalError;
-    @Autowired
-    private ExceptionUtils exceptionUtils;
 
-    @Autowired
-    private EntityManager em;
+    private final UsersRepository usersRepository;
+    private final RoleRepository roleRepository;
+    private final GareRepository gareRepository;
+    private final CompagnieTransportRepository compagnieTransportRepository;
+    private final RoleFunctionalityRepository roleFunctionalityRepository;
+    private final FunctionalError functionalError;
+    private final TechnicalError technicalError;
+    private final ExceptionUtils exceptionUtils;
+    private final EntityManager em;
     private final SimpleDateFormat dateFormat;
     private final SimpleDateFormat dateTimeFormat;
 
-    public UsersBusiness() {
+    public UsersBusiness(UsersRepository usersRepository, RoleRepository roleRepository, GareRepository gareRepository, CompagnieTransportRepository compagnieTransportRepository, RoleFunctionalityRepository roleFunctionalityRepository, FunctionalError functionalError, TechnicalError technicalError, ExceptionUtils exceptionUtils, EntityManager em) {
+        this.usersRepository = usersRepository;
+        this.roleRepository = roleRepository;
+        this.gareRepository = gareRepository;
+        this.compagnieTransportRepository = compagnieTransportRepository;
+        this.roleFunctionalityRepository = roleFunctionalityRepository;
+        this.functionalError = functionalError;
+        this.technicalError = technicalError;
+        this.exceptionUtils = exceptionUtils;
+        this.em = em;
         dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         dateTimeFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
     }
@@ -80,11 +72,6 @@ public class UsersBusiness implements IBasicBusiness<Request<UsersDTO>, Response
         Response<UsersDTO> response = new Response<UsersDTO>();
         List<Users> items = new ArrayList<Users>();
         UsersDTO dto = request.getData();
-        /*if(Utilities.checkForSQLInjection(dto) == false){
-            response.setStatus(functionalError.SAVE_FAIL("Donnée non correcte", locale));
-            response.setHasError(true);
-            return response;
-        }*/
         Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
         fieldsToVerify.put("login", dto.getLogin());
         fieldsToVerify.put("password", dto.getPassword());

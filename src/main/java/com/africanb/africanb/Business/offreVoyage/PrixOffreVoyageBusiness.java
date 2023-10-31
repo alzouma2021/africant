@@ -2,7 +2,7 @@
 package com.africanb.africanb.Business.offreVoyage;
 
 
-import com.africanb.africanb.dao.entity.compagnie.CompagnieTransport;
+
 import com.africanb.africanb.dao.entity.offreVoyage.OffreVoyage;
 import com.africanb.africanb.dao.entity.offreVoyage.PrixOffreVoyage;
 import com.africanb.africanb.dao.repository.Reference.ReferenceRepository;
@@ -16,13 +16,11 @@ import com.africanb.africanb.helper.contrat.Request;
 import com.africanb.africanb.helper.contrat.Response;
 import com.africanb.africanb.helper.dto.offreVoyage.OffreVoyageDTO;
 import com.africanb.africanb.helper.dto.offreVoyage.PrixOffreVoyageDTO;
-import com.africanb.africanb.helper.transformer.offrreVoyage.OffreVoyageTransformer;
 import com.africanb.africanb.helper.transformer.offrreVoyage.PrixOffreVoyageTransformer;
 import com.africanb.africanb.helper.searchFunctions.Utilities;
 import com.africanb.africanb.helper.validation.Validate;
 import com.africanb.africanb.utils.Reference.Reference;
 import lombok.extern.java.Log;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -41,25 +39,26 @@ public class PrixOffreVoyageBusiness implements IBasicBusiness<Request<PrixOffre
 
 
     private Response<PrixOffreVoyageDTO> response;
-    @Autowired
-    private ReferenceRepository referenceRepository;
-    @Autowired
-    private PrixOffreVoyageRepository prixOffreVoyageRepository;
-    @Autowired
-    private OffreVoyageRepository offreVoyageRepository;
-    @Autowired
-    private FunctionalError functionalError;
-    @Autowired
-    private TechnicalError technicalError;
-    @Autowired
-    private ExceptionUtils exceptionUtils;
-    @Autowired
-    private EntityManager em;
+
+    private final ReferenceRepository referenceRepository;
+    private final PrixOffreVoyageRepository prixOffreVoyageRepository;
+    private final OffreVoyageRepository offreVoyageRepository;
+    private final FunctionalError functionalError;
+    private final TechnicalError technicalError;
+    private final ExceptionUtils exceptionUtils;
+    private final EntityManager em;
 
     private final SimpleDateFormat dateFormat;
     private final SimpleDateFormat dateTimeFormat;
 
-    public PrixOffreVoyageBusiness() {
+    public PrixOffreVoyageBusiness(ReferenceRepository referenceRepository, PrixOffreVoyageRepository prixOffreVoyageRepository, OffreVoyageRepository offreVoyageRepository, FunctionalError functionalError, TechnicalError technicalError, ExceptionUtils exceptionUtils, EntityManager em) {
+        this.referenceRepository = referenceRepository;
+        this.prixOffreVoyageRepository = prixOffreVoyageRepository;
+        this.offreVoyageRepository = offreVoyageRepository;
+        this.functionalError = functionalError;
+        this.technicalError = technicalError;
+        this.exceptionUtils = exceptionUtils;
+        this.em = em;
         dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         dateTimeFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
     }
