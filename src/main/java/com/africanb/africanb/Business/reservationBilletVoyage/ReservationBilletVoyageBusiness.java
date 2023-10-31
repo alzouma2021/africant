@@ -166,8 +166,7 @@ public class ReservationBilletVoyageBusiness implements IBasicBusiness<Request<R
         dto.setMontantTotalReservation(montantTotalReservation);
         ReservationBilletVoyage entityToSave = ReservationBilletVoyageTransformer.INSTANCE.toEntity(dto,existingGare,existingOffreVoyage,existingProgramme,existingUser,existingStatusUtilActual);
         entityToSave.setIsDeleted(false);
-        entityToSave.setDateReservation(Utilities.getCurrentDate());
-
+        //entityToSave.setDateReservation(Utilities.getCurrentDate());
         ReservationBilletVoyage entitySaved = reservationBilletVoyageRepository.save(entityToSave);
         if(entitySaved==null){
             response.setStatus(functionalError.SAVE_FAIL("Erreur creation",locale));

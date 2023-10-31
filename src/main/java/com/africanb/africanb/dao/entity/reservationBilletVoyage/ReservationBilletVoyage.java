@@ -5,7 +5,6 @@ import com.africanb.africanb.dao.entity.compagnie.StatusUtil;
 import com.africanb.africanb.dao.entity.offreVoyage.OffreVoyage;
 import com.africanb.africanb.dao.entity.offreVoyage.Programme;
 import com.africanb.africanb.dao.entity.security.Users;
-import com.africanb.africanb.helper.status.Status;
 import com.sun.istack.NotNull;
 import lombok.*;
 

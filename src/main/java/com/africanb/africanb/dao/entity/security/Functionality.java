@@ -17,11 +17,8 @@ public class Functionality implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
     private String code;
-
     private String libelle;
-
     private Boolean isDeleted;
 
     private Date createdAt;

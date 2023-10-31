@@ -45,6 +45,7 @@ com\africanb\africanb\helper\status\StatusCode.class
 com\africanb\africanb\dao\repository\compagnie\BagageRepository.class
 com\africanb\africanb\rest\EncryptFilter.class
 com\africanb\africanb\rest\api\compagnie\StatusUtilController.class
+com\africanb\africanb\rest\api\reservationBilletVoyage\HistoriquePaiementController.class
 com\africanb\africanb\dao\repository\offreVoyage\JourSemaineRepository.class
 com\africanb\africanb\rest\api\security\RoleController.class
 com\africanb\africanb\helper\dto\security\RoleFunctionalityDTO.class
@@ -153,6 +154,7 @@ com\africanb\africanb\dao\entity\offreVoyage\ValeurCaracteristiqueOffreVoyageLon
 com\africanb\africanb\helper\transformer\offrreVoyage\PrixOffreVoyageTransformer.class
 com\africanb\africanb\Business\compagnie\ModePaiement\ModePaiementMoovMoneyBusiness.class
 com\africanb\africanb\dao\entity\compagnie\CompagnieTransport.class
+com\africanb\africanb\dao\repository\reservationBilletVoyage\HistoriquePaiementRepository.class
 com\africanb\africanb\rest\api\security\UsersController.class
 com\africanb\africanb\helper\transformer\offrreVoyage\ValeurCaracteristiqueOffreVoyageLongTransformerImpl.class
 com\africanb\africanb\dao\repository\compagnie\PaysRepository.class
