@@ -16,13 +16,18 @@ import java.lang.reflect.Field;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.util.*;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
 
 //@Slf4j
 public class Utilities {
 
-   // private static final Logger logger = LogManager.getLogManager().getLogger("");
+    private static final Logger logger = LogManager.getLogManager().getLogger("");
 
     /**
      *
@@ -112,7 +117,7 @@ public class Utilities {
 
         AbonnementPrelevement rtn = new AbonnementPrelevement();
         AbonnementPrelevement entityToUpdate = new AbonnementPrelevement();
-        entityToUpdate= (AbonnementPrelevement) entity;
+        entityToUpdate = (AbonnementPrelevement) entity;
 
         rtn.setId(entityToUpdate.getId());
         rtn.setDesignation(entityToUpdate.getDesignation());
@@ -552,12 +557,16 @@ public class Utilities {
     }
 
     public static String getFrenchDayOfWeek(Date date) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
-        String[] daysOfWeek = {"Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"};
-        String dayOfWeekName = daysOfWeek[dayOfWeek - 1];
+        LocalDate localDate = convertDateToLocalDate(date);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEEE", Locale.FRENCH);
+        String dayOfWeekName = localDate.format(formatter);
+
         return dayOfWeekName;
+    }
+
+    public static LocalDate convertDateToLocalDate(Date date) {
+        LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        return localDate;
     }
 /*
     public static Integer getLoginUser() {//HttpRequest request doit etre en parametre

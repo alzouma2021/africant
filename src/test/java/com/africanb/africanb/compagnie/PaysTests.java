@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -39,15 +40,4 @@ public class PaysTests {
         assertEquals(pays.getDesignation(),rtn.getDesignation());
     }
 
-    @Disabled
-    @Test
-    public void update(){
-        Pays pays = paysRepository.findByDesignation("Test1000",false);
-        log.info("Affichage="+pays.toString());
-        pays.setDesignation("Test1111");
-        pays.setDescription("Test1111");
-        Pays rtn=paysRepository.save(pays);
-        assertNotNull(rtn);
-        assertEquals(pays.getDescription(),rtn.getDescription());
-    }
 }

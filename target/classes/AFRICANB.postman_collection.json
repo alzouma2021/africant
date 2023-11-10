@@ -2379,7 +2379,18 @@
 					"name": "login1",
 					"request": {
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "server_id",
+								"value": "backend@africanb",
+								"type": "text"
+							},
+							{
+								"key": "client_id",
+								"value": "fronted@africanb",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\r\n    \"data\":{\r\n        \"login\": \"admin2023\",\r\n        \"password\": \"0123456789\"\r\n    }\r\n}",
@@ -3119,6 +3130,156 @@
 					"response": []
 				},
 				{
+					"name": "getReservationByUserSample",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MjMwLCJsb2dpbiI6ImFkbWluQGNvbXBhZ25pZXRyYW5zcG9ydC5jb20iLCJyb2xlIjoxODcsInJhaXNvblNvY2lhbGUiOiJhbW0iLCJzdWIiOiJhZG1pbiIsImp0aSI6IjIzMCIsImlhdCI6MTY5OTYwNzMwNywiZXhwIjoxNjk5Nzg3MzA3fQ.98idnZDsl8G-qLMuNzVYXLt0RdXoXPUsWRszslh_ZxM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "server_id",
+								"value": "backend@africanb",
+								"type": "text"
+							},
+							{
+								"key": "client_id",
+								"value": "frontend@africanb",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\":{\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:8443/reservationBilletVoyages/getReservationByUserSample",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8443",
+							"path": [
+								"reservationBilletVoyages",
+								"getReservationByUserSample"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getReservationByAdminCompagnieTransport",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MjMwLCJsb2dpbiI6ImFkbWluQGNvbXBhZ25pZXRyYW5zcG9ydC5jb20iLCJyb2xlIjoxODcsInJhaXNvblNvY2lhbGUiOiJhbW0iLCJzdWIiOiJhZG1pbiIsImp0aSI6IjIzMCIsImlhdCI6MTY5OTYwNzMwNywiZXhwIjoxNjk5Nzg3MzA3fQ.98idnZDsl8G-qLMuNzVYXLt0RdXoXPUsWRszslh_ZxM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "server_id",
+								"value": "backend@africanb",
+								"type": "text"
+							},
+							{
+								"key": "client_id",
+								"value": "frontend@africanb",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\":{\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:8443/reservationBilletVoyages/getReservationByAdminCompagnieTransport",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8443",
+							"path": [
+								"reservationBilletVoyages",
+								"getReservationByAdminCompagnieTransport"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getReservationByUserGare",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MjMwLCJsb2dpbiI6ImFkbWluQGNvbXBhZ25pZXRyYW5zcG9ydC5jb20iLCJyb2xlIjoxODcsInJhaXNvblNvY2lhbGUiOiJhbW0iLCJzdWIiOiJhZG1pbiIsImp0aSI6IjIzMCIsImlhdCI6MTY5OTYwNzMwNywiZXhwIjoxNjk5Nzg3MzA3fQ.98idnZDsl8G-qLMuNzVYXLt0RdXoXPUsWRszslh_ZxM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "server_id",
+								"value": "backend@africanb",
+								"type": "text"
+							},
+							{
+								"key": "client_id",
+								"value": "frontend@africanb",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\":{\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:8443/reservationBilletVoyages/getReservationByUserGare",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8443",
+							"path": [
+								"reservationBilletVoyages",
+								"getReservationByUserGare"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "reservationBilletVoyage",
 					"request": {
 						"auth": {
@@ -3126,7 +3287,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MjMwLCJsb2dpbiI6ImFkbWluQGNvbXBhZ25pZXRyYW5zcG9ydC5jb20iLCJyb2xlIjoxODcsInJhaXNvblNvY2lhbGUiOiJhbW0iLCJzdWIiOiJhZG1pbiIsImp0aSI6IjIzMCIsImlhdCI6MTY5ODQyNDM2NCwiZXhwIjoxNjk4NjA0MzY0fQ.NN_HfwxkBrquXFH_PaFtgfKm14qnsCkd6UcOgKRW_yA",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MjMwLCJsb2dpbiI6ImFkbWluQGNvbXBhZ25pZXRyYW5zcG9ydC5jb20iLCJyb2xlIjoxODcsInJhaXNvblNvY2lhbGUiOiJhbW0iLCJzdWIiOiJhZG1pbiIsImp0aSI6IjIzMCIsImlhdCI6MTY5OTYwNzAyNywiZXhwIjoxNjk5Nzg3MDI3fQ.9rea69BTz_mHPn6mXAqHuG9EfCin1xjL38eR9vKx8Gc",
 									"type": "string"
 								}
 							]
@@ -3162,6 +3323,155 @@
 							"port": "8443",
 							"path": [
 								"reservationBilletVoyages"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "historiquePaiement",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MjMwLCJsb2dpbiI6ImFkbWluQGNvbXBhZ25pZXRyYW5zcG9ydC5jb20iLCJyb2xlIjoxODcsInJhaXNvblNvY2lhbGUiOiJhbW0iLCJzdWIiOiJhZG1pbiIsImp0aSI6IjIzMCIsImlhdCI6MTY5OTYwNzMwNywiZXhwIjoxNjk5Nzg3MzA3fQ.98idnZDsl8G-qLMuNzVYXLt0RdXoXPUsWRszslh_ZxM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "server_id",
+								"value": "backend@africanb",
+								"type": "text"
+							},
+							{
+								"key": "client_id",
+								"value": "frontend@africanb",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\":{\r\n        \"dateTimePayment\":\"2023-11-10T10:23:57\",\r\n        \"modePaiementDesignation\":\"modePaiementWave\",\r\n        \"reservationBilletVoyageDesignation\":\"Adulte\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:8443/historiquePaiements",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8443",
+							"path": [
+								"historiquePaiements"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getHistoriquePaiementByIdentifiantUnique",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MjMwLCJsb2dpbiI6ImFkbWluQGNvbXBhZ25pZXRyYW5zcG9ydC5jb20iLCJyb2xlIjoxODcsInJhaXNvblNvY2lhbGUiOiJhbW0iLCJzdWIiOiJhZG1pbiIsImp0aSI6IjIzMCIsImlhdCI6MTY5OTYwNzMwNywiZXhwIjoxNjk5Nzg3MzA3fQ.98idnZDsl8G-qLMuNzVYXLt0RdXoXPUsWRszslh_ZxM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "server_id",
+								"value": "backend@africanb",
+								"type": "text"
+							},
+							{
+								"key": "client_id",
+								"value": "frontend@africanb",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\":{\r\n        \"identifiantUnique\":\"ABDGT234KDLSMPMLF\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:8443/historiquePaiements/getHistoriquePaiementByIdentifiantUnique",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8443",
+							"path": [
+								"historiquePaiements",
+								"getHistoriquePaiementByIdentifiantUnique"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getHistoriquePaiementByReservationBilletVoyage",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MjMwLCJsb2dpbiI6ImFkbWluQGNvbXBhZ25pZXRyYW5zcG9ydC5jb20iLCJyb2xlIjoxODcsInJhaXNvblNvY2lhbGUiOiJhbW0iLCJzdWIiOiJhZG1pbiIsImp0aSI6IjIzMCIsImlhdCI6MTY5OTYwNzMwNywiZXhwIjoxNjk5Nzg3MzA3fQ.98idnZDsl8G-qLMuNzVYXLt0RdXoXPUsWRszslh_ZxM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "server_id",
+								"value": "backend@africanb",
+								"type": "text"
+							},
+							{
+								"key": "client_id",
+								"value": "frontend@africanb",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\":{\r\n        \"designation\":\"reservationBilletVoyage1\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:8443/historiquePaiements/getHistoriquePaiementByReservationBilletVoyage",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8443",
+							"path": [
+								"historiquePaiements",
+								"getHistoriquePaiementByReservationBilletVoyage"
 							]
 						}
 					},
