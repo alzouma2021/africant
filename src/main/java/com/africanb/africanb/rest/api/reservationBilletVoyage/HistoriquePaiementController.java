@@ -22,7 +22,7 @@ import java.util.Locale;
 @Log
 @CrossOrigin("*")
 @RestController
-@RequestMapping(value="/historiquePaiement")
+@RequestMapping(value="/historiquePaiements")
 public class HistoriquePaiementController {
 
 
@@ -120,5 +120,6 @@ public class HistoriquePaiementController {
         }
         return response;
     }
+
 
 }

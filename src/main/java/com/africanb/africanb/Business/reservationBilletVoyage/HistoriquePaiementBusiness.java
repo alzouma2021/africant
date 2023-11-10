@@ -44,20 +44,16 @@ public class HistoriquePaiementBusiness implements IBasicBusiness<Request<Histor
 
     private Response<HistoriquePaiementDTO> response;
 
-
     private final ModePaiementRepository modePaiementRepository;
     private final ProgrammeRepository programmeRepository;
     private final ReservationBilletVoyageRepository reservationBilletVoyageRepository;
     private final HistoriquePaiementRepository historiquePaiementRepository;
-
     private final StatusUtilRepository statusUtilRepository;
     private final StatusUtilRservationBilletVoyageBusiness statusUtilReservationBilletVoyageBusiness;
-
     private final FunctionalError functionalError;
     private final TechnicalError technicalError;
     private final ExceptionUtils exceptionUtils;
     private final EntityManager em;
-
     private final SimpleDateFormat dateFormat;
     private final SimpleDateFormat dateTimeFormat;
 

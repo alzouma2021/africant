@@ -33,7 +33,6 @@ public class StatusUtilRservationBilletVoyageBusiness implements IBasicBusiness<
 
     private Response<StatusUtilReservationBilletVoyageDTO> response;
 
-
     private final StatusUtilReservationBilletVoyageRepository statusUtilReservationBilletVoyageRepository;
     private final StatusUtilRepository statusUtilRepository;
     private final ReservationBilletVoyageRepository reservationBilletVoyageRepository;
@@ -68,19 +67,8 @@ public class StatusUtilRservationBilletVoyageBusiness implements IBasicBusiness<
         }
         List<StatusUtilReservationBilletVoyageDTO> itemsDtos =  Collections.synchronizedList(new ArrayList<StatusUtilReservationBilletVoyageDTO>());
         for(StatusUtilReservationBilletVoyageDTO dto: request.getDatas() ) {
-            Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
-            fieldsToVerify.put("reservationBilletDesignation", dto.getReservationBilletVoyageDesignation());
-            fieldsToVerify.put("statusUtilDesignation", dto.getStatusUtilDesignation());
-            if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
-                response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
-                response.setHasError(true);
-                return response;
-            }
-            if(itemsDtos.stream().anyMatch(a->a.getReservationBilletVoyageDesignation().equals(dto.getReservationBilletVoyageDesignation()))){
-                response.setStatus(functionalError.DATA_DUPLICATE("Tentative de duplication de reservation '" + dto.getReservationBilletVoyageDesignation() , locale));
-                response.setHasError(true);
-                return response;
-            }
+            Response<StatusUtilReservationBilletVoyageDTO> responseCheckDTO = checkStatusUtilReservationBilletVoyageDTO(locale, response, itemsDtos, dto);
+            if (responseCheckDTO != null) return responseCheckDTO;
             itemsDtos.add(dto);
         }
         for(StatusUtilReservationBilletVoyageDTO dto : itemsDtos){
@@ -111,8 +99,6 @@ public class StatusUtilRservationBilletVoyageBusiness implements IBasicBusiness<
             }
             StatusUtilReservationBilletVoyage entityToSave = StatusUtilReservationBilletVoyageTransformer
                                         .INSTANCE.toEntity(dto, existingReservationBilletVoyage, existingStatusUtil);
-
-            //entityToSave.setCreatedBy(request.user);
             items.add(entityToSave);
         }
         if(CollectionUtils.isEmpty(items)){
@@ -189,8 +175,6 @@ public class StatusUtilRservationBilletVoyageBusiness implements IBasicBusiness<
                 }
                 entityToSave.setStatusUtil(existingStatusUtil);
             }
-            //entityToSave.setUpdatedAt(Utilities.getCurrentDate());
-            //entityToSave.setUpdatedBy(request.user);
             items.add(entityToSave);
         }
         if (CollectionUtils.isEmpty(items)) {
@@ -204,7 +188,6 @@ public class StatusUtilRservationBilletVoyageBusiness implements IBasicBusiness<
                 response.setHasError(true);
                 return response;
         }
-        //Transformation
         List<StatusUtilReservationBilletVoyageDTO> itemsDto = (Utilities.isTrue(request.getIsSimpleLoading()))
                                     ? StatusUtilReservationBilletVoyageTransformer.INSTANCE.toLiteDtos(itemsSaved)
                                     : StatusUtilReservationBilletVoyageTransformer.INSTANCE.toDtos(itemsSaved);
@@ -240,9 +223,6 @@ public class StatusUtilRservationBilletVoyageBusiness implements IBasicBusiness<
                 response.setHasError(true);
                 return response;
             }
-            //existingEntity.setIsDeleted(true);
-            //existingEntity.setDeletedAt(Utilities.getCurrentDate());
-            //existingEntity.setDeletedBy(request.user);
             items.add(existingEntity);
         }
         if (CollectionUtils.isEmpty(items)) {
@@ -252,6 +232,39 @@ public class StatusUtilRservationBilletVoyageBusiness implements IBasicBusiness<
         response.setHasError(false);
         response.setStatus(functionalError.SUCCESS("", locale));
         return response;
+    }
+
+    private Response<StatusUtilReservationBilletVoyageDTO> checkStatusUtilReservationBilletVoyageDTO(Locale locale, Response<StatusUtilReservationBilletVoyageDTO> response, List<StatusUtilReservationBilletVoyageDTO> itemsDtos, StatusUtilReservationBilletVoyageDTO dto) {
+        Map<String, Object> fieldsToVerify = createFieldsToVerifyMap(dto);
+        if (!validateFields(fieldsToVerify, response, locale)) {
+            return response;
+        }
+        if (containsDuplicateReservation(itemsDtos, dto)) {
+            response.setStatus(functionalError.DATA_DUPLICATE("Tentative de duplication de reservation '" + dto.getReservationBilletVoyageDesignation(), locale));
+            response.setHasError(true);
+            return response;
+        }
+        return null;
+    }
+
+    private Map<String, Object> createFieldsToVerifyMap(StatusUtilReservationBilletVoyageDTO dto) {
+        Map<String, Object> fieldsToVerify = new HashMap<>();
+        fieldsToVerify.put("reservationBilletDesignation", dto.getReservationBilletVoyageDesignation());
+        fieldsToVerify.put("statusUtilDesignation", dto.getStatusUtilDesignation());
+        return fieldsToVerify;
+    }
+
+    private boolean validateFields(Map<String, Object> fieldsToVerify, Response<StatusUtilReservationBilletVoyageDTO> response, Locale locale) {
+        if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
+            response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
+            response.setHasError(true);
+            return false;
+        }
+        return true;
+    }
+
+    private boolean containsDuplicateReservation(List<StatusUtilReservationBilletVoyageDTO> itemsDtos, StatusUtilReservationBilletVoyageDTO dto) {
+        return itemsDtos.stream().anyMatch(a -> a.getReservationBilletVoyageDesignation().equals(dto.getReservationBilletVoyageDesignation()));
     }
 
     @Override
