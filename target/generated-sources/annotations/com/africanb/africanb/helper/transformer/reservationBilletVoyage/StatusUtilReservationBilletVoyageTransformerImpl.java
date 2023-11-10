@@ -11,7 +11,7 @@ import javax.annotation.processing.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-11-10T10:49:37+0000",
+    date = "2023-11-10T16:54:57+0000",
     comments = "version: 1.4.2.Final, compiler: javac, environment: Java 11.0.0.1 (Oracle Corporation)"
 )
 public class StatusUtilReservationBilletVoyageTransformerImpl implements StatusUtilReservationBilletVoyageTransformer {

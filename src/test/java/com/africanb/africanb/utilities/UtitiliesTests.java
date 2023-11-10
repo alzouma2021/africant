@@ -4,6 +4,10 @@ package com.africanb.africanb.utilities;
 import com.africanb.africanb.dao.entity.compagnie.CompagnieTransport;
 import com.africanb.africanb.dao.entity.compagnie.ModeAbonnement.AbonnementPrelevement;
 import com.africanb.africanb.dao.entity.compagnie.ModeAbonnement.ModeAbonnement;
+import com.africanb.africanb.helper.dto.compagnie.ModeAbonnement.AbonnementPeriodiqueDTO;
+import com.africanb.africanb.helper.dto.compagnie.ModeAbonnement.AbonnementPrelevementDTO;
+import com.africanb.africanb.helper.dto.compagnie.ModeAbonnement.ModeAbonnementDTO;
+import com.africanb.africanb.helper.dto.compagnie.ModePaiement.*;
 import com.africanb.africanb.helper.dto.offreVoyage.ValeurCaracteristiqueOffreVoyageBooleanDTO;
 import com.africanb.africanb.helper.dto.offreVoyage.ValeurCaracteristiqueOffreVoyageDTO;
 import com.africanb.africanb.helper.dto.offreVoyage.ValeurCaracteristiqueOffreVoyageLongDTO;
@@ -27,13 +31,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class UtitiliesTests {
 
     @Test
-    public void transformerValeurCaracteristiqueOffreVoyagEnLaClasseFilleCorrespondateEnFonctionDuTypeLong(){
+    public void transformerValeurCaracteristiqueOffreVoyagEnLaClasseFilleCorrespondateEnFonctionDuTypeLongTest(){
         ValeurCaracteristiqueOffreVoyageDTO valeurCaracteristiqueOffreVoyageDTO = new ValeurCaracteristiqueOffreVoyageDTO();
         valeurCaracteristiqueOffreVoyageDTO.setOffreVoyageDesignation("offreVoyageOne");
         valeurCaracteristiqueOffreVoyageDTO.setTypeProprieteOffreVoyageDesignation("refElementLong");
         valeurCaracteristiqueOffreVoyageDTO.setValeurTexte("12");
 
         ValeurCaracteristiqueOffreVoyageDTO rtn =  Utilities.transformerValeurCaracteristiqueOffreVoyagEnLaClasseFilleCorrespondateEnFonctionDuTypeDeLaPropriete(valeurCaracteristiqueOffreVoyageDTO);
+
         assertNotNull(rtn);
         assertInstanceOf(ValeurCaracteristiqueOffreVoyageLongDTO.class,rtn);
         assertEquals(rtn.getValeurTexte(),valeurCaracteristiqueOffreVoyageDTO.getValeurTexte());
@@ -42,13 +47,14 @@ public class UtitiliesTests {
     }
 
     @Test
-    public void transformerValeurCaracteristiqueOffreVoyagEnLaClasseFilleCorrespondateEnFonctionDuBoolean(){
+    public void transformerValeurCaracteristiqueOffreVoyagEnLaClasseFilleCorrespondateEnFonctionDuBooleanTest(){
         ValeurCaracteristiqueOffreVoyageDTO valeurCaracteristiqueOffreVoyageDTO = new ValeurCaracteristiqueOffreVoyageDTO();
         valeurCaracteristiqueOffreVoyageDTO.setOffreVoyageDesignation("offreVoyageTwo");
         valeurCaracteristiqueOffreVoyageDTO.setTypeProprieteOffreVoyageDesignation("refElementBoolean");
         valeurCaracteristiqueOffreVoyageDTO.setValeurTexte("false");
 
         ValeurCaracteristiqueOffreVoyageDTO rtn =  Utilities.transformerValeurCaracteristiqueOffreVoyagEnLaClasseFilleCorrespondateEnFonctionDuTypeDeLaPropriete(valeurCaracteristiqueOffreVoyageDTO);
+
         assertNotNull(rtn);
         assertInstanceOf(ValeurCaracteristiqueOffreVoyageBooleanDTO.class,rtn);
         assertEquals(rtn.getValeurTexte(),valeurCaracteristiqueOffreVoyageDTO.getValeurTexte());
@@ -57,13 +63,14 @@ public class UtitiliesTests {
     }
 
     @Test
-    public void transformerValeurCaracteristiqueOffreVoyagEnLaClasseFilleCorrespondateEnFonctionDuString(){
+    public void transformerValeurCaracteristiqueOffreVoyagEnLaClasseFilleCorrespondateEnFonctionDuStringTest(){
         ValeurCaracteristiqueOffreVoyageDTO valeurCaracteristiqueOffreVoyageDTO = new ValeurCaracteristiqueOffreVoyageDTO();
         valeurCaracteristiqueOffreVoyageDTO.setOffreVoyageDesignation("offreVoyageThree");
         valeurCaracteristiqueOffreVoyageDTO.setTypeProprieteOffreVoyageDesignation("refElementString");
         valeurCaracteristiqueOffreVoyageDTO.setValeurTexte("froid");
 
         ValeurCaracteristiqueOffreVoyageDTO rtn =  Utilities.transformerValeurCaracteristiqueOffreVoyagEnLaClasseFilleCorrespondateEnFonctionDuTypeDeLaPropriete(valeurCaracteristiqueOffreVoyageDTO);
+
         assertNotNull(rtn);
         assertInstanceOf(ValeurCaracteristiqueOffreVoyageStringDTO.class,rtn);
         assertEquals(rtn.getValeurTexte(),valeurCaracteristiqueOffreVoyageDTO.getValeurTexte());
@@ -73,7 +80,7 @@ public class UtitiliesTests {
 
     @Disabled
     @Test
-    public void transformerEntityModeAbonnementEnEntityAbonnementPrelevement(){
+    public void transformerEntityModeAbonnementEnEntityAbonnementPrelevementTest(){
         ModeAbonnement modeAbonnement = new ModeAbonnement();
         modeAbonnement.setDateDebutAbonnement(Date.from(Instant.now()));
         modeAbonnement.setDateFinAbonnement(Date.from(Instant.now()));
@@ -90,6 +97,7 @@ public class UtitiliesTests {
         modeAbonnement.setTypeModeAbonnement(typeModeAbonnement);
 
         AbonnementPrelevement rtn = Utilities.transformerEntityModeAbonnementEnEntityAbonnementPrelevement(modeAbonnement);
+
         assertNotNull(rtn);
         assertInstanceOf(AbonnementPrelevement.class,rtn);
         assertEquals(rtn.getTypeModeAbonnement().getDesignation(),"Prelevement");
@@ -100,12 +108,14 @@ public class UtitiliesTests {
     @Test
     public void isBlankTest(){
         String str="";
+
         assertEquals(true, Utilities.isBlank(str));
     }
 
     @Test
     public void isNotBlankTest(){
         String str="isNotBlank";
+
         assertEquals(true, Utilities.isNotBlank(str));
     }
 
@@ -113,6 +123,7 @@ public class UtitiliesTests {
     public void convertStringToDateTest() throws ParseException {
         Date date = new Date();
         String dateString="12/12/2023";
+
         assertNotNull(Utilities.convertStringToDate(dateString));
         assertNotNull(Utilities.convertStringToDate(dateString).toString(),dateString);
     }
@@ -120,6 +131,7 @@ public class UtitiliesTests {
     @Test
     public void convertDateToLocalDateTest(){
         Date date = new Date();
+
         assertNotNull(Utilities.convertDateToLocalDate(date));
         assertInstanceOf(LocalDate.class, Utilities.convertDateToLocalDate(date));
     }
@@ -127,7 +139,9 @@ public class UtitiliesTests {
     @Test
     public void getFrenchDayOfWeekTest(){
         Date date = new Date();
+
         String day = Utilities.getFrenchDayOfWeek(date);
+
         assertNotNull(day);
         assertEquals(day, "vendredi");
     }
@@ -137,7 +151,9 @@ public class UtitiliesTests {
         String dateString = "10/11/2023";
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/mm/yyyy");
         Date date = new Date();
+
         String day = Utilities.getFrenchDayOfWeek(date);
+
         assertNotNull(day);
         assertEquals(day, "vendredi");
     }
@@ -152,6 +168,120 @@ public class UtitiliesTests {
         assertEquals(day, "vendredi");
     }
 
+    @Test
+    public void transformerLaClasseModePaiementtEnModePaiementMtnMoneyTest(){
+        ModePaiementDTO modePaiementDTO = new ModePaiementDTO();
+        modePaiementDTO.setCompagnieTransportRaisonSociale("amm");
+        modePaiementDTO.setDesignation("modePaiementMtnMoney");
+        modePaiementDTO.setTypeModePaiementDesignation("ModePaiementMtnMoney");
 
+        ModePaiementDTO rtn =  Utilities.transformerLaClasseModePaiementtEnClasseFilleCorrespondante(modePaiementDTO);
+
+        assertNotNull(rtn);
+        assertInstanceOf(ModePaiementMtnMoneyDTO.class,rtn);
+        assertEquals(rtn.getTypeModePaiementDesignation(),modePaiementDTO.getTypeModePaiementDesignation());
+        assertEquals(rtn.getCompagnieTransportRaisonSociale(),modePaiementDTO.getCompagnieTransportRaisonSociale());
+    }
+
+    @Test
+    public void transformerLaClasseModePaiementtEnModePaiementOrangeMoneyTest(){
+        ModePaiementDTO modePaiementDTO = new ModePaiementDTO();
+        modePaiementDTO.setCompagnieTransportRaisonSociale("amm");
+        modePaiementDTO.setDesignation("modePaiementOrangeMoney");
+        modePaiementDTO.setTypeModePaiementDesignation("ModePaiementOrangeMoney");
+
+        ModePaiementDTO rtn =  Utilities.transformerLaClasseModePaiementtEnClasseFilleCorrespondante(modePaiementDTO);
+
+        assertNotNull(rtn);
+        assertInstanceOf(ModePaiementOrangeMoneyDTO.class,rtn);
+        assertEquals(rtn.getTypeModePaiementDesignation(),modePaiementDTO.getTypeModePaiementDesignation());
+        assertEquals(rtn.getCompagnieTransportRaisonSociale(),modePaiementDTO.getCompagnieTransportRaisonSociale());
+    }
+
+    @Test
+    public void transformerLaClasseModePaiementtEnModePaiementMoovMoneyTest(){
+        ModePaiementDTO modePaiementDTO = new ModePaiementDTO();
+        modePaiementDTO.setCompagnieTransportRaisonSociale("amm");
+        modePaiementDTO.setDesignation("modePaiementMoovMoney");
+        modePaiementDTO.setTypeModePaiementDesignation("ModePaiementMoovMoney");
+
+        ModePaiementDTO rtn =  Utilities.transformerLaClasseModePaiementtEnClasseFilleCorrespondante(modePaiementDTO);
+
+        assertNotNull(rtn);
+        assertInstanceOf(ModePaiementMoovMoneyDTO.class,rtn);
+        assertEquals(rtn.getTypeModePaiementDesignation(),modePaiementDTO.getTypeModePaiementDesignation());
+        assertEquals(rtn.getCompagnieTransportRaisonSociale(),modePaiementDTO.getCompagnieTransportRaisonSociale());
+    }
+
+    @Test
+    public void transformerLaClasseModePaiementtEnModePaiementWaveMoneyTest(){
+        ModePaiementDTO modePaiementDTO = new ModePaiementDTO();
+        modePaiementDTO.setCompagnieTransportRaisonSociale("amm");
+        modePaiementDTO.setDesignation("modePaiementWaveMoney");
+        modePaiementDTO.setTypeModePaiementDesignation("ModePaiementWaveMoney");
+
+        ModePaiementDTO rtn =  Utilities.transformerLaClasseModePaiementtEnClasseFilleCorrespondante(modePaiementDTO);
+
+        assertNotNull(rtn);
+        assertInstanceOf(ModePaiementWaveDTO.class,rtn);
+        assertEquals(rtn.getTypeModePaiementDesignation(),modePaiementDTO.getTypeModePaiementDesignation());
+        assertEquals(rtn.getCompagnieTransportRaisonSociale(),modePaiementDTO.getCompagnieTransportRaisonSociale());
+    }
+
+    @Test
+    public void transformerLaClasseModePaiementtEnModePaiementEnEspeceTest(){
+        ModePaiementDTO modePaiementDTO = new ModePaiementDTO();
+        modePaiementDTO.setCompagnieTransportRaisonSociale("amm");
+        modePaiementDTO.setDesignation("modePaiementEnEspece");
+        modePaiementDTO.setTypeModePaiementDesignation("ModePaiementEnEspece");
+
+        ModePaiementDTO rtn =  Utilities.transformerLaClasseModePaiementtEnClasseFilleCorrespondante(modePaiementDTO);
+
+        assertNotNull(rtn);
+        assertInstanceOf(ModePaiementEnEspeceDTO.class,rtn);
+        assertEquals(rtn.getTypeModePaiementDesignation(),modePaiementDTO.getTypeModePaiementDesignation());
+        assertEquals(rtn.getCompagnieTransportRaisonSociale(),modePaiementDTO.getCompagnieTransportRaisonSociale());
+    }
+
+    @Test
+    public void transformerLaClasseModeAbonnementEnAbonnementPeriodiqueTest(){
+        ModeAbonnementDTO modeAbonnementDTO = new ModeAbonnementDTO();
+        modeAbonnementDTO.setDateDebutAbonnement("10/11/2023");
+        modeAbonnementDTO.setDateFinAbonnement("10/11/2023");
+        modeAbonnementDTO.setCompagnieTransportRaisonSociale("amm");
+        modeAbonnementDTO.setRedevance(10000);
+        modeAbonnementDTO.setTaux(10);
+        modeAbonnementDTO.setTypeModeAbonnementDesignation("AbonnementPeriodique");
+        modeAbonnementDTO.setDesignation("abonnementPeriodique");
+        modeAbonnementDTO.setPeriodiciteAbonnementDesignation("Mensuel");
+
+        ModeAbonnementDTO rtn =  Utilities.transformerLaClasseModeAbonnementEnClasseFilleCorrespondante(modeAbonnementDTO);
+
+        assertNotNull(rtn);
+        assertInstanceOf(AbonnementPeriodiqueDTO.class,rtn);
+        assertEquals(rtn.getTypeModeAbonnementDesignation(),modeAbonnementDTO.getTypeModeAbonnementDesignation());
+        assertEquals(rtn.getRedevance(),modeAbonnementDTO.getRedevance());
+        assertEquals(rtn.getDesignation(),modeAbonnementDTO.getDesignation());
+    }
+
+    @Test
+    public void transformerLaClasseModeAbonnementEnAbonnementPrelevementTest(){
+        ModeAbonnementDTO modeAbonnementDTO = new ModeAbonnementDTO();
+        modeAbonnementDTO.setDateDebutAbonnement("10/11/2023");
+        modeAbonnementDTO.setDateFinAbonnement("10/11/2023");
+        modeAbonnementDTO.setCompagnieTransportRaisonSociale("amm");
+        modeAbonnementDTO.setTaux(10);
+        modeAbonnementDTO.setTypeModeAbonnementDesignation("AbonnementPrelevement");
+        modeAbonnementDTO.setDesignation("abonnementPrelevement");
+        modeAbonnementDTO.setPeriodiciteAbonnementDesignation("Mensuel");
+
+        ModeAbonnementDTO rtn =  Utilities.transformerLaClasseModeAbonnementEnClasseFilleCorrespondante(modeAbonnementDTO);
+
+        assertNotNull(rtn);
+        assertInstanceOf(AbonnementPrelevementDTO.class,rtn);
+        assertEquals(rtn.getTypeModeAbonnementDesignation(),modeAbonnementDTO.getTypeModeAbonnementDesignation());
+        assertEquals(rtn.getRedevance(),modeAbonnementDTO.getRedevance());
+        assertEquals(rtn.getDesignation(),modeAbonnementDTO.getDesignation());
+    }
 
 }
