@@ -398,7 +398,7 @@ public class Utilities {
         return true;
     }
 
-    private static boolean containsSQLInjection(String value) {
+    public static boolean containsSQLInjection(String value) {
         String[] dangerousKeywords = {
                 "SELECT", "INSERT", "UPDATE", "DELETE", "DROP", "ALTER", "EXECUTE",
                 "UNION", "JOIN", "HAVING", "FROM", "WHERE", "OR", "AND", "LIKE",
@@ -408,9 +408,9 @@ public class Utilities {
                 .anyMatch(keyword -> containsWord(value, keyword));
     }
 
-    private static boolean containsWord(String text, String word) {
+    public static boolean containsWord(String text, String word) {
         String pattern = "\\b" + word + "\\b";
-        return text.matches(".*" + pattern + ".*");
+        return text==null?false:text.matches(".*" + pattern + ".*");
     }
 
 

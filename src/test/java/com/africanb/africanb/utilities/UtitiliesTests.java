@@ -22,7 +22,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -31,7 +34,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class UtitiliesTests {
 
     @Test
-    public void transformerValeurCaracteristiqueOffreVoyagEnLaClasseFilleCorrespondateEnFonctionDuTypeLongTest(){
+    public void testTransformerValeurCaracteristiqueOffreVoyagEnLaClasseFilleCorrespondateEnFonctionDuTypeLong(){
         ValeurCaracteristiqueOffreVoyageDTO valeurCaracteristiqueOffreVoyageDTO = new ValeurCaracteristiqueOffreVoyageDTO();
         valeurCaracteristiqueOffreVoyageDTO.setOffreVoyageDesignation("offreVoyageOne");
         valeurCaracteristiqueOffreVoyageDTO.setTypeProprieteOffreVoyageDesignation("refElementLong");
@@ -47,7 +50,7 @@ public class UtitiliesTests {
     }
 
     @Test
-    public void transformerValeurCaracteristiqueOffreVoyagEnLaClasseFilleCorrespondateEnFonctionDuBooleanTest(){
+    public void testTransformerValeurCaracteristiqueOffreVoyagEnLaClasseFilleCorrespondateEnFonctionDuBoolean(){
         ValeurCaracteristiqueOffreVoyageDTO valeurCaracteristiqueOffreVoyageDTO = new ValeurCaracteristiqueOffreVoyageDTO();
         valeurCaracteristiqueOffreVoyageDTO.setOffreVoyageDesignation("offreVoyageTwo");
         valeurCaracteristiqueOffreVoyageDTO.setTypeProprieteOffreVoyageDesignation("refElementBoolean");
@@ -63,7 +66,7 @@ public class UtitiliesTests {
     }
 
     @Test
-    public void transformerValeurCaracteristiqueOffreVoyagEnLaClasseFilleCorrespondateEnFonctionDuStringTest(){
+    public void testTransformerValeurCaracteristiqueOffreVoyagEnLaClasseFilleCorrespondateEnFonctionDuString(){
         ValeurCaracteristiqueOffreVoyageDTO valeurCaracteristiqueOffreVoyageDTO = new ValeurCaracteristiqueOffreVoyageDTO();
         valeurCaracteristiqueOffreVoyageDTO.setOffreVoyageDesignation("offreVoyageThree");
         valeurCaracteristiqueOffreVoyageDTO.setTypeProprieteOffreVoyageDesignation("refElementString");
@@ -80,7 +83,7 @@ public class UtitiliesTests {
 
     @Disabled
     @Test
-    public void transformerEntityModeAbonnementEnEntityAbonnementPrelevementTest(){
+    public void testTransformerEntityModeAbonnementEnEntityAbonnementPrelevement(){
         ModeAbonnement modeAbonnement = new ModeAbonnement();
         modeAbonnement.setDateDebutAbonnement(Date.from(Instant.now()));
         modeAbonnement.setDateFinAbonnement(Date.from(Instant.now()));
@@ -106,21 +109,21 @@ public class UtitiliesTests {
     }
 
     @Test
-    public void isBlankTest(){
+    public void testIsBlank(){
         String str="";
 
         assertEquals(true, Utilities.isBlank(str));
     }
 
     @Test
-    public void isNotBlankTest(){
+    public void testIsNotBlank(){
         String str="isNotBlank";
 
         assertEquals(true, Utilities.isNotBlank(str));
     }
 
     @Test
-    public void convertStringToDateTest() throws ParseException {
+    public void testConvertStringToDate() throws ParseException {
         Date date = new Date();
         String dateString="12/12/2023";
 
@@ -129,7 +132,7 @@ public class UtitiliesTests {
     }
 
     @Test
-    public void convertDateToLocalDateTest(){
+    public void testConvertDateToLocalDate(){
         Date date = new Date();
 
         assertNotNull(Utilities.convertDateToLocalDate(date));
@@ -137,7 +140,7 @@ public class UtitiliesTests {
     }
 
     @Test
-    public void getFrenchDayOfWeekTest(){
+    public void testGetFrenchDayOfWeek(){
         Date date = new Date();
 
         String day = Utilities.getFrenchDayOfWeek(date);
@@ -147,7 +150,7 @@ public class UtitiliesTests {
     }
 
     @Test
-    public void getFrenchDayOfWeekWithFormatDDMMYYYYTest(){
+    public void testGetFrenchDayOfWeekWithFormatDDMMYYYY(){
         String dateString = "10/11/2023";
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/mm/yyyy");
         Date date = new Date();
@@ -159,7 +162,7 @@ public class UtitiliesTests {
     }
 
     @Test
-    public void getFrenchDayOfWeekWithFormatYYYYMMDDTest(){
+    public void testGetFrenchDayOfWeekWithFormatYYYYMMDD(){
         String dateString = "2023-10-11";
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
         Date date = new Date();
@@ -169,7 +172,7 @@ public class UtitiliesTests {
     }
 
     @Test
-    public void transformerLaClasseModePaiementtEnModePaiementMtnMoneyTest(){
+    public void testTransformerLaClasseModePaiementEnModePaiementMtnMoney(){
         ModePaiementDTO modePaiementDTO = new ModePaiementDTO();
         modePaiementDTO.setCompagnieTransportRaisonSociale("amm");
         modePaiementDTO.setDesignation("modePaiementMtnMoney");
@@ -184,7 +187,7 @@ public class UtitiliesTests {
     }
 
     @Test
-    public void transformerLaClasseModePaiementtEnModePaiementOrangeMoneyTest(){
+    public void testTransformerLaClasseModePaiementtEnModePaiementOrangeMoney(){
         ModePaiementDTO modePaiementDTO = new ModePaiementDTO();
         modePaiementDTO.setCompagnieTransportRaisonSociale("amm");
         modePaiementDTO.setDesignation("modePaiementOrangeMoney");
@@ -199,7 +202,7 @@ public class UtitiliesTests {
     }
 
     @Test
-    public void transformerLaClasseModePaiementtEnModePaiementMoovMoneyTest(){
+    public void testTransformerLaClasseModePaiementtEnModePaiementMoovMoney(){
         ModePaiementDTO modePaiementDTO = new ModePaiementDTO();
         modePaiementDTO.setCompagnieTransportRaisonSociale("amm");
         modePaiementDTO.setDesignation("modePaiementMoovMoney");
@@ -214,7 +217,7 @@ public class UtitiliesTests {
     }
 
     @Test
-    public void transformerLaClasseModePaiementtEnModePaiementWaveMoneyTest(){
+    public void testTransformerLaClasseModePaiementtEnModePaiementWaveMoney(){
         ModePaiementDTO modePaiementDTO = new ModePaiementDTO();
         modePaiementDTO.setCompagnieTransportRaisonSociale("amm");
         modePaiementDTO.setDesignation("modePaiementWaveMoney");
@@ -229,7 +232,7 @@ public class UtitiliesTests {
     }
 
     @Test
-    public void transformerLaClasseModePaiementtEnModePaiementEnEspeceTest(){
+    public void TesttransformerLaClasseModePaiementtEnModePaiementEnEspece(){
         ModePaiementDTO modePaiementDTO = new ModePaiementDTO();
         modePaiementDTO.setCompagnieTransportRaisonSociale("amm");
         modePaiementDTO.setDesignation("modePaiementEnEspece");
@@ -244,7 +247,7 @@ public class UtitiliesTests {
     }
 
     @Test
-    public void transformerLaClasseModeAbonnementEnAbonnementPeriodiqueTest(){
+    public void testTransformerLaClasseModeAbonnementEnAbonnementPeriodique(){
         ModeAbonnementDTO modeAbonnementDTO = new ModeAbonnementDTO();
         modeAbonnementDTO.setDateDebutAbonnement("10/11/2023");
         modeAbonnementDTO.setDateFinAbonnement("10/11/2023");
@@ -265,7 +268,7 @@ public class UtitiliesTests {
     }
 
     @Test
-    public void transformerLaClasseModeAbonnementEnAbonnementPrelevementTest(){
+    public void testTransformerLaClasseModeAbonnementEnAbonnementPrelevement(){
         ModeAbonnementDTO modeAbonnementDTO = new ModeAbonnementDTO();
         modeAbonnementDTO.setDateDebutAbonnement("10/11/2023");
         modeAbonnementDTO.setDateFinAbonnement("10/11/2023");
@@ -282,6 +285,80 @@ public class UtitiliesTests {
         assertEquals(rtn.getTypeModeAbonnementDesignation(),modeAbonnementDTO.getTypeModeAbonnementDesignation());
         assertEquals(rtn.getRedevance(),modeAbonnementDTO.getRedevance());
         assertEquals(rtn.getDesignation(),modeAbonnementDTO.getDesignation());
+    }
+
+    @Test
+    public void testIsTrue() {
+        assertTrue(Utilities.isTrue(true));
+        assertFalse(Utilities.isTrue(false));
+        assertFalse(Utilities.isTrue(null));
+    }
+
+    @Test
+    public void testIsNotEmpty() {
+        List<String> nonEmptyList = Arrays.asList("item1", "item2");
+        List<String> emptyList = Collections.emptyList();
+        List<String> nullList = null;
+
+        assertTrue(Utilities.isNotEmpty(nonEmptyList));
+        assertFalse(Utilities.isNotEmpty(emptyList));
+        assertFalse(Utilities.isNotEmpty(nullList));
+    }
+
+    @Test
+    public void testIsEmpty() {
+        List<String> nonEmptyList = Arrays.asList("item1", "item2");
+        List<String> emptyList = Collections.emptyList();
+        List<String> nullList = null;
+
+        assertFalse(Utilities.isEmpty(nonEmptyList));
+        assertTrue(Utilities.isEmpty(emptyList));
+        assertTrue(Utilities.isEmpty(nullList));
+    }
+
+    @Test
+    public void testContainsWord() {
+        String text = "This is a sample text.";
+
+        assertTrue(Utilities.containsWord(text, "This"));
+        assertTrue(Utilities.containsWord(text, "text"));
+        assertTrue(Utilities.containsWord(text, "is"));
+        assertFalse(Utilities.containsWord(text, "example"));
+        assertFalse(Utilities.containsWord(text, "Text")); // Case-sensitive match
+        assertFalse(Utilities.containsWord(null, "text"));
+        assertFalse(Utilities.containsWord(text, null));
+        assertFalse(Utilities.containsWord(null, null));
+    }
+
+    @Disabled
+    @Test
+    public void testContainsSQLInjection() {
+        assertTrue(Utilities.containsSQLInjection("This is a safe value."));
+        assertFalse(Utilities.containsSQLInjection("No SQL injection here!"));
+        assertFalse(Utilities.containsSQLInjection(null));
+
+        // Test with potential SQL injection keywords
+        assertTrue(Utilities.containsSQLInjection("SELECT * FROM users"));
+        assertTrue(Utilities.containsSQLInjection("INSERT INTO table VALUES (1, 'value')"));
+        assertTrue(Utilities.containsSQLInjection("DELETE FROM records WHERE id = 1"));
+        assertTrue(Utilities.containsSQLInjection("UNION ALL SELECT username, password FROM users"));
+        assertTrue(Utilities.containsSQLInjection("This is a comment -- with more text"));
+        assertTrue(Utilities.containsSQLInjection("This is a comment /* with more text */"));
+        assertTrue(Utilities.containsSQLInjection("Some text; DROP TABLE users"));
+
+        // Test case sensitivity
+        assertFalse(Utilities.containsSQLInjection("select * from users"));
+        assertFalse(Utilities.containsSQLInjection("union all select username, password from users"));
+
+        // Test partial matches
+        assertFalse(Utilities.containsSQLInjection("This is a value with SELECTOR in it"));
+        assertFalse(Utilities.containsSQLInjection("This is a value with -- in it"));
+        assertFalse(Utilities.containsSQLInjection("This is a value with /* in it"));
+
+        // Test mixed case
+        assertTrue(Utilities.containsSQLInjection("This is a value with SeLeCt in it"));
+        assertTrue(Utilities.containsSQLInjection("This is a value with // in it"));
+        assertTrue(Utilities.containsSQLInjection("This is a value with -- iN It"));
     }
 
 }
