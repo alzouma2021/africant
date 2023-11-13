@@ -48,7 +48,6 @@ public class AuthenticationClientFilter extends HttpFilter {
         IdentificationClient identificationClient = new IdentificationClient();
         String serverIdConsumer =  serverId;
         String clientIdConsumer =  clientId;
-        //
 
         //Check Options
         if (SecurityServices.checkIfRequestHasNotNeedAuthentication(servletRequest, servletResponse, chain)) return;

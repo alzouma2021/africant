@@ -80,7 +80,7 @@ public class EmailServiceBusiness implements EmailServiceInterface {
             emailSender.send(simpleMailMessage);
         }catch (MailException ex){
             log.info("_82 Affichage de log ="+ex.getMessage());
-            response.setStatus(functionalError.SEND_MAIL_FAIL("Erreur d'envoi", locale));
+            //response.setStatus(functionalError.SEND_MAIL_FAIL("Erreur d'envoi", locale));
             response.setHasError(true);
             dto.setIsSent(false);
             response.setItem(dto);
@@ -89,7 +89,8 @@ public class EmailServiceBusiness implements EmailServiceInterface {
         dto.setIsSent(true);
         response.setItem(dto);
         response.setHasError(false);
-        response.setStatus(functionalError.SUCCESS("", locale));
+        log.info("_92 Affichage de locale=="+locale);
+        //response.setStatus(functionalError.SUCCESS("", locale));
         return response;
     }
 
@@ -131,7 +132,7 @@ public class EmailServiceBusiness implements EmailServiceInterface {
         dto.setIsSent(true);
         response.setItem(dto);
         response.setHasError(false);
-        response.setStatus(functionalError.SUCCESS("", locale));
+        //response.setStatus(functionalError.SUCCESS("", locale));
         return response;
     }
 }
