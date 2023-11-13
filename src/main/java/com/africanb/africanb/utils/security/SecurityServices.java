@@ -94,7 +94,7 @@ public class SecurityServices {
         return tokenInstance;
     }
 
-    private static void extractedClaimsToken(String token, Token tokenInstance) {
+    public static void extractedClaimsToken(String token, Token tokenInstance) {
         Jws<Claims> jwt;
         Key hmacKey = new SecretKeySpec(Base64.getDecoder().decode(ProjectConstants.SESSION_TOKEN_FIELD_SECRET_PHRASE),
                 SignatureAlgorithm.HS256.getJcaName());

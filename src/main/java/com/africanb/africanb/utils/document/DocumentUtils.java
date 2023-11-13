@@ -1,6 +1,7 @@
 package com.africanb.africanb.utils.document;
 
 import com.africanb.africanb.helper.searchFunctions.Utilities;
+import lombok.extern.java.Log;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -8,6 +9,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 
+@Log
 public class DocumentUtils {
 
 
@@ -73,7 +75,9 @@ public class DocumentUtils {
     public static boolean compareFileSizeToLimitSize(MultipartFile file, Double limitSize) {
         long fileSize = file.getSize(); //Taille en octets
         double fileSizeInMb = fileSize / (1024 * 1024.0); // Taille en mégaoctets
+        log.info("_78 compareFileSizeToLimitSize :: fileSizeInMb =="+fileSizeInMb);
         if(fileSizeInMb > limitSize){
+            log.info("_80 compareFileSizeToLimitSize :: fileSizeInMb =="+fileSizeInMb);
             return false;
         }
         return true;
