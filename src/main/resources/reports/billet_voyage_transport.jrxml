@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.6.final using JasperReports Library version 6.20.6-5c96b6aa8a39ac1dc6b6bea4b81168e16dd39231  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Billet_Voyage_AFRICANBUS" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9ee456c8-6454-4645-b944-e605b0d45455">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<queryString><![CDATA[]]></queryString>
+	<field name="compagnieTransport" class="java.lang.String"/>
+	<field name="gare" class="java.lang.String"/>
+	<field name="nom" class="java.lang.String"/>
+	<field name="prenoms" class="java.lang.String"/>
+	<field name="dateDepart" class="java.lang.String"/>
+	<field name="dateArrivee" class="java.lang.String"/>
+	<field name="villeDepart" class="java.lang.String"/>
+	<field name="villeArrivee" class="java.lang.String"/>
+	<field name="heureDepart" class="java.lang.String"/>
+	<field name="heureArrivee" class="java.lang.String"/>
+	<field name="dateGeneration" class="java.lang.String"/>
+	<field name="dateValidite" class="java.lang.String"/>
+	<field name="nombrePlace" class="java.lang.String"/>
+	<field name="prix" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="92" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="20" width="350" height="30" uuid="15cf7d3e-6a25-48d0-b8b1-a8c71b721a64"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="DejaVu Serif" size="18" isBold="true"/>
+				</textElement>
+				<text><![CDATA[BILLET VOYAGE AFRICANBUS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="390" y="20" width="140" height="30" uuid="769b425c-052e-4f49-9903-defca9c1a62e"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="DejaVu Serif" size="18" isBold="true"/>
+				</textElement>
+				<text><![CDATA[COMPAGNIE TRANSPORT :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="558" y="20" width="192" height="30" uuid="f03cf227-67a3-4624-85d8-5ded0dd85431"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="DejaVu Serif" size="14" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{compagnieTransport}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="60" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="-12" width="240" height="30" uuid="3377eaa1-8d31-4741-92a9-2fc3d04528c5"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="DejaVu Serif" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[GARE COMPAGNIE TRANSPORT :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="250" y="-12" width="100" height="30" uuid="e24beeac-27ed-47d1-9d5e-978e6018631f"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="DejaVu Serif" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{gare}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="370" y="-12" width="200" height="30" uuid="a8ffa8d4-99e8-41c0-a020-850e070ef87d"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="DejaVu Serif" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DATE GENERATION BILLET :
+]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="580" y="-12" width="161" height="30" uuid="9867e108-b6f0-47c2-95c0-97b1ad7a1830"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="DejaVu Serif" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dateGeneration}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="61" splitType="Stretch">
+			<staticText>
+				<reportElement x="260" y="30" width="130" height="30" uuid="4535bfd2-52e4-41db-8d48-5aa88bb94e7c"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="DejaVu Serif" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[VILLE ARRIVEE :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="130" y="30" width="120" height="30" uuid="cc830e33-f5f9-4191-be7e-99ea7fbf920a"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="DejaVu Serif" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{villeDepart}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="410" y="30" width="100" height="30" uuid="ddbd56e9-5bfd-423e-9cc1-ac4250376291"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="DejaVu Serif" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{villeArrivee}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="30" width="120" height="30" uuid="515be5b4-d1c9-44e8-9f41-464b9e035dac"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="DejaVu Serif" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[VILLE DEPART :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="520" y="30" width="130" height="30" uuid="662ccbfb-79da-49cb-af81-b3922d8e73ff"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="DejaVu Serif" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[HEURE ARRIVEE]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="660" y="30" width="90" height="30" uuid="117efd87-3cbb-4193-8d7f-782151506ca3">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="6e016b5b-a3e2-48d3-b3c6-2011b018c654"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="DejaVu Serif" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{heureArrivee}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="-10" width="60" height="30" uuid="c37ad288-b0e4-408b-8717-21be000c2cbb"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="DejaVu Serif" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[NOM : ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="70" y="-10" width="100" height="30" uuid="c0d508f0-5f17-424b-9607-06bb627a0fca">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="fd73af9e-4f0a-4642-a43c-2ce706ff052a"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="DejaVu Serif" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="190" y="-10" width="90" height="30" uuid="b4c7e734-38b4-48ee-9ebd-9011edb94a03"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="DejaVu Serif" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PRENOMS :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="290" y="-10" width="100" height="30" uuid="d9301290-5e50-4517-888e-0074fee040ae">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="82ec54f0-b755-48d8-9a19-9fe4cdf31d08"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="DejaVu Serif" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{prenoms}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="400" y="-10" width="150" height="30" uuid="484953a9-d5af-45ac-95b3-3f85a52c0e6a"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="DejaVu Serif" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[HEURE DEPART :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="570" y="-10" width="164" height="30" uuid="e8492609-0d81-4e24-aaeb-3db324e0157c">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="5ccd4f04-fbe5-4081-9291-a313a6134573"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="DejaVu Serif" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{heureDepart}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="120" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="80" width="170" height="30" uuid="05160b2e-41cd-499e-bb2c-1528f92bd641"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="DejaVu Serif" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[NOMBRE PLACE :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="190" y="80" width="160" height="30" uuid="0f11c6b9-2ec1-4a6c-8c4a-7232da356468"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="DejaVu Serif" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nombrePlace}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="400" y="80" width="140" height="30" uuid="11b4f2ed-6511-45c0-8312-55472cf48ed2"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="DejaVu Serif" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DELAI VALIDITE :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="570" y="80" width="100" height="30" uuid="2e5ecbec-d2d0-429a-b5f1-d37ba86e4715"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="DejaVu Serif" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dateValidite}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="9" width="120" height="30" uuid="0eeb428d-15bd-4fed-b7e3-eda206189423"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="DejaVu Serif" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DATE DEPART :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="130" y="9" width="120" height="30" uuid="620119ca-8552-42f2-a162-7e0520a5eda7">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="6783c459-d023-467f-82cc-f6e6d81cea8a"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="DejaVu Serif" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dateDepart}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="260" y="9" width="130" height="30" uuid="6e63ea90-92f4-4d1c-b7fa-ad9f0f85cb50"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="DejaVu Serif" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DATE ARRIVEE :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="410" y="9" width="100" height="30" uuid="95308e66-ad7a-4591-9fdc-b027e71480a8">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="4f5309b3-6b0c-4b8e-8e03-4d4a4616551c"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="DejaVu Serif" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dateArrivee}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="520" y="9" width="60" height="30" uuid="a5909ca6-215c-4301-b489-7c8df14e4f54"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="DejaVu Serif" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PRIX :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="590" y="9" width="160" height="30" uuid="74ec6ec7-8590-41bb-9d02-5e7e55a70b80"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="DejaVu Serif" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{prix}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

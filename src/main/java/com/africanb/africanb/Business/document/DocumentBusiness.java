@@ -40,7 +40,6 @@ public class DocumentBusiness implements IBasicBusiness<Request<DocumentDTO>, Re
     private final TechnicalError technicalError;
     private final ExceptionUtils exceptionUtils;
     private final EntityManager em;
-
     private final SimpleDateFormat dateFormat;
     private final SimpleDateFormat dateTimeFormat;
 

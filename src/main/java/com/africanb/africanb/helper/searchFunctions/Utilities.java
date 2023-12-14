@@ -10,6 +10,7 @@ import com.africanb.africanb.helper.dto.offreVoyage.ValeurCaracteristiqueOffreVo
 import com.africanb.africanb.helper.dto.offreVoyage.ValeurCaracteristiqueOffreVoyageDTO;
 import com.africanb.africanb.helper.dto.offreVoyage.ValeurCaracteristiqueOffreVoyageLongDTO;
 import com.africanb.africanb.helper.dto.offreVoyage.ValeurCaracteristiqueOffreVoyageStringDTO;
+import com.africanb.africanb.helper.validation.Validate;
 import com.africanb.africanb.utils.Constants.ProjectConstants;
 
 import java.lang.reflect.Field;
@@ -21,6 +22,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.util.*;
+import java.util.function.Function;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
@@ -567,6 +569,17 @@ public class Utilities {
     public static LocalDate convertDateToLocalDate(Date date) {
         LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         return localDate;
+    }
+
+    private boolean validateFields(Object object, Function<Object, Object>... fieldExtractors) {
+        Map<String, Object> fieldsToVerify = new HashMap<>();
+
+        for (Function<Object, Object> fieldExtractor : fieldExtractors) {
+            String fieldName = fieldExtractor.apply(object).toString();
+            fieldsToVerify.put(fieldName, fieldExtractor.apply(object));
+        }
+
+        return Validate.RequiredValue(fieldsToVerify).isGood();
     }
 /*
     public static Integer getLoginUser() {//HttpRequest request doit etre en parametre

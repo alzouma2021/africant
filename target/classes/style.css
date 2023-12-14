@@ -1,0 +1,46 @@
+/* styles.css */
+@page { size: 10cm 10cm; margin: 0; }
+
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #fff;
+    width: 20cm;
+    height: 9cm;
+    transform: rotate(-90deg);
+    transform-origin: left top;
+}
+
+.ticket {
+    padding: 10mm;
+    position: relative;
+    display: flex;
+    flex-direction: row;
+}
+
+h1 {
+    color: #333;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.watermark {
+    color: #ccc;
+    font-size: 2em;
+    opacity: 0.5;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+p {
+    margin: 10px;
+    line-height: 1.5;
+    color: #555;
+}
+
+strong {
+    color: #333;
+}

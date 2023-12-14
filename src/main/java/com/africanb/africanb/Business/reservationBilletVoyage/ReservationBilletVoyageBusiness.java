@@ -7,6 +7,7 @@ import com.africanb.africanb.dao.entity.compagnie.StatusUtil;
 import com.africanb.africanb.dao.entity.offreVoyage.OffreVoyage;
 import com.africanb.africanb.dao.entity.offreVoyage.PrixOffreVoyage;
 import com.africanb.africanb.dao.entity.offreVoyage.Programme;
+import com.africanb.africanb.dao.entity.reservationBilletVoyage.ClientDetails;
 import com.africanb.africanb.dao.entity.reservationBilletVoyage.ReservationBilletVoyage;
 import com.africanb.africanb.dao.entity.security.Users;
 import com.africanb.africanb.dao.repository.Reference.ReferenceRepository;
@@ -22,7 +23,6 @@ import com.africanb.africanb.helper.TechnicalError;
 import com.africanb.africanb.helper.contrat.IBasicBusiness;
 import com.africanb.africanb.helper.contrat.Request;
 import com.africanb.africanb.helper.contrat.Response;
-import com.africanb.africanb.helper.dto.compagnie.GareDTO;
 import com.africanb.africanb.helper.dto.reservationBilletVoyage.ReservationBilletVoyageDTO;
 import com.africanb.africanb.helper.dto.reservationBilletVoyage.StatusUtilReservationBilletVoyageDTO;
 import com.africanb.africanb.helper.searchFunctions.Utilities;
@@ -40,15 +40,22 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
-/**
- * @Author ALZOUMA MOUSSA MAHAAMADOU
- */
 @Log
 @Component
 public class ReservationBilletVoyageBusiness implements IBasicBusiness<Request<ReservationBilletVoyageDTO>, Response<ReservationBilletVoyageDTO>> {
 
 
     private Response<ReservationBilletVoyageDTO> response;
+
+    private static final String NOM_FIELD = "nom";
+    private static final String PRENOMS_FIELD = "prenoms";
+    private static final String EMAIL_FIELD = "email";
+    private static final String TELEPHONE_FIELD = "telephone";
+    private static final String GARE_FIELD = "gare";
+    private static final String OFFRE_VOYAGE_FIELD = "offreVoyage";
+    private static final String PROGRAMME_FIELD = "programme";
+    private static final String NOMBRE_PLACE_FIELD = "nombrePlace";
+    private static final String CATEGORIE_VOYAGEUR_FIELD = "categorieVoyageur";
 
 
     private final ReferenceRepository referenceRepository;
@@ -103,15 +110,27 @@ public class ReservationBilletVoyageBusiness implements IBasicBusiness<Request<R
         ReservationBilletVoyageDTO dto = request.getData();
         List<ReservationBilletVoyageDTO> itemsDtos =  Collections.synchronizedList(new ArrayList<ReservationBilletVoyageDTO>());
         Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
-        fieldsToVerify.put("gare", dto.getGareDesignation());
-        fieldsToVerify.put("offreVoyage", dto.getOffreVoyageDesignation());
-        fieldsToVerify.put("programme", dto.getProgrammeDesignation());
-        fieldsToVerify.put("categorieVoyageur", dto.getCategorieVoyageur());
-        fieldsToVerify.put("nombrePlace", dto.getNombrePlace());
+        fieldsToVerify.put(GARE_FIELD, dto.getGareDesignation());
+        fieldsToVerify.put(OFFRE_VOYAGE_FIELD, dto.getOffreVoyageDesignation());
+        fieldsToVerify.put(PROGRAMME_FIELD, dto.getProgrammeDesignation());
+        fieldsToVerify.put(CATEGORIE_VOYAGEUR_FIELD, dto.getCategorieVoyageur());
+        fieldsToVerify.put(NOMBRE_PLACE_FIELD, dto.getNombrePlace());
         if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
             response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
             response.setHasError(true);
             return response;
+        }
+        if (Optional.ofNullable(dto.getIsOtherPerson()).orElse(false)){
+            if (Objects.isNull(dto.getClientDetails())) {
+                response.setStatus(functionalError.DATA_NOT_EXIST("Client details non défini", locale));
+                response.setHasError(true);
+                return response;
+            }
+            if (!validateClientDetails(dto.getClientDetails())) {
+                response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
+                response.setHasError(true);
+                return response;
+            }
         }
         Users existingUser = usersRepository.findOne(Long.valueOf(request.userID),false);
         if (existingUser==null) {
@@ -147,24 +166,24 @@ public class ReservationBilletVoyageBusiness implements IBasicBusiness<Request<R
             response.setHasError(true);
             return response;
         }
-        //NombreDePlace
+
         Integer nombrePlaceDisponible=existingProgramme.getNombrePlaceDisponible();
         if(nombrePlaceDisponible<dto.getNombrePlace()){
             response.setStatus(functionalError.SAVE_FAIL("Aucune place disponible !!!", locale));
             response.setHasError(true);
             return response;
         }
-        //Calculate montantTotalReservation
+
         PrixOffreVoyage existingPrixOffreVoyage=prixOffreVoyageRepository.findByOffreVoyageAndCategorieVoyageur(existingOffreVoyage.getDesignation(),dto.getCategorieVoyageur(),false);
         if(existingPrixOffreVoyage==null){
             response.setStatus(functionalError.SAVE_FAIL("Aucun prix fixé pour la catégorie du voyageur !!!", locale));
             response.setHasError(true);
             return response;
         }
-        Double montantTotalReservation=existingPrixOffreVoyage.getPrix().doubleValue() * dto.getNombrePlace();
+        Double montantTotalReservation = getMontantReservation(dto, existingPrixOffreVoyage);
         log.info("_147 Montant total de la reservation="+ montantTotalReservation);
         dto.setMontantTotalReservation(montantTotalReservation);
-        ReservationBilletVoyage entityToSave = ReservationBilletVoyageTransformer.INSTANCE.toEntity(dto,existingGare,existingOffreVoyage,existingProgramme,existingUser,existingStatusUtilActual);
+        ReservationBilletVoyage entityToSave = ReservationBilletVoyageTransformer.INSTANCE.toEntity(dto,existingGare,existingOffreVoyage,existingProgramme,existingStatusUtilActual);
         entityToSave.setIsDeleted(false);
         //entityToSave.setDateReservation(Utilities.getCurrentDate());
         ReservationBilletVoyage entitySaved = reservationBilletVoyageRepository.save(entityToSave);
@@ -173,34 +192,51 @@ public class ReservationBilletVoyageBusiness implements IBasicBusiness<Request<R
             response.setHasError(true);
             return response;
         }
-        //
-        List<StatusUtilReservationBilletVoyageDTO> itemsDatas =  Collections.synchronizedList(new ArrayList<StatusUtilReservationBilletVoyageDTO>());
-        StatusUtilReservationBilletVoyageDTO statusUtilReservationBilletVoyageDTO= new StatusUtilReservationBilletVoyageDTO();
-        statusUtilReservationBilletVoyageDTO.setStatusUtilDesignation(existingStatusUtilActual.getDesignation());
-        statusUtilReservationBilletVoyageDTO.setReservationBilletVoyageDesignation(entitySaved.getDesignation());
-        itemsDatas.add(statusUtilReservationBilletVoyageDTO);
-        Request<StatusUtilReservationBilletVoyageDTO> subRequest = new Request<StatusUtilReservationBilletVoyageDTO>();
-        subRequest.setDatas(itemsDatas);
-        //subRequest.setUser(request.getUser());
-        Response<StatusUtilReservationBilletVoyageDTO> subResponse = statusUtilRservationBilletVoyageBusiness.create(subRequest, locale);
-        if (subResponse.isHasError()) {
-            response.setStatus(subResponse.getStatus());
-            response.setHasError(Boolean.TRUE);
-            return response;
-        }
-        items.add(entitySaved);
-        if (CollectionUtils.isEmpty(items)) {
-            response.setStatus(functionalError.SAVE_FAIL("Erreur de creation", locale));
+
+        boolean responseStatusReservation = initializeReservationOffreVoyageStatus(locale, response, existingStatusUtilActual, entitySaved);
+        if (responseStatusReservation == false){
+            response.setStatus(functionalError.SAVE_FAIL("Status reservation non crée",locale));
             response.setHasError(true);
             return response;
         }
+
+        items.add(entitySaved);
+
         List<ReservationBilletVoyageDTO> itemsDto = (Utilities.isTrue(request.getIsSimpleLoading()))
                 ? ReservationBilletVoyageTransformer.INSTANCE.toLiteDtos(items)
                 : ReservationBilletVoyageTransformer.INSTANCE.toDtos(items);
+
         response.setItems(itemsDto);
         response.setHasError(false);
         response.setStatus(functionalError.SUCCESS("", locale));
         return response;
+    }
+
+    private boolean initializeReservationOffreVoyageStatus(Locale locale, Response<ReservationBilletVoyageDTO> response, StatusUtil existingStatusUtilActual, ReservationBilletVoyage entitySaved) throws ParseException {
+        List<StatusUtilReservationBilletVoyageDTO> itemDatas =  Collections.synchronizedList(new ArrayList<>());
+        StatusUtilReservationBilletVoyageDTO statusUtilReservationBilletVoyageDTO= new StatusUtilReservationBilletVoyageDTO();
+        statusUtilReservationBilletVoyageDTO.setStatusUtilDesignation(existingStatusUtilActual.getDesignation());
+        statusUtilReservationBilletVoyageDTO.setReservationBilletVoyageDesignation(entitySaved.getDesignation());
+        itemDatas.add(statusUtilReservationBilletVoyageDTO);
+        Request<StatusUtilReservationBilletVoyageDTO> subRequest = new Request<>();
+        subRequest.setDatas(itemDatas);
+        Response<StatusUtilReservationBilletVoyageDTO> subResponse = statusUtilRservationBilletVoyageBusiness.create(subRequest, locale);
+        if (subResponse.isHasError()) return false;
+        return true ;
+    }
+
+    private boolean validateClientDetails(ClientDetails clientDetails) {
+        Map<String, Object> fieldsToVerifyClient = new HashMap<>();
+        fieldsToVerifyClient.put(NOM_FIELD, clientDetails.getNom());
+        fieldsToVerifyClient.put(PRENOMS_FIELD, clientDetails.getPrenoms());
+        fieldsToVerifyClient.put(EMAIL_FIELD, clientDetails.getEmail());
+        fieldsToVerifyClient.put(TELEPHONE_FIELD, clientDetails.getTelephone());
+
+        return Validate.RequiredValue(fieldsToVerifyClient).isGood();
+    }
+
+    private  Double getMontantReservation(ReservationBilletVoyageDTO dto, PrixOffreVoyage existingPrixOffreVoyage) {
+        return existingPrixOffreVoyage.getPrix().doubleValue() * dto.getNombrePlace();
     }
 
 

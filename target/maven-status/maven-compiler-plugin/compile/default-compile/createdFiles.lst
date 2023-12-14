@@ -47,6 +47,7 @@ com\africanb\africanb\rest\EncryptFilter.class
 com\africanb\africanb\rest\api\compagnie\StatusUtilController.class
 com\africanb\africanb\rest\api\reservationBilletVoyage\HistoriquePaiementController.class
 com\africanb\africanb\dao\repository\offreVoyage\JourSemaineRepository.class
+com\africanb\africanb\dao\entity\reservationBilletVoyage\ClientDetails.class
 com\africanb\africanb\rest\api\security\RoleController.class
 com\africanb\africanb\helper\dto\security\RoleFunctionalityDTO.class
 com\africanb\africanb\helper\dto\compagnie\ModePaiement\ModePaiementMoovMoneyDTO.class
@@ -99,6 +100,7 @@ com\africanb\africanb\helper\dto\compagnie\ModePaiement\ModePaiementMtnMoneyDTO.
 com\africanb\africanb\dao\repository\compagnie\ModePaiement\ModePaiementWaveRepository.class
 com\africanb\africanb\helper\dto\compagnie\ModePaiement\ModePaiementEnEspeceDTO.class
 com\africanb\africanb\dao\entity\security\RoleFunctionality.class
+com\africanb\africanb\utils\htmltopdf\PdfService.class
 com\africanb\africanb\helper\dto\offreVoyage\ProgrammeDTO.class
 com\africanb\africanb\helper\contrat\Response.class
 com\africanb\africanb\rest\api\mail\EmailServiceController.class
@@ -169,6 +171,7 @@ com\africanb\africanb\utils\Reference\ReferenceFamilleBusines.class
 com\africanb\africanb\rest\api\offreVoyage\ProprieteOffreVoyageController.class
 com\africanb\africanb\rest\api\offreVoyage\BusController.class
 com\africanb\africanb\Business\offreVoyage\OffreVoyageBusiness.class
+com\africanb\africanb\utils\htmltopdf\PdfController.class
 com\africanb\africanb\helper\transformer\offrreVoyage\PrixOffreVoyageTransformerImpl.class
 com\africanb\africanb\helper\transformer\offrreVoyage\ProgrammeTransformerImpl.class
 com\africanb\africanb\helper\dto\offreVoyage\PrixOffreVoyageDTO.class

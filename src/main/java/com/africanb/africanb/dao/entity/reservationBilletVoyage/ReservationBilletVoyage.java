@@ -29,6 +29,7 @@ public class ReservationBilletVoyage implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id ;
+
     @Column(unique = true , length = 50)
     @NotNull
     private String designation;
@@ -41,6 +42,7 @@ public class ReservationBilletVoyage implements Serializable {
     private Double montantTotalReservation;
     private Integer nombrePlace;
     private String raisonAnnulation;
+    private Boolean isOtherPerson;
 
     @ManyToOne
     private Gare gare;
@@ -52,6 +54,8 @@ public class ReservationBilletVoyage implements Serializable {
     private Users users;
     @ManyToOne
     private StatusUtil statusUtilActual;
+    @Embedded
+    private  ClientDetails clientDetails;
 
     @Column(name="is_deleted")
     private Boolean    isDeleted ;

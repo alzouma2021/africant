@@ -5,7 +5,6 @@ import com.africanb.africanb.dao.entity.compagnie.StatusUtil;
 import com.africanb.africanb.dao.entity.offreVoyage.OffreVoyage;
 import com.africanb.africanb.dao.entity.offreVoyage.Programme;
 import com.africanb.africanb.dao.entity.reservationBilletVoyage.ReservationBilletVoyage;
-import com.africanb.africanb.dao.entity.security.Users;
 import com.africanb.africanb.helper.dto.reservationBilletVoyage.ReservationBilletVoyageDTO;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -15,7 +14,7 @@ import javax.annotation.processing.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-11-10T16:54:57+0000",
+    date = "2023-12-14T15:57:50+0000",
     comments = "version: 1.4.2.Final, compiler: javac, environment: Java 11.0.0.1 (Oracle Corporation)"
 )
 public class ReservationBilletVoyageTransformerImpl implements ReservationBilletVoyageTransformer {
@@ -40,7 +39,8 @@ public class ReservationBilletVoyageTransformerImpl implements ReservationBillet
         reservationBilletVoyageDTO.setGareDesignation( entityGareDesignation( entity ) );
         reservationBilletVoyageDTO.setOffreVoyageDesignation( entityOffreVoyageDesignation( entity ) );
         reservationBilletVoyageDTO.setProgrammeDesignation( entityProgrammeDesignation( entity ) );
-        reservationBilletVoyageDTO.setUserEmail( entityUsersEmail( entity ) );
+        reservationBilletVoyageDTO.setIsOtherPerson( entity.getIsOtherPerson() );
+        reservationBilletVoyageDTO.setClientDetails( entity.getClientDetails() );
         reservationBilletVoyageDTO.setStatusActualDesignation( entityStatusUtilActualDesignation( entity ) );
         if ( entity.getUpdatedAt() != null ) {
             reservationBilletVoyageDTO.setUpdatedAt( new SimpleDateFormat( "dd/MM/yyyy" ).format( entity.getUpdatedAt() ) );
@@ -74,8 +74,8 @@ public class ReservationBilletVoyageTransformerImpl implements ReservationBillet
     }
 
     @Override
-    public ReservationBilletVoyage toEntity(ReservationBilletVoyageDTO dto, Gare gare, OffreVoyage offreVoyage, Programme programme, Users users, StatusUtil statusUtilActual) throws ParseException {
-        if ( dto == null && gare == null && offreVoyage == null && programme == null && users == null && statusUtilActual == null ) {
+    public ReservationBilletVoyage toEntity(ReservationBilletVoyageDTO dto, Gare gare, OffreVoyage offreVoyage, Programme programme, StatusUtil statusUtilActual) throws ParseException {
+        if ( dto == null && gare == null && offreVoyage == null && programme == null && statusUtilActual == null ) {
             return null;
         }
 
@@ -89,6 +89,8 @@ public class ReservationBilletVoyageTransformerImpl implements ReservationBillet
             reservationBilletVoyage.setDateEffectiveDepart( dto.getDateEffectiveDepart() );
             reservationBilletVoyage.setMontantTotalReservation( dto.getMontantTotalReservation() );
             reservationBilletVoyage.setNombrePlace( dto.getNombrePlace() );
+            reservationBilletVoyage.setIsOtherPerson( dto.getIsOtherPerson() );
+            reservationBilletVoyage.setClientDetails( dto.getClientDetails() );
             reservationBilletVoyage.setIsCanceled( dto.getIsCanceled() );
             reservationBilletVoyage.setRaisonAnnulation( dto.getRaisonAnnulation() );
             if ( dto.getUpdatedAt() != null ) {
@@ -113,9 +115,6 @@ public class ReservationBilletVoyageTransformerImpl implements ReservationBillet
         }
         if ( programme != null ) {
             reservationBilletVoyage.setProgramme( programme );
-        }
-        if ( users != null ) {
-            reservationBilletVoyage.setUsers( users );
         }
         if ( statusUtilActual != null ) {
             reservationBilletVoyage.setStatusUtilActual( statusUtilActual );
@@ -167,21 +166,6 @@ public class ReservationBilletVoyageTransformerImpl implements ReservationBillet
             return null;
         }
         return designation;
-    }
-
-    private String entityUsersEmail(ReservationBilletVoyage reservationBilletVoyage) {
-        if ( reservationBilletVoyage == null ) {
-            return null;
-        }
-        Users users = reservationBilletVoyage.getUsers();
-        if ( users == null ) {
-            return null;
-        }
-        String email = users.getEmail();
-        if ( email == null ) {
-            return null;
-        }
-        return email;
     }
 
     private String entityStatusUtilActualDesignation(ReservationBilletVoyage reservationBilletVoyage) {

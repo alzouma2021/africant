@@ -1,6 +1,7 @@
 package com.africanb.africanb.helper.dto.reservationBilletVoyage;
 
 
+import com.africanb.africanb.dao.entity.reservationBilletVoyage.ClientDetails;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Data;
@@ -24,6 +25,8 @@ public class ReservationBilletVoyageDTO {
     private Double montantTotalReservation;
     private Integer nombrePlace;
     private String raisonAnnulation;
+    private ClientDetails clientDetails;
+    private Boolean isOtherPerson;
 
     private String gareDesignation;
     private String offreVoyageDesignation;

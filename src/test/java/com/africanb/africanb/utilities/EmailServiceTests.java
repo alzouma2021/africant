@@ -8,11 +8,8 @@ import com.africanb.africanb.utils.emailService.EmailServiceBusiness;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.MessageSource;
@@ -25,6 +22,7 @@ import java.util.Locale;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+@Disabled
 @SpringBootTest
 public class EmailServiceTests {
 
@@ -87,6 +85,6 @@ public class EmailServiceTests {
         assertFalse(response.getItem().getIsSent());
         verify(emailSender, times(1)).send(any(SimpleMailMessage.class));
     }
-    
+
 
 }

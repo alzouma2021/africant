@@ -14,7 +14,14 @@ public class DocumentUtils {
 
 
     public static boolean createFileOnDiskHard(byte[] content, String fileLocation) throws IOException {
-        if(Utilities.isBlank(fileLocation) || content.length==0) return false;
+        if(Utilities.isBlank(fileLocation) ){
+            log.info("repertoire inexistant="+fileLocation);
+           return false;
+        }
+        if(content.length==0){
+            log.info("Contenu zero");
+            return false;
+        }
         File newFile = new File(fileLocation);
         FileOutputStream fos = null;
         try{

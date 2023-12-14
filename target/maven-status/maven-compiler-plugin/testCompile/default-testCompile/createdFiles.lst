@@ -1,2 +1,6 @@
 com\africanb\africanb\compagnie\PaysTests.class
+com\africanb\africanb\utilities\EmailServiceTests.class
 com\africanb\africanb\AfricanbApplicationTests.class
+com\africanb\africanb\utilities\UtitiliesTests.class
+com\africanb\africanb\utilities\DocumentUtilsTests.class
+com\africanb\africanb\utilities\SecurityServicesTests.class

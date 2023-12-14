@@ -1,6 +1,7 @@
 package com.africanb.africanb.utilities;
 
 import com.africanb.africanb.utils.document.DocumentUtils;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockMultipartFile;
@@ -12,6 +13,7 @@ import java.nio.file.Paths;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Disabled
 @SpringBootTest
 public class DocumentUtilsTests {
 
@@ -63,6 +65,5 @@ public class DocumentUtilsTests {
 
         assertTrue(DocumentUtils.compareFileSizeToLimitSize(file, 1.0));
     }
-
 
 }

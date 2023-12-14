@@ -1,19 +1,13 @@
 package com.africanb.africanb.helper.transformer.reservationBilletVoyage;
 
 
-import com.africanb.africanb.dao.entity.compagnie.CompagnieTransport;
 import com.africanb.africanb.dao.entity.compagnie.Gare;
 import com.africanb.africanb.dao.entity.compagnie.StatusUtil;
-import com.africanb.africanb.dao.entity.compagnie.Ville;
 import com.africanb.africanb.dao.entity.offreVoyage.OffreVoyage;
 import com.africanb.africanb.dao.entity.offreVoyage.Programme;
 import com.africanb.africanb.dao.entity.reservationBilletVoyage.ReservationBilletVoyage;
-import com.africanb.africanb.dao.entity.security.Users;
 import com.africanb.africanb.helper.contrat.FullTransformerQualifier;
-import com.africanb.africanb.helper.dto.offreVoyage.OffreVoyageDTO;
 import com.africanb.africanb.helper.dto.reservationBilletVoyage.ReservationBilletVoyageDTO;
-import com.africanb.africanb.helper.status.Status;
-import com.africanb.africanb.utils.Reference.Reference;
 import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -44,7 +38,8 @@ public interface ReservationBilletVoyageTransformer {
             @Mapping(source = "entity.gare.designation", target = "gareDesignation"),
             @Mapping(source = "entity.offreVoyage.designation", target = "offreVoyageDesignation"),
             @Mapping(source = "entity.programme.designation", target = "programmeDesignation"),
-            @Mapping(source = "entity.users.email", target = "userEmail"),
+            @Mapping(source = "entity.isOtherPerson", target = "isOtherPerson"),
+            @Mapping(source = "entity.clientDetails", target = "clientDetails"),
             @Mapping(source = "entity.statusUtilActual.designation", target = "statusActualDesignation"),
 
             @Mapping(source = "entity.updatedAt", dateFormat="dd/MM/yyyy",target="updatedAt"),
@@ -90,6 +85,8 @@ public interface ReservationBilletVoyageTransformer {
             @Mapping(source = "dto.dateEffectiveDepart", dateFormat="dd/MM/yyyy",target = "dateEffectiveDepart"),
             @Mapping(source = "dto.montantTotalReservation", target = "montantTotalReservation"),
             @Mapping(source = "dto.nombrePlace", target = "nombrePlace"),
+            @Mapping(source = "dto.isOtherPerson", target = "isOtherPerson"),
+            @Mapping(source = "dto.clientDetails", target = "clientDetails"),
             @Mapping(source = "dto.isCanceled", target = "isCanceled"),
             @Mapping(source = "dto.raisonAnnulation", target = "raisonAnnulation"),
 
@@ -104,8 +101,7 @@ public interface ReservationBilletVoyageTransformer {
             @Mapping(source="offreVoyage", target="offreVoyage"),
             @Mapping(source="programme", target="programme"),
             @Mapping(source="gare", target="gare"),
-            @Mapping(source="statusUtilActual", target="statusUtilActual"),
-            @Mapping(source="users", target="users")
+            @Mapping(source="statusUtilActual", target="statusUtilActual")
     })
-    ReservationBilletVoyage toEntity(ReservationBilletVoyageDTO dto, Gare gare, OffreVoyage offreVoyage, Programme programme,  Users users,StatusUtil statusUtilActual) throws ParseException;
+    ReservationBilletVoyage toEntity(ReservationBilletVoyageDTO dto, Gare gare, OffreVoyage offreVoyage, Programme programme, StatusUtil statusUtilActual) throws ParseException;
 }
