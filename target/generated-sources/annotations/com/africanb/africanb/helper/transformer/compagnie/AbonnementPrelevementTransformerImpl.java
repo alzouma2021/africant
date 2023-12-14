@@ -12,7 +12,7 @@ import javax.annotation.processing.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-12-14T15:57:51+0000",
+    date = "2023-12-14T16:59:23+0000",
     comments = "version: 1.4.2.Final, compiler: javac, environment: Java 11.0.0.1 (Oracle Corporation)"
 )
 public class AbonnementPrelevementTransformerImpl implements AbonnementPrelevementTransformer {
