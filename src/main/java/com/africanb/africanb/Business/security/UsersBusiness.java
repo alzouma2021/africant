@@ -22,7 +22,7 @@ import com.africanb.africanb.helper.searchFunctions.Utilities;
 import com.africanb.africanb.helper.transformer.security.UsersTransformer;
 import com.africanb.africanb.helper.validation.Validate;
 import com.africanb.africanb.utils.Constants.ProjectConstants;
-import com.africanb.africanb.utils.security.SecurityServices;
+import com.africanb.africanb.utils.security.SecurityUtils;
 import lombok.extern.java.Log;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -81,7 +81,7 @@ public class UsersBusiness implements IBasicBusiness<Request<UsersDTO>, Response
             return response;
         }
         Users existingEntity = null;
-        existingEntity = usersRepository.findByLoginAndPassword(dto.getLogin(), SecurityServices.encryptPassword(dto.getPassword()), false);
+        existingEntity = usersRepository.findByLoginAndPassword(dto.getLogin(), SecurityUtils.encryptPassword(dto.getPassword()), false);
         if (existingEntity == null) {
             response.setStatus(functionalError.DATA_NOT_EXIST("login or password is not correct -> " + dto.getLogin() + " " + dto.getPassword(), locale));
             response.setHasError(true);
@@ -104,7 +104,7 @@ public class UsersBusiness implements IBasicBusiness<Request<UsersDTO>, Response
         existingEntity.setLastConnectionDate(Utilities.getCurrentDate());
         usersRepository.save(existingEntity);
         //Generate token
-        String token = SecurityServices.generateToken(existingEntity);
+        String token = SecurityUtils.generateToken(existingEntity);
         log.info("_103  Génération de token  :: "+token);
         existingEntityDto.setToken(token);
         //Return reponse
@@ -151,12 +151,12 @@ public class UsersBusiness implements IBasicBusiness<Request<UsersDTO>, Response
         }
         //Check if old password is correct
         String oldPassWordEncryted=existingEntity.getPassword();
-        if(!oldPassWordEncryted.equals(SecurityServices.encryptPassword(dto.getOldPassWord()))){
+        if(!oldPassWordEncryted.equals(SecurityUtils.encryptPassword(dto.getOldPassWord()))){
             response.setStatus(functionalError.SAVE_FAIL("Ancien mot de passe incorrect !!!", locale));
             response.setHasError(true);
             return response;
         }
-        String newPassWordEncryted=SecurityServices.encryptPassword(dto.getNewPassWord());
+        String newPassWordEncryted= SecurityUtils.encryptPassword(dto.getNewPassWord());
         if(oldPassWordEncryted.equals(newPassWordEncryted)){
             response.setStatus(functionalError.SAVE_FAIL("Ancien et nouveau mot de passe identique !!!", locale));
             response.setHasError(true);
@@ -164,7 +164,7 @@ public class UsersBusiness implements IBasicBusiness<Request<UsersDTO>, Response
         }
         existingEntity.setPassword(newPassWordEncryted);
         //Incrementation du nombre de connections
-        if(existingEntity.getNumberOfConnections()==0 && (!SecurityServices.encryptPassword(ProjectConstants.USER_PASSWORD_DEFAULT).equals(oldPassWordEncryted))){
+        if(existingEntity.getNumberOfConnections()==0 && (!SecurityUtils.encryptPassword(ProjectConstants.USER_PASSWORD_DEFAULT).equals(oldPassWordEncryted))){
             existingEntity.setNumberOfConnections(existingEntity.getNumberOfConnections()+1);
         }
         //Persistence
@@ -254,10 +254,10 @@ public class UsersBusiness implements IBasicBusiness<Request<UsersDTO>, Response
             entityToSave.setIsFirst(Boolean.TRUE);
             entityToSave.setIsActif(Boolean.FALSE);
             //entityToSave.setCreatedBy(request.userID);
-            String generateNewPassword=SecurityServices.generatePassword();
+            String generateNewPassword= SecurityUtils.generatePassword();
             log.info("_151 New password generate="+generateNewPassword); //TODO A effacer
             try {
-                entityToSave.setPassword(SecurityServices.encryptPassword(ProjectConstants.USER_PASSWORD_DEFAULT));
+                entityToSave.setPassword(SecurityUtils.encryptPassword(ProjectConstants.USER_PASSWORD_DEFAULT));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -334,9 +334,9 @@ public class UsersBusiness implements IBasicBusiness<Request<UsersDTO>, Response
                 entityToSave.setMatricule(dto.getEmail());
             }
             if (Utilities.isNotBlank(dto.getPassword()) && !dto.getEmail().equals(entityToSave.getPassword())) {
-                if (Utilities.isNotBlank(SecurityServices.encryptPassword(dto.getPassword())) && !SecurityServices.encryptPassword(dto.getPassword()).equals(entityToSave.getPassword())) {
+                if (Utilities.isNotBlank(SecurityUtils.encryptPassword(dto.getPassword())) && !SecurityUtils.encryptPassword(dto.getPassword()).equals(entityToSave.getPassword())) {
                     try {
-                        entityToSave.setPassword(SecurityServices.encryptPassword(dto.getPassword()));
+                        entityToSave.setPassword(SecurityUtils.encryptPassword(dto.getPassword()));
                         if (entityToSave.getIsFirst() != null && entityToSave.getIsFirst()) {
                             entityToSave.setIsFirst(Boolean.FALSE);
                         }

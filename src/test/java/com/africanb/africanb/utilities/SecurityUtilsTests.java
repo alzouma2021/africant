@@ -5,8 +5,8 @@ import com.africanb.africanb.dao.entity.security.Role;
 import com.africanb.africanb.dao.entity.security.Users;
 import com.africanb.africanb.dao.repository.security.UsersRepository;
 import com.africanb.africanb.utils.Constants.ProjectConstants;
-import com.africanb.africanb.utils.security.SecurityServices;
-import com.africanb.africanb.utils.security.Token;
+import com.africanb.africanb.utils.security.SecurityUtils;
+import com.africanb.africanb.utils.security.TokenData;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -26,7 +26,7 @@ import static org.mockito.Mockito.mock;
 
 @Disabled
 @SpringBootTest
-public class SecurityServicesTests {
+public class SecurityUtilsTests {
 
     private static String validToken;
     private static String expiredToken;
@@ -34,7 +34,7 @@ public class SecurityServicesTests {
 
     private static final String SECRET_PHRASE = "your_secret_phrase_here"; // Replace with your actual secret phrase
 
-    private static SecurityServices securityServices;
+    private static SecurityUtils securityUtils;
 
     private static Users createUserForTesting() {
         Users user = new Users();
@@ -56,12 +56,12 @@ public class SecurityServicesTests {
 
     private static String generateValidToken() {
         Users user = createUserForTesting();
-        return SecurityServices.generateToken(user);
+        return SecurityUtils.generateToken(user);
     }
 
     private static String generateExpiredToken() {
         Users user = createUserForTesting();
-        Key hmacKey = new SecretKeySpec(Base64.getDecoder().decode(SecurityServices.SESSION_TOKEN_FIELD_SECRET_PHRASE),
+        Key hmacKey = new SecretKeySpec(Base64.getDecoder().decode(SecurityUtils.SESSION_TOKEN_FIELD_SECRET_PHRASE),
                 SignatureAlgorithm.HS256.getJcaName());
 
         Claims claims = new DefaultClaims();
@@ -81,61 +81,61 @@ public class SecurityServicesTests {
         validToken = generateValidToken();
         expiredToken = generateExpiredToken();
         invalidToken = generateValidToken().replace("A", "B");
-        securityServices = new SecurityServices(mock(UsersRepository.class));
+        securityUtils = new SecurityUtils(mock(UsersRepository.class));
     }
 
     @Test
     public void testGenerateToken() {
         Users user = createUserForTesting();
-        String token = SecurityServices.generateToken(user);
+        String token = SecurityUtils.generateToken(user);
         assertNotNull(token);
     }
 
     @Test
     public void testValideToken_ValidToken() {
-        String result = SecurityServices.valideToken(validToken);
+        String result = SecurityUtils.valideToken(validToken);
         assertEquals(ProjectConstants.VERIFY_TOKEN_VALIDE, result);
     }
 
     @Test
     public void testValideToken_ExpiredToken() {
-        String result = SecurityServices.valideToken(expiredToken);
+        String result = SecurityUtils.valideToken(expiredToken);
         assertEquals(ProjectConstants.VERIFY_TOKEN_EXPIRE, result);
     }
 
     @Test
     public void testValideToken_InvalidToken() {
-        String result = SecurityServices.valideToken(invalidToken);
+        String result = SecurityUtils.valideToken(invalidToken);
         assertEquals(ProjectConstants.VERIFY_TOKEN_MAUVAIS, result);
     }
 
     @Test
     public void testDecodeAndValidateToken_ValidToken() {
-        Token tokenInstance = SecurityServices.decodeAndValidateToken(validToken);
-        assertNotNull(tokenInstance);
-        assertNotNull(ProjectConstants.VERIFY_TOKEN_MAUVAIS, tokenInstance.getStatus());
-        assertNotNull(tokenInstance.getClaims());
+        TokenData tokenDataInstance = SecurityUtils.decodeAndValidateToken(validToken);
+        assertNotNull(tokenDataInstance);
+        assertNotNull(ProjectConstants.VERIFY_TOKEN_MAUVAIS, tokenDataInstance.getStatus());
+        assertNotNull(tokenDataInstance.getClaims());
     }
 
     @Test
     public void testDecodeAndValidateToken_ExpiredToken() {
-        Token tokenInstance = SecurityServices.decodeAndValidateToken(expiredToken);
-        assertNotNull(tokenInstance);
-        assertEquals(ProjectConstants.VERIFY_TOKEN_EXPIRE, tokenInstance.getStatus());
-        assertNull(tokenInstance.getClaims());
+        TokenData tokenDataInstance = SecurityUtils.decodeAndValidateToken(expiredToken);
+        assertNotNull(tokenDataInstance);
+        assertEquals(ProjectConstants.VERIFY_TOKEN_EXPIRE, tokenDataInstance.getStatus());
+        assertNull(tokenDataInstance.getClaims());
     }
 
     @Test
     public void testDecodeAndValidateToken_InvalidToken() {
-        Token tokenInstance = SecurityServices.decodeAndValidateToken(invalidToken);
-        assertNotNull(tokenInstance);
-        assertEquals(ProjectConstants.VERIFY_TOKEN_MAUVAIS, tokenInstance.getStatus());
-        assertNull(tokenInstance.getClaims());
+        TokenData tokenDataInstance = SecurityUtils.decodeAndValidateToken(invalidToken);
+        assertNotNull(tokenDataInstance);
+        assertEquals(ProjectConstants.VERIFY_TOKEN_MAUVAIS, tokenDataInstance.getStatus());
+        assertNull(tokenDataInstance.getClaims());
     }
 
     @Test
     public void testGeneratePassword() {
-        String password = SecurityServices.generatePassword();
+        String password = SecurityUtils.generatePassword();
         assertNotNull(password);
         assertEquals(10, password.length());
     }
@@ -143,7 +143,7 @@ public class SecurityServicesTests {
     @Test
     public void testEncryptPassword() {
         String password = "password123";
-        String hashedPassword = SecurityServices.encryptPassword(password);
+        String hashedPassword = SecurityUtils.encryptPassword(password);
         assertNotNull(hashedPassword);
         assertNotEquals(password, hashedPassword);
     }

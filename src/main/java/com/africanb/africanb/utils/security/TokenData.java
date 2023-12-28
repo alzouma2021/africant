@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Token {
+public class TokenData {
     private String status;
     private Claims claims;
 }

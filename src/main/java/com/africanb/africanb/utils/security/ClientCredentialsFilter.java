@@ -22,7 +22,7 @@ import java.util.Locale;
 @Slf4j
 @Component
 @Order(2)
-public class AuthenticationClientFilter extends HttpFilter {
+public class ClientCredentialsFilter extends HttpFilter {
 
     @Value("${server.id}")
     private String serverId;
@@ -32,7 +32,7 @@ public class AuthenticationClientFilter extends HttpFilter {
     private final ExceptionUtils exceptionUtils;
 
     @Autowired
-    public AuthenticationClientFilter(FunctionalError functionalError, ExceptionUtils exceptionUtils) {
+    public ClientCredentialsFilter(FunctionalError functionalError, ExceptionUtils exceptionUtils) {
         this.functionalError = functionalError;
         this.exceptionUtils = exceptionUtils;
     }
@@ -45,12 +45,12 @@ public class AuthenticationClientFilter extends HttpFilter {
         //Initialize Headers
         String serverIdProvider = servletRequest.getHeader("server_id");
         String clientIdProvider = servletRequest.getHeader("client_id");
-        IdentificationClient identificationClient = new IdentificationClient();
+        ClientCredentials clientCredentials = new ClientCredentials();
         String serverIdConsumer =  serverId;
         String clientIdConsumer =  clientId;
 
         //Check Options
-        if (SecurityServices.doesPathNotRequireAuthentication(servletRequest, servletResponse, chain)) return;
+        if (SecurityUtils.doesPathNotRequireAuthentication(servletRequest, servletResponse, chain)) return;
         //Check
         if(Utilities.isBlank(serverIdProvider) || Utilities.isBlank(clientIdProvider)){
                 servletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // HTTP 401.

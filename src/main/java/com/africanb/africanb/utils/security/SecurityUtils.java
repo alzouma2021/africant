@@ -29,14 +29,14 @@ import java.util.Optional;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 @Log
-public class SecurityServices {
+public class SecurityUtils {
 
     private static String	defaultTenant = "null";
     private static String defaultLanguage = "fr";
     public static final String SESSION_TOKEN_FIELD_SECRET_PHRASE = "asdfSFS34wfsdfsdfSDSD32dfsddDDerQSNCK34SOWEK5354fdgdf4";
     private static final long TOKEN_EXPIRATION_MINUTES = 3000L;
     private final UsersRepository usersRepository;
-    public SecurityServices(UsersRepository usersRepository) {
+    public SecurityUtils(UsersRepository usersRepository) {
         this.usersRepository = usersRepository;
     }
 
@@ -96,8 +96,8 @@ public class SecurityServices {
                 .build();
     }
 
-    public static Token decodeAndValidateToken(String token){
-        return  Token.builder()
+    public static TokenData decodeAndValidateToken(String token){
+        return  TokenData.builder()
                     .status(valideToken(token))
                     .claims(parseToken(token))
                 .build();

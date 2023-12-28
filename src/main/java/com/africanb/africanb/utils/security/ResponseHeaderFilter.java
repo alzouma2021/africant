@@ -1,13 +1,6 @@
 package com.africanb.africanb.utils.security;
 
-import com.africanb.africanb.helper.ExceptionUtils;
-import com.africanb.africanb.helper.FunctionalError;
-import com.africanb.africanb.helper.contrat.Response;
-import com.africanb.africanb.helper.dto.security.UsersDTO;
-import com.africanb.africanb.helper.searchFunctions.Utilities;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
@@ -17,13 +10,12 @@ import javax.servlet.http.HttpFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Locale;
 
 
 @Slf4j
 @Component
 @Order(1)
-public class ParamResponseHeaderFilter extends HttpFilter {
+public class ResponseHeaderFilter extends HttpFilter {
 
     @Override
     public void doFilter(HttpServletRequest servletRequest, HttpServletResponse servletResponse, FilterChain chain) throws IOException, ServletException {
