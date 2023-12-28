@@ -3287,7 +3287,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MjMwLCJsb2dpbiI6ImFkbWluQGNvbXBhZ25pZXRyYW5zcG9ydC5jb20iLCJyb2xlIjoxODcsInJhaXNvblNvY2lhbGUiOiJhbW0iLCJzdWIiOiJhZG1pbiIsImp0aSI6IjIzMCIsImlhdCI6MTY5OTYwNzAyNywiZXhwIjoxNjk5Nzg3MDI3fQ.9rea69BTz_mHPn6mXAqHuG9EfCin1xjL38eR9vKx8Gc",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MjMwLCJsb2dpbiI6ImFkbWluQGNvbXBhZ25pZXRyYW5zcG9ydC5jb20iLCJyb2xlIjoxODcsInJhaXNvblNvY2lhbGUiOiJhbW0iLCJzdWIiOiJhZG1pbiIsImp0aSI6IjIzMCIsImlhdCI6MTcwMjU2OTUzMywiZXhwIjoxNzAyNzQ5NTMzfQ.DqZ0a0aQyAbcelFWcO48xnDKxmKc1dGtmggHCqs6jo8",
 									"type": "string"
 								}
 							]
@@ -3307,7 +3307,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"data\":{\r\n        \"programmeDesignation\":\"programme600\",\r\n        \"nombrePlace\":2,\r\n        \"categorieVoyageur\":\"Adulte\",\r\n        \"gareDesignation\":\"gare001\",\r\n        \"offreVoyageDesignation\":\"AbidjanYamoussoukroCompagnieTransport\"\r\n    }\r\n}",
+							"raw": "{\r\n    \"data\":{\r\n        \"programmeDesignation\":\"programme600\",\r\n        \"nombrePlace\":2,\r\n        \"categorieVoyageur\":\"Adulte\",\r\n        \"gareDesignation\":\"gare001\",\r\n        \"isOtherPerson\":true,\r\n        \"clientDetails\":{\r\n            \"nom\": \"Alzouma Moussa\",\r\n            \"prenoms\": \"Mahamadou\",\r\n            \"email\": \"alzoumamoussa@gmail.com\",\r\n            \"telephone\":\"0565585746\"\r\n        },\r\n        \"offreVoyageDesignation\":\"AbidjanYamoussoukroCompagnieTransport\"\r\n    }\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -3472,6 +3472,60 @@
 							"path": [
 								"historiquePaiements",
 								"getHistoriquePaiementByReservationBilletVoyage"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "JASPORT",
+			"item": [
+				{
+					"name": "New Request",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "New Request Copy",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MjMwLCJsb2dpbiI6ImFkbWluQGNvbXBhZ25pZXRyYW5zcG9ydC5jb20iLCJyb2xlIjoxODcsInJhaXNvblNvY2lhbGUiOiJhbW0iLCJzdWIiOiJhZG1pbiIsImp0aSI6IjIzMCIsImlhdCI6MTcwMDIyNDYzMCwiZXhwIjoxNzAwNDA0NjMwfQ.2G-aXnTz-888pSpvOpViKjJ3R6fTFm7Bfm6OIIqzvQs",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "server_id",
+								"value": "backend@africanb",
+								"type": "text"
+							},
+							{
+								"key": "client_id",
+								"value": "fronted@africanb",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://localhost:8443/billet/generer",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8443",
+							"path": [
+								"billet",
+								"generer"
 							]
 						}
 					},

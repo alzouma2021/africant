@@ -50,7 +50,7 @@ public class AuthenticationClientFilter extends HttpFilter {
         String clientIdConsumer =  clientId;
 
         //Check Options
-        if (SecurityServices.checkIfRequestHasNotNeedAuthentication(servletRequest, servletResponse, chain)) return;
+        if (SecurityServices.doesPathNotRequireAuthentication(servletRequest, servletResponse, chain)) return;
         //Check
         if(Utilities.isBlank(serverIdProvider) || Utilities.isBlank(clientIdProvider)){
                 servletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // HTTP 401.

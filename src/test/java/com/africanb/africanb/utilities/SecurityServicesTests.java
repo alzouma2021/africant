@@ -61,7 +61,7 @@ public class SecurityServicesTests {
 
     private static String generateExpiredToken() {
         Users user = createUserForTesting();
-        Key hmacKey = new SecretKeySpec(Base64.getDecoder().decode(ProjectConstants.SESSION_TOKEN_FIELD_SECRET_PHRASE),
+        Key hmacKey = new SecretKeySpec(Base64.getDecoder().decode(SecurityServices.SESSION_TOKEN_FIELD_SECRET_PHRASE),
                 SignatureAlgorithm.HS256.getJcaName());
 
         Claims claims = new DefaultClaims();
@@ -114,7 +114,7 @@ public class SecurityServicesTests {
         Token tokenInstance = SecurityServices.decodeAndValidateToken(validToken);
         assertNotNull(tokenInstance);
         assertNotNull(ProjectConstants.VERIFY_TOKEN_MAUVAIS, tokenInstance.getStatus());
-        assertNotNull(tokenInstance.getJwt());
+        assertNotNull(tokenInstance.getClaims());
     }
 
     @Test
@@ -122,7 +122,7 @@ public class SecurityServicesTests {
         Token tokenInstance = SecurityServices.decodeAndValidateToken(expiredToken);
         assertNotNull(tokenInstance);
         assertEquals(ProjectConstants.VERIFY_TOKEN_EXPIRE, tokenInstance.getStatus());
-        assertNull(tokenInstance.getJwt());
+        assertNull(tokenInstance.getClaims());
     }
 
     @Test
@@ -130,7 +130,7 @@ public class SecurityServicesTests {
         Token tokenInstance = SecurityServices.decodeAndValidateToken(invalidToken);
         assertNotNull(tokenInstance);
         assertEquals(ProjectConstants.VERIFY_TOKEN_MAUVAIS, tokenInstance.getStatus());
-        assertNull(tokenInstance.getJwt());
+        assertNull(tokenInstance.getClaims());
     }
 
     @Test
@@ -146,14 +146,6 @@ public class SecurityServicesTests {
         String hashedPassword = SecurityServices.encryptPassword(password);
         assertNotNull(hashedPassword);
         assertNotEquals(password, hashedPassword);
-    }
-
-    @Test
-    public void testExtractedClaimsToken_ValidToken() {
-        String validToken = generateValidToken();
-        Token tokenInstance = new Token();
-        securityServices.extractedClaimsToken(validToken, tokenInstance);
-        assertNotNull(tokenInstance.getJwt());
     }
 
 }
