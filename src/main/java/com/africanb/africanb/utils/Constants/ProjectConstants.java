@@ -127,7 +127,7 @@ public class ProjectConstants {
     public final static String FUNCTIONNALITY_LISTING_MODE_PAIEMENT="FunctionnalityListingModePaiement";
 
     //Variables constantes authentication
-    public static final String SESSION_TOKEN_FIELD_SECRET_PHRASE = "asdfSFS34wfsdfsdfSDSD32dfsddDDerQSNCK34SOWEK5354fdgdf4";
+
     public static final String SESSION_TOKEN_FILED_USER_ID = "id";
     public static final String SESSION_TOKEN_FILED_USER_NOM = "nom";
     public static final String SESSION_TOKEN_FILED_USER_PRENOM = "prenom";

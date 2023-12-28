@@ -1,14 +1,16 @@
 package com.africanb.africanb.utils.security;
 
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-/**
- * @author ALZOUMA MOUSSA MAHAMADOU
- */
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Token {
     private String status;
-    private Jws<Claims> jwt = null ;
+    private Claims claims;
 }

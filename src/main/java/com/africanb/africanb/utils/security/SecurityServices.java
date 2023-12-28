@@ -24,6 +24,7 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Base64;
 import java.util.Date;
+import java.util.Optional;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
@@ -32,80 +33,76 @@ public class SecurityServices {
 
     private static String	defaultTenant = "null";
     private static String defaultLanguage = "fr";
-
+    public static final String SESSION_TOKEN_FIELD_SECRET_PHRASE = "asdfSFS34wfsdfsdfSDSD32dfsddDDerQSNCK34SOWEK5354fdgdf4";
+    private static final long TOKEN_EXPIRATION_MINUTES = 3000L;
     private final UsersRepository usersRepository;
-
     public SecurityServices(UsersRepository usersRepository) {
         this.usersRepository = usersRepository;
     }
 
     public static String generateToken(Users users){
-        Key hmacKey = new SecretKeySpec(Base64.getDecoder().decode(ProjectConstants.SESSION_TOKEN_FIELD_SECRET_PHRASE),
+
+        Key hmacKey = new SecretKeySpec(Base64.getDecoder().decode(SESSION_TOKEN_FIELD_SECRET_PHRASE),
                 SignatureAlgorithm.HS256.getJcaName());
+
         Instant now = Instant.now();
-        String jwtToken = Jwts.builder()
-                .claim(ProjectConstants.SESSION_TOKEN_FILED_USER_ID, users.getId() != null ? users.getId() : null)
-                .claim(ProjectConstants.SESSION_TOKEN_FILED_USER_LOGIN, users.getLogin() != null ? users.getLogin() : null)
-                .claim(ProjectConstants.SESSION_TOKEN_FILED_USER_LOGIN, users.getEmail() != null ? users.getEmail() : null)
-                .claim(ProjectConstants.SESSION_TOKEN_FILED_USER_ROLE, users.getRole() != null ? users.getRole().getId() :  null)
-                .claim(ProjectConstants.SESSION_TOKEN_FILED_USER_COMPAGNIE, users.getCompagnieTransport() != null ? users.getCompagnieTransport().getRaisonSociale() :  null)
+
+        JwtBuilder jwtBuilder = Jwts.builder()
+                .claim(ProjectConstants.SESSION_TOKEN_FILED_USER_ID, users.getId())
+                .claim(ProjectConstants.SESSION_TOKEN_FILED_USER_LOGIN, users.getLogin())
+                .claim(ProjectConstants.SESSION_TOKEN_FILED_USER_MAIL, users.getEmail()) // Correction ici
+                .claim(ProjectConstants.SESSION_TOKEN_FILED_USER_ROLE, users.getRole() != null ? users.getRole().getId() : null)
+                .claim(ProjectConstants.SESSION_TOKEN_FILED_USER_COMPAGNIE,
+                        users.getCompagnieTransport() != null ? users.getCompagnieTransport().getRaisonSociale() : null)
                 .setSubject(users.getNom())
                 .setId(users.getId().toString())
                 .setIssuedAt(Date.from(now))
-                .setExpiration(Date.from(now.plus(3000l, ChronoUnit.MINUTES)))
-                .signWith(hmacKey)
-                .compact();
-        return jwtToken;
+                .setExpiration(Date.from(now.plus(TOKEN_EXPIRATION_MINUTES, ChronoUnit.MINUTES)));
+
+        return jwtBuilder.signWith(hmacKey).compact();
     }
 
-    public static String valideToken(String token){
-       try{
-            Key hmacKey = new SecretKeySpec(Base64.getDecoder().decode(ProjectConstants.SESSION_TOKEN_FIELD_SECRET_PHRASE),
-                    SignatureAlgorithm.HS256.getJcaName());
-                    Jwts.parserBuilder()
-                    .setSigningKey(hmacKey)
+    public static String valideToken(String token) {
+        try {
+            Jwts.parserBuilder()
+                    .setSigningKey(new SecretKeySpec(Base64.getDecoder().decode(SESSION_TOKEN_FIELD_SECRET_PHRASE),
+                            SignatureAlgorithm.HS256.getJcaName()))
                     .build()
-                    .parseClaimsJws(token);
-                    return ProjectConstants.VERIFY_TOKEN_VALIDE;
-       }catch (ExpiredJwtException eje){
-           return ProjectConstants.VERIFY_TOKEN_EXPIRE;
-       }catch (SignatureException se){
-           return ProjectConstants.VERIFY_TOKEN_INVALIDE;
-       }catch (MalformedJwtException mje){
-           return ProjectConstants.VERIFY_TOKEN_MAUVAIS;
-       }
+                    .parseClaimsJws(token)
+                    .getBody();
+            return ProjectConstants.VERIFY_TOKEN_VALIDE;
+        }catch (ExpiredJwtException e) {
+            return ProjectConstants.VERIFY_TOKEN_EXPIRE;
+        }catch (SignatureException e) {
+            return ProjectConstants.VERIFY_TOKEN_INVALIDE;
+        }catch (MalformedJwtException e) {
+            return ProjectConstants.VERIFY_TOKEN_MAUVAIS;
+        }
+    }
+
+    private static Claims parseToken(String token) {
+        try {
+            JwtParser parser = createJwtParser();
+            return parser.parseClaimsJws(token).getBody();
+        } catch (JwtException e) {
+            return null;
+        }
+    }
+
+    private static JwtParser createJwtParser() {
+        return Jwts.parserBuilder()
+                .setSigningKey(new SecretKeySpec(Base64.getDecoder().decode(SESSION_TOKEN_FIELD_SECRET_PHRASE),
+                        SignatureAlgorithm.HS256.getJcaName()))
+                .build();
     }
 
     public static Token decodeAndValidateToken(String token){
-        Jws<Claims> jwt = null ;
-        Token tokenInstance=new Token();
-        try{
-            extractedClaimsToken(token, tokenInstance);
-        }catch (ExpiredJwtException eje){
-            tokenInstance.setStatus(ProjectConstants.VERIFY_TOKEN_EXPIRE);
-            return  tokenInstance;
-        }catch (SignatureException se){
-            tokenInstance.setStatus(ProjectConstants.VERIFY_TOKEN_INVALIDE);
-            return  tokenInstance;
-        }catch (MalformedJwtException mje){
-            tokenInstance.setStatus(ProjectConstants.VERIFY_TOKEN_MAUVAIS);
-            return  tokenInstance;
-        }
-        return tokenInstance;
+        return  Token.builder()
+                    .status(valideToken(token))
+                    .claims(parseToken(token))
+                .build();
     }
 
-    public static void extractedClaimsToken(String token, Token tokenInstance) {
-        Jws<Claims> jwt;
-        Key hmacKey = new SecretKeySpec(Base64.getDecoder().decode(ProjectConstants.SESSION_TOKEN_FIELD_SECRET_PHRASE),
-                SignatureAlgorithm.HS256.getJcaName());
-        jwt = Jwts.parserBuilder()
-                .setSigningKey(hmacKey)
-                .build()
-                .parseClaimsJws(token);
-        tokenInstance.setJwt(jwt);
-    }
-
-    // Méthode pour générer automatiquement un mot de passe
     public static String generatePassword() {
         String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         int length = 10;
@@ -118,7 +115,6 @@ public class SecurityServices {
         return password.toString();
     }
 
-    // Méthode pour crypter un mot de passe
     public static String encryptPassword(String password) {
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
@@ -135,36 +131,13 @@ public class SecurityServices {
         }
     }
 
-
-    /*public static String generateCode1(){
-      String formatted = null;
-      formatted = RandomStringUtils.randomAlphanumeric(8).toUpperCase();
-      return formatted;
-    }*/
-
-    /*    public static String generateCode2(){
-        String formatted = null;
-        SecureRandom secureRandom = new SecureRandom();
-        int num = secureRandom.nextInt(100000000);
-        formatted = String.format("%05d", num);
-        return formatted;
-    }*/
-
-    public  boolean authenticateUser(Jws<Claims> token) {
-        Long userId = Long.valueOf(token.getBody().getId());
-        Users user = usersRepository.findOne(userId,false);
-        if(user == null){
-            return false;
-        }
-        return true;
-    }
-
     public static String extractToken(HttpServletRequest servletResquest){
-        if(servletResquest==null) return null;
-        String token = servletResquest.getHeader(AUTHORIZATION);
-        if(token==null) return null;
-        String rtn = token.substring(("Bearer ".length()));
-        return rtn == null || rtn.isEmpty() ? null : rtn;
+        return  servletResquest != null
+                ? Optional.ofNullable(servletResquest.getHeader(AUTHORIZATION))
+                    .map(token -> token.startsWith("Bearer ") ? token.substring("Bearer ".length()) : null)
+                    .filter(token -> !token.isEmpty())
+                    .orElse(null)
+                : null;
     }
 
     public static void languageManager(HttpServletRequest req){
@@ -184,13 +157,26 @@ public class SecurityServices {
     }
 
     @SneakyThrows
-    public static boolean checkIfRequestHasNotNeedAuthentication(HttpServletRequest servletRequest, HttpServletResponse servletResponse, FilterChain chain) throws IOException, ServletException {
+    public static boolean doesPathNotRequireAuthentication(HttpServletRequest servletRequest, HttpServletResponse servletResponse, FilterChain chain) throws IOException, ServletException {
         String servletPath = servletRequest.getServletPath();
-        if (servletRequest.getMethod().equalsIgnoreCase("OPTIONS") || servletPath.contains("swagger") || servletPath.contains("/v2") || servletPath.contains("/users/login")) {
+        String method = servletRequest.getMethod();
+        if ("OPTIONS".equalsIgnoreCase(method) || isSwaggerPath(servletPath) || isApiVersionPath(servletPath) || isLoginPath(servletPath)) {
             chain.doFilter(servletRequest, servletResponse);
             return true;
         }
         return false;
+    }
+
+    private static boolean isSwaggerPath(String servletPath) {
+        return servletPath.contains("swagger");
+    }
+
+    private static boolean isApiVersionPath(String servletPath) {
+        return servletPath.contains("/v2");
+    }
+
+    private static boolean isLoginPath(String servletPath) {
+        return servletPath.contains("/users/login");
     }
 
 }

@@ -59,7 +59,7 @@ public class SecurityServletFilter extends HttpFilter {
         List<String> listUrlDoNotHaveAuthentication = Collections.synchronizedList(new ArrayList<String>());
         listUrlDoNotHaveAuthentication.add("/users/login");
         //Check Options
-        if (SecurityServices.checkIfRequestHasNotNeedAuthentication(request, response, chain)) return;
+        if (SecurityServices.doesPathNotRequireAuthentication(request, response, chain)) return;
         try {
             String path = request.getServletPath();
             String token = SecurityServices.extractToken(request);
@@ -71,9 +71,11 @@ public class SecurityServletFilter extends HttpFilter {
                 return;
             }
             Token entityToken = SecurityServices.decodeAndValidateToken(token);
-            String status = entityToken.getStatus();
-            if (status != null) {
-                switch (status) {
+            log.info("_67 Affichage du entityToken ="+entityToken.toString());
+            if(Optional.ofNullable(entityToken.getStatus())
+                    .map(status -> !status.equalsIgnoreCase(ProjectConstants.VERIFY_TOKEN_VALIDE))
+                    .orElse(false)) {
+                switch (entityToken.getStatus()) {
                     case ProjectConstants.VERIFY_TOKEN_EXPIRE:
                         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // HTTP 401.
                         resp.setStatus( functionalError.DATA_NOT_EXIST(ProjectConstants.VERIFY_TOKEN_EXPIRE, locale));
@@ -99,41 +101,34 @@ public class SecurityServletFilter extends HttpFilter {
                         response.getWriter().write(String.valueOf(resp));
                         break;
                 }
-            } else {
-                if (entityToken.getJwt() == null) {
-                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // HTTP 401.
-                    resp.setStatus( functionalError.DATA_NOT_EXIST("Authentification Echouée", locale));
-                    resp.setHasError(true);
-                    response.getWriter().write(String.valueOf(resp));
-                    return;
-                }
-                boolean isAuthenticated = authenticateUser(entityToken.getJwt());
-                if (!isAuthenticated) {
-                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // HTTP 401.
-                    resp.setStatus( functionalError.DATA_NOT_EXIST("Utilisateur non authentifié", locale));
-                    resp.setHasError(true);
-                    response.getWriter().write(String.valueOf(resp));
-                    return;
-                }
-                RequestBase.userID = Long.valueOf(entityToken.getJwt().getBody().getId());
-                chain.doFilter(request, response);
             }
+            if (entityToken.getClaims() == null) {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // HTTP 401.
+                resp.setStatus( functionalError.DATA_NOT_EXIST("Authentification Echouée", locale));
+                resp.setHasError(true);
+                response.getWriter().write(String.valueOf(resp));
+                return;
+            }
+            boolean isAuthenticated = authenticateUser(entityToken.getClaims());
+            if (!isAuthenticated) {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // HTTP 401.
+                resp.setStatus( functionalError.DATA_NOT_EXIST("Utilisateur non authentifié", locale));
+                resp.setHasError(true);
+                response.getWriter().write(String.valueOf(resp));
+                return;
+            }
+            RequestBase.userID = Long.valueOf(entityToken.getClaims().getId());
+            chain.doFilter(request, response);
         } catch (IOException | ServletException e) {
             exceptionUtils.PERMISSION_DENIED_DATA_ACCESS_EXCEPTION(resp, locale, e);
         } finally {
             if (resp.isHasError() && resp.getStatus() != null) {
                 log.info("Erreur| code: {} -  message: {}", resp.getStatus().getCode(), resp.getStatus().getMessage());
-                //throw new RuntimeException(resp.getStatus().getCode() + ";" + resp.getStatus().getMessage());
             }
         }
     }
 
-    private boolean authenticateUser(Jws<Claims> token) {
-        Long userId = Long.valueOf(Integer.valueOf(token.getBody().getId()));
-        Users user = usersRepository.findOne(userId,false);
-        if(user == null){
-            return false;
-        }
-        return true;
+    private boolean authenticateUser(Claims token) {
+        return Optional.ofNullable(usersRepository.findOne(Long.valueOf(token.getId()), false)).isPresent();
     }
 }
