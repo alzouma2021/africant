@@ -56,9 +56,8 @@ public class SecurityServletFilter extends HttpFilter {
         List<String> listUrlDoNotHaveAuthentication = Collections.synchronizedList(new ArrayList<String>());
         listUrlDoNotHaveAuthentication.add("/users/login");
 
-        if (SecurityUtils.doesPathNotRequireAuthentication(request, response, chain)) return;
+        if (SecurityUtils.doesPathNotRequireAuthentication(request, response, chain) ) return;
         try {
-            String path = request.getServletPath();
             String token = SecurityUtils.extractToken(request);
             if (token==null) {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // HTTP 401.
@@ -68,7 +67,6 @@ public class SecurityServletFilter extends HttpFilter {
                 return;
             }
             TokenData entityTokenData = SecurityUtils.decodeAndValidateToken(token);
-            log.info("_67 Affichage du entityToken ="+ entityTokenData.toString());
             if(Optional.ofNullable(entityTokenData.getStatus())
                     .map(status -> !status.equalsIgnoreCase(ProjectConstants.VERIFY_TOKEN_VALIDE))
                     .orElse(false)) {

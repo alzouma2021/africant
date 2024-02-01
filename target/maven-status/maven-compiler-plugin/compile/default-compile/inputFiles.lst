@@ -26,6 +26,7 @@ D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\dao\entity\c
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\rest\fact\ControllerFactory.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\dao\repository\reservationBilletVoyage\ReservationBilletVoyageRepository.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\dao\repository\offreVoyage\VilleEscaleRepository.java
+D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\utils\security\ClientCredentialsFilter.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\helper\transformer\compagnie\AbonnementPrelevementTransformer.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\dao\entity\document\Document.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\helper\dto\offreVoyage\RechercheCritereOffreVoyageDTO.java
@@ -46,7 +47,6 @@ D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\dao\reposito
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\helper\dto\offreVoyage\ValeurCaracteristiqueOffreVoyageStringDTO.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\helper\dto\compagnie\ModeAbonnement\ModeAbonnementDTO.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\utils\Reference\ReferenceFamille.java
-D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\utils\security\SecurityServices.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\dao\entity\offreVoyage\OffreVoyage.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\utils\Reference\ReferenceTransformer.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\utils\emailService\EmailServiceBusiness.java
@@ -69,12 +69,14 @@ D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\utils\Refere
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\dao\repository\compagnie\VilleRepository.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\dao\entity\compagnie\Bagage.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\Business\compagnie\AbonnementPeriodiqueBusiness.java
+D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\utils\security\ResponseHeaderFilter.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\dao\repository\offreVoyage\PrixOffreVoyageRepository.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\dao\repository\compagnie\AbonnementPrelevementRepository.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\rest\api\offreVoyage\ProgrammeController.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\dao\entity\compagnie\StatusUtilCompagnieTransport.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\Business\offreVoyage\PrixOffreVoyageBusiness.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\rest\api\compagnie\ModeAbonnementController.java
+D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\utils\security\TokenData.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\helper\dto\offreVoyage\ProgrammeDTO.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\dao\repository\security\UsersRepository.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\helper\contrat\Response.java
@@ -97,7 +99,6 @@ D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\dao\entity\c
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\dao\entity\compagnie\ModePaiment\ModePaiementMoovMoney.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\helper\transformer\compagnie\ModePaiement\ModePaimentWaveTransformer.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\utils\htmltopdf\PdfController.java
-D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\utils\security\Token.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\rest\api\compagnie\GareController.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\Business\reservationBilletVoyage\ReservationBilletVoyageBusiness.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\dao\entity\reservationBilletVoyage\ReservationBilletVoyage.java
@@ -124,10 +125,10 @@ D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\dao\reposito
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\helper\transformer\compagnie\PaysTransformer.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\helper\transformer\reservationBilletVoyage\ReservationBilletVoyageTransformer.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\Business\fact\UsersBusinessFactory.java
+D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\utils\security\ClientCredentials.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\dao\repository\reservationBilletVoyage\HistoriquePaiementRepository.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\Business\compagnie\ModePaiement\ModePaiementWaveBusiness.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\Business\compagnie\ModePaiement\ModePaiementOrangeMoneyBusiness.java
-D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\utils\security\AuthenticationClientFilter.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\helper\transformer\compagnie\CompagnieTransportTransformer.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\dao\entity\offreVoyage\Programme.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\helper\dto\compagnie\CompagnieTransportDTO.java
@@ -150,7 +151,6 @@ D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\helper\enums
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\helper\transformer\security\RoleTransformer.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\AfricanbApplication.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\dao\entity\compagnie\ModePaiment\ModePaiementOrangeMoney.java
-D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\utils\security\ParamResponseHeaderFilter.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\helper\transformer\compagnie\GareTransformer.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\helper\dto\offreVoyage\ValeurCaracteristiqueOffreVoyageLongDTO.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\dao\entity\offreVoyage\JourSemaine.java
@@ -225,7 +225,6 @@ D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\Business\com
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\helper\TechnicalError.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\dao\entity\security\Users.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\helper\dto\compagnie\ModePaiement\ModePaiementOrangeMoneyDTO.java
-D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\utils\security\IdentificationClient.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\dao\entity\reservationBilletVoyage\StatusUtilReservationBilletVoyage.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\dao\entity\offreVoyage\ProprieteOffreVoyage.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\rest\api\mail\EmailServiceController.java
@@ -244,6 +243,7 @@ D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\rest\api\ref
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\helper\ExceptionUtils.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\helper\transformer\compagnie\BagageTransformer.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\helper\transformer\compagnie\StatusUtilCompagnieTransportTransformer.java
+D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\utils\security\SecurityUtils.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\Business\offreVoyage\ValeurCaracteristiqueOffreVoyageBooleanBusiness.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\dao\entity\offreVoyage\Bus.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\dao\entity\offreVoyage\ValeurCaracteristiqueOffreVoyageLong.java

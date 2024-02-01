@@ -72,7 +72,6 @@ com\africanb\africanb\helper\contrat\Request.class
 com\africanb\africanb\utils\Reference\ReferenceFamille.class
 com\africanb\africanb\dao\repository\security\FunctionalityRepository.class
 com\africanb\africanb\dao\repository\compagnie\ModePaiement\ModePaiementMoovMoneyRepository.class
-com\africanb\africanb\utils\security\IdentificationClient.class
 com\africanb\africanb\Business\offreVoyage\ProgrammeBusiness.class
 com\africanb\africanb\dao\entity\compagnie\ModeAbonnement\ModeAbonnement.class
 com\africanb\africanb\utils\Reference\ReferenceBusines.class
@@ -91,7 +90,6 @@ com\africanb\africanb\Business\offreVoyage\VilleEscaleBusiness.class
 com\africanb\africanb\utils\Reference\Reference.class
 com\africanb\africanb\helper\dto\compagnie\ModePaiement\ModePaiementDTO.class
 com\africanb\africanb\dao\entity\compagnie\ModePaiment\ModePaiement.class
-com\africanb\africanb\utils\security\AuthenticationClientFilter.class
 com\africanb\africanb\helper\transformer\compagnie\GareTransformerImpl.class
 com\africanb\africanb\dao\repository\compagnie\StatusUtilCompagnieTransportRepository.class
 com\africanb\africanb\helper\dto\reservationBilletVoyage\HistoriquePaiementDTO.class
@@ -125,7 +123,6 @@ com\africanb\africanb\helper\FunctionalError.class
 com\africanb\africanb\rest\WebMvcConfig.class
 com\africanb\africanb\helper\dto\compagnie\ModePaiement\ModePaiementOrangeMoneyDTO.class
 com\africanb\africanb\dao\entity\compagnie\Ville.class
-com\africanb\africanb\utils\security\SecurityServices.class
 com\africanb\africanb\Business\offreVoyage\ValeurCaracteristiqueOffreVoyageLongBusiness.class
 com\africanb\africanb\dao\repository\compagnie\ModeAbonnementRepository.class
 com\africanb\africanb\dao\repository\compagnie\CompagnieAttestationTransportRepository.class
@@ -246,7 +243,6 @@ com\africanb\africanb\dao\repository\compagnie\StatusUtilRepository.class
 com\africanb\africanb\Business\compagnie\GareBusiness.class
 com\africanb\africanb\dao\repository\offreVoyage\ValeurCaracteristiqueOffreVoyageBooleanRepository.class
 com\africanb\africanb\helper\transformer\security\RoleFunctionalityTransformerImpl.class
-com\africanb\africanb\utils\security\ParamResponseHeaderFilter.class
 com\africanb\africanb\helper\transformer\reservationBilletVoyage\HistoriquePaiementTransformerImpl.class
 com\africanb\africanb\helper\transformer\compagnie\AbonnementPrelevementTransformerImpl.class
 com\africanb\africanb\helper\transformer\compagnie\CompagnieAttestionTransportTransformerImpl.class
@@ -264,7 +260,6 @@ com\africanb\africanb\dao\entity\security\Role.class
 com\africanb\africanb\helper\transformer\offrreVoyage\ValeurCaracteristiqueOffreVoyageLongTransformer.class
 com\africanb\africanb\Business\compagnie\CompagnieAttestionTransportBusiness.class
 com\africanb\africanb\helper\transformer\offrreVoyage\JourSemaineTransformerImpl.class
-com\africanb\africanb\utils\security\Token.class
 com\africanb\africanb\rest\api\compagnie\GareController.class
 com\africanb\africanb\dao\repository\offreVoyage\VilleEscaleRepository.class
 com\africanb\africanb\dao\entity\compagnie\ModePaiment\ModePaiementWave.class
