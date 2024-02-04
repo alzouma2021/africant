@@ -3,4 +3,5 @@ D:\Projects SpringBoot\africanb\src\test\java\com\africanb\africanb\compagnie\Pa
 D:\Projects SpringBoot\africanb\src\test\java\com\africanb\africanb\utilities\DocumentUtilsTests.java
 D:\Projects SpringBoot\africanb\src\test\java\com\africanb\africanb\utilities\UtitiliesTests.java
 D:\Projects SpringBoot\africanb\src\test\java\com\africanb\africanb\utilities\EmailServiceTests.java
-D:\Projects SpringBoot\africanb\src\test\java\com\africanb\africanb\utilities\SecurityServicesTests.java
+D:\Projects SpringBoot\africanb\src\test\java\com\africanb\africanb\utilities\SecurityUtilsTests.java
+D:\Projects SpringBoot\africanb\src\test\java\com\africanb\africanb\integration\reservationBilletVoyage\ReservationBilletVoyageTest.java
