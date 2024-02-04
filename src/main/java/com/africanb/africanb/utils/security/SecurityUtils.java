@@ -161,7 +161,7 @@ public class SecurityUtils {
         String servletPath = servletRequest.getServletPath();
         String method = servletRequest.getMethod();
         String isAdmin = servletRequest.getHeader("is_admin");
-        if ("OPTIONS".equalsIgnoreCase(method) || isSwaggerPath(servletPath) || isApiVersionPath(servletPath) || isLoginPath(servletPath) || isAdmin.equalsIgnoreCase("isAdmin")) {
+        if ("OPTIONS".equalsIgnoreCase(method) || isSwaggerPath(servletPath) || isApiVersionPath(servletPath) || isLoginPath(servletPath) || "isAdmin".equalsIgnoreCase(isAdmin)) {
             chain.doFilter(servletRequest, servletResponse);
             return true;
         }

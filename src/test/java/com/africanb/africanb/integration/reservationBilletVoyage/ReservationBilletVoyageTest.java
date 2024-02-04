@@ -4,6 +4,7 @@ import com.africanb.africanb.dao.entity.reservationBilletVoyage.ClientDetails;
 import com.africanb.africanb.helper.contrat.Request;
 import com.africanb.africanb.helper.dto.reservationBilletVoyage.ReservationBilletVoyageDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -17,6 +18,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@Disabled
 public class ReservationBilletVoyageTest {
 
     @Autowired

@@ -161,6 +161,7 @@ com\africanb\africanb\helper\dto\reservationBilletVoyage\ReservationBilletVoyage
 com\africanb\africanb\rest\api\reference\ReferenceController.class
 com\africanb\africanb\helper\dto\offreVoyage\ValeurCaracteristiqueOffreVoyageStringDTO.class
 com\africanb\africanb\helper\dto\reservationBilletVoyage\StatusUtilReservationBilletVoyageDTO.class
+com\africanb\africanb\utils\security\ResponseHeaderFilter.class
 com\africanb\africanb\dao\repository\offreVoyage\ProprieteOffreVoyageRepository.class
 com\africanb\africanb\helper\dto\compagnie\CompagnieTransportDTO.class
 com\africanb\africanb\dao\entity\compagnie\Pays.class
@@ -179,8 +180,10 @@ com\africanb\africanb\helper\dto\security\FunctionalityDTO.class
 com\africanb\africanb\utils\Constants\ProjectConstants.class
 com\africanb\africanb\helper\transformer\compagnie\PaysTransformer.class
 com\africanb\africanb\dao\repository\security\RoleFunctionalityRepository.class
+com\africanb\africanb\utils\security\TokenData$TokenDataBuilder.class
 com\africanb\africanb\dao\repository\compagnie\GareRepository.class
 com\africanb\africanb\helper\contrat\RequestBase.class
+com\africanb\africanb\utils\security\TokenData.class
 com\africanb\africanb\Business\compagnie\ModePaiement\ModePaiementMtnMoneyBusiness.class
 com\africanb\africanb\dao\entity\compagnie\ModePaiment\ModePaiementMtnMoney.class
 com\africanb\africanb\helper\dto\compagnie\PaysDTO.class
@@ -243,6 +246,7 @@ com\africanb\africanb\dao\repository\compagnie\StatusUtilRepository.class
 com\africanb\africanb\Business\compagnie\GareBusiness.class
 com\africanb\africanb\dao\repository\offreVoyage\ValeurCaracteristiqueOffreVoyageBooleanRepository.class
 com\africanb\africanb\helper\transformer\security\RoleFunctionalityTransformerImpl.class
+com\africanb\africanb\utils\security\ClientCredentialsFilter.class
 com\africanb\africanb\helper\transformer\reservationBilletVoyage\HistoriquePaiementTransformerImpl.class
 com\africanb\africanb\helper\transformer\compagnie\AbonnementPrelevementTransformerImpl.class
 com\africanb\africanb\helper\transformer\compagnie\CompagnieAttestionTransportTransformerImpl.class
@@ -262,6 +266,7 @@ com\africanb\africanb\Business\compagnie\CompagnieAttestionTransportBusiness.cla
 com\africanb\africanb\helper\transformer\offrreVoyage\JourSemaineTransformerImpl.class
 com\africanb\africanb\rest\api\compagnie\GareController.class
 com\africanb\africanb\dao\repository\offreVoyage\VilleEscaleRepository.class
+com\africanb\africanb\utils\security\SecurityUtils.class
 com\africanb\africanb\dao\entity\compagnie\ModePaiment\ModePaiementWave.class
 com\africanb\africanb\Business\offreVoyage\ValeurCaracteristiqueOffreVoyageBusiness.class
 com\africanb\africanb\dao\repository\Reference\ReferenceFamilleRepository.class
@@ -294,3 +299,4 @@ com\africanb\africanb\helper\transformer\offrreVoyage\ProgrammeTransformer.class
 com\africanb\africanb\dao\repository\offreVoyage\ValeurCaracteristiqueOffreVoyageLongRepository.class
 com\africanb\africanb\rest\api\compagnie\BagageController.class
 com\africanb\africanb\utils\Reference\ReferenceTransformer.class
+com\africanb\africanb\utils\security\ClientCredentials.class
