@@ -1,1 +1,1 @@
-web: java -Dspring.profiles.active=staging -jar target/africanb-0.0.1-SNAPSHOT.jar
+web: java -Dspring.profiles.active=staging -jar target/africanb.jar
