@@ -1,1 +1,1 @@
-web: java -Dspring.profiles.active=staging -jar target/africanb.jar
+web: java -Dspring.profiles.active=staging -Dserver.port=$PORT -jar target/africanb.jar
