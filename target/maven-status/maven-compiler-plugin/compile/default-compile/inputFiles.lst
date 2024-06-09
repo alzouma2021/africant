@@ -240,6 +240,7 @@ D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\helper\valid
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\helper\dto\security\RoleDTO.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\dao\entity\reservationBilletVoyage\ClientDetails.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\rest\api\reference\ReferenceController.java
+D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\helper\dto\security\TypeUser.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\helper\ExceptionUtils.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\helper\transformer\compagnie\BagageTransformer.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\helper\transformer\compagnie\StatusUtilCompagnieTransportTransformer.java

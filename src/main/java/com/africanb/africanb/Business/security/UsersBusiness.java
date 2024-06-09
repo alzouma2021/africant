@@ -87,6 +87,7 @@ public class UsersBusiness implements IBasicBusiness<Request<UsersDTO>, Response
             response.setHasError(true);
             return response;
         }
+        log.info("_90 affichage enum="+dto.getTypeUser().getValue());
         //Incrementation de la propriété numberOfConnections
         if(existingEntity.getNumberOfConnections() == null){
             existingEntity.setNumberOfConnections(0L);

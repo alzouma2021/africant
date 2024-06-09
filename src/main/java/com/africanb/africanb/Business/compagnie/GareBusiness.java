@@ -86,14 +86,14 @@ public class GareBusiness implements IBasicBusiness<Request<GareDTO>, Response<G
             itemsDtos.add(dto);
         }
         for(GareDTO itemDto : itemsDtos){
-            Gare existingGare = null;
+            Gare existingGare;
             existingGare = gareRepository.findByDesignation(itemDto.getDesignation(), false);
             if (existingGare != null) {
                 response.setStatus(functionalError.DATA_EXIST("La Gare ayant  pour designation -> " + itemDto.getDesignation() +", existe déjà", locale));
                 response.setHasError(true);
                 return response;
             }
-            CompagnieTransport existingCompagnieTransport = null;
+            CompagnieTransport existingCompagnieTransport;
             existingCompagnieTransport = compagnieTransportRepository.findByRaisonSociale(itemDto.getCompagnieTransportRaisonSociale(),false);
             if (existingCompagnieTransport == null) {
                 response.setStatus(functionalError.DATA_EXIST("La compagnie de transport ayant  pour raison sociale -> " + itemDto.getCompagnieTransportRaisonSociale() +", n'existe pas", locale));
@@ -312,7 +312,7 @@ public class GareBusiness implements IBasicBusiness<Request<GareDTO>, Response<G
     @Transactional(rollbackFor = {RuntimeException.class, Exception.class})
     public Response<GareDTO> getGareByCompagnieTransportRaisonScoiale(Request<GareDTO> request, Locale locale) throws ParseException {
         Response<GareDTO> response = new Response<GareDTO>();
-        List<Gare> items = new ArrayList<Gare>();
+        List<Gare> items;
         if (request.getData() == null ) {
             response.setStatus(functionalError.DATA_NOT_EXIST("Aucune donnée definie", locale));
             response.setHasError(true);
@@ -326,7 +326,7 @@ public class GareBusiness implements IBasicBusiness<Request<GareDTO>, Response<G
             return response;
         }
         String raisonSociale=request.getData().getCompagnieTransportRaisonSociale();
-        CompagnieTransport existingCompagnieTransport = null;
+        CompagnieTransport existingCompagnieTransport;
         existingCompagnieTransport= compagnieTransportRepository.findByRaisonSociale(raisonSociale,false);
         if (existingCompagnieTransport == null) {
             response.setStatus(functionalError.DATA_EXIST("La compagnie de transport n'existe pas", locale));

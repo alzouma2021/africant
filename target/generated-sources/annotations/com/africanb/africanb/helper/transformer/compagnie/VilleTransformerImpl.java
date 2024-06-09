@@ -11,7 +11,7 @@ import javax.annotation.processing.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-02-13T11:29:41+0000",
+    date = "2024-02-22T11:35:30+0000",
     comments = "version: 1.4.2.Final, compiler: javac, environment: Java 11.0.0.1 (Oracle Corporation)"
 )
 public class VilleTransformerImpl implements VilleTransformer {

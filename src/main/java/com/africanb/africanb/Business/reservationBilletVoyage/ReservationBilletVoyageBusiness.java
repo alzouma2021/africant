@@ -38,7 +38,6 @@ import javax.persistence.EntityManager;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Log
 @Component
@@ -100,16 +99,15 @@ public class ReservationBilletVoyageBusiness implements IBasicBusiness<Request<R
 
     @Override
     public Response<ReservationBilletVoyageDTO> create(Request<ReservationBilletVoyageDTO> request, Locale locale) throws ParseException {
-        Response<ReservationBilletVoyageDTO> response = new Response<ReservationBilletVoyageDTO>();
-        List<ReservationBilletVoyage> items = new ArrayList<ReservationBilletVoyage>();
-        if(Optional.of(request.getData()).isEmpty()){
+        Response<ReservationBilletVoyageDTO> response = new Response<>();
+        List<ReservationBilletVoyage> items = new ArrayList<>();
+        if(!Optional.of(request.getData()).isPresent()){
             response.setStatus(functionalError.DATA_NOT_EXIST("Aucune donnée",locale));
             response.setHasError(true);
             return response;
         }
         ReservationBilletVoyageDTO dto = request.getData();
-        List<ReservationBilletVoyageDTO> itemsDtos =  Collections.synchronizedList(new ArrayList<ReservationBilletVoyageDTO>());
-        Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+        Map<String, Object> fieldsToVerify = new HashMap<>();
         fieldsToVerify.put(GARE_FIELD, dto.getGareDesignation());
         fieldsToVerify.put(OFFRE_VOYAGE_FIELD, dto.getOffreVoyageDesignation());
         fieldsToVerify.put(PROGRAMME_FIELD, dto.getProgrammeDesignation());
@@ -133,73 +131,67 @@ public class ReservationBilletVoyageBusiness implements IBasicBusiness<Request<R
             }
         }
         Users existingUser = usersRepository.findOne(Long.valueOf(request.userID),false);
-        if (existingUser==null) {
+        if (Objects.isNull(existingUser)) {
             response.setStatus(functionalError.SAVE_FAIL("user inexistant !!!!", locale));
             response.setHasError(true);
             return response;
         }
-        OffreVoyage existingOffreVoyage = null;
+        OffreVoyage existingOffreVoyage;
         existingOffreVoyage = offreVoyageRepository.findByDesignation(dto.getOffreVoyageDesignation(),false);
-        if (existingOffreVoyage==null) {
+        if (Objects.isNull(existingOffreVoyage)) {
             response.setStatus(functionalError.SAVE_FAIL("Offre de voyage inexistante !!!!", locale));
             response.setHasError(true);
             return response;
         }
-        Gare existingGare = null;
+        Gare existingGare;
         existingGare = gareRepository.findByDesignation(dto.getGareDesignation(),false);
-        if (existingGare==null) {
+        if (Objects.isNull(existingGare)) {
             response.setStatus(functionalError.SAVE_FAIL("gare inexistante !!!!", locale));
             response.setHasError(true);
             return response;
         }
-        Programme existingProgramme = null;
+        Programme existingProgramme;
         existingProgramme = programmeRepository.findByDesignation(dto.getProgrammeDesignation(),false);
-        if (existingProgramme==null) {
+        if (Objects.isNull(existingProgramme)) {
             response.setStatus(functionalError.SAVE_FAIL("programme inexistant !!!!", locale));
             response.setHasError(true);
             return response;
         }
-        StatusUtil existingStatusUtilActual = null;
+        StatusUtil existingStatusUtilActual;
         existingStatusUtilActual = statusUtilRepository.findByDesignation(ProjectConstants.REF_ELEMENT_RESERVATION_CREE,false);
-        if (existingStatusUtilActual==null) {
+        if (Objects.isNull(existingStatusUtilActual)) {
             response.setStatus(functionalError.SAVE_FAIL("Status inexistant !!!!", locale));
             response.setHasError(true);
             return response;
         }
-
-        Integer nombrePlaceDisponible=existingProgramme.getNombrePlaceDisponible();
-        if(nombrePlaceDisponible<dto.getNombrePlace()){
-            response.setStatus(functionalError.SAVE_FAIL("Aucune place disponible !!!", locale));
+        if(existingProgramme.getNombrePlaceDisponible() < dto.getNombrePlace()){
+            response.setStatus(functionalError.SAVE_FAIL("Pas de place disponible !!!", locale));
             response.setHasError(true);
             return response;
         }
 
         PrixOffreVoyage existingPrixOffreVoyage=prixOffreVoyageRepository.findByOffreVoyageAndCategorieVoyageur(existingOffreVoyage.getDesignation(),dto.getCategorieVoyageur(),false);
-        if(existingPrixOffreVoyage==null){
+        if(Objects.isNull(existingPrixOffreVoyage)){
             response.setStatus(functionalError.SAVE_FAIL("Aucun prix fixé pour la catégorie du voyageur !!!", locale));
             response.setHasError(true);
             return response;
         }
         Double montantTotalReservation = getMontantReservation(dto, existingPrixOffreVoyage);
-        log.info("_147 Montant total de la reservation="+ montantTotalReservation);
         dto.setMontantTotalReservation(montantTotalReservation);
         ReservationBilletVoyage entityToSave = ReservationBilletVoyageTransformer.INSTANCE.toEntity(dto,existingGare,existingOffreVoyage,existingProgramme,existingStatusUtilActual);
         entityToSave.setIsDeleted(false);
         //entityToSave.setDateReservation(Utilities.getCurrentDate());
-        ReservationBilletVoyage entitySaved = reservationBilletVoyageRepository.save(entityToSave);
-        if(entitySaved==null){
-            response.setStatus(functionalError.SAVE_FAIL("Erreur creation",locale));
+        ReservationBilletVoyage entitySaved = Optional.of(reservationBilletVoyageRepository.save(entityToSave)).orElseThrow();
+        if(Objects.isNull(entitySaved)){
+            response.setStatus(functionalError.SAVE_FAIL("Erreur de reservation",locale));
             response.setHasError(true);
             return response;
         }
-
-        boolean responseStatusReservation = initializeReservationOffreVoyageStatus(locale, response, existingStatusUtilActual, entitySaved);
-        if (responseStatusReservation == false){
+        if (!initializeReservationOffreVoyageStatus(locale, response, existingStatusUtilActual, entitySaved)){
             response.setStatus(functionalError.SAVE_FAIL("Status reservation non crée",locale));
             response.setHasError(true);
             return response;
         }
-
         items.add(entitySaved);
 
         List<ReservationBilletVoyageDTO> itemsDto = (Utilities.isTrue(request.getIsSimpleLoading()))
@@ -218,11 +210,12 @@ public class ReservationBilletVoyageBusiness implements IBasicBusiness<Request<R
         statusUtilReservationBilletVoyageDTO.setStatusUtilDesignation(existingStatusUtilActual.getDesignation());
         statusUtilReservationBilletVoyageDTO.setReservationBilletVoyageDesignation(entitySaved.getDesignation());
         itemDatas.add(statusUtilReservationBilletVoyageDTO);
+
         Request<StatusUtilReservationBilletVoyageDTO> subRequest = new Request<>();
         subRequest.setDatas(itemDatas);
-        Response<StatusUtilReservationBilletVoyageDTO> subResponse = statusUtilRservationBilletVoyageBusiness.create(subRequest, locale);
-        if (subResponse.isHasError()) return false;
-        return true ;
+        if(statusUtilRservationBilletVoyageBusiness.create(subRequest, locale).isHasError()) return false;
+
+        return true;
     }
 
     private boolean validateClientDetails(ClientDetails clientDetails) {
