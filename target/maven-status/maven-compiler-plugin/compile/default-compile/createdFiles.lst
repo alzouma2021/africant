@@ -25,6 +25,7 @@ com\africanb\africanb\dao\entity\compagnie\CompagnieAttestionTransport.class
 com\africanb\africanb\Business\document\DocumentBusiness.class
 com\africanb\africanb\rest\api\offreVoyage\VilleEscaleController.class
 com\africanb\africanb\dao\repository\offreVoyage\ValeurCaracteristiqueOffreVoyageRepository.class
+com\africanb\africanb\helper\dto\security\TypeUser.class
 com\africanb\africanb\dao\entity\compagnie\ModePaiment\ModePaiementEnEspece.class
 com\africanb\africanb\dao\entity\compagnie\FamilleStatusUtil.class
 com\africanb\africanb\dao\entity\compagnie\StatusUtil.class

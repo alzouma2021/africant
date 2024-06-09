@@ -18,6 +18,7 @@ public class UsersDTO {
     private String prenoms;
     private String login;
     private String password;
+    private TypeUser typeUser;
     private String email;
     private String telephone;
 
