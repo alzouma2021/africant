@@ -6,7 +6,6 @@ import com.africanb.africanb.helper.ExceptionUtils;
 import com.africanb.africanb.helper.TechnicalError;
 import com.africanb.africanb.helper.contrat.Request;
 import com.africanb.africanb.helper.contrat.Response;
-import com.africanb.africanb.helper.dto.compagnie.VilleDTO;
 import com.africanb.africanb.helper.dto.offreVoyage.OffreVoyageDTO;
 import com.africanb.africanb.helper.dto.offreVoyage.VilleEscaleDTO;
 import com.africanb.africanb.helper.enums.FunctionalityEnum;
@@ -45,43 +44,33 @@ public class VilleEscaleController {
 
     @RequestMapping(value="",method= RequestMethod.POST,consumes = {"application/json"},produces={"application/json"})
     public Response<VilleEscaleDTO> create(@RequestBody Request<VilleEscaleDTO> request) {
-        log.info("start method create");
         Response<VilleEscaleDTO> response = controllerFactory.create(villeEscaleBusiness, request, FunctionalityEnum.CREATE_VILLEESCALE);
-        log.info("end method create");
         return response;
     }
 
     @RequestMapping(value="",method=RequestMethod.PUT,consumes = {"application/json"},produces={"application/json"})
     public Response<VilleEscaleDTO> update(@RequestBody Request<VilleEscaleDTO> request) {
-        log.info("start method update");
         Response<VilleEscaleDTO> response = controllerFactory.update(villeEscaleBusiness, request, FunctionalityEnum.UPDATE_VILLEESCALE);
-        log.info("end method update");
         return response;
     }
 
     @RequestMapping(value="",method=RequestMethod.DELETE,consumes = {"application/json"},produces={"application/json"})
     public Response<VilleEscaleDTO> delete(@RequestBody Request<VilleEscaleDTO> request) {
-        log.info("start method delete");
         Response<VilleEscaleDTO> response = controllerFactory.delete(villeEscaleBusiness, request, FunctionalityEnum.DELETE_VILLEESCALE);
-        log.info("end method delete");
         return response;
     }
 
     @RequestMapping(value="/getByCriteria",method=RequestMethod.POST,consumes = {"application/json"},produces={"application/json"})
     public Response<VilleEscaleDTO> getByCriteria(@RequestBody Request<VilleEscaleDTO> request) {
-        log.info("start method /villeEscale/getByCriteria");
         Response<VilleEscaleDTO> response = controllerFactory.getByCriteria(villeEscaleBusiness, request, FunctionalityEnum.VIEW_VILLEESCALE);
-        log.info("end method /villeEscale/getByCriteria");
         return response;
     }
 
     @RequestMapping(value="/getVilleByOffreVoyageDesignation",method= RequestMethod.POST,consumes = {"application/json"},produces={"application/json"})
-    public Response<VilleDTO> getVilleByOffreVoyageDesignation(@RequestBody Request<OffreVoyageDTO> request) {
-        log.info("start method getVilleByOffreVoyageDesignation");
-        Response<VilleDTO> response = new Response<VilleDTO>();
-        //requestBasic.setAttribute("CURRENT_LANGUAGE_IDENTIFIER", "fr");
+    public Response<VilleEscaleDTO> getVilleByOffreVoyageDesignation(@RequestBody Request<OffreVoyageDTO> request) {
         String languageID = (String) requestBasic.getAttribute("CURRENT_LANGUAGE_IDENTIFIER");
         Locale locale = new Locale(languageID, "");
+        Response<VilleEscaleDTO> response = new Response<>();
         try{
             response=villeEscaleBusiness.getVilleByOffreVoyageDesignation(request,locale);
             if(response.isHasError()){

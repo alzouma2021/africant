@@ -82,7 +82,7 @@ public class PrixOffreVoyageController {
         String languageID = (String) requestBasic.getAttribute("CURRENT_LANGUAGE_IDENTIFIER");
         Locale locale = new Locale(languageID, "");
         try{
-            response=prixOffreVoyageBusiness.getPrixTravelOfferByOffreVoyageDesignation(request,locale);
+            response = prixOffreVoyageBusiness.getPrixTravelOfferByOffreVoyageDesignation(request,locale);
             if(response.isHasError()){
                 log.info(String.format("Erreur | code: {}",response.getStatus(),response.getStatus().getMessage()));
             }

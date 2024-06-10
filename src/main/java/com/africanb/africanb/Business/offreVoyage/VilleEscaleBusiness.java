@@ -60,14 +60,14 @@ public class VilleEscaleBusiness implements IBasicBusiness<Request<VilleEscaleDT
     
     @Override
     public Response<VilleEscaleDTO> create(Request<VilleEscaleDTO> request, Locale locale) throws ParseException {
-        Response<VilleEscaleDTO> response = new Response<VilleEscaleDTO>();
-        List<VilleEscale> items = new ArrayList<VilleEscale>();
+        Response<VilleEscaleDTO> response = new Response<>();
+        List<VilleEscale> items = new ArrayList<>();
         if(request.getDatas().isEmpty() || request.getDatas() == null){
             response.setStatus(functionalError.DATA_NOT_EXIST("Liste vide ",locale));
             response.setHasError(true);
             return response;
         }
-        List<VilleEscaleDTO> itemsDtos =  Collections.synchronizedList(new ArrayList<VilleEscaleDTO>());
+        List<VilleEscaleDTO> itemsDtos =  Collections.synchronizedList(new ArrayList<>());
         for(VilleEscaleDTO dto: request.getDatas() ) {
             Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
             fieldsToVerify.put("villeDesignation", dto.getVilleDesignation());
@@ -78,30 +78,22 @@ public class VilleEscaleBusiness implements IBasicBusiness<Request<VilleEscaleDT
                 response.setHasError(true);
                 return response;
             }
-            /*if(itemsDtos.stream().anyMatch(a->a.getOffreVoyageDesignation().equals(dto.getOffreVoyageDesignation()))){
-                response.setStatus(functionalError.DATA_DUPLICATE("Tentative de duplication de l'offre de voyage'" + dto.getOffreVoyageDesignation() , locale));
-                response.setHasError(true);
-                return response;
-            }*/
             itemsDtos.add(dto);
         }
         for(VilleEscaleDTO dto : itemsDtos){
-            VilleEscale existingEntity = null;
-            existingEntity = villeEscaleRepository.findByOffreVoyageAndVille(dto.getOffreVoyageDesignation(),dto.getVilleDesignation(),false);
+            VilleEscale existingEntity = villeEscaleRepository.findByOffreVoyageAndVille(dto.getOffreVoyageDesignation(),dto.getVilleDesignation(),false);
             if (existingEntity != null) {
                 response.setStatus(functionalError.DATA_EXIST("VilleEscale ", locale));
                 response.setHasError(true);
                 return response;
             }
-            OffreVoyage existingOffreVoyage = null;
-            existingOffreVoyage = offreVoyageRepository.findByDesignation(dto.getOffreVoyageDesignation(), false);
+            OffreVoyage existingOffreVoyage = offreVoyageRepository.findByDesignation(dto.getOffreVoyageDesignation(), false);
             if (existingOffreVoyage == null) {
                 response.setStatus(functionalError.DATA_NOT_EXIST("offreVoyage offreVoyageID -> " + dto.getOffreVoyageDesignation(), locale));
                 response.setHasError(true);
                 return response;
             }
-            Ville existingVille = null;
-            existingVille = villeRepository.findByDesignation(dto.getVilleDesignation(), false);
+            Ville existingVille = villeRepository.findByDesignation(dto.getVilleDesignation(), false);
             if (existingVille == null) {
                 response.setStatus(functionalError.DATA_NOT_EXIST("ville villeID -> " + dto.getVilleDesignation(), locale));
                 response.setHasError(true);
@@ -111,7 +103,6 @@ public class VilleEscaleBusiness implements IBasicBusiness<Request<VilleEscaleDT
                                         .INSTANCE.toEntity(dto, existingOffreVoyage, existingVille);
             entityToSave.setIsDeleted(false);
             entityToSave.setCreatedAt(Utilities.getCurrentDate());
-            //entityToSave.setCreatedBy(request.user);
             items.add(entityToSave);
         }
         if(CollectionUtils.isEmpty(items)){
@@ -119,8 +110,7 @@ public class VilleEscaleBusiness implements IBasicBusiness<Request<VilleEscaleDT
             response.setHasError(true);
             return response;
         }
-        List<VilleEscale> itemsSaved = null;
-        itemsSaved = villeEscaleRepository.saveAll((Iterable<VilleEscale>) items);
+        List<VilleEscale> itemsSaved = villeEscaleRepository.saveAll(items);
         if (CollectionUtils.isEmpty(itemsSaved)) {
             response.setStatus(functionalError.SAVE_FAIL("Erreur creation", locale));
             response.setHasError(true);
@@ -144,7 +134,7 @@ public class VilleEscaleBusiness implements IBasicBusiness<Request<VilleEscaleDT
             response.setHasError(true);
             return response;
         }
-        List<VilleEscaleDTO> itemsDtos =  Collections.synchronizedList(new ArrayList<VilleEscaleDTO>());
+        List<VilleEscaleDTO> itemsDtos =  Collections.synchronizedList(new ArrayList<>());
         for(VilleEscaleDTO dto: request.getDatas() ) {
             Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
             fieldsToVerify.put("id", dto.getId());
@@ -161,14 +151,13 @@ public class VilleEscaleBusiness implements IBasicBusiness<Request<VilleEscaleDT
             itemsDtos.add(dto);
         }
         for(VilleEscaleDTO dto : itemsDtos){
-            VilleEscale entityToSave = null;
-            entityToSave = villeEscaleRepository.findOne(dto.getId(), false);
+            VilleEscale entityToSave = villeEscaleRepository.findOne(dto.getId(), false);
             if (entityToSave == null) {
                 response.setStatus(functionalError.DATA_NOT_EXIST("villeEscale id -> " + dto.getId(), locale));
                 response.setHasError(true);
                 return response;
             }
-            OffreVoyage existingOffreVoyage = null;
+            OffreVoyage existingOffreVoyage;
             if (Utilities.isNotBlank(dto.getOffreVoyageDesignation()) && !entityToSave.getOffreVoyage().getDesignation().equalsIgnoreCase(dto.getOffreVoyageDesignation())) {
                 existingOffreVoyage = offreVoyageRepository.findByDesignation(dto.getOffreVoyageDesignation(), false);
                 if (existingOffreVoyage == null) {
@@ -178,7 +167,7 @@ public class VilleEscaleBusiness implements IBasicBusiness<Request<VilleEscaleDT
                 }
                 entityToSave.setOffreVoyage(existingOffreVoyage);
             }
-            Ville existingVille = null;
+            Ville existingVille;
             if (Utilities.isNotBlank(dto.getVilleDesignation()) && !entityToSave.getVille().getDesignation().equalsIgnoreCase(dto.getVilleDesignation())) {
                 existingVille = villeRepository.findByDesignation(dto.getVilleDesignation(), false);
                 if (existingVille == null) {
@@ -192,21 +181,20 @@ public class VilleEscaleBusiness implements IBasicBusiness<Request<VilleEscaleDT
                 entityToSave.setPosition(dto.getPosition());
             }
             entityToSave.setUpdatedAt(Utilities.getCurrentDate());
-            //entityToSave.setUpdatedBy(request.user);
             items.add(entityToSave);
         }
         if (CollectionUtils.isEmpty(items)) {
             response.setStatus(functionalError.DATA_NOT_EXIST("Erreur de modification ",locale));
             response.setHasError(true);
         }
-        List<VilleEscale> itemsSaved = null;
-        itemsSaved = villeEscaleRepository.saveAll((Iterable<VilleEscale>) items);
+        List<VilleEscale> itemsSaved;
+        itemsSaved = villeEscaleRepository.saveAll(items);
         if (CollectionUtils.isEmpty(itemsSaved)) {
                 response.setStatus(functionalError.SAVE_FAIL("VilleEscale", locale));
                 response.setHasError(true);
                 return response;
         }
-        //Transformation
+
         List<VilleEscaleDTO> itemsDto = (Utilities.isTrue(request.getIsSimpleLoading()))
                                     ? VilleEscaleTransformer.INSTANCE.toLiteDtos(itemsSaved)
                                     : VilleEscaleTransformer.INSTANCE.toDtos(itemsSaved);
@@ -218,15 +206,15 @@ public class VilleEscaleBusiness implements IBasicBusiness<Request<VilleEscaleDT
 
     @Override
     public Response<VilleEscaleDTO> delete(Request<VilleEscaleDTO> request, Locale locale) {
-        Response<VilleEscaleDTO> response = new Response<VilleEscaleDTO>();
-        List<VilleEscale> items = new ArrayList<VilleEscale>();
+        Response<VilleEscaleDTO> response = new Response<>();
+        List<VilleEscale> items = new ArrayList<>();
         if(request.getDatas() == null  || CollectionUtils.isEmpty(request.getDatas())){
             response.setStatus(functionalError.DATA_NOT_EXIST("Liste vide ",locale));
             response.setHasError(true);
             return response;
         }
         for(VilleEscaleDTO dto: request.getDatas() ) {
-            Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+            Map<String, Object> fieldsToVerify = new HashMap<>();
             fieldsToVerify.put("id", dto.getId());
             if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
                 response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
@@ -235,8 +223,7 @@ public class VilleEscaleBusiness implements IBasicBusiness<Request<VilleEscaleDT
             }
         }
         for(VilleEscaleDTO dto : request.getDatas()){
-            VilleEscale existingEntity = null;
-            existingEntity = villeEscaleRepository.findOne(dto.getId(), false);
+            VilleEscale existingEntity = villeEscaleRepository.findOne(dto.getId(), false);
             if (existingEntity == null) {
                 response.setStatus(functionalError.DATA_NOT_EXIST("VillEsclae id -> " + dto.getId(), locale));
                 response.setHasError(true);
@@ -244,7 +231,6 @@ public class VilleEscaleBusiness implements IBasicBusiness<Request<VilleEscaleDT
             }
             existingEntity.setIsDeleted(true);
             existingEntity.setDeletedAt(Utilities.getCurrentDate());
-            //existingEntity.setDeletedBy(request.user);
             items.add(existingEntity);
         }
         if (CollectionUtils.isEmpty(items)) {
@@ -268,50 +254,12 @@ public class VilleEscaleBusiness implements IBasicBusiness<Request<VilleEscaleDT
 
     @Override
     public Response<VilleEscaleDTO> getByCriteria(Request<VilleEscaleDTO> request, Locale locale) {
-
-    /*    log.info("----begin get HistoriqueDemande-----");
-
-        Response<StatusUtilCompagnieTransportDTO> response = new Response<StatusUtilCompagnieTransportDTO>();
-
-        //verification si le parametre d'ordre à été fourni, sinon nous mettons le paramètre à vide
-        if (Utilities.blank(request.getData().getOrderField())) {
-            request.getData().setOrderField("");
-        }
-
-        //verification si le parametre direction à été fourni, sinon nous mettons le paramètre ascendant( du plus ancien au plus ressent)
-        if (Utilities.blank(request.getData().getOrderDirection())) {
-            request.getData().setOrderDirection("asc");
-        }
-
-        //recuperation des entités en base
-        List<HistoriqueDemande> items = statusUtilCompagnieTransportRepository.getByCriteria(request, em, locale);
-
-        if (Utilities.isEmpty(items)) {
-            response.setStatus(functionalError.DATA_EMPTY("HistoriqueDemande", locale));
-            response.setHasError(false);
-            return response;
-        }
-
-        //Transformation
-        List<HistoriqueDemandeDto> itemsDto = HistoriqueDemandeTransformer.INSTANCE.toDtos(items);
-
-        //Envoie de la reponse
-        response.setItems(itemsDto);
-        response.setCount(statusUtilCompagnieTransportRepository.count(request, em, locale));
-        response.setHasError(false);
-        response.setStatus(functionalError.SUCCESS("", locale));
-
-        log.info("----end get HistoriqueDemande-----");
-
-        return response;
-        */
         return null;
     }
 
     @Transactional(rollbackFor = {RuntimeException.class, Exception.class})
-    public Response<VilleDTO> getVilleByOffreVoyageDesignation(Request<OffreVoyageDTO> request, Locale locale) throws ParseException {
-        Response<VilleDTO> response = new Response<VilleDTO>();
-        List<Ville> items = Collections.synchronizedList(new ArrayList<Ville>());
+    public Response<VilleEscaleDTO> getVilleByOffreVoyageDesignation(Request<OffreVoyageDTO> request, Locale locale) throws ParseException {
+        Response<VilleEscaleDTO> response = new Response<>();
         if (request.getData() == null ) {
             response.setStatus(functionalError.DATA_NOT_EXIST("Aucune donnée définie", locale));
             response.setHasError(true);
@@ -324,23 +272,23 @@ public class VilleEscaleBusiness implements IBasicBusiness<Request<VilleEscaleDT
             response.setHasError(true);
             return response;
         }
-        String offreVoyageDesignation=request.getData().getDesignation();
-        OffreVoyage existingOffreVoyage = null;
-        existingOffreVoyage= offreVoyageRepository.findByDesignation(offreVoyageDesignation,false);
+        String offreVoyageDesignation = request.getData().getDesignation();
+        OffreVoyage existingOffreVoyage = offreVoyageRepository.findByDesignation(offreVoyageDesignation,false);
         if (existingOffreVoyage == null) {
             response.setStatus(functionalError.DATA_EXIST("L'offre de voyage n'existe pas", locale));
             response.setHasError(true);
             return response;
         }
-        items =villeEscaleRepository.getVilleByOffreVoyageDesignation(offreVoyageDesignation,false);
+        List<VilleEscale>  items = villeEscaleRepository.getVilleByOffreVoyageDesignation(offreVoyageDesignation,false);
         if (CollectionUtils.isEmpty(items)) {
             response.setStatus(functionalError.DATA_NOT_EXIST("L'offre de voayage ne dispose d'aucune ville escale", locale));
             response.setHasError(true);
             return response;
         }
-        List<VilleDTO> itemsDto = (Utilities.isTrue(request.getIsSimpleLoading()))
-                ? VilleTransformer.INSTANCE.toLiteDtos(items)
-                : VilleTransformer.INSTANCE.toDtos(items);
+
+        List<VilleEscaleDTO> itemsDto = (Utilities.isTrue(request.getIsSimpleLoading()))
+                ? VilleEscaleTransformer.INSTANCE.toLiteDtos(items)
+                : VilleEscaleTransformer.INSTANCE.toDtos(items);
 
         response.setItems(itemsDto);
         response.setHasError(false);
