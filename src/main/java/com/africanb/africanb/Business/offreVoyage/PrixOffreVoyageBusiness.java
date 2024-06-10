@@ -262,7 +262,6 @@ public class PrixOffreVoyageBusiness implements IBasicBusiness<Request<PrixOffre
                 }
                 entityToSave.setCategorieVoyageur(offreVoyageToSave);
             }
-            //Autres
             if(Utilities.isNotBlank(dto.getDescription()) && !dto.getDescription().equals(entityToSave.getDescription())){
                 entityToSave.setDescription(dto.getDescription());
             }
@@ -278,6 +277,7 @@ public class PrixOffreVoyageBusiness implements IBasicBusiness<Request<PrixOffre
             response.setHasError(true);
             return response;
         }
+
         List<PrixOffreVoyageDTO> itemsDto = (Utilities.isTrue(request.getIsSimpleLoading()))
                 ? PrixOffreVoyageTransformer.INSTANCE.toLiteDtos(items)
                 : PrixOffreVoyageTransformer.INSTANCE.toDtos(items);
@@ -291,60 +291,6 @@ public class PrixOffreVoyageBusiness implements IBasicBusiness<Request<PrixOffre
 
     @Override
     public Response<PrixOffreVoyageDTO> delete(Request<PrixOffreVoyageDTO> request, Locale locale) {
-
-/*        log.info("----begin delete agence-----");
-        Response<AgenceDto> response = new Response<AgenceDto>();
-        List<Agence> items = new ArrayList<Agence>();
-        //Verification
-        if(request.getDatas().isEmpty() || request.getDatas() == null){
-            response.setStatus(functionalError.DATA_NOT_EXIST("Liste de données est vide ",locale));
-            response.setHasError(true);
-            return response;
-        }
-        //Verification des champs obligatoires
-        for(AgenceDto dto : request.getDatas()) {
-            Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
-            fieldsToVerify.put("id", dto.getId());
-            if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
-                response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
-                response.setHasError(true);
-                return response;
-            }
-        }
-        //Parcourir la liste
-        for(AgenceDto dto : request.getDatas()){
-            // Verification du parametre identifiant
-            Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
-            fieldsToVerify.put("id", dto.getId());
-            if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
-                response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
-                response.setHasError(true);
-                return response;
-            }
-            // Verify if Functionality  exist
-            Agence existingEntity = null;
-            existingEntity = agenceRepository.findOne(dto.getId(), false);
-            if (existingEntity == null) {
-                response.setStatus(functionalError.DATA_NOT_EXIST("L'agence ayant  id -> " + dto.getId() + ",n'existe pas", locale));
-                response.setHasError(true);
-                return response;
-            }
-            log.info("_413 Verification d'existence de l'objet"+existingEntity.toString()); //TODO A effacer
-            //Suppression logique
-            existingEntity.setIsDeleted(true);
-            existingEntity.setDeletedAt(Utilities.getCurrentDate());
-            existingEntity.setDeletedBy(request.user);// a modifier
-            items.add(existingEntity);
-        }
-        //Verificatioon de la liste de données recues
-        if(items == null  || items.isEmpty()){
-            response.setStatus(functionalError.DATA_NOT_EXIST("Liste de données est vide ",locale));
-            response.setHasError(true);
-            return response;
-        }
-        response.setHasError(false);
-        response.setStatus(functionalError.SUCCESS("", locale));
-        return response;*/
         return null;
     }
 
@@ -360,38 +306,13 @@ public class PrixOffreVoyageBusiness implements IBasicBusiness<Request<PrixOffre
 
     @Override
     public Response<PrixOffreVoyageDTO> getByCriteria(Request<PrixOffreVoyageDTO> request, Locale locale) {
-       /*
-        log.info("----begin get agence-----");
-        Response<AgenceDto> response = new Response<AgenceDto>();
-        if (Utilities.blank(request.getData().getOrderField())) {
-            request.getData().setOrderField("");
-        }
-        if (Utilities.blank(request.getData().getOrderDirection())) {
-            request.getData().setOrderDirection("asc");
-        }
-        List<Agence> items = agenceRepository.getByCriteria(request, em, locale);
-        if (Utilities.isEmpty(items)) {
-            response.setStatus(functionalError.DATA_EMPTY("Aucune agence ne correspond aux critères de recherche definis", locale));
-            response.setHasError(false);
-            return response;
-        }
-        List<AgenceDto> itemsDto = (Utilities.isTrue(request.getIsSimpleLoading()))
-                                 ? AgenceTransformer.INSTANCE.toLiteDtos(items)
-                                 : AgenceTransformer.INSTANCE.toDtos(items);
-        response.setItems(itemsDto);
-        response.setCount(agenceRepository.count(request, em, locale));
-        response.setHasError(false);
-        response.setStatus(functionalError.SUCCESS("", locale));
-        log.info("----end get agence-----");
-        return response;
-    */
         return null;
     }
 
     @Transactional(rollbackFor = {RuntimeException.class, Exception.class})
     public Response<PrixOffreVoyageDTO> getPrixTravelOfferByOffreVoyageDesignation(Request<OffreVoyageDTO> request, Locale locale) throws ParseException {
-        Response<PrixOffreVoyageDTO> response = new Response<PrixOffreVoyageDTO>();
-        List<PrixOffreVoyage> items = new ArrayList<PrixOffreVoyage>();
+        Response<PrixOffreVoyageDTO> response = new Response<>();
+        List<PrixOffreVoyage> items;
         if (request.getData() == null ) {
             response.setStatus(functionalError.DATA_NOT_EXIST("Aucune donnée definie", locale));
             response.setHasError(true);
@@ -405,19 +326,19 @@ public class PrixOffreVoyageBusiness implements IBasicBusiness<Request<PrixOffre
             return response;
         }
         String offreVoyageDesignation=request.getData().getDesignation();
-        OffreVoyage existingOffreVoyage = null;
-        existingOffreVoyage= offreVoyageRepository.findByDesignation(offreVoyageDesignation,false);
+        OffreVoyage existingOffreVoyage = offreVoyageRepository.findByDesignation(offreVoyageDesignation,false);
         if (existingOffreVoyage == null) {
             response.setStatus(functionalError.DATA_EXIST("L'offre de voyage n'existe pas", locale));
             response.setHasError(true);
             return response;
         }
-        items =prixOffreVoyageRepository.findAllByOffreVoyageDesignation(offreVoyageDesignation,false);
+        items = prixOffreVoyageRepository.findAllByOffreVoyageDesignation(offreVoyageDesignation,false);
         if (CollectionUtils.isEmpty(items)) {
             response.setStatus(functionalError.DATA_NOT_EXIST("L'offre de voayage ne dispose d'aucun prix", locale));
             response.setHasError(true);
             return response;
         }
+
         List<PrixOffreVoyageDTO> itemsDto = (Utilities.isTrue(request.getIsSimpleLoading()))
                 ? PrixOffreVoyageTransformer.INSTANCE.toLiteDtos(items)
                 : PrixOffreVoyageTransformer.INSTANCE.toDtos(items);

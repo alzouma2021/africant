@@ -1,6 +1,5 @@
 package com.africanb.africanb.helper.dto.offreVoyage;
 
-import com.africanb.africanb.dao.entity.compagnie.Ville;
 import com.africanb.africanb.helper.searchFunctions.SearchParam;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -8,7 +7,6 @@ import lombok.Data;
 import lombok.ToString;
 
 import java.util.List;
-import java.util.Set;
 
 @Data
 @ToString
@@ -16,12 +14,10 @@ import java.util.Set;
 @JsonPropertyOrder(alphabetic = true)
 public class OffreVoyageDTO {
 
-    //Proprietes
     private Long id ;
     private String designation;
     private String description;
     private Boolean isActif;
-
 
     private Boolean isDeleted;
     private String updatedAt;
@@ -31,7 +27,6 @@ public class OffreVoyageDTO {
     private String deletedAt;
     private Long  deletedBy;
 
-    //relationShip
     private String compagnieTransportRaisonSociale;
     private String typeOffreVoyageDesignation;
     private String villeDepartDesignation;
@@ -42,7 +37,6 @@ public class OffreVoyageDTO {
     private List<VilleEscaleDTO> villeEscaleDTOList;
     private List<ValeurCaracteristiqueOffreVoyageDTO> valeurCaracteristiqueOffreVoyageDTOList;
 
-    // Search param
     private SearchParam<String> designationParam;
     private SearchParam<String>   compagnieTransportDesignationDesignationParam ;
     private SearchParam<String>   typeOffreVoyageDesignationParam;

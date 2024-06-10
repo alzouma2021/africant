@@ -35,9 +35,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-/**
- * @Author ALZOUMA MOUSSA MAHAAMADOU
- */
+
 @Log
 @Component
 public class OffreVoyageBusiness implements IBasicBusiness<Request<OffreVoyageDTO>, Response<OffreVoyageDTO>> {
@@ -52,6 +50,7 @@ public class OffreVoyageBusiness implements IBasicBusiness<Request<OffreVoyageDT
     private final OffreVoyageRepository offreVoyageRepository;
     private final PrixOffreVoyageRepository prixOffreVoyageRepository;
     private final PrixOffreVoyageBusiness prixOffreVoyageBusiness;
+    private final ProgrammeBusiness programmeBusiness;
     private final VilleEscaleBusiness villeEscaleBusiness;
     private final JourSemaineBusiness jourSemaineBusinesse;
     private final ValeurCaracteristiqueOffreVoyageBusiness valeurCaracteristiqueOffreVoyageBusiness;
@@ -63,7 +62,7 @@ public class OffreVoyageBusiness implements IBasicBusiness<Request<OffreVoyageDT
     private final SimpleDateFormat dateFormat;
     private final SimpleDateFormat dateTimeFormat;
 
-    public OffreVoyageBusiness(ReferenceRepository referenceRepository, VilleRepository villeRepository, ProgrammeRepository programmeRepository, JourSemaineRepository jourSemaineRepository, CompagnieTransportRepository compagnieTransportRepository, OffreVoyageRepository offreVoyageRepository, PrixOffreVoyageRepository prixOffreVoyageRepository, PrixOffreVoyageBusiness prixOffreVoyageBusiness, VilleEscaleBusiness villeEscaleBusiness, JourSemaineBusiness jourSemaineBusinesse, ValeurCaracteristiqueOffreVoyageBusiness valeurCaracteristiqueOffreVoyageBusiness, FunctionalError functionalError, TechnicalError technicalError, ExceptionUtils exceptionUtils, EntityManager em) {
+    public OffreVoyageBusiness(ReferenceRepository referenceRepository, VilleRepository villeRepository, ProgrammeRepository programmeRepository, JourSemaineRepository jourSemaineRepository, CompagnieTransportRepository compagnieTransportRepository, OffreVoyageRepository offreVoyageRepository, PrixOffreVoyageRepository prixOffreVoyageRepository, PrixOffreVoyageBusiness prixOffreVoyageBusiness, ProgrammeBusiness programmeBusiness, VilleEscaleBusiness villeEscaleBusiness, JourSemaineBusiness jourSemaineBusinesse, ValeurCaracteristiqueOffreVoyageBusiness valeurCaracteristiqueOffreVoyageBusiness, FunctionalError functionalError, TechnicalError technicalError, ExceptionUtils exceptionUtils, EntityManager em) {
         this.referenceRepository = referenceRepository;
         this.villeRepository = villeRepository;
         this.programmeRepository = programmeRepository;
@@ -72,6 +71,7 @@ public class OffreVoyageBusiness implements IBasicBusiness<Request<OffreVoyageDT
         this.offreVoyageRepository = offreVoyageRepository;
         this.prixOffreVoyageRepository = prixOffreVoyageRepository;
         this.prixOffreVoyageBusiness = prixOffreVoyageBusiness;
+        this.programmeBusiness = programmeBusiness;
         this.villeEscaleBusiness = villeEscaleBusiness;
         this.jourSemaineBusinesse = jourSemaineBusinesse;
         this.valeurCaracteristiqueOffreVoyageBusiness = valeurCaracteristiqueOffreVoyageBusiness;
@@ -331,10 +331,11 @@ public class OffreVoyageBusiness implements IBasicBusiness<Request<OffreVoyageDT
                 }
                 entityToSave.setVilleDestination(villeDestinationToSave);
             }
-            //TypeOffreVoyage
-            String typeOffreVoyageDesignation=entityToSave.getTypeOffreVoyage()!=null&&entityToSave.getTypeOffreVoyage().getDesignation()!=null
-                    ?entityToSave.getTypeOffreVoyage().getDesignation()
-                    :null;
+
+            String typeOffreVoyageDesignation=entityToSave.getTypeOffreVoyage() != null && entityToSave.getTypeOffreVoyage().getDesignation() != null
+                    ?   entityToSave.getTypeOffreVoyage().getDesignation()
+                    :   null;
+
             if(typeOffreVoyageDesignation==null){
                 response.setStatus(functionalError.DATA_NOT_EXIST("Le prix offre de voyage ne relie à aucun type offre de voyage", locale));
                 response.setHasError(true);
@@ -355,7 +356,6 @@ public class OffreVoyageBusiness implements IBasicBusiness<Request<OffreVoyageDT
                 }
                 entityToSave.setTypeOffreVoyage(typeOffreVoyageToSave);
             }
-            //Autres
             if(Utilities.isNotBlank(dto.getDescription()) && !dto.getDesignation().equals(entityToSave.getDescription())){
                 entityToSave.setDescription(dto.getDescription());
             }
@@ -364,21 +364,18 @@ public class OffreVoyageBusiness implements IBasicBusiness<Request<OffreVoyageDT
             }
             entityToSave.setUpdatedAt(Utilities.getCurrentDate());
             //entityToSave.setUpdatedBy(request.user);
-            OffreVoyage entityupdated=null;
-            entityupdated=offreVoyageRepository.save(entityToSave);
+            OffreVoyage entityupdated=offreVoyageRepository.save(entityToSave);
             if(entityupdated==null){
                 response.setStatus(functionalError.SAVE_FAIL("Erreur de Modification", locale));
                 response.setHasError(true);
                 return response;
             }
-            //Check if prixOffreVoyageExist
             if(!CollectionUtils.isEmpty(dto.getPrixOffreVoyageDTOList())){
                 Request<PrixOffreVoyageDTO> subRequest = new Request<PrixOffreVoyageDTO>();
                 subRequest.setDatas( dto.getPrixOffreVoyageDTOList());
                 for(PrixOffreVoyageDTO prixOffreVoyageDTO: dto.getPrixOffreVoyageDTOList()){
                     prixOffreVoyageDTO.setOffreVoyageDesignation(entityupdated.getDesignation());
                 }
-                //subRequest.setUser(request.getUser());
                 Response<PrixOffreVoyageDTO> subResponse = prixOffreVoyageBusiness.update(subRequest, locale);
                 if (subResponse.isHasError()) {
                     response.setStatus(subResponse.getStatus());
@@ -386,14 +383,12 @@ public class OffreVoyageBusiness implements IBasicBusiness<Request<OffreVoyageDT
                     return response;
                 }
             }
-            //Check if jourSemaine
             if(!CollectionUtils.isEmpty(dto.getJourSemaineDTOList())){
                 Request<JourSemaineDTO> subRequestJourSemaine = new Request<JourSemaineDTO>();
                 subRequestJourSemaine.setDatas( dto.getJourSemaineDTOList());
                 for(JourSemaineDTO jourSemaineDTO: dto.getJourSemaineDTOList()){
                     jourSemaineDTO.setOffreVoyageDesignation(entityupdated.getDesignation());
                 }
-                //subRequest.setUser(request.getUser());
                 Response<JourSemaineDTO> subResponse = jourSemaineBusinesse.update(subRequestJourSemaine, locale);
                 if (subResponse.isHasError()) {
                     response.setStatus(subResponse.getStatus());
@@ -401,12 +396,9 @@ public class OffreVoyageBusiness implements IBasicBusiness<Request<OffreVoyageDT
                     return response;
                 }
             }
-            //Check if villeEscaleList
             if(!CollectionUtils.isEmpty(dto.getVilleEscaleDTOList())){
                 Request<VilleEscaleDTO> subRequestVilleEscale = new Request<VilleEscaleDTO>();
                 subRequestVilleEscale.setDatas( dto.getVilleEscaleDTOList());
-                //subRequest.setUser(request.getUser());
-                //Initialisation de l'offre de voyage
                 for(VilleEscaleDTO villeEscaleDTO: dto.getVilleEscaleDTOList()){
                     villeEscaleDTO.setOffreVoyageDesignation(entityupdated.getDesignation());
                 }
@@ -432,79 +424,6 @@ public class OffreVoyageBusiness implements IBasicBusiness<Request<OffreVoyageDT
 
     @Override
     public Response<OffreVoyageDTO> delete(Request<OffreVoyageDTO> request, Locale locale) {
-
-/*        log.info("----begin delete agence-----");
-
-        Response<AgenceDto> response = new Response<AgenceDto>();
-        List<Agence> items = new ArrayList<Agence>();
-
-        //Verification
-        if(request.getDatas().isEmpty() || request.getDatas() == null){
-            response.setStatus(functionalError.DATA_NOT_EXIST("Liste de données est vide ",locale));
-            response.setHasError(true);
-            return response;
-        }
-
-        //Verification des champs obligatoires
-        for(AgenceDto dto : request.getDatas()) {
-
-            Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
-            fieldsToVerify.put("id", dto.getId());
-
-            if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
-                response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
-                response.setHasError(true);
-                return response;
-            }
-
-        }
-
-        //Parcourir la liste
-        for(AgenceDto dto : request.getDatas()){
-
-            // Verification du parametre identifiant
-            Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
-            fieldsToVerify.put("id", dto.getId());
-
-            if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
-                response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
-                response.setHasError(true);
-                return response;
-            }
-
-            // Verify if Functionality  exist
-            Agence existingEntity = null;
-
-            existingEntity = agenceRepository.findOne(dto.getId(), false);
-
-            if (existingEntity == null) {
-                response.setStatus(functionalError.DATA_NOT_EXIST("L'agence ayant  id -> " + dto.getId() + ",n'existe pas", locale));
-                response.setHasError(true);
-                return response;
-            }
-
-            log.info("_413 Verification d'existence de l'objet"+existingEntity.toString()); //TODO A effacer
-
-            //Suppression logique
-            existingEntity.setIsDeleted(true);
-            existingEntity.setDeletedAt(Utilities.getCurrentDate());
-            existingEntity.setDeletedBy(request.user);// a modifier
-
-            items.add(existingEntity);
-
-        }
-
-        //Verificatioon de la liste de données recues
-        if(items == null  || items.isEmpty()){
-            response.setStatus(functionalError.DATA_NOT_EXIST("Liste de données est vide ",locale));
-            response.setHasError(true);
-            return response;
-        }
-
-        response.setHasError(false);
-        response.setStatus(functionalError.SUCCESS("", locale));
-
-        return response;*/
         return null;
     }
 
@@ -520,40 +439,6 @@ public class OffreVoyageBusiness implements IBasicBusiness<Request<OffreVoyageDT
 
     @Override
     public Response<OffreVoyageDTO> getByCriteria(Request<OffreVoyageDTO> request, Locale locale) {
-       /*
-        log.info("----begin get agence-----");
-
-        Response<AgenceDto> response = new Response<AgenceDto>();
-
-        if (Utilities.blank(request.getData().getOrderField())) {
-            request.getData().setOrderField("");
-        }
-        if (Utilities.blank(request.getData().getOrderDirection())) {
-            request.getData().setOrderDirection("asc");
-        }
-
-        List<Agence> items = agenceRepository.getByCriteria(request, em, locale);
-
-        if (Utilities.isEmpty(items)) {
-            response.setStatus(functionalError.DATA_EMPTY("Aucune agence ne correspond aux critères de recherche definis", locale));
-            response.setHasError(false);
-            return response;
-        }
-
-        List<AgenceDto> itemsDto = (Utilities.isTrue(request.getIsSimpleLoading()))
-                                 ? AgenceTransformer.INSTANCE.toLiteDtos(items)
-                                 : AgenceTransformer.INSTANCE.toDtos(items);
-
-
-        response.setItems(itemsDto);
-        response.setCount(agenceRepository.count(request, em, locale));
-        response.setHasError(false);
-        response.setStatus(functionalError.SUCCESS("", locale));
-
-        log.info("----end get agence-----");
-
-        return response;
-    */
         return null;
     }
 
@@ -630,8 +515,7 @@ public class OffreVoyageBusiness implements IBasicBusiness<Request<OffreVoyageDT
 
             List<Programme> existingProgrammeList;
             for(JourSemaine jourSemaine: existingEntityJourSemaineList){
-                if(jourSemaine!=null){
-                    log.info("_Affichage de la designation Jour semaine="+jourSemaine.getDesignation()); //TODO A effacer
+                if(jourSemaine != null){
                     existingProgrammeList = programmeRepository.findByJourSemaine(jourSemaine.getDesignation(),false);
                     if (CollectionUtils.isEmpty(existingProgrammeList)) {
                         response.setStatus(functionalError.DATA_EXIST("Aucun programme pour le jour de la semaine", locale));
@@ -639,13 +523,13 @@ public class OffreVoyageBusiness implements IBasicBusiness<Request<OffreVoyageDT
                         return response;
                     }
                     for(Programme programme: existingProgrammeList){
-                        if(programme!=null){
-                            if(programme.getHeureDepart()==null){
+                        if(programme != null){
+                            if(programme.getHeureDepart() == null){
                                 response.setStatus(functionalError.DATA_EXIST("Heure départ non définie", locale));
                                 response.setHasError(true);
                                 return response;
                             }
-                            if(programme.getHeureArrivee()==null){
+                            if(programme.getHeureArrivee() == null){
                                 response.setStatus(functionalError.DATA_EXIST("Heure arrivee non définie", locale));
                                 response.setHasError(true);
                                 return response;
@@ -685,8 +569,8 @@ public class OffreVoyageBusiness implements IBasicBusiness<Request<OffreVoyageDT
             response.setHasError(true);
             return response;
         }
-        String raisonCompagnie=request.getData().getCompagnieTransportRaisonSociale();
-        CompagnieTransport existingCompagnieTransport = null;
+        String raisonCompagnie = request.getData().getCompagnieTransportRaisonSociale();
+        CompagnieTransport existingCompagnieTransport;
         existingCompagnieTransport = compagnieTransportRepository.findByRaisonSociale(raisonCompagnie, false);
         if (existingCompagnieTransport == null) {
             response.setStatus(functionalError.DATA_NOT_EXIST("La compagnie de transport n'existe pas", locale));
@@ -729,27 +613,48 @@ public class OffreVoyageBusiness implements IBasicBusiness<Request<OffreVoyageDT
             response.setHasError(true);
             return response;
         }
+        //This code research the offre voyage by criteria
         Date dateDepart=Utilities.convertStringToDate(request.getData().getDateDepart());
         String villeDepart=request.getData().getVilleDepart();
         String villeDestination=request.getData().getVilleDestination();
         List<OffreVoyageDTO> itemsDto;
+        Map<String,JourSemaine> mapOffreVoyageToJourSemaine = new HashMap<>();
         List<OffreVoyage> items = offreVoyageRepository.getOffreVoyageByCriteria(villeDepart,villeDestination,false);
+
         if (items != null && !items.isEmpty()){
             items.forEach(offreVoyage -> {
-                List<JourSemaine> jourSemaines = jourSemaineRepository.findAllByOffreVoyageDesignation(offreVoyage.getDesignation(),false);
-                for (JourSemaine js: jourSemaines) {
-                    if(js !=null && js.getJourSemaine()!=null &&
-                            js.getJourSemaine().getDesignation()!=null &&
-                            js.getJourSemaine().getDesignation().equals(Utilities.getFrenchDayOfWeek(dateDepart))){
-                        itemsResponse.add(js.getOffreVoyage());
-                    }
-                }
+                List<JourSemaine> jourSemaines = jourSemaineRepository.findAllByOffreVoyageDesignation(offreVoyage.getDesignation(), false);
+                jourSemaines.stream()
+                        .filter(js -> js != null &&
+                                js.getJourSemaine() != null &&
+                                js.getJourSemaine().getDesignation() != null &&
+                                js.getJourSemaine().getDesignation().equals(Utilities.getFrenchDayOfWeek(dateDepart)))
+                        .forEach(js -> {
+                            itemsResponse.add(js.getOffreVoyage());
+                            mapOffreVoyageToJourSemaine.put(js.getOffreVoyage().getDesignation(), js);
+                        });
             });
             itemsDto = (Utilities.isTrue(request.getIsSimpleLoading()))
                     ? OffreVoyageTransformer.INSTANCE.toLiteDtos(itemsResponse)
                     : OffreVoyageTransformer.INSTANCE.toDtos(itemsResponse);
         }else{
             itemsDto = new ArrayList<>();
+        }
+
+        if (Objects.nonNull(itemsDto) && !itemsDto.isEmpty()) {
+            itemsDto.stream()
+                    .filter(dto -> dto != null && dto.getDesignation() != null)
+                    .forEach(dto -> {
+                        Request<OffreVoyageDTO> offreVoyageDTORequest = new Request<>();
+                        OffreVoyageDTO offreVoyageDTO = new OffreVoyageDTO();
+                        offreVoyageDTO.setDesignation(dto.getDesignation());
+                        offreVoyageDTORequest.setData(offreVoyageDTO);
+                        dto.setPrixOffreVoyageDTOList(getPrixOffreVoyageDTOS(locale, offreVoyageDTORequest));
+                        dto.setVilleEscaleDTOList(getVilleEscaleDTOS(locale, offreVoyageDTORequest));
+                        if (mapOffreVoyageToJourSemaine.containsKey(dto.getDesignation())) {
+                            dto.setJourSemaineDTOList(getJourSemaineDTOS(locale, offreVoyageDTORequest));
+                        }
+                    });
         }
         response.setItems(itemsDto);
         response.setHasError(false);
@@ -758,8 +663,46 @@ public class OffreVoyageBusiness implements IBasicBusiness<Request<OffreVoyageDT
         return response;
     }
 
-    private Response<Boolean> verifierSiPrixOffreVoyageEstDifferentDeZero(Locale
-    locale, Response < Boolean > response, List < PrixOffreVoyage > existingEntityPrixOffreVoyageList){
+    private List<JourSemaineDTO> getJourSemaineDTOS(Locale locale, Request<OffreVoyageDTO> offreVoyageDTORequest) {
+        List<JourSemaineDTO> jourSemaineDTOList;
+        try {
+            jourSemaineDTOList = Optional.ofNullable(
+                            jourSemaineBusinesse.getJourSemaineByVoyageDesignation(offreVoyageDTORequest, locale))
+                    .map(Response::getItems)
+                    .orElse(new ArrayList<>());
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+        return jourSemaineDTOList;
+    }
+
+    private List<VilleEscaleDTO> getVilleEscaleDTOS(Locale locale, Request<OffreVoyageDTO> offreVoyageDTORequest) {
+        List<VilleEscaleDTO> villeEscaleDTOList;
+        try {
+            villeEscaleDTOList = Optional.ofNullable(
+                            villeEscaleBusiness.getVilleByOffreVoyageDesignation(offreVoyageDTORequest, locale))
+                    .map(Response::getItems)
+                    .orElse(new ArrayList<>());
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+        return villeEscaleDTOList;
+    }
+
+    private List<PrixOffreVoyageDTO> getPrixOffreVoyageDTOS(Locale locale, Request<OffreVoyageDTO> offreVoyageDTORequest) {
+        List<PrixOffreVoyageDTO> prixOffreVoyageDTOList;
+        try {
+            prixOffreVoyageDTOList = Optional.ofNullable(
+                    prixOffreVoyageBusiness.getPrixTravelOfferByOffreVoyageDesignation(offreVoyageDTORequest, locale))
+                    .map(Response::getItems)
+                    .orElse(new ArrayList<>());
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+        return prixOffreVoyageDTOList;
+    }
+
+    private Response<Boolean> verifierSiPrixOffreVoyageEstDifferentDeZero(Locale locale, Response < Boolean > response, List < PrixOffreVoyage > existingEntityPrixOffreVoyageList){
         for (PrixOffreVoyage prixOffreVoyage : existingEntityPrixOffreVoyageList) {
             if (prixOffreVoyage != null) {
                 if (prixOffreVoyage.getPrix() == 0L) {

@@ -19,7 +19,7 @@ public interface VilleEscaleRepository extends JpaRepository<VilleEscale,Long> {
     @Query("select ve from  VilleEscale ve where ve.id = :id and ve.isDeleted= :isDeleted")
     VilleEscale findOne(@Param("id") Long id, @Param("isDeleted") Boolean isDeleted);
 
-    @Query("select ve.ville from  VilleEscale ve where ve.offreVoyage.designation = :offreVoyageDesignation and ve.isDeleted= :isDeleted")
-    List<Ville> getVilleByOffreVoyageDesignation(@Param("offreVoyageDesignation") String offreVoyageDesignation, @Param("isDeleted") Boolean isDeleted);
+    @Query("select ve from  VilleEscale ve where ve.offreVoyage.designation = :offreVoyageDesignation and ve.isDeleted= :isDeleted")
+    List<VilleEscale> getVilleByOffreVoyageDesignation(@Param("offreVoyageDesignation") String offreVoyageDesignation, @Param("isDeleted") Boolean isDeleted);
 
 }
