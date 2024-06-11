@@ -76,15 +76,15 @@ public class ModePaiementBusiness implements IBasicBusiness<Request<ModePaiement
 
     @Override
     public Response<ModePaiementDTO> create(Request<ModePaiementDTO> request, Locale locale) throws ParseException {
-        Response<ModePaiementDTO> response = new Response<ModePaiementDTO>();
-        List<ModePaiement> items = new ArrayList<ModePaiement>();
-        List<ModePaiementDTO> itemsDto= new ArrayList<ModePaiementDTO>();
+        Response<ModePaiementDTO> response = new Response<>();
+        List<ModePaiementDTO> itemsDto = new ArrayList<>();
         if(request.getDatas() == null || request.getDatas().isEmpty()){
             response.setStatus(functionalError.DATA_NOT_EXIST("Liste vide",locale));
             response.setHasError(true);
             return response;
         }
-        List<ModePaiementDTO>itemsDtos =  Collections.synchronizedList(new ArrayList<ModePaiementDTO>());
+
+        List<ModePaiementDTO>itemsDtos =  Collections.synchronizedList(new ArrayList<>());
         for(ModePaiementDTO dto: request.getDatas() ) {
             if(dto!=null){
                 Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
@@ -104,25 +104,22 @@ public class ModePaiementBusiness implements IBasicBusiness<Request<ModePaiement
                 itemsDtos.add(dto);
             }
         }
+
         for(ModePaiementDTO itemDto : itemsDtos){
-            //Verify Compagnie transport
-            CompagnieTransport existingCompagnieTransport = null;
-            existingCompagnieTransport = compagnieTransportRepository.findByRaisonSociale(itemDto.getCompagnieTransportRaisonSociale(),false);
+            CompagnieTransport existingCompagnieTransport = compagnieTransportRepository.findByRaisonSociale(itemDto.getCompagnieTransportRaisonSociale(),false);
             if (existingCompagnieTransport == null) {
                 response.setStatus(functionalError.DATA_EXIST("La compagnie de transport n'existe pas", locale));
                 response.setHasError(true);
                 return response;
             }
-            //Check the compagny mode abonnement
-            List<ModeAbonnement> exitingModeAbonnementList=null;
-            exitingModeAbonnementList=modeAbonnementRepository.findByCompagnieTransport(itemDto.getCompagnieTransportRaisonSociale(),false);
+            List<ModeAbonnement> exitingModeAbonnementList = modeAbonnementRepository.findByCompagnieTransport(itemDto.getCompagnieTransportRaisonSociale(),false);
             if(CollectionUtils.isEmpty(exitingModeAbonnementList)){
                 response.setStatus(functionalError.SAVE_FAIL("La compagnie ne dispose pas de mode abonnement", locale));
                 response.setHasError(true);
                 return response;
             }else{
                 for(ModeAbonnement modeAbonnement: exitingModeAbonnementList){
-                    if(modeAbonnement!=null){
+                    if(modeAbonnement != null){
                         if(modeAbonnement instanceof AbonnementPrelevement){
                             if(itemDto.getTypeModePaiementDesignation().equalsIgnoreCase(ProjectConstants.REF_ELEMENT_MODE_PAIEMENT_EN_ESPECE)){
                                 response.setStatus(functionalError.DATA_EXIST("Impossible de pouvoir définir un mode de paiement en espece.Car,la société a défini un mode d'abonnement prélevement", locale));
@@ -133,17 +130,14 @@ public class ModePaiementBusiness implements IBasicBusiness<Request<ModePaiement
                     }
                 }
             }
-            //Verify typeModeAbonnement
-            Reference existingTypeModeAbonnement = null;
-            existingTypeModeAbonnement = typeModePaiementRepository.findByDesignation(itemDto.getTypeModePaiementDesignation(),false);
+            Reference existingTypeModeAbonnement = typeModePaiementRepository.findByDesignation(itemDto.getTypeModePaiementDesignation(),false);
             if (existingTypeModeAbonnement == null) {
                 response.setStatus(functionalError.DATA_EXIST("Le type de mode d'abonnement n'existe pas", locale));
                 response.setHasError(true);
                 return response;
             }
             itemDto=Utilities.transformerLaClasseModePaiementtEnClasseFilleCorrespondante(itemDto);
-            ModePaiementDTO entitySaved=null;
-            entitySaved= saveModePaiementEnFonctionDeLaClasseFilleCorrespondante(itemDto,locale);
+            ModePaiementDTO entitySaved= saveModePaiementEnFonctionDeLaClasseFilleCorrespondante(itemDto,locale);
             itemsDto.add(entitySaved);
         }
         if (CollectionUtils.isEmpty(itemsDto)) {
@@ -159,15 +153,15 @@ public class ModePaiementBusiness implements IBasicBusiness<Request<ModePaiement
 
     @Override
     public Response<ModePaiementDTO> update(Request<ModePaiementDTO> request, Locale locale) throws ParseException {
-        Response<ModePaiementDTO> response = new Response<ModePaiementDTO>();
-        List<ModePaiement> items = new ArrayList<ModePaiement>();
-        List<ModePaiementDTO> itemsDto= new ArrayList<ModePaiementDTO>();
+        Response<ModePaiementDTO> response = new Response<>();
+        List<ModePaiementDTO> itemsDto= new ArrayList<>();
         if(request.getDatas() == null || request.getDatas().isEmpty()){
             response.setStatus(functionalError.DATA_NOT_EXIST("Liste vide",locale));
             response.setHasError(true);
             return response;
         }
-        List<ModePaiementDTO>itemsDtos =  Collections.synchronizedList(new ArrayList<ModePaiementDTO>());
+
+        List<ModePaiementDTO>itemsDtos =  Collections.synchronizedList(new ArrayList<>());
         for(ModePaiementDTO dto: request.getDatas() ) {
             if(dto!=null){
                 Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
@@ -187,26 +181,21 @@ public class ModePaiementBusiness implements IBasicBusiness<Request<ModePaiement
                 itemsDtos.add(dto);
             }
         }
+
         for(ModePaiementDTO itemDto : itemsDtos){
-            //Verify Compagnie transport
-            CompagnieTransport existingCompagnieTransport = null;
-            existingCompagnieTransport = compagnieTransportRepository.findByRaisonSociale(itemDto.getCompagnieTransportRaisonSociale(),false);
+            CompagnieTransport existingCompagnieTransport = compagnieTransportRepository.findByRaisonSociale(itemDto.getCompagnieTransportRaisonSociale(),false);
             if (existingCompagnieTransport == null) {
                 response.setStatus(functionalError.DATA_EXIST("La compagnie de transport n'existe pas", locale));
                 response.setHasError(true);
                 return response;
             }
-            //Verify periodiciteAbonnement
-            Reference existingPeriodiciteAbonnement = null;
-            existingPeriodiciteAbonnement = typeModePaiementRepository.findByDesignation(itemDto.getTypeModePaiementDesignation(),false);
+            Reference existingPeriodiciteAbonnement = typeModePaiementRepository.findByDesignation(itemDto.getTypeModePaiementDesignation(),false);
             if (existingPeriodiciteAbonnement == null) {
                 response.setStatus(functionalError.DATA_EXIST("La periodicite de l'abonnement n'existe pas", locale));
                 response.setHasError(true);
                 return response;
             }
-            //Verify typeModeAbonnement
-            Reference existingTypeModeAbonnement = null;
-            existingTypeModeAbonnement = typeModePaiementRepository.findByDesignation(itemDto.getTypeModePaiementDesignation(),false);
+            Reference existingTypeModeAbonnement = typeModePaiementRepository.findByDesignation(itemDto.getTypeModePaiementDesignation(),false);
             if (existingTypeModeAbonnement == null) {
                 response.setStatus(functionalError.DATA_EXIST("Le type de mode d'abonnement n'existe pas", locale));
                 response.setHasError(true);
@@ -230,79 +219,6 @@ public class ModePaiementBusiness implements IBasicBusiness<Request<ModePaiement
 
     @Override
     public Response<ModePaiementDTO> delete(Request<ModePaiementDTO> request, Locale locale) {
-
-/*        log.info("----begin delete agence-----");
-
-        Response<AgenceDto> response = new Response<AgenceDto>();
-        List<Agence> items = new ArrayList<Agence>();
-
-        //Verification
-        if(request.getDatas().isEmpty() || request.getDatas() == null){
-            response.setStatus(functionalError.DATA_NOT_EXIST("Liste de données est vide ",locale));
-            response.setHasError(true);
-            return response;
-        }
-
-        //Verification des champs obligatoires
-        for(AgenceDto dto : request.getDatas()) {
-
-            Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
-            fieldsToVerify.put("id", dto.getId());
-
-            if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
-                response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
-                response.setHasError(true);
-                return response;
-            }
-
-        }
-
-        //Parcourir la liste
-        for(AgenceDto dto : request.getDatas()){
-
-            // Verification du parametre identifiant
-            Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
-            fieldsToVerify.put("id", dto.getId());
-
-            if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
-                response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
-                response.setHasError(true);
-                return response;
-            }
-
-            // Verify if Functionality  exist
-            Agence existingEntity = null;
-
-            existingEntity = agenceRepository.findOne(dto.getId(), false);
-
-            if (existingEntity == null) {
-                response.setStatus(functionalError.DATA_NOT_EXIST("L'agence ayant  id -> " + dto.getId() + ",n'existe pas", locale));
-                response.setHasError(true);
-                return response;
-            }
-
-            log.info("_413 Verification d'existence de l'objet"+existingEntity.toString()); //TODO A effacer
-
-            //Suppression logique
-            existingEntity.setIsDeleted(true);
-            existingEntity.setDeletedAt(Utilities.getCurrentDate());
-            existingEntity.setDeletedBy(request.user);// a modifier
-
-            items.add(existingEntity);
-
-        }
-
-        //Verificatioon de la liste de données recues
-        if(items == null  || items.isEmpty()){
-            response.setStatus(functionalError.DATA_NOT_EXIST("Liste de données est vide ",locale));
-            response.setHasError(true);
-            return response;
-        }
-
-        response.setHasError(false);
-        response.setStatus(functionalError.SUCCESS("", locale));
-
-        return response;*/
         return null;
     }
 
@@ -318,54 +234,18 @@ public class ModePaiementBusiness implements IBasicBusiness<Request<ModePaiement
 
     @Override
     public Response<ModePaiementDTO> getByCriteria(Request<ModePaiementDTO> request, Locale locale) {
-       /*
-        log.info("----begin get agence-----");
-
-        Response<AgenceDto> response = new Response<AgenceDto>();
-
-        if (Utilities.blank(request.getData().getOrderField())) {
-            request.getData().setOrderField("");
-        }
-        if (Utilities.blank(request.getData().getOrderDirection())) {
-            request.getData().setOrderDirection("asc");
-        }
-
-        List<Agence> items = agenceRepository.getByCriteria(request, em, locale);
-
-        if (Utilities.isEmpty(items)) {
-            response.setStatus(functionalError.DATA_EMPTY("Aucune agence ne correspond aux critères de recherche definis", locale));
-            response.setHasError(false);
-            return response;
-        }
-
-        List<AgenceDto> itemsDto = (Utilities.isTrue(request.getIsSimpleLoading()))
-                                 ? AgenceTransformer.INSTANCE.toLiteDtos(items)
-                                 : AgenceTransformer.INSTANCE.toDtos(items);
-
-
-        response.setItems(itemsDto);
-        response.setCount(agenceRepository.count(request, em, locale));
-        response.setHasError(false);
-        response.setStatus(functionalError.SUCCESS("", locale));
-
-        log.info("----end get agence-----");
-
-        return response;
-    */
         return null;
     }
 
     @Transactional(rollbackFor = {RuntimeException.class, Exception.class})
     public Response<ModePaiementDTO> getModePaiementByCompagnieTransport(Request<ModePaiementDTO> request, Locale locale) throws ParseException {
-        Response<ModePaiementDTO> response = new Response<ModePaiementDTO>();
-        List<ModePaiementDTO> itemsDto= new ArrayList<ModePaiementDTO>();
-        List<ModePaiement> items = new ArrayList<ModePaiement>();
+        Response<ModePaiementDTO> response = new Response<>();
         if (request.getData() == null ) {
             response.setStatus(functionalError.DATA_NOT_EXIST("Aucune donnée definie", locale));
             response.setHasError(true);
             return response;
         }
-        Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+        Map<String, Object> fieldsToVerify = new HashMap<>();
         fieldsToVerify.put("compagnieTransportRaisonSociale", request.getData().getCompagnieTransportRaisonSociale());
         if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
             response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
@@ -373,20 +253,19 @@ public class ModePaiementBusiness implements IBasicBusiness<Request<ModePaiement
             return response;
         }
         String compagnieTransportRaisonScoiale=request.getData().getCompagnieTransportRaisonSociale();
-        CompagnieTransport existingCompagnieTransport = null;
-        existingCompagnieTransport = compagnieTransportRepository.findByRaisonSociale(compagnieTransportRaisonScoiale,false);
+        CompagnieTransport existingCompagnieTransport = compagnieTransportRepository.findByRaisonSociale(compagnieTransportRaisonScoiale,false);
         if (existingCompagnieTransport == null) {
             response.setStatus(functionalError.DATA_EXIST("La compagnie de transport n'existe pas", locale));
             response.setHasError(true);
             return response;
         }
-        items=(List<ModePaiement>) modePaiementRepository.findByCompagnieTransport(compagnieTransportRaisonScoiale,false);
+        List<ModePaiement> items = modePaiementRepository.findByCompagnieTransport(compagnieTransportRaisonScoiale,false);
         if (CollectionUtils.isEmpty(items)) {
             response.setStatus(functionalError.DATA_NOT_EXIST("La compagnie de transport ne dispose d'aucun mode de paiement", locale));
             response.setHasError(true);
             return response;
         }
-        itemsDto=transformerClasseFilleEnClasseModePaiementDTO(items);
+        List<ModePaiementDTO> itemsDto = transformerClasseFilleEnClasseModePaiementDTO(items);
         response.setItems(itemsDto);
         response.setHasError(false);
         response.setStatus(functionalError.SUCCESS("", locale));
@@ -395,12 +274,10 @@ public class ModePaiementBusiness implements IBasicBusiness<Request<ModePaiement
     }
 
     public ModePaiementDTO saveModePaiementEnFonctionDeLaClasseFilleCorrespondante(ModePaiementDTO modePaiementDTO, Locale locale) throws ParseException {
-
         if(modePaiementDTO instanceof ModePaiementMtnMoneyDTO ){
-            Request<ModePaiementMtnMoneyDTO> subRequest = new Request<ModePaiementMtnMoneyDTO>();
-            List<ModePaiementMtnMoneyDTO> itemsDTO = Collections.synchronizedList(new ArrayList<ModePaiementMtnMoneyDTO>());
+            Request<ModePaiementMtnMoneyDTO> subRequest = new Request<>();
             ModePaiementMtnMoneyDTO modePaiementMtnMoneyDTO = (ModePaiementMtnMoneyDTO) modePaiementDTO;
-            //Conversion
+            List<ModePaiementMtnMoneyDTO> itemsDTO = Collections.synchronizedList(new ArrayList<>());
             itemsDTO.add(modePaiementMtnMoneyDTO);
             subRequest.setDatas( itemsDTO);
             Response<ModePaiementMtnMoneyDTO> subResponse = modePaiementMtnMoneyBusiness.create(subRequest,locale);
@@ -409,6 +286,7 @@ public class ModePaiementBusiness implements IBasicBusiness<Request<ModePaiement
                 response.setHasError(Boolean.TRUE);
                 return new ModePaiementDTO();
             }
+
             ModePaiementDTO rtn = new ModePaiementDTO();
             rtn.setId( subResponse.getItems().get(0).getId());
             rtn.setDesignation( subResponse.getItems().get(0).getDesignation());
@@ -431,6 +309,7 @@ public class ModePaiementBusiness implements IBasicBusiness<Request<ModePaiement
             rtn.setCreatedByParam( subResponse.getItems().get(0).getCreatedByParam());
             rtn.setUpdatedByParam(subResponse.getItems().get(0).getUpdatedByParam());
             rtn.setOrderDirection(subResponse.getItems().get(0).getOrderDirection());
+
             return rtn;
         }
         else if(modePaiementDTO instanceof ModePaiementOrangeMoneyDTO){
