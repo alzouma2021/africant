@@ -34,6 +34,7 @@ import javax.persistence.EntityManager;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Log
@@ -60,6 +61,8 @@ public class OffreVoyageBusiness implements IBasicBusiness<Request<OffreVoyageDT
     private final EntityManager em;
 
     private final SimpleDateFormat dateFormat;
+
+    SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
     private final SimpleDateFormat dateTimeFormat;
 
     public OffreVoyageBusiness(ReferenceRepository referenceRepository, VilleRepository villeRepository, ProgrammeRepository programmeRepository, JourSemaineRepository jourSemaineRepository, CompagnieTransportRepository compagnieTransportRepository, OffreVoyageRepository offreVoyageRepository, PrixOffreVoyageRepository prixOffreVoyageRepository, PrixOffreVoyageBusiness prixOffreVoyageBusiness, ProgrammeBusiness programmeBusiness, VilleEscaleBusiness villeEscaleBusiness, JourSemaineBusiness jourSemaineBusinesse, ValeurCaracteristiqueOffreVoyageBusiness valeurCaracteristiqueOffreVoyageBusiness, FunctionalError functionalError, TechnicalError technicalError, ExceptionUtils exceptionUtils, EntityManager em) {
@@ -514,6 +517,7 @@ public class OffreVoyageBusiness implements IBasicBusiness<Request<OffreVoyageDT
             }
 
             List<Programme> existingProgrammeList;
+
             for(JourSemaine jourSemaine: existingEntityJourSemaineList){
                 if(jourSemaine != null){
                     existingProgrammeList = programmeRepository.findByJourSemaine(jourSemaine.getDesignation(),false);
@@ -613,31 +617,38 @@ public class OffreVoyageBusiness implements IBasicBusiness<Request<OffreVoyageDT
             response.setHasError(true);
             return response;
         }
-        //This code research the offre voyage by criteria
-        Date dateDepart=Utilities.convertStringToDate(request.getData().getDateDepart());
+
         String villeDepart=request.getData().getVilleDepart();
         String villeDestination=request.getData().getVilleDestination();
         List<OffreVoyageDTO> itemsDto;
         Map<String,JourSemaine> mapOffreVoyageToJourSemaine = new HashMap<>();
-        List<OffreVoyage> items = offreVoyageRepository.getOffreVoyageByCriteria(villeDepart,villeDestination,false);
 
-        if (items != null && !items.isEmpty()){
-            items.forEach(offreVoyage -> {
+        List<OffreVoyage> offreVoyageListCorrespondantAuxCriteres = offreVoyageRepository.getOffreVoyageByCriteria(villeDepart, villeDestination, false);
+
+        if (offreVoyageListCorrespondantAuxCriteres != null && !offreVoyageListCorrespondantAuxCriteres.isEmpty()) {
+            offreVoyageListCorrespondantAuxCriteres.forEach(offreVoyage -> {
                 List<JourSemaine> jourSemaines = jourSemaineRepository.findAllByOffreVoyageDesignation(offreVoyage.getDesignation(), false);
                 jourSemaines.stream()
                         .filter(js -> js != null &&
                                 js.getJourSemaine() != null &&
-                                js.getJourSemaine().getDesignation() != null &&
-                                js.getJourSemaine().getDesignation().equals(Utilities.getFrenchDayOfWeek(dateDepart)))
-                        .forEach(js -> {
-                            itemsResponse.add(js.getOffreVoyage());
-                            mapOffreVoyageToJourSemaine.put(js.getOffreVoyage().getDesignation(), js);
-                        });
+                                js.getJourSemaine().getDesignation() != null)
+                        .flatMap(js -> programmeRepository.findByJourSemaine(js.getDesignation(), false).stream()
+                                .filter(programme -> programme.getDateDepart() != null &&
+                                        request.getData().getDateDepart().equalsIgnoreCase(formatter.format(programme.getDateDepart())))
+                                .peek(programme -> {
+                                    if (!itemsResponse.contains(programme.getJourSemaine().getOffreVoyage())) {
+                                        itemsResponse.add(programme.getJourSemaine().getOffreVoyage());
+                                    }
+                                    mapOffreVoyageToJourSemaine.put(programme.getJourSemaine().getOffreVoyage().getDesignation(), js);
+                                }))
+                        .collect(Collectors.toList());
             });
+
             itemsDto = (Utilities.isTrue(request.getIsSimpleLoading()))
-                    ? OffreVoyageTransformer.INSTANCE.toLiteDtos(itemsResponse)
-                    : OffreVoyageTransformer.INSTANCE.toDtos(itemsResponse);
-        }else{
+                    ? OffreVoyageTransformer.INSTANCE.toLiteDtos(new ArrayList<>(itemsResponse))
+                    : OffreVoyageTransformer.INSTANCE.toDtos(new ArrayList<>(itemsResponse));
+
+        } else {
             itemsDto = new ArrayList<>();
         }
 
@@ -656,6 +667,7 @@ public class OffreVoyageBusiness implements IBasicBusiness<Request<OffreVoyageDT
                         }
                     });
         }
+
         response.setItems(itemsDto);
         response.setHasError(false);
         response.setStatus(functionalError.SUCCESS("", locale));
