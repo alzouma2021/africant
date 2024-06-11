@@ -69,10 +69,9 @@ public class UsersBusiness implements IBasicBusiness<Request<UsersDTO>, Response
     @Transactional(rollbackFor = {RuntimeException.class, Exception.class})
     public Response<UsersDTO> login(Request<UsersDTO> request, Locale locale) throws Exception {
         log.info("----begin login-----");
-        Response<UsersDTO> response = new Response<UsersDTO>();
-        List<Users> items = new ArrayList<Users>();
+        Response<UsersDTO> response = new Response<>();
         UsersDTO dto = request.getData();
-        Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+        Map<String, Object> fieldsToVerify = new HashMap<>();
         fieldsToVerify.put("login", dto.getLogin());
         fieldsToVerify.put("password", dto.getPassword());
         if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
@@ -80,15 +79,12 @@ public class UsersBusiness implements IBasicBusiness<Request<UsersDTO>, Response
             response.setHasError(true);
             return response;
         }
-        Users existingEntity = null;
-        existingEntity = usersRepository.findByLoginAndPassword(dto.getLogin(), SecurityUtils.encryptPassword(dto.getPassword()), false);
+        Users existingEntity = usersRepository.findByLoginAndPassword(dto.getLogin(), SecurityUtils.encryptPassword(dto.getPassword()), false);
         if (existingEntity == null) {
             response.setStatus(functionalError.DATA_NOT_EXIST("login or password is not correct -> " + dto.getLogin() + " " + dto.getPassword(), locale));
             response.setHasError(true);
             return response;
         }
-        log.info("_90 affichage enum="+dto.getTypeUser().getValue());
-        //Incrementation de la propriété numberOfConnections
         if(existingEntity.getNumberOfConnections() == null){
             existingEntity.setNumberOfConnections(0L);
         }
@@ -96,19 +92,16 @@ public class UsersBusiness implements IBasicBusiness<Request<UsersDTO>, Response
             Long compt=existingEntity.getNumberOfConnections() + 1 ;
             existingEntity.setNumberOfConnections(compt);
         }
-        //Transformation
         UsersDTO existingEntityDto = UsersTransformer.INSTANCE.toDto(existingEntity);
         if (existingEntityDto.getLastConnectionDate() != null && !existingEntityDto.getLastConnectionDate().isEmpty()) {
             existingEntityDto.setLastConnection(existingEntityDto.getLastConnectionDate());
         }
-        //Set last connexion date
         existingEntity.setLastConnectionDate(Utilities.getCurrentDate());
         usersRepository.save(existingEntity);
-        //Generate token
+
         String token = SecurityUtils.generateToken(existingEntity);
-        log.info("_103  Génération de token  :: "+token);
         existingEntityDto.setToken(token);
-        //Return reponse
+
         response.setItem(existingEntityDto);
         response.setHasError(Boolean.FALSE);
         response.setStatus(functionalError.SUCCESS("", locale));
