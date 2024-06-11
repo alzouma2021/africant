@@ -517,9 +517,8 @@ public class OffreVoyageBusiness implements IBasicBusiness<Request<OffreVoyageDT
             }
 
             List<Programme> existingProgrammeList;
-
             for(JourSemaine jourSemaine: existingEntityJourSemaineList){
-                if(jourSemaine != null){
+                if(jourSemaine != null && jourSemaine.getDesignation() != null){
                     existingProgrammeList = programmeRepository.findByJourSemaine(jourSemaine.getDesignation(),false);
                     if (CollectionUtils.isEmpty(existingProgrammeList)) {
                         response.setStatus(functionalError.DATA_EXIST("Aucun programme pour le jour de la semaine", locale));
@@ -653,10 +652,10 @@ public class OffreVoyageBusiness implements IBasicBusiness<Request<OffreVoyageDT
         }
 
         if (Objects.nonNull(itemsDto) && !itemsDto.isEmpty()) {
+            Request<OffreVoyageDTO> offreVoyageDTORequest = new Request<>();
             itemsDto.stream()
                     .filter(dto -> dto != null && dto.getDesignation() != null)
                     .forEach(dto -> {
-                        Request<OffreVoyageDTO> offreVoyageDTORequest = new Request<>();
                         OffreVoyageDTO offreVoyageDTO = new OffreVoyageDTO();
                         offreVoyageDTO.setDesignation(dto.getDesignation());
                         offreVoyageDTORequest.setData(offreVoyageDTO);
@@ -676,55 +675,46 @@ public class OffreVoyageBusiness implements IBasicBusiness<Request<OffreVoyageDT
     }
 
     private List<JourSemaineDTO> getJourSemaineDTOS(Locale locale, Request<OffreVoyageDTO> offreVoyageDTORequest) {
-        List<JourSemaineDTO> jourSemaineDTOList;
         try {
-            jourSemaineDTOList = Optional.ofNullable(
-                            jourSemaineBusinesse.getJourSemaineByVoyageDesignation(offreVoyageDTORequest, locale))
+            return Optional.ofNullable(jourSemaineBusinesse.getJourSemaineByVoyageDesignation(offreVoyageDTORequest, locale))
                     .map(Response::getItems)
-                    .orElse(new ArrayList<>());
+                    .orElseGet(Collections::emptyList);
         } catch (ParseException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error fetching JourSemaineDTOs", e);
         }
-        return jourSemaineDTOList;
     }
 
     private List<VilleEscaleDTO> getVilleEscaleDTOS(Locale locale, Request<OffreVoyageDTO> offreVoyageDTORequest) {
-        List<VilleEscaleDTO> villeEscaleDTOList;
         try {
-            villeEscaleDTOList = Optional.ofNullable(
-                            villeEscaleBusiness.getVilleByOffreVoyageDesignation(offreVoyageDTORequest, locale))
+            return Optional.ofNullable(villeEscaleBusiness.getVilleByOffreVoyageDesignation(offreVoyageDTORequest, locale))
                     .map(Response::getItems)
-                    .orElse(new ArrayList<>());
+                    .orElseGet(Collections::emptyList);
         } catch (ParseException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error fetching VilleEscaleDTOs", e);
         }
-        return villeEscaleDTOList;
     }
 
     private List<PrixOffreVoyageDTO> getPrixOffreVoyageDTOS(Locale locale, Request<OffreVoyageDTO> offreVoyageDTORequest) {
-        List<PrixOffreVoyageDTO> prixOffreVoyageDTOList;
         try {
-            prixOffreVoyageDTOList = Optional.ofNullable(
-                    prixOffreVoyageBusiness.getPrixTravelOfferByOffreVoyageDesignation(offreVoyageDTORequest, locale))
+            return Optional.ofNullable(prixOffreVoyageBusiness.getPrixTravelOfferByOffreVoyageDesignation(offreVoyageDTORequest, locale))
                     .map(Response::getItems)
-                    .orElse(new ArrayList<>());
+                    .orElseGet(Collections::emptyList);
         } catch (ParseException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error fetching PrixOffreVoyageDTOs", e);
         }
-        return prixOffreVoyageDTOList;
     }
+    private Response<Boolean> verifierSiPrixOffreVoyageEstDifferentDeZero(Locale locale, Response<Boolean> response, List<PrixOffreVoyage> existingEntityPrixOffreVoyageList) {
+        boolean hasZeroPrice = existingEntityPrixOffreVoyageList.stream()
+                .filter(Objects::nonNull)
+                .anyMatch(prixOffreVoyage -> prixOffreVoyage.getPrix() == 0L);
 
-    private Response<Boolean> verifierSiPrixOffreVoyageEstDifferentDeZero(Locale locale, Response < Boolean > response, List < PrixOffreVoyage > existingEntityPrixOffreVoyageList){
-        for (PrixOffreVoyage prixOffreVoyage : existingEntityPrixOffreVoyageList) {
-            if (prixOffreVoyage != null) {
-                if (prixOffreVoyage.getPrix() == 0L) {
-                    response.setStatus(functionalError.DATA_EXIST("Lr prix de l'offre de voyage doit être différent de 0", locale));
-                    response.setHasError(true);
-                    return response;
-                }
-            }
+        if (hasZeroPrice) {
+            response.setStatus(functionalError.DATA_EXIST("Le prix de l'offre de voyage doit être différent de 0", locale));
+            response.setHasError(true);
+            return response;
         }
-        return null;
+
+        return response;
     }
 
 }

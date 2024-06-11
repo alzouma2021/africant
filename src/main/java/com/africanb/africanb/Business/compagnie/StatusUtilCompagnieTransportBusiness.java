@@ -255,53 +255,16 @@ public class StatusUtilCompagnieTransportBusiness implements IBasicBusiness<Requ
 
     @Override
     public Response<StatusUtilCompagnieTransportDTO> forceDelete(Request<StatusUtilCompagnieTransportDTO> request, Locale locale) {
-        return null;
+        return new Response<>();
     }
 
     @Override
     public Response<StatusUtilCompagnieTransportDTO> getAll(Locale locale) throws ParseException {
-        return null;
+        return new Response<>();
     }
 
     @Override
     public Response<StatusUtilCompagnieTransportDTO> getByCriteria(Request<StatusUtilCompagnieTransportDTO> request, Locale locale) {
-
-    /*    log.info("----begin get HistoriqueDemande-----");
-
-        Response<StatusUtilCompagnieTransportDTO> response = new Response<StatusUtilCompagnieTransportDTO>();
-
-        //verification si le parametre d'ordre à été fourni, sinon nous mettons le paramètre à vide
-        if (Utilities.blank(request.getData().getOrderField())) {
-            request.getData().setOrderField("");
-        }
-
-        //verification si le parametre direction à été fourni, sinon nous mettons le paramètre ascendant( du plus ancien au plus ressent)
-        if (Utilities.blank(request.getData().getOrderDirection())) {
-            request.getData().setOrderDirection("asc");
-        }
-
-        //recuperation des entités en base
-        List<HistoriqueDemande> items = statusUtilCompagnieTransportRepository.getByCriteria(request, em, locale);
-
-        if (Utilities.isEmpty(items)) {
-            response.setStatus(functionalError.DATA_EMPTY("HistoriqueDemande", locale));
-            response.setHasError(false);
-            return response;
-        }
-
-        //Transformation
-        List<HistoriqueDemandeDto> itemsDto = HistoriqueDemandeTransformer.INSTANCE.toDtos(items);
-
-        //Envoie de la reponse
-        response.setItems(itemsDto);
-        response.setCount(statusUtilCompagnieTransportRepository.count(request, em, locale));
-        response.setHasError(false);
-        response.setStatus(functionalError.SUCCESS("", locale));
-
-        log.info("----end get HistoriqueDemande-----");
-
-        return response;
-        */
-        return null;
+        return new Response<>();
     }
 }

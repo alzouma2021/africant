@@ -30,9 +30,6 @@ import java.util.*;
 @Component
 public class StatusUtilRservationBilletVoyageBusiness implements IBasicBusiness<Request<StatusUtilReservationBilletVoyageDTO>, Response<StatusUtilReservationBilletVoyageDTO>> {
 
-
-    private Response<StatusUtilReservationBilletVoyageDTO> response;
-
     private final StatusUtilReservationBilletVoyageRepository statusUtilReservationBilletVoyageRepository;
     private final StatusUtilRepository statusUtilRepository;
     private final ReservationBilletVoyageRepository reservationBilletVoyageRepository;
@@ -58,22 +55,21 @@ public class StatusUtilRservationBilletVoyageBusiness implements IBasicBusiness<
     
     @Override
     public Response<StatusUtilReservationBilletVoyageDTO> create(Request<StatusUtilReservationBilletVoyageDTO> request, Locale locale) throws ParseException {
-        Response<StatusUtilReservationBilletVoyageDTO> response = new Response<StatusUtilReservationBilletVoyageDTO>();
-        List<StatusUtilReservationBilletVoyage> items = new ArrayList<StatusUtilReservationBilletVoyage>();
+        Response<StatusUtilReservationBilletVoyageDTO> response = new Response<>();
+        List<StatusUtilReservationBilletVoyage> items = new ArrayList<>();
         if(request.getDatas().isEmpty() || request.getDatas() == null){
             response.setStatus(functionalError.DATA_NOT_EXIST("Aucune donnée ",locale));
             response.setHasError(true);
             return response;
         }
-        List<StatusUtilReservationBilletVoyageDTO> itemsDtos =  Collections.synchronizedList(new ArrayList<StatusUtilReservationBilletVoyageDTO>());
+        List<StatusUtilReservationBilletVoyageDTO> itemsDtos =  Collections.synchronizedList(new ArrayList<>());
         for(StatusUtilReservationBilletVoyageDTO dto: request.getDatas() ) {
             Response<StatusUtilReservationBilletVoyageDTO> responseCheckDTO = checkStatusUtilReservationBilletVoyageDTO(locale, response, itemsDtos, dto);
             if (responseCheckDTO != null) return responseCheckDTO;
             itemsDtos.add(dto);
         }
         for(StatusUtilReservationBilletVoyageDTO dto : itemsDtos){
-            StatusUtilReservationBilletVoyage existingEntity = null;
-            existingEntity = statusUtilReservationBilletVoyageRepository.findByReservationBilletVoyageAndStatusUtil(dto.getReservationBilletVoyageDesignation(),dto.getStatusUtilDesignation());
+            StatusUtilReservationBilletVoyage existingEntity = statusUtilReservationBilletVoyageRepository.findByReservationBilletVoyageAndStatusUtil(dto.getReservationBilletVoyageDesignation(),dto.getStatusUtilDesignation());
             if (existingEntity != null) {
                 response.setStatus(functionalError.DATA_EXIST("StatusUtilReservationBilletVoyage  ", locale));
                 response.setHasError(true);
@@ -106,16 +102,17 @@ public class StatusUtilRservationBilletVoyageBusiness implements IBasicBusiness<
             response.setHasError(true);
             return response;
         }
-        List<StatusUtilReservationBilletVoyage> itemsSaved = null;
-        itemsSaved = statusUtilReservationBilletVoyageRepository.saveAll((Iterable<StatusUtilReservationBilletVoyage>) items);
+        List<StatusUtilReservationBilletVoyage> itemsSaved = statusUtilReservationBilletVoyageRepository.saveAll(items);
         if (CollectionUtils.isEmpty(itemsSaved)) {
             response.setStatus(functionalError.SAVE_FAIL("StatusUtilReservationVilleVoyage", locale));
             response.setHasError(true);
             return response;
         }
+
         List<StatusUtilReservationBilletVoyageDTO> itemsDto = (Utilities.isTrue(request.getIsSimpleLoading()))
                                 ? StatusUtilReservationBilletVoyageTransformer.INSTANCE.toLiteDtos(itemsSaved)
                                 : StatusUtilReservationBilletVoyageTransformer.INSTANCE.toDtos(itemsSaved);
+
         response.setItems(itemsDto);
         response.setHasError(false);
         response.setStatus(functionalError.SUCCESS("", locale));
@@ -133,7 +130,7 @@ public class StatusUtilRservationBilletVoyageBusiness implements IBasicBusiness<
         }
         List<StatusUtilReservationBilletVoyageDTO> itemsDtos =  Collections.synchronizedList(new ArrayList<StatusUtilReservationBilletVoyageDTO>());
         for(StatusUtilReservationBilletVoyageDTO dto: request.getDatas() ) {
-            Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+            Map<String, Object> fieldsToVerify = new HashMap<>();
             fieldsToVerify.put("id", dto.getId());
             if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
                 response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
@@ -148,8 +145,7 @@ public class StatusUtilRservationBilletVoyageBusiness implements IBasicBusiness<
             itemsDtos.add(dto);
         }
         for(StatusUtilReservationBilletVoyageDTO dto : itemsDtos){
-            StatusUtilReservationBilletVoyage entityToSave = null;
-            entityToSave = statusUtilReservationBilletVoyageRepository.findOne(dto.getId());
+            StatusUtilReservationBilletVoyage entityToSave = statusUtilReservationBilletVoyageRepository.findOne(dto.getId());
             if (entityToSave == null) {
                 response.setStatus(functionalError.DATA_NOT_EXIST("StatusUtilReservationBilletVoyage id -> " + dto.getId(), locale));
                 response.setHasError(true);
@@ -165,7 +161,7 @@ public class StatusUtilRservationBilletVoyageBusiness implements IBasicBusiness<
                 }
                 entityToSave.setReservationBilletVoyage(existingReservationBilletVoyage);
             }
-            StatusUtil existingStatusUtil = null;
+            StatusUtil existingStatusUtil;
             if (Utilities.isBlank(dto.getStatusUtilDesignation()) && !entityToSave.getStatusUtil().getDesignation().equalsIgnoreCase(dto.getStatusUtilDesignation())) {
                 existingStatusUtil = statusUtilRepository.findByDesignation(dto.getStatusUtilDesignation(), false);
                 if (existingStatusUtil == null) {
@@ -181,8 +177,7 @@ public class StatusUtilRservationBilletVoyageBusiness implements IBasicBusiness<
             response.setStatus(functionalError.DATA_NOT_EXIST("Erreur de modification ",locale));
             response.setHasError(true);
         }
-        List<StatusUtilReservationBilletVoyage> itemsSaved = null;
-        itemsSaved = statusUtilReservationBilletVoyageRepository.saveAll((Iterable<StatusUtilReservationBilletVoyage>) items);
+        List<StatusUtilReservationBilletVoyage> itemsSaved = statusUtilReservationBilletVoyageRepository.saveAll((Iterable<StatusUtilReservationBilletVoyage>) items);
         if (CollectionUtils.isEmpty(itemsSaved)) {
                 response.setStatus(functionalError.SAVE_FAIL("StatusUtilReservationBilletVoyage", locale));
                 response.setHasError(true);
@@ -199,15 +194,15 @@ public class StatusUtilRservationBilletVoyageBusiness implements IBasicBusiness<
 
     @Override
     public Response<StatusUtilReservationBilletVoyageDTO> delete(Request<StatusUtilReservationBilletVoyageDTO> request, Locale locale) {
-        Response<StatusUtilReservationBilletVoyageDTO> response = new Response<StatusUtilReservationBilletVoyageDTO>();
-        List<StatusUtilReservationBilletVoyage> items = new ArrayList<StatusUtilReservationBilletVoyage>();
+        Response<StatusUtilReservationBilletVoyageDTO> response = new Response<>();
+        List<StatusUtilReservationBilletVoyage> items = new ArrayList<>();
         if(request.getDatas() == null  || CollectionUtils.isEmpty(request.getDatas())){
             response.setStatus(functionalError.DATA_NOT_EXIST("Liste vide ",locale));
             response.setHasError(true);
             return response;
         }
         for(StatusUtilReservationBilletVoyageDTO dto: request.getDatas() ) {
-            Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+            Map<String, Object> fieldsToVerify = new HashMap<>();
             fieldsToVerify.put("id", dto.getId());
             if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
                 response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
@@ -216,8 +211,7 @@ public class StatusUtilRservationBilletVoyageBusiness implements IBasicBusiness<
             }
         }
         for(StatusUtilReservationBilletVoyageDTO dto : request.getDatas()){
-            StatusUtilReservationBilletVoyage existingEntity = null;
-            existingEntity = statusUtilReservationBilletVoyageRepository.findOne(dto.getId());
+            StatusUtilReservationBilletVoyage existingEntity = statusUtilReservationBilletVoyageRepository.findOne(dto.getId());
             if (existingEntity == null) {
                 response.setStatus(functionalError.DATA_NOT_EXIST("StatusUtilReservationBillet id -> " + dto.getId(), locale));
                 response.setHasError(true);
@@ -279,43 +273,6 @@ public class StatusUtilRservationBilletVoyageBusiness implements IBasicBusiness<
 
     @Override
     public Response<StatusUtilReservationBilletVoyageDTO> getByCriteria(Request<StatusUtilReservationBilletVoyageDTO> request, Locale locale) {
-
-    /*    log.info("----begin get HistoriqueDemande-----");
-
-        Response<StatusUtilCompagnieTransportDTO> response = new Response<StatusUtilCompagnieTransportDTO>();
-
-        //verification si le parametre d'ordre à été fourni, sinon nous mettons le paramètre à vide
-        if (Utilities.blank(request.getData().getOrderField())) {
-            request.getData().setOrderField("");
-        }
-
-        //verification si le parametre direction à été fourni, sinon nous mettons le paramètre ascendant( du plus ancien au plus ressent)
-        if (Utilities.blank(request.getData().getOrderDirection())) {
-            request.getData().setOrderDirection("asc");
-        }
-
-        //recuperation des entités en base
-        List<HistoriqueDemande> items = statusUtilCompagnieTransportRepository.getByCriteria(request, em, locale);
-
-        if (Utilities.isEmpty(items)) {
-            response.setStatus(functionalError.DATA_EMPTY("HistoriqueDemande", locale));
-            response.setHasError(false);
-            return response;
-        }
-
-        //Transformation
-        List<HistoriqueDemandeDto> itemsDto = HistoriqueDemandeTransformer.INSTANCE.toDtos(items);
-
-        //Envoie de la reponse
-        response.setItems(itemsDto);
-        response.setCount(statusUtilCompagnieTransportRepository.count(request, em, locale));
-        response.setHasError(false);
-        response.setStatus(functionalError.SUCCESS("", locale));
-
-        log.info("----end get HistoriqueDemande-----");
-
-        return response;
-        */
         return null;
     }
 }

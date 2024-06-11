@@ -316,135 +316,11 @@ public class CompagnieTransportBusiness implements IBasicBusiness<Request<Compag
 
     @Override
     public Response<CompagnieTransportDTO> delete(Request<CompagnieTransportDTO> request, Locale locale) {
-        /*log.info("----begin delete Profil-----");
-
-        Response<ProfilDto> response = new Response<ProfilDto>();
-        List<Profil> items = new ArrayList<Profil>();
-
-        for (ProfilDto dto : request.getDatas()) {
-            // Definir les parametres obligatoires
-            Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
-            fieldsToVerify.put("id", dto.getId());
-            if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
-                response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
-                response.setHasError(true);
-                return response;
-            }
-            // Verifier si la profil existe
-            Profil existingEntity = null;
-            existingEntity = statusUtilRepository.findOne(dto.getId(), false);
-            if (existingEntity == null) {
-                response.setStatus(functionalError.DATA_NOT_EXIST("profil -> " + dto.getId(), locale));
-                response.setHasError(true);
-                return response;
-            }
-            // -----------------------------------------------------------------------
-            // ----------- CHECK IF DATA IS USED
-            // -----------------------------------------------------------------------
-            // user
-            List<User> listOfUser = userRepository.findByProfilId(existingEntity.getId(), false);
-            if (listOfUser != null && !listOfUser.isEmpty()) {
-                response.setStatus(functionalError.DATA_NOT_DELETABLE("(" + listOfUser.size() + ")", locale));
-                response.setHasError(true);
-                return response;
-            }
-            // profilFonctionnalite
-            List<ProfilFonctionnalite> listOfProfilFonctionnalite = profilFonctionnaliteRepository
-                    .findByProfilId(existingEntity.getId(), false);
-            if (listOfProfilFonctionnalite != null && !listOfProfilFonctionnalite.isEmpty()) {
-                response.setStatus(
-                        functionalError.DATA_NOT_DELETABLE("(" + listOfProfilFonctionnalite.size() + ")", locale));
-                response.setHasError(true);
-                return response;
-            }
-            existingEntity.setIsDeleted(true);
-            existingEntity.setDeletedAt(Utilities.getCurrentDate());
-            existingEntity.setDeletedBy((long) request.getUser());
-            items.add(existingEntity);
-        }
-        if (!items.isEmpty()) {
-            // supprimer les donnees en base
-            statusUtilRepository.saveAll((Iterable<Profil>) items);
-
-            response.setHasError(false);
-            response.setStatus(functionalError.SUCCESS("", locale));
-        }
-        log.info("----end delete Profil-----");
-        return response;*/
         return null;
     }
 
     @Override
     public Response<CompagnieTransportDTO> forceDelete(Request<CompagnieTransportDTO> request, Locale locale) {
-       /* log.info("----begin forceDelete Profil-----");
-
-        Response<ProfilDto> response = new Response<ProfilDto>();
-        List<Profil> items = new ArrayList<Profil>();
-        for (ProfilDto dto : request.getDatas()) {
-            // Definir les parametres obligatoires
-            Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
-            fieldsToVerify.put("id", dto.getId());
-            if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
-                response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
-                response.setHasError(true);
-                return response;
-            }
-            // Verifier si la profil existe
-            Profil existingEntity = null;
-            existingEntity = statusUtilRepository.findOne(dto.getId(), false);
-            if (existingEntity == null) {
-                response.setStatus(functionalError.DATA_NOT_EXIST("profil -> " + dto.getId(), locale));
-                response.setHasError(true);
-                return response;
-            }
-            // -----------------------------------------------------------------------
-            // ----------- CHECK IF DATA IS USED
-            // -----------------------------------------------------------------------
-
-            // user
-            List<User> listOfUser = userRepository.findByProfilId(existingEntity.getId(), false);
-            if (listOfUser != null && !listOfUser.isEmpty()) {
-                Request<UserDto> deleteRequest = new Request<UserDto>();
-                deleteRequest.setDatas(UserTransformer.INSTANCE.toDtos(listOfUser));
-                deleteRequest.setUser(request.getUser());
-                Response<UserDto> deleteResponse = userBusiness.delete(deleteRequest, locale);
-                if (deleteResponse.isHasError()) {
-                    response.setStatus(deleteResponse.getStatus());
-                    response.setHasError(true);
-                    return response;
-                }
-            }
-            // profilFonctionnalite
-            List<ProfilFonctionnalite> listOfProfilFonctionnalite = profilFonctionnaliteRepository
-                    .findByProfilId(existingEntity.getId(), false);
-            if (listOfProfilFonctionnalite != null && !listOfProfilFonctionnalite.isEmpty()) {
-                Request<ProfilFonctionnaliteDto> deleteRequest = new Request<ProfilFonctionnaliteDto>();
-                deleteRequest.setDatas(ProfilFonctionnaliteTransformer.INSTANCE.toDtos(listOfProfilFonctionnalite));
-                deleteRequest.setUser(request.getUser());
-                Response<ProfilFonctionnaliteDto> deleteResponse = profilFonctionnaliteBusiness.delete(deleteRequest,
-                        locale);
-                if (deleteResponse.isHasError()) {
-                    response.setStatus(deleteResponse.getStatus());
-                    response.setHasError(true);
-                    return response;
-                }
-            }
-            existingEntity.setIsDeleted(true);
-            existingEntity.setDeletedAt(Utilities.getCurrentDate());
-            existingEntity.setDeletedBy((long) request.getUser());
-            items.add(existingEntity);
-        }
-
-        if (!items.isEmpty()) {
-            // supprimer les donnees en base
-            statusUtilRepository.saveAll((Iterable<Profil>) items);
-
-            response.setHasError(false);
-            response.setStatus(functionalError.SUCCESS("", locale));
-        }
-
-        log.info("----end forceDelete Profil-----");
-        return response;*/
         return null;
     }
 
@@ -455,76 +331,13 @@ public class CompagnieTransportBusiness implements IBasicBusiness<Request<Compag
 
     @Override
     public Response<CompagnieTransportDTO> getByCriteria(Request<CompagnieTransportDTO> request, Locale locale) {
-       /* log.info("----begin get Profil-----");
-
-        Response<ProfilDto> response = new Response<ProfilDto>();
-
-        if (Utilities.blank(request.getData().getOrderField())) {
-            request.getData().setOrderField("");
-        }
-        if (Utilities.blank(request.getData().getOrderDirection())) {
-            request.getData().setOrderDirection("asc");
-        }
-
-        List<Profil> items = statusUtilRepository.getByCriteria(request, em, locale);
-
-        if (Utilities.isEmpty(items)) {
-            response.setStatus(functionalError.DATA_EMPTY("profil", locale));
-            response.setHasError(false);
-            return response;
-        }
-
-        List<ProfilDto> itemsDto = (Utilities.isTrue(request.getIsSimpleLoading()))
-                ? ProfilTransformer.INSTANCE.toLiteDtos(items)
-                : ProfilTransformer.INSTANCE.toDtos(items);
-
-        final int size = items.size();
-        List<String> listOfError = Collections.synchronizedList(new ArrayList<String>());
-        itemsDto.parallelStream().forEach(dto -> {
-            try {
-                dto = getFullInfos(dto, size, request.getIsSimpleLoading(), locale);
-            } catch (Exception e) {
-                listOfError.add(e.getMessage());
-                e.printStackTrace();
-            }
-        });
-        if (Utilities.isNotEmpty(listOfError)) {
-            Object[] objArray = listOfError.stream().distinct().toArray();
-            throw new RuntimeException(StringUtils.join(objArray, ", "));
-        }
-
-        response.setItems(itemsDto);
-        response.setCount(statusUtilRepository.count(request, em, locale));
-        response.setHasError(false);
-        response.setStatus(functionalError.SUCCESS("", locale));
-
-        log.info("----end get Profil-----");
-        return response;*/
         return null;
     }
 
-   /* private ProfilDto getFullInfos(ProfilDto dto, Integer size, Boolean isSimpleLoading, Locale locale)
-            throws Exception {
-        // put code here
-        if (Utilities.isTrue(isSimpleLoading)) {
-            return dto;
-        }
-        if (size > 1) {
-            return dto;
-        }
-        var datasFonctionnalites = profilFonctionnaliteRepository.getFonctionnalitedByProfilId(dto.getId(), Boolean.FALSE);
-        if (Utilities.isNotEmpty(datasFonctionnalites)) {
-            dto.setDatasFonctionnalite(FonctionnaliteTransformer.INSTANCE.toDtos(datasFonctionnalites));
-        }
-        return dto;
-    }*/
-
-
     @Transactional(rollbackFor = {RuntimeException.class, Exception.class})
-    public  Response<CompagnieTransportDTO> getAllProcessingCompagnies(Request<CompagnieTransportDTO> request, Locale locale) throws ParseException {
-        Response<CompagnieTransportDTO> response = new Response<CompagnieTransportDTO>();
-        List<CompagnieTransport> items = new ArrayList<CompagnieTransport>();
-        Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+    public  Response<CompagnieTransportDTO> getDemandeCompagniesEnCours(Request<CompagnieTransportDTO> request, Locale locale) throws ParseException {
+        Response<CompagnieTransportDTO> response = new Response<>();
+        Map<String, Object> fieldsToVerify = new HashMap<>();
         fieldsToVerify.put("size",request.getSize());
         fieldsToVerify.put("index",request.getIndex());
         if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
@@ -532,11 +345,8 @@ public class CompagnieTransportBusiness implements IBasicBusiness<Request<Compag
             response.setHasError(true);
             return response;
         }
-        Long count=0L;
-        count=compagnieTransportRepository.countAllProcessingCompagnies(ProjectConstants.COMPAGNIE_TRANSPORT_ENCOURS_TRAITEMENT,false);
-        log.info("_493 COUNT=====:"+count); //TODO A effacer
-        items=compagnieTransportRepository.getAllProcessingCompagnies(ProjectConstants.COMPAGNIE_TRANSPORT_ENCOURS_TRAITEMENT,false, PageRequest.of(request.getIndex(), request.getSize()));
-        log.info("_494 ITEMS=====:"+items.toString()); //TODO A effacer
+        Long count=compagnieTransportRepository.countAllProcessingCompagnies(ProjectConstants.COMPAGNIE_TRANSPORT_ENCOURS_TRAITEMENT,false);
+        List<CompagnieTransport> items=compagnieTransportRepository.getAllProcessingCompagnies(ProjectConstants.COMPAGNIE_TRANSPORT_ENCOURS_TRAITEMENT,false, PageRequest.of(request.getIndex(), request.getSize()));
         if(CollectionUtils.isEmpty(items)){
             response.setStatus(functionalError.DATA_NOT_EXIST("Aucune compagnie de transport en de traiement",locale));
             response.setHasError(true);
@@ -555,10 +365,8 @@ public class CompagnieTransportBusiness implements IBasicBusiness<Request<Compag
 
     @Transactional(rollbackFor = {RuntimeException.class, Exception.class})
     public  Response<CompagnieTransportDTO> validateAdhesionRequestCompagny(Request<CompagnieTransportDTO> request, Locale locale) throws ParseException {
-        Response<CompagnieTransportDTO> response = new Response<CompagnieTransportDTO>();
-        Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
-        List<CompagnieTransport> items = new ArrayList<CompagnieTransport>();
-        CompagnieTransportDTO itemDTO= new CompagnieTransportDTO();
+        Response<CompagnieTransportDTO> response = new Response<>();
+        Map<String, Object> fieldsToVerify = new HashMap<>();
         if(request.getData() == null){
             response.setStatus(functionalError.DATA_NOT_EXIST("Aucune donnée définie ",locale));
             response.setHasError(true);
@@ -600,7 +408,6 @@ public class CompagnieTransportBusiness implements IBasicBusiness<Request<Compag
         itemsDatas.add(statusUtilCompagnieTransportDTO);
         Request<StatusUtilCompagnieTransportDTO> subRequest = new Request<StatusUtilCompagnieTransportDTO>();
         subRequest.setDatas(itemsDatas);
-        //subRequest.setUser(request.getUser());
         Response<StatusUtilCompagnieTransportDTO> subResponse = statusUtilCompagnieTransportBusiness.create(subRequest, locale);
         if (subResponse.isHasError()) {
             response.setStatus(subResponse.getStatus());
@@ -611,19 +418,16 @@ public class CompagnieTransportBusiness implements IBasicBusiness<Request<Compag
         Runnable runnable = () -> {
             BodiesOfEmail bodiesOfEmail= new BodiesOfEmail();
             EmailDTO emailDTO = new EmailDTO();
-            Request<EmailDTO> subRequestEmail = new Request<EmailDTO>();
-
+            Request<EmailDTO> subRequestEmail = new Request<>();
             emailDTO.setSubject("Validation de compagnie de transport");
             emailDTO.setMessage(bodiesOfEmail.bodyHtmlMailValidationCompagny());
             emailDTO.setToAddress(entityUpdate.getEmail());
             subRequestEmail.setData(emailDTO);
-
             emailServiceBusiness.sendSimpleEmail(subRequestEmail,locale);
         };
         runnable.run();
 
         CompagnieTransportDTO itemDto = CompagnieTransportTransformer.INSTANCE.toDto(entityUpdate);
-        //response.setCount(count);
         response.setItem(itemDto);
         response.setHasError(false);
         response.setStatus(functionalError.SUCCESS("", locale));
@@ -633,9 +437,8 @@ public class CompagnieTransportBusiness implements IBasicBusiness<Request<Compag
 
     @Transactional(rollbackFor = {RuntimeException.class, Exception.class})
     public  Response<CompagnieTransportDTO> getAllValidedCompagnies(Request<CompagnieTransportDTO> request, Locale locale) throws ParseException {
-        Response<CompagnieTransportDTO> response = new Response<CompagnieTransportDTO>();
-        List<CompagnieTransport> items = new ArrayList<CompagnieTransport>();
-        Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+        Response<CompagnieTransportDTO> response = new Response<>();
+        Map<String, Object> fieldsToVerify = new HashMap<>();
         fieldsToVerify.put("size",request.getSize());
         fieldsToVerify.put("index",request.getIndex());
         if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
@@ -643,17 +446,18 @@ public class CompagnieTransportBusiness implements IBasicBusiness<Request<Compag
             response.setHasError(true);
             return response;
         }
-        Long count=0L;
-        count=compagnieTransportRepository.countAllValidedCompagnies(ProjectConstants.COMPAGNIE_TRANSPORT_VALIDE,false);
-        items=compagnieTransportRepository.getAllValidedCompagnies(ProjectConstants.COMPAGNIE_TRANSPORT_VALIDE,false, PageRequest.of(request.getIndex(), request.getSize()));
+        Long count = compagnieTransportRepository.countAllValidedCompagnies(ProjectConstants.COMPAGNIE_TRANSPORT_VALIDE,false);
+        List<CompagnieTransport> items=compagnieTransportRepository.getAllValidedCompagnies(ProjectConstants.COMPAGNIE_TRANSPORT_VALIDE,false, PageRequest.of(request.getIndex(), request.getSize()));
         if(CollectionUtils.isEmpty(items)){
             response.setStatus(functionalError.DATA_NOT_EXIST("Aucune compagnie de transport valide n'est disponible",locale));
             response.setHasError(true);
             return response;
         }
+
         List<CompagnieTransportDTO> itemsDto = (Utilities.isTrue(request.getIsSimpleLoading()))
                 ? CompagnieTransportTransformer.INSTANCE.toLiteDtos(items)
                 : CompagnieTransportTransformer.INSTANCE.toDtos(items);
+
         response.setCount(count);
         response.setItems(itemsDto);
         response.setHasError(false);
@@ -663,23 +467,21 @@ public class CompagnieTransportBusiness implements IBasicBusiness<Request<Compag
 
     @Transactional(rollbackFor = {RuntimeException.class, Exception.class,IllegalArgumentException.class, IOException.class})
     public  Response<DocumentDTO> uploadAttestionTransport(Request<CompagnieTransportDTO> request, MultipartFile file, Locale locale) throws ParseException, IOException {
-        Response<DocumentDTO> response = new Response<DocumentDTO>();
-        List<CompagnieTransport> items = new ArrayList<CompagnieTransport>();
-        Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+        Response<DocumentDTO> response = new Response<>();
+        List<CompagnieTransport> items = new ArrayList<>();
         if(request.getData()==null){
             response.setStatus(functionalError.DATA_NOT_EXIST("Aucune donnée définie ",locale));
             response.setHasError(true);
             return response;
         }
-        //Vérification champ raisonSociale
+        Map<String, Object> fieldsToVerify = new HashMap<>();
         fieldsToVerify.put("compagnieRaisonSociale",request.getData().getRaisonSociale());
         if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
             response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
             response.setHasError(true);
             return response;
         }
-        CompagnieTransport existingEntity=null;
-        existingEntity=compagnieTransportRepository.findByRaisonSociale(request.getData().getRaisonSociale(),false);
+        CompagnieTransport existingEntity=compagnieTransportRepository.findByRaisonSociale(request.getData().getRaisonSociale(),false);
         if (existingEntity == null) {
             response.setStatus(functionalError.DATA_NOT_EXIST("La compagnie de transport n'existe pas", locale));
             response.setHasError(true);
@@ -690,7 +492,6 @@ public class CompagnieTransportBusiness implements IBasicBusiness<Request<Compag
             response.setHasError(true);
             return response;
         }
-        //Get Extension
         String extension = StringUtils.getFilenameExtension(file.getOriginalFilename());
         if(!extension.equalsIgnoreCase("PDF")){
             response.setStatus(functionalError.DATA_NOT_EXIST("Le document doit être au format PDF ",locale));
@@ -749,7 +550,7 @@ public class CompagnieTransportBusiness implements IBasicBusiness<Request<Compag
         compagnieAttestionTransportDTO.setCompagnieRaisonSociale(request.getData().getRaisonSociale());
         compagnieAttestionTransportDTO.setDocumentDesignation(subResponse.getItem().getDesignation());
         itemsDTO.add(compagnieAttestionTransportDTO);
-        Request<CompagnieAttestionTransportDTO> subRequest1 = new Request<CompagnieAttestionTransportDTO>();
+        Request<CompagnieAttestionTransportDTO> subRequest1 = new Request<>();
         subRequest1.setDatas(itemsDTO);
         Response<CompagnieAttestionTransportDTO> subResponse1 = compagnieAttestionTransportBusiness.create(subRequest1, locale);
         if (subResponse.isHasError()) {
@@ -774,31 +575,25 @@ public class CompagnieTransportBusiness implements IBasicBusiness<Request<Compag
             response.setHasError(true);
             return response;
         }
-        //Vérification champ raisonSociale
         fieldsToVerify.put("compagnieRaisonSociale",request.getData().getRaisonSociale());
         if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
             response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
             response.setHasError(true);
             return response;
         }
-        //Check if compagny exists
-        CompagnieTransport existingEntity=null;
-        existingEntity=compagnieTransportRepository.findByRaisonSociale(request.getData().getRaisonSociale(),false);
+        CompagnieTransport existingEntity=compagnieTransportRepository.findByRaisonSociale(request.getData().getRaisonSociale(),false);
         if (existingEntity == null) {
             response.setStatus(functionalError.DATA_NOT_EXIST("La compagnie de transport n'existe pas", locale));
             response.setHasError(true);
             return response;
         }
-        //Check if compagny has a attestation transport
         String raisonSociale = request.getData().getRaisonSociale();
-        CompagnieAttestionTransport existingCompagnieAttestionTransport = null;
-        existingCompagnieAttestionTransport = compagnieAttestationTransportRepository.findByRaisonSociale(raisonSociale,false);
+        CompagnieAttestionTransport existingCompagnieAttestionTransport = compagnieAttestationTransportRepository.findByRaisonSociale(raisonSociale,false);
         if (existingEntity == null) {
             response.setStatus(functionalError.DATA_NOT_EXIST("Aucune attestation de transport declarée pour la compagnie", locale));
             response.setHasError(true);
             return response;
         }
-        //Get information about Attestation Document
         Document attestationTransportEntity = existingCompagnieAttestionTransport.getAttestionTransport();
         if(attestationTransportEntity==null || attestationTransportEntity.getPath()==null){
             response.setStatus(functionalError.DATA_NOT_EXIST("Aucune attestation de transport declarée pour la compagnie", locale));
@@ -813,11 +608,8 @@ public class CompagnieTransportBusiness implements IBasicBusiness<Request<Compag
             response.setHasError(true);
             return response;
         }
-        //Build path absolu of attestion transport with Extension
-        String linked =  racineDocumentPath + documentpath;
-        //return document for response
         DocumentReponseDTO documentReponseDTO = new DocumentReponseDTO();
-        documentReponseDTO.setLinkedAttestionDocument(linked);
+        documentReponseDTO.setLinkedAttestionDocument(racineDocumentPath + documentpath);
         response.setItem(documentReponseDTO);
         response.setHasError(false);
         response.setStatus(functionalError.SUCCESS("", locale));

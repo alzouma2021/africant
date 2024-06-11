@@ -25,11 +25,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-/**
- * Cette classe traite les operations portant sur les agences
- * @author  Alzouma Moussa Mahamadou
- * @date 09/05/2022
- */
+
 @Log
 @Component
 public class VilleBusiness implements IBasicBusiness<Request<VilleDTO>, Response<VilleDTO>> {
@@ -212,151 +208,36 @@ public class VilleBusiness implements IBasicBusiness<Request<VilleDTO>, Response
 
     @Override
     public Response<VilleDTO> delete(Request<VilleDTO> request, Locale locale) {
-
-/*        log.info("----begin delete agence-----");
-
-        Response<AgenceDto> response = new Response<AgenceDto>();
-        List<Agence> items = new ArrayList<Agence>();
-
-        //Verification
-        if(request.getDatas().isEmpty() || request.getDatas() == null){
-            response.setStatus(functionalError.DATA_NOT_EXIST("Liste de données est vide ",locale));
-            response.setHasError(true);
-            return response;
-        }
-
-        //Verification des champs obligatoires
-        for(AgenceDto dto : request.getDatas()) {
-
-            Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
-            fieldsToVerify.put("id", dto.getId());
-
-            if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
-                response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
-                response.setHasError(true);
-                return response;
-            }
-
-        }
-
-        //Parcourir la liste
-        for(AgenceDto dto : request.getDatas()){
-
-            // Verification du parametre identifiant
-            Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
-            fieldsToVerify.put("id", dto.getId());
-
-            if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
-                response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
-                response.setHasError(true);
-                return response;
-            }
-
-            // Verify if Functionality  exist
-            Agence existingEntity = null;
-
-            existingEntity = agenceRepository.findOne(dto.getId(), false);
-
-            if (existingEntity == null) {
-                response.setStatus(functionalError.DATA_NOT_EXIST("L'agence ayant  id -> " + dto.getId() + ",n'existe pas", locale));
-                response.setHasError(true);
-                return response;
-            }
-
-            log.info("_413 Verification d'existence de l'objet"+existingEntity.toString()); //TODO A effacer
-
-            //Suppression logique
-            existingEntity.setIsDeleted(true);
-            existingEntity.setDeletedAt(Utilities.getCurrentDate());
-            existingEntity.setDeletedBy(request.user);// a modifier
-
-            items.add(existingEntity);
-
-        }
-
-        //Verificatioon de la liste de données recues
-        if(items == null  || items.isEmpty()){
-            response.setStatus(functionalError.DATA_NOT_EXIST("Liste de données est vide ",locale));
-            response.setHasError(true);
-            return response;
-        }
-
-        response.setHasError(false);
-        response.setStatus(functionalError.SUCCESS("", locale));
-
-        return response;*/
-        return null;
+        return new Response<>();
     }
 
     @Override
     public Response<VilleDTO> forceDelete(Request<VilleDTO> request, Locale locale) {
-        return null ;
+        return new Response<>();
     }
 
     @Override
     public Response<VilleDTO> getAll(Locale locale) throws ParseException {
-       return null;
+        return new Response<>();
     }
 
     @Override
     public Response<VilleDTO> getByCriteria(Request<VilleDTO> request, Locale locale) {
-       /*
-        log.info("----begin get agence-----");
-
-        Response<AgenceDto> response = new Response<AgenceDto>();
-
-        if (Utilities.blank(request.getData().getOrderField())) {
-            request.getData().setOrderField("");
-        }
-        if (Utilities.blank(request.getData().getOrderDirection())) {
-            request.getData().setOrderDirection("asc");
-        }
-
-        List<Agence> items = agenceRepository.getByCriteria(request, em, locale);
-
-        if (Utilities.isEmpty(items)) {
-            response.setStatus(functionalError.DATA_EMPTY("Aucune agence ne correspond aux critères de recherche definis", locale));
-            response.setHasError(false);
-            return response;
-        }
-
-        List<AgenceDto> itemsDto = (Utilities.isTrue(request.getIsSimpleLoading()))
-                                 ? AgenceTransformer.INSTANCE.toLiteDtos(items)
-                                 : AgenceTransformer.INSTANCE.toDtos(items);
-
-
-        response.setItems(itemsDto);
-        response.setCount(agenceRepository.count(request, em, locale));
-        response.setHasError(false);
-        response.setStatus(functionalError.SUCCESS("", locale));
-
-        log.info("----end get agence-----");
-
-        return response;
-    */
         return null;
     }
 
     @Transactional(rollbackFor = {RuntimeException.class, Exception.class})
     public  Response<VilleDTO> getAllCities(Request<VilleDTO> request, Locale locale) throws ParseException {
-        Response<VilleDTO> response = new Response<VilleDTO>();
-        List<Ville> items = new ArrayList<Ville>();
-        Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
-       /* fieldsToVerify.put("size",request.getSize());
-        fieldsToVerify.put("index",request.getIndex());
-        if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
-            response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
-            response.setHasError(true);
-            return response;
-        }*/
-        Long count=0L;
-        count=villeRepository.countAllCities(false);
-        items=villeRepository.getAllCities(false );
+        Response<VilleDTO> response = new Response<>();
+        Long count = villeRepository.countAllCities(false);
+
+        List<Ville> items = villeRepository.getAllCities(false );
         if(CollectionUtils.isEmpty(items)){
             response.setStatus(functionalError.DATA_NOT_EXIST("Aucune ville n'est trouvée",locale));
             response.setHasError(true);
             return response;
         }
+
         List<VilleDTO> itemsDto = (Utilities.isTrue(request.getIsSimpleLoading()))
                                 ? VilleTransformer.INSTANCE.toLiteDtos(items)
                                 : VilleTransformer.INSTANCE.toDtos(items);
