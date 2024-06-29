@@ -69,11 +69,13 @@ com\africanb\africanb\helper\transformer\offrreVoyage\BusTransformer.class
 com\africanb\africanb\helper\transformer\reservationBilletVoyage\HistoriquePaiementTransformer.class
 com\africanb\africanb\helper\dto\document\DocumentDTO.class
 com\africanb\africanb\rest\api\reference\ReferenceFamilleController.class
+com\africanb\africanb\Business\design\factory\modeAbonnement\ModeAbonnementDTOCreator.class
 com\africanb\africanb\rest\api\compagnie\ModePaiementController.class
 com\africanb\africanb\helper\contrat\Request.class
 com\africanb\africanb\utils\Reference\ReferenceFamille.class
 com\africanb\africanb\dao\repository\security\FunctionalityRepository.class
 com\africanb\africanb\dao\repository\compagnie\ModePaiement\ModePaiementMoovMoneyRepository.class
+com\africanb\africanb\Business\design\factory\modeAbonnement\ModeAbonnementPrelevementDTOFactory.class
 com\africanb\africanb\Business\offreVoyage\ProgrammeBusiness.class
 com\africanb\africanb\dao\entity\compagnie\ModeAbonnement\ModeAbonnement.class
 com\africanb\africanb\utils\Reference\ReferenceBusines.class
@@ -120,6 +122,7 @@ com\africanb\africanb\dao\entity\offreVoyage\ValeurCaracteristiqueOffreVoyage.cl
 com\africanb\africanb\helper\transformer\offrreVoyage\VilleEscaleTransformer.class
 com\africanb\africanb\utils\emailService\EmailServiceInterface.class
 com\africanb\africanb\rest\api\offreVoyage\ValeurCaracteristiqueOffreVoyageController.class
+com\africanb\africanb\Business\design\factory\modeAbonnement\ModeAbonnementDTOFactory.class
 com\africanb\africanb\dao\entity\offreVoyage\PrixOffreVoyage.class
 com\africanb\africanb\helper\FunctionalError.class
 com\africanb\africanb\rest\WebMvcConfig.class
@@ -130,6 +133,7 @@ com\africanb\africanb\dao\repository\compagnie\ModeAbonnementRepository.class
 com\africanb\africanb\dao\repository\compagnie\CompagnieAttestationTransportRepository.class
 com\africanb\africanb\dao\entity\reservationBilletVoyage\StatusUtilReservationBilletVoyage.class
 com\africanb\africanb\helper\dto\compagnie\VilleDTO.class
+com\africanb\africanb\Business\design\factory\modeAbonnement\ModeAbonnementPrelevementFactory.class
 com\africanb\africanb\dao\repository\compagnie\AbonnementPrelevementRepository.class
 com\africanb\africanb\helper\transformer\reservationBilletVoyage\ReservationBilletVoyageTransformerImpl.class
 com\africanb\africanb\dao\entity\reservationBilletVoyage\ReservationBilletVoyage.class
@@ -157,6 +161,7 @@ com\africanb\africanb\Business\compagnie\ModePaiement\ModePaiementMoovMoneyBusin
 com\africanb\africanb\dao\entity\compagnie\CompagnieTransport.class
 com\africanb\africanb\dao\repository\reservationBilletVoyage\HistoriquePaiementRepository.class
 com\africanb\africanb\rest\api\security\UsersController.class
+com\africanb\africanb\Business\design\factory\modeAbonnement\ModeAbonnementPeriodiqueFactory.class
 com\africanb\africanb\helper\transformer\offrreVoyage\ValeurCaracteristiqueOffreVoyageLongTransformerImpl.class
 com\africanb\africanb\dao\repository\compagnie\PaysRepository.class
 com\africanb\africanb\helper\dto\reservationBilletVoyage\ReservationBilletVoyageDTO.class
@@ -175,6 +180,7 @@ com\africanb\africanb\utils\htmltopdf\PdfController.class
 com\africanb\africanb\helper\transformer\offrreVoyage\PrixOffreVoyageTransformerImpl.class
 com\africanb\africanb\helper\transformer\offrreVoyage\ProgrammeTransformerImpl.class
 com\africanb\africanb\helper\dto\offreVoyage\PrixOffreVoyageDTO.class
+com\africanb\africanb\Business\design\factory\modeAbonnement\ModeAbonnementPeriodiqueDTOFactory.class
 com\africanb\africanb\helper\dto\security\UsersDTO.class
 com\africanb\africanb\helper\transformer\compagnie\StatusUtilCompagnieTransportTransformer.class
 com\africanb\africanb\helper\transformer\compagnie\ModePaiement\ModePaimentWaveTransformerImpl.class
@@ -198,6 +204,7 @@ com\africanb\africanb\dao\repository\offreVoyage\ProgrammeRepository.class
 com\africanb\africanb\helper\transformer\offrreVoyage\ValeurCaracteristiqueOffreVoyageStringTransformerImpl.class
 com\africanb\africanb\Business\compagnie\FamilleStatusUtilBusiness.class
 com\africanb\africanb\Business\security\RoleBusiness.class
+com\africanb\africanb\Business\design\factory\modeAbonnement\ModeAbonnementFromEntityCreator.class
 com\africanb\africanb\helper\dto\compagnie\StatusUtilDTO.class
 com\africanb\africanb\dao\entity\security\Users.class
 com\africanb\africanb\Business\security\RoleFunctionalityBusiness.class

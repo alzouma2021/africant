@@ -1,5 +1,7 @@
 package com.africanb.africanb.Business.compagnie;
 
+import com.africanb.africanb.Business.design.factory.modeAbonnement.ModeAbonnementDTOCreator;
+import com.africanb.africanb.Business.design.factory.modeAbonnement.ModeAbonnementFromEntityCreator;
 import com.africanb.africanb.dao.entity.compagnie.CompagnieTransport;
 import com.africanb.africanb.dao.entity.compagnie.ModeAbonnement.AbonnementPeriodique;
 import com.africanb.africanb.dao.entity.compagnie.ModeAbonnement.AbonnementPrelevement;
@@ -67,7 +69,6 @@ public class ModeAbonnementBusiness implements IBasicBusiness<Request<ModeAbonne
     @Override
     public Response<ModeAbonnementDTO> create(Request<ModeAbonnementDTO> request, Locale locale) throws ParseException {
         Response<ModeAbonnementDTO> response = new Response<>();
-        List<ModeAbonnement> items = new ArrayList<>();
         List<ModeAbonnementDTO> itemsDto= new ArrayList<>();
         if(request.getDatas() == null || request.getDatas().isEmpty()){
             response.setStatus(functionalError.DATA_NOT_EXIST("Liste vide",locale));
@@ -120,7 +121,7 @@ public class ModeAbonnementBusiness implements IBasicBusiness<Request<ModeAbonne
                 return response;
             }
             itemDto=Utilities.transformerLaClasseModeAbonnementEnClasseFilleCorrespondante(itemDto);
-            ModeAbonnementDTO entitySaved = saveModeAbonnementEnFonctionDeLaClasseFilleCorrespondante(itemDto,locale);
+            ModeAbonnementDTO entitySaved = saveModeAbonnement(itemDto,locale);
             itemsDto.add(entitySaved);
         }
         if (CollectionUtils.isEmpty(itemsDto)) {
@@ -181,9 +182,9 @@ public class ModeAbonnementBusiness implements IBasicBusiness<Request<ModeAbonne
                 response.setStatus(functionalError.DATA_EXIST("Le type de mode d'abonnement n'existe pas", locale));
                 response.setHasError(true);
                 return response;
-            };
+            }
             itemDto=Utilities.transformerLaClasseModeAbonnementEnClasseFilleCorrespondante(itemDto);
-            ModeAbonnementDTO entitySaved=updateModeAbonnementEnFonctionDeLaClasseFilleCorrespondante(itemDto,locale);
+            ModeAbonnementDTO entitySaved= updateModeAbonnement(itemDto,locale);
             itemsDto.add(entitySaved);
         }
         if (CollectionUtils.isEmpty(itemsDto)) {
@@ -218,7 +219,7 @@ public class ModeAbonnementBusiness implements IBasicBusiness<Request<ModeAbonne
     }
 
     @Transactional(rollbackFor = {RuntimeException.class, Exception.class})
-    public Response<ModeAbonnementDTO> getModeAbonnementByCompagnieTransport(Request<ModeAbonnementDTO> request, Locale locale) throws ParseException {
+    public Response<ModeAbonnementDTO> getModeAbonnementByCompagnieTransport(Request<ModeAbonnementDTO> request, Locale locale) {
         Response<ModeAbonnementDTO> response = new Response<>();
         if (request.getData() == null ) {
             response.setStatus(functionalError.DATA_NOT_EXIST("Aucune donnée definie", locale));
@@ -249,11 +250,10 @@ public class ModeAbonnementBusiness implements IBasicBusiness<Request<ModeAbonne
         response.setItems(itemsDto);
         response.setHasError(false);
         response.setStatus(functionalError.SUCCESS("", locale));
-        log.info("----end update Mode Abonnement-----");
         return response;
     }
 
-    public ModeAbonnementDTO saveModeAbonnementEnFonctionDeLaClasseFilleCorrespondante(ModeAbonnementDTO modeAbonnementDTO,Locale locale) throws ParseException {
+    public ModeAbonnementDTO saveModeAbonnement(ModeAbonnementDTO modeAbonnementDTO, Locale locale) throws ParseException {
         if(modeAbonnementDTO instanceof AbonnementPeriodiqueDTO abonnementPeriodiqueDTO){
             Request<AbonnementPeriodiqueDTO> subRequest = new Request<>();
             List<AbonnementPeriodiqueDTO> itemsDTO = Collections.synchronizedList(new ArrayList<>());
@@ -265,31 +265,7 @@ public class ModeAbonnementBusiness implements IBasicBusiness<Request<ModeAbonne
                 response.setHasError(Boolean.TRUE);
                 return new ModeAbonnementDTO();
             }
-            ModeAbonnementDTO rtn = new ModeAbonnementDTO();
-            rtn.setId( subResponse.getItems().get(0).getId());
-            rtn.setDesignation( subResponse.getItems().get(0).getDesignation());
-            rtn.setDescription( subResponse.getItems().get(0).getDescription());
-            rtn.setRedevance( subResponse.getItems().get(0).getRedevance());
-            rtn.setRedevancePublicite( subResponse.getItems().get(0).getRedevancePublicite());
-            rtn.setDateDebutAbonnement(subResponse.getItems().get(0).getDateDebutAbonnement());
-            rtn.setDateFinAbonnement(subResponse.getItems().get(0).getDateFinAbonnement());
-            rtn.setPeriodiciteAbonnementDesignation(subResponse.getItems().get(0).getPeriodiciteAbonnementDesignation());
-            rtn.setCompagnieTransportRaisonSociale(subResponse.getItems().get(0).getCompagnieTransportRaisonSociale());
-            rtn.setDeletedAt( subResponse.getItems().get(0).getDeletedAt());
-            rtn.setUpdatedAt( subResponse.getItems().get(0).getUpdatedAt());
-            rtn.setCreatedAt( subResponse.getItems().get(0).getCreatedAt());
-            rtn.setCreatedBy( subResponse.getItems().get(0).getCreatedBy());
-            rtn.setIsDeleted( subResponse.getItems().get(0).getIsDeleted());
-            rtn.setDeletedBy( subResponse.getItems().get(0).getDeletedBy());
-            rtn.setUpdatedBy( subResponse.getItems().get(0).getUpdatedBy());
-            rtn.setIsDeletedParam( subResponse.getItems().get(0).getIsDeletedParam());
-            rtn.setUpdatedAtParam( subResponse.getItems().get(0).getUpdatedAtParam());
-            rtn.setCreatedAtParam( subResponse.getItems().get(0).getCreatedAtParam());
-            rtn.setCreatedByParam( subResponse.getItems().get(0).getCreatedByParam());
-            rtn.setUpdatedByParam(subResponse.getItems().get(0).getUpdatedByParam());
-            rtn.setOrderDirection(subResponse.getItems().get(0).getOrderDirection());
-
-            return rtn;
+            return ModeAbonnementDTOCreator.createModeAbonnementDTO(subResponse.getItems().get(0));
         }
         else if(modeAbonnementDTO instanceof AbonnementPrelevementDTO abonnementPrelevementDTO){
             Request<AbonnementPrelevementDTO> subRequest = new Request<>();
@@ -302,36 +278,14 @@ public class ModeAbonnementBusiness implements IBasicBusiness<Request<ModeAbonne
                 response.setHasError(Boolean.TRUE);
                 return new AbonnementPrelevementDTO();
             }
-            ModeAbonnementDTO rtn = new ModeAbonnementDTO();
-            rtn.setId( subResponse.getItems().get(0).getId());
-            rtn.setDesignation( subResponse.getItems().get(0).getDesignation());
-            rtn.setDescription( subResponse.getItems().get(0).getDescription());
-            rtn.setTaux( subResponse.getItems().get(0).getTaux());
-            rtn.setDateDebutAbonnement(subResponse.getItems().get(0).getDateDebutAbonnement());
-            rtn.setDateFinAbonnement(subResponse.getItems().get(0).getDateFinAbonnement());
-            rtn.setPeriodiciteAbonnementDesignation(subResponse.getItems().get(0).getPeriodiciteAbonnementDesignation());
-            rtn.setCompagnieTransportRaisonSociale(subResponse.getItems().get(0).getCompagnieTransportRaisonSociale());
-            rtn.setDeletedAt( subResponse.getItems().get(0).getDeletedAt());
-            rtn.setUpdatedAt( subResponse.getItems().get(0).getUpdatedAt());
-            rtn.setCreatedAt( subResponse.getItems().get(0).getCreatedAt());
-            rtn.setCreatedBy( subResponse.getItems().get(0).getCreatedBy());
-            rtn.setIsDeleted( subResponse.getItems().get(0).getIsDeleted());
-            rtn.setDeletedBy( subResponse.getItems().get(0).getDeletedBy());
-            rtn.setUpdatedBy( subResponse.getItems().get(0).getUpdatedBy());
-            rtn.setIsDeletedParam( subResponse.getItems().get(0).getIsDeletedParam());
-            rtn.setUpdatedAtParam( subResponse.getItems().get(0).getUpdatedAtParam());
-            rtn.setCreatedAtParam( subResponse.getItems().get(0).getCreatedAtParam());
-            rtn.setCreatedByParam( subResponse.getItems().get(0).getCreatedByParam());
-            rtn.setUpdatedByParam(subResponse.getItems().get(0).getUpdatedByParam());
-            rtn.setOrderDirection(subResponse.getItems().get(0).getOrderDirection());
-            return rtn;
+            return ModeAbonnementDTOCreator.createModeAbonnementDTO(subResponse.getItems().get(0));
         }
         return new ModeAbonnementDTO();
     }
 
 
-    public ModeAbonnementDTO updateModeAbonnementEnFonctionDeLaClasseFilleCorrespondante(ModeAbonnementDTO modeAbonnementDTO,Locale locale) throws ParseException {
-      if(modeAbonnementDTO!=null){
+    public ModeAbonnementDTO updateModeAbonnement(ModeAbonnementDTO modeAbonnementDTO, Locale locale) throws ParseException {
+      if(modeAbonnementDTO != null){
           if(modeAbonnementDTO.getTypeModeAbonnementDesignation()!= null
                   && modeAbonnementDTO.getTypeModeAbonnementDesignation().equals(ProjectConstants.REF_ELEMENT_ABONNEMENT_PERIODIQUE)){
               Request<AbonnementPeriodiqueDTO> subRequest = new Request<>();
@@ -345,30 +299,7 @@ public class ModeAbonnementBusiness implements IBasicBusiness<Request<ModeAbonne
                   response.setHasError(Boolean.TRUE);
                   return new ModeAbonnementDTO();
               }
-              ModeAbonnementDTO rtn = new ModeAbonnementDTO();
-              rtn.setId( subResponse.getItems().get(0).getId());
-              rtn.setDesignation( subResponse.getItems().get(0).getDesignation());
-              rtn.setDescription( subResponse.getItems().get(0).getDescription());
-              rtn.setRedevance( subResponse.getItems().get(0).getRedevance());
-              rtn.setRedevancePublicite( subResponse.getItems().get(0).getRedevancePublicite());
-              rtn.setDateDebutAbonnement(subResponse.getItems().get(0).getDateDebutAbonnement());
-              rtn.setDateFinAbonnement(subResponse.getItems().get(0).getDateFinAbonnement());
-              rtn.setPeriodiciteAbonnementDesignation(subResponse.getItems().get(0).getPeriodiciteAbonnementDesignation());
-              rtn.setCompagnieTransportRaisonSociale(subResponse.getItems().get(0).getCompagnieTransportRaisonSociale());
-              rtn.setDeletedAt( subResponse.getItems().get(0).getDeletedAt());
-              rtn.setUpdatedAt( subResponse.getItems().get(0).getUpdatedAt());
-              rtn.setCreatedAt( subResponse.getItems().get(0).getCreatedAt());
-              rtn.setCreatedBy( subResponse.getItems().get(0).getCreatedBy());
-              rtn.setIsDeleted( subResponse.getItems().get(0).getIsDeleted());
-              rtn.setDeletedBy( subResponse.getItems().get(0).getDeletedBy());
-              rtn.setUpdatedBy( subResponse.getItems().get(0).getUpdatedBy());
-              rtn.setIsDeletedParam( subResponse.getItems().get(0).getIsDeletedParam());
-              rtn.setUpdatedAtParam( subResponse.getItems().get(0).getUpdatedAtParam());
-              rtn.setCreatedAtParam( subResponse.getItems().get(0).getCreatedAtParam());
-              rtn.setCreatedByParam( subResponse.getItems().get(0).getCreatedByParam());
-              rtn.setUpdatedByParam(subResponse.getItems().get(0).getUpdatedByParam());
-              rtn.setOrderDirection(subResponse.getItems().get(0).getOrderDirection());
-              return rtn;
+              return ModeAbonnementDTOCreator.createModeAbonnementDTO(subResponse.getItems().get(0));
           }
           else if(modeAbonnementDTO.getTypeModeAbonnementDesignation()!= null
                   && modeAbonnementDTO.getTypeModeAbonnementDesignation().equals(ProjectConstants.REF_ELEMENT_ABONNEMENT_PRELEVEMENT)){
@@ -383,29 +314,7 @@ public class ModeAbonnementBusiness implements IBasicBusiness<Request<ModeAbonne
                   response.setHasError(Boolean.TRUE);
                   return new AbonnementPrelevementDTO();
               }
-              ModeAbonnementDTO rtn = new ModeAbonnementDTO();
-              rtn.setId( subResponse.getItems().get(0).getId());
-              rtn.setDesignation( subResponse.getItems().get(0).getDesignation());
-              rtn.setDescription( subResponse.getItems().get(0).getDescription());
-              rtn.setTaux( subResponse.getItems().get(0).getTaux());
-              rtn.setDateDebutAbonnement(subResponse.getItems().get(0).getDateDebutAbonnement());
-              rtn.setDateFinAbonnement(subResponse.getItems().get(0).getDateFinAbonnement());
-              rtn.setPeriodiciteAbonnementDesignation(subResponse.getItems().get(0).getPeriodiciteAbonnementDesignation());
-              rtn.setCompagnieTransportRaisonSociale(subResponse.getItems().get(0).getCompagnieTransportRaisonSociale());
-              rtn.setDeletedAt( subResponse.getItems().get(0).getDeletedAt());
-              rtn.setUpdatedAt( subResponse.getItems().get(0).getUpdatedAt());
-              rtn.setCreatedAt( subResponse.getItems().get(0).getCreatedAt());
-              rtn.setCreatedBy( subResponse.getItems().get(0).getCreatedBy());
-              rtn.setIsDeleted( subResponse.getItems().get(0).getIsDeleted());
-              rtn.setDeletedBy( subResponse.getItems().get(0).getDeletedBy());
-              rtn.setUpdatedBy( subResponse.getItems().get(0).getUpdatedBy());
-              rtn.setIsDeletedParam( subResponse.getItems().get(0).getIsDeletedParam());
-              rtn.setUpdatedAtParam( subResponse.getItems().get(0).getUpdatedAtParam());
-              rtn.setCreatedAtParam( subResponse.getItems().get(0).getCreatedAtParam());
-              rtn.setCreatedByParam( subResponse.getItems().get(0).getCreatedByParam());
-              rtn.setUpdatedByParam(subResponse.getItems().get(0).getUpdatedByParam());
-              rtn.setOrderDirection(subResponse.getItems().get(0).getOrderDirection());
-              return rtn;
+              return ModeAbonnementDTOCreator.createModeAbonnementDTO(subResponse.getItems().get(0));
           }
       }
       return new ModeAbonnementDTO();
@@ -415,43 +324,12 @@ public class ModeAbonnementBusiness implements IBasicBusiness<Request<ModeAbonne
         List<ModeAbonnementDTO> itemsDTO = Collections.synchronizedList(new ArrayList<>());
         for(ModeAbonnement modeAbonnement:modeAbonnementList) {
             if(modeAbonnement instanceof AbonnementPrelevement abonnementPrelevement){
-                ModeAbonnementDTO rtn = new ModeAbonnementDTO();
-                rtn.setId(abonnementPrelevement.getId());
-                rtn.setDesignation(abonnementPrelevement.getDesignation());
-                rtn.setDescription( abonnementPrelevement.getDescription());
-                rtn.setTaux(abonnementPrelevement.getTaux());
-                rtn.setDateDebutAbonnement(abonnementPrelevement.getDateDebutAbonnement().toString());
-                rtn.setDateFinAbonnement(abonnementPrelevement.getDateFinAbonnement().toString());
-                rtn.setPeriodiciteAbonnementDesignation(abonnementPrelevement.getPeriodiciteAbonnement().getDesignation());
-                rtn.setCompagnieTransportRaisonSociale(abonnementPrelevement.getCompagnieTransport().getRaisonSociale());
-                rtn.setDeletedAt( abonnementPrelevement.getDeletedAt()!=null?abonnementPrelevement.getDeletedAt().toString():null);
-                rtn.setUpdatedAt( abonnementPrelevement.getUpdatedAt()!=null?abonnementPrelevement.getUpdatedAt().toString():null);
-                rtn.setCreatedAt( abonnementPrelevement.getCreatedAt()!=null?abonnementPrelevement.getCreatedAt().toString():null);
-                rtn.setCreatedBy( abonnementPrelevement.getCreatedBy());
-                rtn.setIsDeleted( abonnementPrelevement.getIsDeleted());
-                rtn.setDeletedBy( abonnementPrelevement.getDeletedBy());
-                rtn.setUpdatedBy( abonnementPrelevement.getUpdatedBy());
-                itemsDTO.add(rtn);
+                ModeAbonnementDTO dto = ModeAbonnementFromEntityCreator.createModeAbonnementDTO(abonnementPrelevement);
+                itemsDTO.add(dto);
             }
-            else if(modeAbonnement instanceof AbonnementPeriodique abonnementPeriodique){
-                ModeAbonnementDTO rtn = new ModeAbonnementDTO();
-                rtn.setId( abonnementPeriodique.getId());
-                rtn.setDesignation( abonnementPeriodique.getDesignation());
-                rtn.setDescription( abonnementPeriodique.getDescription());
-                rtn.setRedevance( abonnementPeriodique.getRedevance());
-                rtn.setRedevancePublicite( abonnementPeriodique.getRedevancePublicite());
-                rtn.setDateDebutAbonnement(abonnementPeriodique.getDateDebutAbonnement()!=null?abonnementPeriodique.getDateDebutAbonnement().toString():null);
-                rtn.setDateFinAbonnement(abonnementPeriodique.getDateFinAbonnement()!=null?abonnementPeriodique.getDateFinAbonnement().toString():null);
-                rtn.setPeriodiciteAbonnementDesignation(abonnementPeriodique.getPeriodiciteAbonnement().getDesignation());
-                rtn.setCompagnieTransportRaisonSociale(abonnementPeriodique.getCompagnieTransport().getRaisonSociale());
-                rtn.setDeletedAt( abonnementPeriodique.getDeletedAt()!=null?abonnementPeriodique.getDeletedAt().toString():null);
-                rtn.setUpdatedAt( abonnementPeriodique.getUpdatedAt()!=null?abonnementPeriodique.getUpdatedAt().toString():null);
-                rtn.setCreatedAt( abonnementPeriodique.getCreatedAt()!=null?abonnementPeriodique.getCreatedAt().toString():null);
-                rtn.setCreatedBy( abonnementPeriodique.getCreatedBy());
-                rtn.setIsDeleted( abonnementPeriodique.getIsDeleted());
-                rtn.setDeletedBy( abonnementPeriodique.getDeletedBy());
-                rtn.setUpdatedBy( abonnementPeriodique.getUpdatedBy());
-                itemsDTO.add(rtn);
+            if(modeAbonnement instanceof AbonnementPeriodique abonnementPeriodique){
+                ModeAbonnementDTO dto = ModeAbonnementFromEntityCreator.createModeAbonnementDTO(abonnementPeriodique);
+                itemsDTO.add(dto);
             }
         }
         return itemsDTO;
