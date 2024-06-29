@@ -175,7 +175,7 @@ public class ReservationBilletVoyageBusiness implements IBasicBusiness<Request<R
         dto.setMontantTotalReservation(montantTotalReservation);
         ReservationBilletVoyage entityToSave = ReservationBilletVoyageTransformer.INSTANCE.toEntity(dto,existingGare,existingOffreVoyage,existingProgramme,existingStatusUtilActual);
         entityToSave.setIsDeleted(false);
-        entityToSave.setDesignation(existingUser.getNom()+RandomStringUtils.randomAlphanumeric(6));
+        entityToSave.setDesignation((existingUser.getNom()+RandomStringUtils.randomAlphanumeric(20)).toUpperCase());
         ReservationBilletVoyage entitySaved = Optional.of(reservationBilletVoyageRepository.save(entityToSave)).orElseThrow();
         if (!initializeReservationOffreVoyageStatus(locale, existingStatusUtilActual, entitySaved)){
             response.setStatus(functionalError.SAVE_FAIL("Status reservation non crée",locale));
@@ -200,7 +200,7 @@ public class ReservationBilletVoyageBusiness implements IBasicBusiness<Request<R
         return !statusUtilRservationBilletVoyageBusiness.create(subRequest, locale).isHasError();
     }
 
-    private static List<StatusUtilReservationBilletVoyageDTO> getStatusUtilReservationBilletVoyageDTOS(StatusUtil existingStatusUtilActual, ReservationBilletVoyage entitySaved) {
+    private  List<StatusUtilReservationBilletVoyageDTO> getStatusUtilReservationBilletVoyageDTOS(StatusUtil existingStatusUtilActual, ReservationBilletVoyage entitySaved) {
         List<StatusUtilReservationBilletVoyageDTO> itemDatas =  Collections.synchronizedList(new ArrayList<>());
         StatusUtilReservationBilletVoyageDTO statusUtilReservationBilletVoyageDTO= new StatusUtilReservationBilletVoyageDTO();
         statusUtilReservationBilletVoyageDTO.setStatusUtilDesignation(existingStatusUtilActual.getDesignation());
