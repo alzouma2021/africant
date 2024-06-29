@@ -21,7 +21,7 @@ import lombok.extern.java.Log;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -121,14 +121,14 @@ public class StatusUtilRservationBilletVoyageBusiness implements IBasicBusiness<
 
     @Override
     public Response<StatusUtilReservationBilletVoyageDTO> update(Request<StatusUtilReservationBilletVoyageDTO> request, Locale locale) throws ParseException {
-        Response<StatusUtilReservationBilletVoyageDTO> response = new Response<StatusUtilReservationBilletVoyageDTO>();
-        List<StatusUtilReservationBilletVoyage> items = new ArrayList<StatusUtilReservationBilletVoyage>();
+        Response<StatusUtilReservationBilletVoyageDTO> response = new Response<>();
+        List<StatusUtilReservationBilletVoyage> items = new ArrayList<>();
         if(request.getDatas() == null  || CollectionUtils.isEmpty(request.getDatas())){
             response.setStatus(functionalError.DATA_NOT_EXIST("Liste vide ",locale));
             response.setHasError(true);
             return response;
         }
-        List<StatusUtilReservationBilletVoyageDTO> itemsDtos =  Collections.synchronizedList(new ArrayList<StatusUtilReservationBilletVoyageDTO>());
+        List<StatusUtilReservationBilletVoyageDTO> itemsDtos =  Collections.synchronizedList(new ArrayList<>());
         for(StatusUtilReservationBilletVoyageDTO dto: request.getDatas() ) {
             Map<String, Object> fieldsToVerify = new HashMap<>();
             fieldsToVerify.put("id", dto.getId());
@@ -151,9 +151,8 @@ public class StatusUtilRservationBilletVoyageBusiness implements IBasicBusiness<
                 response.setHasError(true);
                 return response;
             }
-            ReservationBilletVoyage existingReservationBilletVoyage = null;
             if (Utilities.isBlank(dto.getReservationBilletVoyageDesignation()) && !entityToSave.getReservationBilletVoyage().getDesignation().equalsIgnoreCase(dto.getReservationBilletVoyageDesignation())) {
-                existingReservationBilletVoyage = reservationBilletVoyageRepository.findByDesignation(dto.getReservationBilletVoyageDesignation(), false);
+                ReservationBilletVoyage existingReservationBilletVoyage = reservationBilletVoyageRepository.findByDesignation(dto.getReservationBilletVoyageDesignation(), false);
                 if (existingReservationBilletVoyage == null) {
                     response.setStatus(functionalError.DATA_NOT_EXIST("ReservationBilletVoyage -> " + dto.getReservationBilletVoyageDesignation(), locale));
                     response.setHasError(true);
@@ -177,7 +176,7 @@ public class StatusUtilRservationBilletVoyageBusiness implements IBasicBusiness<
             response.setStatus(functionalError.DATA_NOT_EXIST("Erreur de modification ",locale));
             response.setHasError(true);
         }
-        List<StatusUtilReservationBilletVoyage> itemsSaved = statusUtilReservationBilletVoyageRepository.saveAll((Iterable<StatusUtilReservationBilletVoyage>) items);
+        List<StatusUtilReservationBilletVoyage> itemsSaved = statusUtilReservationBilletVoyageRepository.saveAll(items);
         if (CollectionUtils.isEmpty(itemsSaved)) {
                 response.setStatus(functionalError.SAVE_FAIL("StatusUtilReservationBilletVoyage", locale));
                 response.setHasError(true);

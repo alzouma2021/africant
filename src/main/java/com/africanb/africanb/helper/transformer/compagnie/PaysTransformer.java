@@ -10,6 +10,7 @@ import org.mapstruct.factory.Mappers;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Mapper
 public interface PaysTransformer {
@@ -45,10 +46,10 @@ public interface PaysTransformer {
     }
 
     public default List<PaysDTO> toLiteDtos(List<Pays> entities) {
-        if (entities == null || entities.stream().allMatch(o -> o == null)) {
+        if (entities == null || entities.stream().allMatch(Objects::isNull)) {
             return null;
         }
-        List<PaysDTO> dtos = new ArrayList<PaysDTO>();
+        List<PaysDTO> dtos = new ArrayList<>();
         for (Pays entity : entities) {
             dtos.add(toLiteDto(entity));
         }

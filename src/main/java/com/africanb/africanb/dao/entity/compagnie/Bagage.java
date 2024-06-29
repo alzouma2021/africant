@@ -1,28 +1,26 @@
 package com.africanb.africanb.dao.entity.compagnie;
 
-import com.africanb.africanb.dao.entity.offreVoyage.OffreVoyage;
 import com.africanb.africanb.utils.Reference.Reference;
-import com.sun.istack.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
+
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
 
-/**
- * @author Alzouma Moussa Mahamadou
- */
+
 @Entity
 @Table(name = "bagage")
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter
+@Setter
 @ToString
+@EqualsAndHashCode(callSuper = false)
+@NoArgsConstructor
 public class Bagage implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -32,10 +30,10 @@ public class Bagage implements Serializable {
     @NotNull
     private String designation;
     private String description;
-    private Long coutBagageParTypeBagage; //Cette propriété stocke le prix de baga
-    private Long nombreBagageGratuitParTypeBagage; //Cette propriété stocke le nombre de bagages gratuit par type de bagages
+    private Long coutBagageParTypeBagage;
+    private Long nombreBagageGratuitParTypeBagage;
     @ManyToOne
-    private Reference typeBagage;  //FamilleReferenceBagage
+    private Reference typeBagage;
     @ManyToOne
     private CompagnieTransport compagnieTransport;
 

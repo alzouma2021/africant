@@ -1,9 +1,7 @@
 package com.africanb.africanb.helper.status;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Status {
     private String	code;

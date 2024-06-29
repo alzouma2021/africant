@@ -35,8 +35,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import javax.persistence.EntityManager;
-import java.rmi.server.UID;
+import jakarta.persistence.EntityManager;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -178,18 +177,11 @@ public class ReservationBilletVoyageBusiness implements IBasicBusiness<Request<R
         entityToSave.setIsDeleted(false);
         entityToSave.setDesignation(existingUser.getNom()+RandomStringUtils.randomAlphanumeric(6));
         ReservationBilletVoyage entitySaved = Optional.of(reservationBilletVoyageRepository.save(entityToSave)).orElseThrow();
-        if(Objects.isNull(entitySaved)){
-            response.setStatus(functionalError.SAVE_FAIL("Erreur de reservation",locale));
-            response.setHasError(true);
-            return response;
-        }
-
         if (!initializeReservationOffreVoyageStatus(locale, existingStatusUtilActual, entitySaved)){
             response.setStatus(functionalError.SAVE_FAIL("Status reservation non crée",locale));
             response.setHasError(true);
             return response;
         }
-
         items.add(entitySaved);
         List<ReservationBilletVoyageDTO> itemsDto = (Utilities.isTrue(request.getIsSimpleLoading()))
                 ? ReservationBilletVoyageTransformer.INSTANCE.toLiteDtos(items)
@@ -205,8 +197,7 @@ public class ReservationBilletVoyageBusiness implements IBasicBusiness<Request<R
         List<StatusUtilReservationBilletVoyageDTO> itemDatas = getStatusUtilReservationBilletVoyageDTOS(existingStatusUtilActual, entitySaved);
         Request<StatusUtilReservationBilletVoyageDTO> subRequest = new Request<>();
         subRequest.setDatas(itemDatas);
-        if(statusUtilRservationBilletVoyageBusiness.create(subRequest, locale).isHasError()) return false;
-        return true;
+        return !statusUtilRservationBilletVoyageBusiness.create(subRequest, locale).isHasError();
     }
 
     private static List<StatusUtilReservationBilletVoyageDTO> getStatusUtilReservationBilletVoyageDTOS(StatusUtil existingStatusUtilActual, ReservationBilletVoyage entitySaved) {

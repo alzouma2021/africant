@@ -1,7 +1,6 @@
 package com.africanb.africanb.helper.transformer.reservationBilletVoyage;
 
 import com.africanb.africanb.dao.entity.compagnie.StatusUtil;
-import com.africanb.africanb.dao.entity.compagnie.StatusUtilCompagnieTransport;
 import com.africanb.africanb.dao.entity.reservationBilletVoyage.ReservationBilletVoyage;
 import com.africanb.africanb.dao.entity.reservationBilletVoyage.StatusUtilReservationBilletVoyage;
 import com.africanb.africanb.helper.contrat.FullTransformerQualifier;
@@ -15,6 +14,7 @@ import org.mapstruct.factory.Mappers;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Mapper
 public interface StatusUtilReservationBilletVoyageTransformer {
@@ -44,10 +44,10 @@ public interface StatusUtilReservationBilletVoyageTransformer {
     }
 
     public default List<StatusUtilReservationBilletVoyageDTO> toLiteDtos(List<StatusUtilReservationBilletVoyage> entities) {
-        if (entities == null || entities.stream().allMatch(o -> o == null)) {
+        if (entities == null || entities.stream().allMatch(Objects::isNull)) {
             return null;
         }
-        List<StatusUtilReservationBilletVoyageDTO> dtos = new ArrayList<StatusUtilReservationBilletVoyageDTO>();
+        List<StatusUtilReservationBilletVoyageDTO> dtos = new ArrayList<>();
         for (StatusUtilReservationBilletVoyage entity : entities) {
             dtos.add(toLiteDto(entity));
         }

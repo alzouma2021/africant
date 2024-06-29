@@ -2,10 +2,8 @@ package com.africanb.africanb.helper.transformer.compagnie.ModePaiement;
 
 import com.africanb.africanb.dao.entity.compagnie.CompagnieTransport;
 import com.africanb.africanb.dao.entity.compagnie.ModePaiment.ModePaiementOrangeMoney;
-import com.africanb.africanb.dao.entity.compagnie.ModePaiment.ModePaiementWave;
 import com.africanb.africanb.helper.contrat.FullTransformerQualifier;
 import com.africanb.africanb.helper.dto.compagnie.ModePaiement.ModePaiementOrangeMoneyDTO;
-import com.africanb.africanb.helper.dto.compagnie.ModePaiement.ModePaiementWaveDTO;
 import com.africanb.africanb.utils.Reference.Reference;
 import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
@@ -16,6 +14,7 @@ import org.mapstruct.factory.Mappers;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Mapper
 public interface ModePaimentOrangeMoneyTransformer {
@@ -41,7 +40,7 @@ public interface ModePaimentOrangeMoneyTransformer {
             @Mapping(source = "entity.deletedBy", target="deletedBy"),
             @Mapping(source = "entity.isDeleted", target="isDeleted"),
     })
-    ModePaiementOrangeMoneyDTO toDto(ModePaiementOrangeMoney entity) throws ParseException;;
+    ModePaiementOrangeMoneyDTO toDto(ModePaiementOrangeMoney entity) throws ParseException;
 
     @IterableMapping(qualifiedBy = {FullTransformerQualifier.class})
     List<ModePaiementOrangeMoneyDTO> toDtos(List<ModePaiementOrangeMoney> entities) throws ParseException;
@@ -59,10 +58,10 @@ public interface ModePaimentOrangeMoneyTransformer {
     }
 
     default List<ModePaiementOrangeMoneyDTO> toLiteDtos(List<ModePaiementOrangeMoney> entities) {
-        if (entities == null || entities.stream().allMatch(o -> o == null)) {
+        if (entities == null || entities.stream().allMatch(Objects::isNull)) {
             return null;
         }
-        List<ModePaiementOrangeMoneyDTO> dtos = new ArrayList<ModePaiementOrangeMoneyDTO>();
+        List<ModePaiementOrangeMoneyDTO> dtos = new ArrayList<>();
         for (ModePaiementOrangeMoney entity : entities) {
             dtos.add(toLiteDto(entity));
         }

@@ -8,9 +8,9 @@ import lombok.ToString;
 
 @Data
 @ToString
-@JsonInclude(JsonInclude.Include.NON_NULL) @JsonPropertyOrder(alphabetic = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonPropertyOrder(alphabetic = true)
 public class RoleFunctionalityDTO {
-
     private Long id;
 
     private Long roleId;
@@ -30,8 +30,6 @@ public class RoleFunctionalityDTO {
     private Long updatedBy;
     private Long deletedBy;
 
-    /// SEARCH PARAM//
-
     private SearchParam<Long> roleIdParam;
     private SearchParam<String>  roleLibelleParam;
     private SearchParam<String>  roleCodeParam;
@@ -46,7 +44,6 @@ public class RoleFunctionalityDTO {
     private SearchParam<Long> updatedByParam;
     private SearchParam<Long> deletedByParam;
 
-    // order param
     private String orderField;
     private String orderDirection;
 }

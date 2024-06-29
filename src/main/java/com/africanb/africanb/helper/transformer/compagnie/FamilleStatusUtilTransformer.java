@@ -10,6 +10,7 @@ import org.mapstruct.factory.Mappers;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Mapper
 public interface FamilleStatusUtilTransformer {
@@ -33,7 +34,7 @@ public interface FamilleStatusUtilTransformer {
     @IterableMapping(qualifiedBy = {FullTransformerQualifier.class})
     List<FamilleStatusUtilDTO> toDtos(List<FamilleStatusUtil> entities) throws ParseException;
 
-    public default FamilleStatusUtilDTO toLiteDto(FamilleStatusUtil entity) {
+    default FamilleStatusUtilDTO toLiteDto(FamilleStatusUtil entity) {
         if (entity == null) {
             return null;
         }
@@ -44,11 +45,11 @@ public interface FamilleStatusUtilTransformer {
         return dto;
     }
 
-    public default List<FamilleStatusUtilDTO> toLiteDtos(List<FamilleStatusUtil> entities) {
-        if (entities == null || entities.stream().allMatch(o -> o == null)) {
+    default List<FamilleStatusUtilDTO> toLiteDtos(List<FamilleStatusUtil> entities) {
+        if (entities == null || entities.stream().allMatch(Objects::isNull)) {
             return null;
         }
-        List<FamilleStatusUtilDTO> dtos = new ArrayList<FamilleStatusUtilDTO>();
+        List<FamilleStatusUtilDTO> dtos = new ArrayList<>();
         for (FamilleStatusUtil entity : entities) {
             dtos.add(toLiteDto(entity));
         }

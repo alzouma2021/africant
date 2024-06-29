@@ -1,13 +1,8 @@
 package com.africanb.africanb.helper.transformer.document;
 
-
-import com.africanb.africanb.dao.entity.compagnie.Bagage;
-import com.africanb.africanb.dao.entity.compagnie.CompagnieTransport;
 import com.africanb.africanb.dao.entity.document.Document;
 import com.africanb.africanb.helper.contrat.FullTransformerQualifier;
-import com.africanb.africanb.helper.dto.compagnie.BagageDTO;
 import com.africanb.africanb.helper.dto.document.DocumentDTO;
-import com.africanb.africanb.utils.Reference.Reference;
 import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -17,6 +12,7 @@ import org.mapstruct.factory.Mappers;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Mapper
 public interface DocumentTransformer {
@@ -39,7 +35,7 @@ public interface DocumentTransformer {
             @Mapping(source = "entity.deletedBy", target="deletedBy"),
             @Mapping(source = "entity.isDeleted", target="isDeleted"),
     })
-    DocumentDTO toDto(Document entity) throws ParseException;;
+    DocumentDTO toDto(Document entity) throws ParseException;
 
     @IterableMapping(qualifiedBy = {FullTransformerQualifier.class})
     List<DocumentDTO> toDtos(List<Document> entities) throws ParseException;
@@ -59,10 +55,10 @@ public interface DocumentTransformer {
     }
 
     default List<DocumentDTO> toLiteDtos(List<Document> entities) {
-        if (entities == null || entities.stream().allMatch(o -> o == null)) {
+        if (entities == null || entities.stream().allMatch(Objects::isNull)) {
             return null;
         }
-        List<DocumentDTO> dtos = new ArrayList<DocumentDTO>();
+        List<DocumentDTO> dtos = new ArrayList<>();
         for (Document entity : entities) {
             dtos.add(toLiteDto(entity));
         }

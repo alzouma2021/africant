@@ -13,12 +13,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebFilter;
-import javax.servlet.http.HttpFilter;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebFilter;
+import jakarta.servlet.http.HttpFilter;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.*;
 
@@ -33,9 +33,6 @@ public class SecurityServletFilter extends HttpFilter {
     private final ExceptionUtils exceptionUtils;
     private final UsersRepository usersRepository;
 
-    private static String	defaultTenant	= "null";
-    private static String defaultLanguage = "fr";
-
     public SecurityServletFilter(FunctionalError functionalError, ExceptionUtils exceptionUtils, UsersRepository usersRepository) {
         this.functionalError = functionalError;
         this.exceptionUtils = exceptionUtils;
@@ -48,17 +45,17 @@ public class SecurityServletFilter extends HttpFilter {
         log.info("filter method begin");
         log.info(request.getRequestURI());
 
-        SecurityUtils.languageManager(request);
+        JwtUtils.languageManager(request);
         String        languageID = (String) request.getAttribute("CURRENT_LANGUAGE_IDENTIFIER");
         Locale locale     = new Locale(languageID, "");
-        Response<UsersDTO> resp = new Response<UsersDTO>();
+        Response<UsersDTO> resp = new Response<>();
 
-        List<String> listUrlDoNotHaveAuthentication = Collections.synchronizedList(new ArrayList<String>());
+        List<String> listUrlDoNotHaveAuthentication = Collections.synchronizedList(new ArrayList<>());
         listUrlDoNotHaveAuthentication.add("/users/login");
 
-        if (SecurityUtils.doesPathNotRequireAuthentication(request, response, chain) ) return;
+        if (JwtUtils.doesPathNotRequireAuthentication(request, response, chain) ) return;
         try {
-            String token = SecurityUtils.extractToken(request);
+            String token = JwtUtils.extractToken(request);
             if (token==null) {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // HTTP 401.
                 resp.setStatus( functionalError.DATA_NOT_EXIST("Authentification Echouée", locale));
@@ -66,35 +63,35 @@ public class SecurityServletFilter extends HttpFilter {
                 response.getWriter().write(String.valueOf(resp));
                 return;
             }
-            TokenData entityTokenData = SecurityUtils.decodeAndValidateToken(token);
+            TokenData entityTokenData = JwtUtils.decodeAndValidateToken(token);
             if(Optional.ofNullable(entityTokenData.getStatus())
                     .map(status -> !status.equalsIgnoreCase(ProjectConstants.VERIFY_TOKEN_VALIDE))
                     .orElse(false)) {
                 switch (entityTokenData.getStatus()) {
-                    case ProjectConstants.VERIFY_TOKEN_EXPIRE:
-                        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // HTTP 401.
-                        resp.setStatus( functionalError.DATA_NOT_EXIST(ProjectConstants.VERIFY_TOKEN_EXPIRE, locale));
+                    case ProjectConstants.VERIFY_TOKEN_EXPIRE -> {
+                        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                        resp.setStatus(functionalError.DATA_NOT_EXIST(ProjectConstants.VERIFY_TOKEN_EXPIRE, locale));
                         resp.setHasError(true);
                         response.getWriter().write(String.valueOf(resp));
-                        break;
-                    case ProjectConstants.VERIFY_TOKEN_INVALIDE:
-                        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // HTTP 401.
-                        resp.setStatus( functionalError.DATA_NOT_EXIST(ProjectConstants.VERIFY_TOKEN_INVALIDE, locale));
+                    }
+                    case ProjectConstants.VERIFY_TOKEN_INVALIDE -> {
+                        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                        resp.setStatus(functionalError.DATA_NOT_EXIST(ProjectConstants.VERIFY_TOKEN_INVALIDE, locale));
                         resp.setHasError(true);
                         response.getWriter().write(String.valueOf(resp));
-                        break;
-                    case ProjectConstants.VERIFY_TOKEN_MAUVAIS:
-                        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // HTTP 401.
-                        resp.setStatus( functionalError.DATA_NOT_EXIST("Authentification Echouée", locale));
+                    }
+                    case ProjectConstants.VERIFY_TOKEN_MAUVAIS -> {
+                        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                        resp.setStatus(functionalError.DATA_NOT_EXIST("Authentification Echouée", locale));
                         resp.setHasError(true);
                         response.getWriter().write(String.valueOf(resp));
-                        break;
-                    default:
+                    }
+                    default -> {
                         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // HTTP 401.
                         resp.setStatus(functionalError.DATA_NOT_EXIST("Authentification impossible", locale));
                         resp.setHasError(true);
                         response.getWriter().write(String.valueOf(resp));
-                        break;
+                    }
                 }
             }
             if (entityTokenData.getClaims() == null) {

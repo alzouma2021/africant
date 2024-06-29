@@ -1,28 +1,24 @@
 package com.africanb.africanb.dao.entity.offreVoyage;
 
-import com.africanb.africanb.utils.Reference.Reference;
-import com.sun.istack.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
+
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
 
-/**
- * @author Alzouma Moussa Mahamadou
- * Cette classe permet d'enrgistrer les informations des bus attachés à une offre de voyage
- */
 @Entity
 @Table(name = "bus")
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter
+@Setter
 @ToString
+@EqualsAndHashCode(callSuper = false)
+@NoArgsConstructor
 public class Bus implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Id

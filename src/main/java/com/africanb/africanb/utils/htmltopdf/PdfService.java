@@ -14,10 +14,7 @@ import java.util.Map;
 public class PdfService {
 
     public void generateTicket(Map<String, String> dynamicFields) throws Exception {
-        // Date de génération
         String dateGeneration = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date());
-
-        // HTML pour le billet avec des champs dynamiques et référence au fichier CSS externe
         String htmlContent =    "<html><head>" +
                 "<style>" +
                 "@page { size: 13cm 15cm; margin: 0; } " +
@@ -49,7 +46,6 @@ public class PdfService {
                 "<p><strong>Nombre de places:</strong> " + dynamicFields.get("Nombre places") + "</p>" +
                 "</div></div></body></html>";
 
-        // Chemin du fichier PDF généré
         String pdfPath = "billet.pdf";
         generatePdf(htmlContent, pdfPath);
     }

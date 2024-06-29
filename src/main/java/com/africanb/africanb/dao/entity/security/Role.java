@@ -1,20 +1,22 @@
 package com.africanb.africanb.dao.entity.security;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Date;
 
-@Entity @Data @NoArgsConstructor @AllArgsConstructor
+@Entity
+@Getter
+@Setter
+@ToString
+@EqualsAndHashCode(callSuper = false)
+@NoArgsConstructor
 public class Role implements Serializable {
 
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
-
     private Long id;
+
     private String code;
     private String libelle;
 

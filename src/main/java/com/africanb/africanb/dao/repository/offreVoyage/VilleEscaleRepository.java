@@ -1,7 +1,5 @@
 package com.africanb.africanb.dao.repository.offreVoyage;
 
-import com.africanb.africanb.dao.entity.compagnie.StatusUtilCompagnieTransport;
-import com.africanb.africanb.dao.entity.compagnie.Ville;
 import com.africanb.africanb.dao.entity.offreVoyage.VilleEscale;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

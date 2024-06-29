@@ -9,7 +9,9 @@ import lombok.Data;
 import lombok.ToString;
 
 @Data
-@ToString @JsonInclude(JsonInclude.Include.NON_NULL) @JsonPropertyOrder(alphabetic = true)
+@ToString
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonPropertyOrder(alphabetic = true)
 public class UsersDTO {
 
     private Long id;
@@ -22,12 +24,11 @@ public class UsersDTO {
     private String email;
     private String telephone;
 
-    //role information
     private Long roleId;
     private String  roleCode;
     private String  roleLibelle;
 
-    private Long numberOfConnections; //Permet de compter le nombre de fois qu'un utilisateur s'est authentifié
+    private Long numberOfConnections;
 
     private Boolean isDeleted;
     private String  createdAt;
@@ -48,8 +49,6 @@ public class UsersDTO {
     private String lastConnectionDate;
     private String lastConnection;
 
-
-    /// SEARCH PARAM//
     private SearchParam<Integer> idParam;
     private SearchParam<String> matriculeParam;
     private SearchParam<String> loginParam;
@@ -70,7 +69,6 @@ public class UsersDTO {
     private SearchParam<Integer> isActifParam;
     private SearchParam<Boolean> isFirstParam;
 
-    // order param
     private String orderField;
     private String orderDirection;
 }

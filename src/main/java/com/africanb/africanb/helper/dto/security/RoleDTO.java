@@ -13,7 +13,6 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder(alphabetic = true)
 public class RoleDTO {
-
     private Long id;
     private String code;
     private String libelle;
@@ -29,8 +28,6 @@ public class RoleDTO {
     private Long updatedBy;
     private Long deletedBy;
 
-    /// SEARCH PARAM//
-
     private SearchParam<Long> idParam;
     private SearchParam<String> codeParam;
     private SearchParam<String> libelleParam;
@@ -42,8 +39,6 @@ public class RoleDTO {
     private SearchParam<Long> updatedByParam;
     private SearchParam<Long> deletedByParam;
 
-    // order param
     private String orderField;
     private String orderDirection;
-
 }

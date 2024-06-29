@@ -18,22 +18,16 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-/**
- * Cette classe traite les operations portant sur les agences
- * @author  Alzouma Moussa Mahamadou
- * @date 09/05/2022
- */
+
 @Log
 @Component
 public class PaysBusiness implements IBasicBusiness<Request<PaysDTO>, Response<PaysDTO>> {
 
-
-    private Response<PaysDTO> response;
 
     private final PaysRepository paysRepository;
     private final FunctionalError functionalError;
@@ -56,16 +50,16 @@ public class PaysBusiness implements IBasicBusiness<Request<PaysDTO>, Response<P
 
     @Override
     public Response<PaysDTO> create(Request<PaysDTO> request, Locale locale) throws ParseException {
-        Response<PaysDTO> response = new Response<PaysDTO>();
-        List<Pays> items = new ArrayList<Pays>();
+        Response<PaysDTO> response = new Response<>();
+        List<Pays> items = new ArrayList<>();
         if(request.getDatas() == null || request.getDatas().isEmpty()){
             response.setStatus(functionalError.DATA_NOT_EXIST("Liste vide",locale));
             response.setHasError(true);
             return response;
         }
-        List<PaysDTO> itemsDtos =  Collections.synchronizedList(new ArrayList<PaysDTO>());
+        List<PaysDTO> itemsDtos =  Collections.synchronizedList(new ArrayList<>());
         for(PaysDTO dto: request.getDatas() ) {
-            Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+            Map<String, Object> fieldsToVerify = new HashMap<>();
             fieldsToVerify.put("designation", dto.getDesignation());
             if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
                 response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
@@ -73,7 +67,6 @@ public class PaysBusiness implements IBasicBusiness<Request<PaysDTO>, Response<P
                 return response;
             }
             if(itemsDtos.stream().anyMatch(a->a.getDesignation().equalsIgnoreCase(dto.getDesignation()))){
-                //TODO Mise à jour des messages d'erreur
                 response.setStatus(functionalError.DATA_DUPLICATE("Tentative de duplication de la designation'" + dto.getDesignation() + "' pour les pays", locale));
                 response.setHasError(true);
                 return response;
@@ -101,26 +94,24 @@ public class PaysBusiness implements IBasicBusiness<Request<PaysDTO>, Response<P
         List<PaysDTO> itemsDto = (Utilities.isTrue(request.getIsSimpleLoading()))
                                     ? PaysTransformer.INSTANCE.toLiteDtos(itemsSaved)
                                     : PaysTransformer.INSTANCE.toDtos(itemsSaved);
-
         response.setItems(itemsDto);
         response.setHasError(false);
         response.setStatus(functionalError.SUCCESS("", locale));
-
         return response;
     }
 
     @Override
     public Response<PaysDTO> update(Request<PaysDTO> request, Locale locale) throws ParseException {
-        Response<PaysDTO> response = new Response<PaysDTO>();
-        List<Pays> items = new ArrayList<Pays>();
+        Response<PaysDTO> response = new Response<>();
+        List<Pays> items = new ArrayList<>();
         if(request.getDatas() == null  || request.getDatas().isEmpty()){
             response.setStatus(functionalError.DATA_NOT_EXIST("Liste de données est vide ",locale));
             response.setHasError(true);
             return response;
         }
-        List<PaysDTO>itemsDtos =  Collections.synchronizedList(new ArrayList<PaysDTO>());
+        List<PaysDTO> itemsDtos =  Collections.synchronizedList(new ArrayList<>());
         for(PaysDTO dto: request.getDatas() ) {
-            Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+            Map<String, Object> fieldsToVerify = new HashMap<>();
             fieldsToVerify.put("id", dto.getId());
             if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
                 response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
@@ -197,18 +188,15 @@ public class PaysBusiness implements IBasicBusiness<Request<PaysDTO>, Response<P
     @Transactional(rollbackFor = {RuntimeException.class, Exception.class})
     public  Response<PaysDTO> getAllPays(Request<PaysDTO> request, Locale locale) throws ParseException {
         Response<PaysDTO> response = new Response<>();
-
         List<Pays>  items =paysRepository.getAllPays(false );
         if(CollectionUtils.isEmpty(items)){
             response.setStatus(functionalError.DATA_NOT_EXIST("Aucun pays n'existe",locale));
             response.setHasError(true);
             return response;
         }
-
         List<PaysDTO> itemsDto = (Utilities.isTrue(request.getIsSimpleLoading()))
                 ? PaysTransformer.INSTANCE.toLiteDtos(items)
                 : PaysTransformer.INSTANCE.toDtos(items);
-
         response.setItems(itemsDto);
         response.setHasError(false);
         response.setStatus(functionalError.SUCCESS("", locale));

@@ -2,28 +2,26 @@ package com.africanb.africanb.dao.entity.compagnie.ModePaiment;
 
 import com.africanb.africanb.dao.entity.compagnie.CompagnieTransport;
 import com.africanb.africanb.utils.Reference.Reference;
-import com.sun.istack.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
+
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
 
-/**
- * @Author Alzouma Moussa Mahamadou
- */
+
 @Inheritance(strategy = InheritanceType.JOINED)
 @Entity
 @Table(name="modepaiement")
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter
+@Setter
 @ToString
+@NoArgsConstructor
 public class ModePaiement implements Serializable{
 
+	@Serial
 	private static final long serialVersionUID = 1L;
 
 	@Id

@@ -13,7 +13,7 @@ import java.io.IOException;
 public class DocumentUtils {
 
 
-    public static boolean createFileOnDiskHard(byte[] content, String fileLocation) throws IOException {
+    public static boolean createFileOnDiskHard(byte[] content, String fileLocation) {
         if(Utilities.isBlank(fileLocation) ){
             log.info("repertoire inexistant="+fileLocation);
            return false;
@@ -23,18 +23,11 @@ public class DocumentUtils {
             return false;
         }
         File newFile = new File(fileLocation);
-        FileOutputStream fos = null;
-        try{
-            fos = new FileOutputStream(newFile);
+        try (FileOutputStream fos = new FileOutputStream(newFile)) {
             fos.write(content);
-        }catch (IOException ex){
+        } catch (IOException | SecurityException ex) {
             ex.printStackTrace();
             return false;
-        } catch (SecurityException se){
-            se.printStackTrace();
-            return false;
-        }finally {
-            fos.close();
         }
         return true;
     }
@@ -42,9 +35,8 @@ public class DocumentUtils {
 
     public static boolean checkIfDirectoryExists(String path){
         if(path==null) return false;
-        File directory = null;
         try{
-            directory = new File(path);
+            File directory = new File(path);
             if(!directory.exists()) return false;
         }catch (SecurityException se){
             se.printStackTrace();
@@ -55,9 +47,8 @@ public class DocumentUtils {
 
     public static boolean checkIfDocumentExistsOnDirectory(String filePath){
         if(filePath==null) return false;
-        File pdfFile = null;
         try{
-            pdfFile = new File(filePath);
+            File pdfFile = new File(filePath);
             if(!pdfFile.exists()) return false;
         }catch (SecurityException se){
             se.printStackTrace();
@@ -67,9 +58,8 @@ public class DocumentUtils {
     }
 
     public static boolean createDirectoryOnHardDisk(String pathDirectory){
-        File directory = null;
         try{
-            directory = new File(pathDirectory);
+            File directory = new File(pathDirectory);
             directory.mkdirs();
         }catch (SecurityException se){
             se.printStackTrace();

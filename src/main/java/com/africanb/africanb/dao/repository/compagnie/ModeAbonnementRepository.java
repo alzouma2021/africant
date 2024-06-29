@@ -14,7 +14,4 @@ public interface ModeAbonnementRepository extends JpaRepository<ModeAbonnement,L
     @Query("select ma from  ModeAbonnement ma where ma.compagnieTransport.raisonSociale = :compagnieTransportRaisonSociale and ma.isDeleted= :isDeleted")
     List<ModeAbonnement> findByCompagnieTransport(@Param("compagnieTransportRaisonSociale") String compagnieTransportRaisonSociale, @Param("isDeleted") Boolean isDeleted);
 
-    @Query("select ma from  ModeAbonnement ma where ma.id.id = :id and ma.isDeleted= :isDeleted")
-    ModeAbonnement findOne(@Param("id") long id, @Param("isDeleted") Boolean isDeleted);
-
 }

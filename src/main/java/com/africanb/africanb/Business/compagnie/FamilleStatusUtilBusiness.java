@@ -16,19 +16,16 @@ import lombok.extern.java.Log;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-/**
- * @author Alzouma Moussa Mahamadou
- */
+
 @Log
 @Component
 public class FamilleStatusUtilBusiness implements IBasicBusiness<Request<FamilleStatusUtilDTO>, Response<FamilleStatusUtilDTO>> {
 
-    private Response<FamilleStatusUtilDTO> response;
 
     private final FamilleStatusUtilRepository familleStatusUtilRepository;
     private final FunctionalError functionalError;
@@ -50,18 +47,16 @@ public class FamilleStatusUtilBusiness implements IBasicBusiness<Request<Famille
 
     @Override
     public Response<FamilleStatusUtilDTO> create(Request<FamilleStatusUtilDTO> request, Locale locale) throws ParseException {
-        log.info("========Debut de traitement========"); //TODO A effacer
-        Response<FamilleStatusUtilDTO> response = new Response<FamilleStatusUtilDTO>();
-        List<FamilleStatusUtil> items = new ArrayList<FamilleStatusUtil>();
+        Response<FamilleStatusUtilDTO> response = new Response<>();
+        List<FamilleStatusUtil> items = new ArrayList<>();
         if(request.getDatas() == null || request.getDatas().isEmpty()){
-            //TODO Mise à jour des messages derreur
             response.setStatus(functionalError.DATA_NOT_EXIST("Liste vide",locale));
             response.setHasError(true);
             return response;
         }
-        List<FamilleStatusUtilDTO> itemsDtos =  Collections.synchronizedList(new ArrayList<FamilleStatusUtilDTO>());
+        List<FamilleStatusUtilDTO> itemsDtos =  Collections.synchronizedList(new ArrayList<>());
         for(FamilleStatusUtilDTO dto: request.getDatas() ) {
-            Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+            Map<String, Object> fieldsToVerify = new HashMap<>();
             fieldsToVerify.put("designation", dto.getDesignation());
             if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
                 response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
@@ -69,7 +64,6 @@ public class FamilleStatusUtilBusiness implements IBasicBusiness<Request<Famille
                 return response;
             }
             if(itemsDtos.stream().anyMatch(a->a.getDesignation().equalsIgnoreCase(dto.getDesignation()))){
-                //TODO Mise à jour des messages d'erreur
                 response.setStatus(functionalError.DATA_DUPLICATE("Tentative de duplication de la designation'" + dto.getDesignation() + "' pour les pays", locale));
                 response.setHasError(true);
                 return response;
@@ -77,22 +71,18 @@ public class FamilleStatusUtilBusiness implements IBasicBusiness<Request<Famille
             itemsDtos.add(dto);
         }
         for(FamilleStatusUtilDTO itemDto : itemsDtos){
-            FamilleStatusUtil existingEntity = null;
-            existingEntity = familleStatusUtilRepository.findByDesignation(itemDto.getDesignation(),false);
+            FamilleStatusUtil existingEntity = familleStatusUtilRepository.findByDesignation(itemDto.getDesignation(),false);
             if (existingEntity != null) {
                 response.setStatus(functionalError.DATA_EXIST("FamilleStatusUtil ayant  pour designation -> " + itemDto.getDesignation() +", existe déjà", locale));
                 response.setHasError(true);
                 return response;
             }
             FamilleStatusUtil entityToSave = FamilleStatusUtilTransformer.INSTANCE.toEntity(itemDto);
-            log.info("_94 PaysDTO transform to Entity :: ="+ entityToSave.toString());
             entityToSave.setIsDeleted(false);
             entityToSave.setCreatedAt(Utilities.getCurrentDate());
-            //entityToSave.setCreatedBy(request.user); // à modifier
             items.add(entityToSave);
         }
-        List<FamilleStatusUtil> itemsSaved = null;
-        itemsSaved = familleStatusUtilRepository.saveAll((Iterable<FamilleStatusUtil>) items);
+        List<FamilleStatusUtil> itemsSaved = familleStatusUtilRepository.saveAll(items);
         if (CollectionUtils.isEmpty(itemsSaved)) {
             response.setStatus(functionalError.SAVE_FAIL("Erreur de creation", locale));
             response.setHasError(true);
@@ -110,17 +100,16 @@ public class FamilleStatusUtilBusiness implements IBasicBusiness<Request<Famille
 
     @Override
     public Response<FamilleStatusUtilDTO> update(Request<FamilleStatusUtilDTO> request, Locale locale) throws ParseException {
-
-        Response<FamilleStatusUtilDTO> response = new Response<FamilleStatusUtilDTO>();
-        List<FamilleStatusUtil> items = new ArrayList<FamilleStatusUtil>();
+        Response<FamilleStatusUtilDTO> response = new Response<>();
+        List<FamilleStatusUtil> items = new ArrayList<>();
         if(request.getDatas() == null  || request.getDatas().isEmpty()){
             response.setStatus(functionalError.DATA_NOT_EXIST("Liste de données est vide ",locale));
             response.setHasError(true);
             return response;
         }
-        List<FamilleStatusUtilDTO>itemsDtos =  Collections.synchronizedList(new ArrayList<FamilleStatusUtilDTO>());
+        List<FamilleStatusUtilDTO> itemsDtos =  Collections.synchronizedList(new ArrayList<>());
         for(FamilleStatusUtilDTO dto: request.getDatas() ) {
-            Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+            Map<String, Object> fieldsToVerify = new HashMap<>();
             fieldsToVerify.put("id", dto.getId());
             if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
                 response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
@@ -128,7 +117,6 @@ public class FamilleStatusUtilBusiness implements IBasicBusiness<Request<Famille
                 return response;
             }
             if(itemsDtos.stream().anyMatch(a->a.getDesignation().equalsIgnoreCase(dto.getDesignation()))){
-                //TODO Mise à jour des messages d'erreur
                 response.setStatus(functionalError.DATA_DUPLICATE("Tentative de duplication de la designation'" + dto.getDesignation() + "' pour les pays", locale));
                 response.setHasError(true);
                 return response;
@@ -145,7 +133,6 @@ public class FamilleStatusUtilBusiness implements IBasicBusiness<Request<Famille
             }
             if (Utilities.isNotBlank(dto.getDesignation()) && !dto.getDesignation().equals(entityToSave.getDesignation())) {
                 FamilleStatusUtil existingEntity = familleStatusUtilRepository.findByDesignation(dto.getDesignation(), false);
-                //Verification de l'identifiant
                 if (existingEntity != null && !existingEntity.getId().equals(entityToSave.getId())) {
                     response.setStatus(functionalError.DATA_EXIST("FamilleStatusUtil -> " + dto.getDesignation(), locale));
                     response.setHasError(true);
@@ -155,7 +142,6 @@ public class FamilleStatusUtilBusiness implements IBasicBusiness<Request<Famille
             }
             entityToSave.setDescription(dto.getDescription());
             entityToSave.setUpdatedAt(Utilities.getCurrentDate());
-            //entityToSave.setUpdatedBy(request.user);
             items.add(entityToSave);
         }
         if(CollectionUtils.isEmpty(items)){

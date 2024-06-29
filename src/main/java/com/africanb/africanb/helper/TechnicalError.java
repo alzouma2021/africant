@@ -6,13 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
 
-import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.logging.Logger;
 
 
-@XmlRootElement
 @Component
 public class TechnicalError {
 

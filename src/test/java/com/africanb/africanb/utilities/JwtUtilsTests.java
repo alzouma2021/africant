@@ -5,7 +5,7 @@ import com.africanb.africanb.dao.entity.security.Role;
 import com.africanb.africanb.dao.entity.security.Users;
 import com.africanb.africanb.dao.repository.security.UsersRepository;
 import com.africanb.africanb.utils.Constants.ProjectConstants;
-import com.africanb.africanb.utils.security.SecurityUtils;
+import com.africanb.africanb.utils.security.JwtUtils;
 import com.africanb.africanb.utils.security.TokenData;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -26,7 +26,7 @@ import static org.mockito.Mockito.mock;
 
 @Disabled
 @SpringBootTest
-public class SecurityUtilsTests {
+public class JwtUtilsTests {
 
     private static String validToken;
     private static String expiredToken;
@@ -34,7 +34,7 @@ public class SecurityUtilsTests {
 
     private static final String SECRET_PHRASE = "your_secret_phrase_here"; // Replace with your actual secret phrase
 
-    private static SecurityUtils securityUtils;
+    private static JwtUtils jwtUtils;
 
     private static Users createUserForTesting() {
         Users user = new Users();
@@ -56,12 +56,12 @@ public class SecurityUtilsTests {
 
     private static String generateValidToken() {
         Users user = createUserForTesting();
-        return SecurityUtils.generateToken(user);
+        return JwtUtils.generateToken(user);
     }
 
     private static String generateExpiredToken() {
         Users user = createUserForTesting();
-        Key hmacKey = new SecretKeySpec(Base64.getDecoder().decode(SecurityUtils.SESSION_TOKEN_FIELD_SECRET_PHRASE),
+        Key hmacKey = new SecretKeySpec(Base64.getDecoder().decode(JwtUtils.SESSION_TOKEN_FIELD_SECRET_PHRASE),
                 SignatureAlgorithm.HS256.getJcaName());
 
         Claims claims = new DefaultClaims();
@@ -81,37 +81,37 @@ public class SecurityUtilsTests {
         validToken = generateValidToken();
         expiredToken = generateExpiredToken();
         invalidToken = generateValidToken().replace("A", "B");
-        securityUtils = new SecurityUtils(mock(UsersRepository.class));
+        jwtUtils = new JwtUtils(mock(UsersRepository.class));
     }
 
     @Test
     public void testGenerateToken() {
         Users user = createUserForTesting();
-        String token = SecurityUtils.generateToken(user);
+        String token = JwtUtils.generateToken(user);
         assertNotNull(token);
     }
 
     @Test
     public void testValideToken_ValidToken() {
-        String result = SecurityUtils.valideToken(validToken);
+        String result = JwtUtils.valideToken(validToken);
         assertEquals(ProjectConstants.VERIFY_TOKEN_VALIDE, result);
     }
 
     @Test
     public void testValideToken_ExpiredToken() {
-        String result = SecurityUtils.valideToken(expiredToken);
+        String result = JwtUtils.valideToken(expiredToken);
         assertEquals(ProjectConstants.VERIFY_TOKEN_EXPIRE, result);
     }
 
     @Test
     public void testValideToken_InvalidToken() {
-        String result = SecurityUtils.valideToken(invalidToken);
+        String result = JwtUtils.valideToken(invalidToken);
         assertEquals(ProjectConstants.VERIFY_TOKEN_MAUVAIS, result);
     }
 
     @Test
     public void testDecodeAndValidateToken_ValidToken() {
-        TokenData tokenDataInstance = SecurityUtils.decodeAndValidateToken(validToken);
+        TokenData tokenDataInstance = JwtUtils.decodeAndValidateToken(validToken);
         assertNotNull(tokenDataInstance);
         assertNotNull(ProjectConstants.VERIFY_TOKEN_MAUVAIS, tokenDataInstance.getStatus());
         assertNotNull(tokenDataInstance.getClaims());
@@ -119,7 +119,7 @@ public class SecurityUtilsTests {
 
     @Test
     public void testDecodeAndValidateToken_ExpiredToken() {
-        TokenData tokenDataInstance = SecurityUtils.decodeAndValidateToken(expiredToken);
+        TokenData tokenDataInstance = JwtUtils.decodeAndValidateToken(expiredToken);
         assertNotNull(tokenDataInstance);
         assertEquals(ProjectConstants.VERIFY_TOKEN_EXPIRE, tokenDataInstance.getStatus());
         assertNull(tokenDataInstance.getClaims());
@@ -127,7 +127,7 @@ public class SecurityUtilsTests {
 
     @Test
     public void testDecodeAndValidateToken_InvalidToken() {
-        TokenData tokenDataInstance = SecurityUtils.decodeAndValidateToken(invalidToken);
+        TokenData tokenDataInstance = JwtUtils.decodeAndValidateToken(invalidToken);
         assertNotNull(tokenDataInstance);
         assertEquals(ProjectConstants.VERIFY_TOKEN_MAUVAIS, tokenDataInstance.getStatus());
         assertNull(tokenDataInstance.getClaims());
@@ -135,7 +135,7 @@ public class SecurityUtilsTests {
 
     @Test
     public void testGeneratePassword() {
-        String password = SecurityUtils.generatePassword();
+        String password = JwtUtils.generatePassword();
         assertNotNull(password);
         assertEquals(10, password.length());
     }
@@ -143,7 +143,7 @@ public class SecurityUtilsTests {
     @Test
     public void testEncryptPassword() {
         String password = "password123";
-        String hashedPassword = SecurityUtils.encryptPassword(password);
+        String hashedPassword = JwtUtils.encryptPassword(password);
         assertNotNull(hashedPassword);
         assertNotEquals(password, hashedPassword);
     }

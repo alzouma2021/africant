@@ -20,7 +20,7 @@ import lombok.extern.java.Log;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -54,19 +54,18 @@ public class StatusUtilBusiness implements IBasicBusiness<Request<StatusUtilDTO>
 
     @Override
     public Response<StatusUtilDTO> create(Request<StatusUtilDTO> request, Locale locale) throws ParseException {
-        Response<StatusUtilDTO> response = new Response<StatusUtilDTO>();
-        List<StatusUtil> items = new ArrayList<StatusUtil>();
+        Response<StatusUtilDTO> response = new Response<>();
+        List<StatusUtil> items = new ArrayList<>();
         if(request.getDatas() == null || request.getDatas().isEmpty()){
             response.setStatus(functionalError.DATA_NOT_EXIST("Liste vide",locale));
             response.setHasError(true);
             return response;
         }
-        List<StatusUtilDTO> itemsDtos =  Collections.synchronizedList(new ArrayList<StatusUtilDTO>());
+        List<StatusUtilDTO> itemsDtos =  Collections.synchronizedList(new ArrayList<>());
         for(StatusUtilDTO dto: request.getDatas() ) {
-            Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+            Map<String, Object> fieldsToVerify = new HashMap<>();
             fieldsToVerify.put("designation", dto.getDesignation());
             fieldsToVerify.put("familleStatusUtilId", dto.getFamilleStatusUtilId());
-            //fieldsToVerify.put("familleStatusUtilDesignation", dto.getFamilleStatusUtilDesignation());
             if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
                 response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
                 response.setHasError(true);
@@ -80,29 +79,24 @@ public class StatusUtilBusiness implements IBasicBusiness<Request<StatusUtilDTO>
             itemsDtos.add(dto);
         }
         for(StatusUtilDTO itemDto : itemsDtos){
-            StatusUtil existingStatusUtil = null;
-            existingStatusUtil = statusUtilRepository.findByDesignation(itemDto.getDesignation(), false);
+            StatusUtil existingStatusUtil = statusUtilRepository.findByDesignation(itemDto.getDesignation(), false);
             if (existingStatusUtil != null) {
                 response.setStatus(functionalError.DATA_EXIST("StatusUtil ayant  pour designation -> " + itemDto.getDesignation() +", existe déjà", locale));
                 response.setHasError(true);
                 return response;
             }
-            FamilleStatusUtil existingFamilleStatusUtil = null;
-            existingFamilleStatusUtil=familleStatusUtilRepository.findOne(itemDto.getFamilleStatusUtilId(),false);
+            FamilleStatusUtil existingFamilleStatusUtil = familleStatusUtilRepository.findOne(itemDto.getFamilleStatusUtilId(),false);
             if (existingFamilleStatusUtil == null) {
                 response.setStatus(functionalError.DATA_NOT_EXIST("FamilleStatusUtil ayant pour identifiant -> " + itemDto.getFamilleStatusUtilId() +", n'existe pas", locale));
                 response.setHasError(true);
                 return response;
             }
             StatusUtil entityToSave = StatusUtilTransformer.INSTANCE.toEntity(itemDto,existingFamilleStatusUtil);
-            log.info("_110 StatusUtilDTO transform to Entity :: ="+ entityToSave.toString());
             entityToSave.setIsDeleted(false);
             entityToSave.setCreatedAt(Utilities.getCurrentDate());
-            //entityToSave.setCreatedBy(request.user); // à modifier
             items.add(entityToSave);
         }
-        List<StatusUtil> itemsSaved = null;
-        itemsSaved = statusUtilRepository.saveAll((Iterable<StatusUtil>) items);
+        List<StatusUtil> itemsSaved = statusUtilRepository.saveAll(items);
         if (CollectionUtils.isEmpty(itemsSaved)) {
             response.setStatus(functionalError.SAVE_FAIL("Erreur de creation", locale));
             response.setHasError(true);
@@ -111,7 +105,6 @@ public class StatusUtilBusiness implements IBasicBusiness<Request<StatusUtilDTO>
         List<StatusUtilDTO> itemsDto = (Utilities.isTrue(request.getIsSimpleLoading()))
                                     ? StatusUtilTransformer.INSTANCE.toLiteDtos(itemsSaved)
                                     : StatusUtilTransformer.INSTANCE.toDtos(itemsSaved);
-
         response.setItems(itemsDto);
         response.setHasError(false);
         response.setStatus(functionalError.SUCCESS("", locale));
@@ -120,17 +113,16 @@ public class StatusUtilBusiness implements IBasicBusiness<Request<StatusUtilDTO>
 
     @Override
     public Response<StatusUtilDTO> update(Request<StatusUtilDTO> request, Locale locale) throws ParseException {
-
-        Response<StatusUtilDTO> response = new Response<StatusUtilDTO>();
-        List<StatusUtil> items = new ArrayList<StatusUtil>();
+        Response<StatusUtilDTO> response = new Response<>();
+        List<StatusUtil> items = new ArrayList<>();
         if(request.getDatas() == null  || request.getDatas().isEmpty()){
             response.setStatus(functionalError.DATA_NOT_EXIST("Liste vide",locale));
             response.setHasError(true);
             return response;
         }
-        List<StatusUtilDTO>itemsDtos =  Collections.synchronizedList(new ArrayList<StatusUtilDTO>());
+        List<StatusUtilDTO>itemsDtos =  Collections.synchronizedList(new ArrayList<>());
         for(StatusUtilDTO dto: request.getDatas() ) {
-            Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+            Map<String, Object> fieldsToVerify = new HashMap<>();
             fieldsToVerify.put("id", dto.getId());
             if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
                 response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
@@ -187,7 +179,6 @@ public class StatusUtilBusiness implements IBasicBusiness<Request<StatusUtilDTO>
                 entityToSave.setDescription(dto.getDescription());
             }
             entityToSave.setUpdatedAt(Utilities.getCurrentDate());
-            //entityToSave.setUpdatedBy(request.user);
             items.add(entityToSave);
         }
         if(CollectionUtils.isEmpty(items)){

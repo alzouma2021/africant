@@ -16,9 +16,8 @@ import lombok.extern.java.Log;
 import org.springframework.transaction.CannotCreateTransactionException;
 import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.bind.annotation.*;
-import springfox.documentation.annotations.Cacheable;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.Locale;
 
 
@@ -132,7 +131,6 @@ public class UsersController {
         return response;
     }
 
-    @Cacheable("myCache")
     @RequestMapping(value = "/getAll", method = RequestMethod.POST, consumes = {"application/json"}, produces = {"application/json"})
     public Response<UsersDTO> getAll(@RequestBody Request<UsersDTO> request) {
         Response<UsersDTO> response = new Response<UsersDTO>();

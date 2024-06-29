@@ -6,15 +6,12 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Data;
 import lombok.ToString;
 
-/**
- * @Author Alzouma Moussa Mahamadou
- */
+
 @Data
 @ToString
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder(alphabetic = true)
 public class VilleEscaleDTO {
-
     private Long id ;
     private String offreVoyageDesignation;
     private String villeDesignation;

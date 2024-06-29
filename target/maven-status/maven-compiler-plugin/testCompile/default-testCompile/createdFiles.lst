@@ -1,7 +1,7 @@
 com\africanb\africanb\utilities\EmailServiceTests.class
-com\africanb\africanb\utilities\SecurityUtilsTests.class
 com\africanb\africanb\compagnie\PaysTests.class
 com\africanb\africanb\integration\reservationBilletVoyage\ReservationBilletVoyageTest.class
 com\africanb\africanb\AfricanbApplicationTests.class
+com\africanb\africanb\utilities\JwtUtilsTests.class
 com\africanb\africanb\utilities\UtitiliesTests.class
 com\africanb\africanb\utilities\DocumentUtilsTests.class

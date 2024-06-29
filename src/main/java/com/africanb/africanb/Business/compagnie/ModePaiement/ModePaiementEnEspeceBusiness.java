@@ -21,19 +21,15 @@ import lombok.extern.java.Log;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-/**
- * @Author ALZOUMA MOUSSA MAHAAMADOU
- */
+
 @Log
 @Component
 public class ModePaiementEnEspeceBusiness implements IBasicBusiness<Request<ModePaiementEnEspeceDTO>, Response<ModePaiementEnEspeceDTO>> {
-
-    private Response<ModePaiementEnEspeceDTO> response;
 
     private final ModePaiementEnEspeceRepository modePaiementEnEspeceRepository;
     private final FunctionalError functionalError;
@@ -60,25 +56,21 @@ public class ModePaiementEnEspeceBusiness implements IBasicBusiness<Request<Mode
 
     @Override
     public Response<ModePaiementEnEspeceDTO> create(Request<ModePaiementEnEspeceDTO> request, Locale locale) throws ParseException {
-        Response<ModePaiementEnEspeceDTO> response = new Response<ModePaiementEnEspeceDTO>();
-        List<ModePaiementEnEspece> items = new ArrayList<ModePaiementEnEspece>();
+        Response<ModePaiementEnEspeceDTO> response = new Response<>();
+        List<ModePaiementEnEspece> items = new ArrayList<>();
         if(request.getDatas() == null || request.getDatas().isEmpty()){
             response.setStatus(functionalError.DATA_NOT_EXIST("Liste vide",locale));
             response.setHasError(true);
             return response;
         }
         for(ModePaiementEnEspeceDTO itemDto : request.getDatas() ){
-            //Chech If CompagnieTransport exists
-            CompagnieTransport exitingCompagnieTransport=null;
-            exitingCompagnieTransport=compagnieTransportRepository.findByRaisonSociale(itemDto.getCompagnieTransportRaisonSociale(), false);
+            CompagnieTransport exitingCompagnieTransport=compagnieTransportRepository.findByRaisonSociale(itemDto.getCompagnieTransportRaisonSociale(), false);
             if (exitingCompagnieTransport == null) {
                 response.setStatus(functionalError.DATA_EXIST("Compagnie de transport ayant la raison sociale"+itemDto.getCompagnieTransportRaisonSociale()+" n'existe pas", locale)) ;
                 response.setHasError(true);
                 return response;
             }
-            //Check if periodiciteAbonnement exists
-            Reference existingTypeModePaiement = null;
-            existingTypeModePaiement = typeModePaiementRepository.findByDesignation(itemDto.getTypeModePaiementDesignation(),false);
+            Reference existingTypeModePaiement = typeModePaiementRepository.findByDesignation(itemDto.getTypeModePaiementDesignation(),false);
             if (existingTypeModePaiement == null) {
                 response.setStatus(functionalError.DATA_EXIST("Le mode de paiment n'existe pas", locale));
                 response.setHasError(true);
@@ -87,8 +79,7 @@ public class ModePaiementEnEspeceBusiness implements IBasicBusiness<Request<Mode
             ModePaiementEnEspece entityToSave = ModePaimentEnEspeceTransformer.INSTANCE.toEntity(itemDto,exitingCompagnieTransport,existingTypeModePaiement);
             entityToSave.setIsDeleted(false);
             entityToSave.setCreatedAt(Utilities.getCurrentDate());
-            ModePaiementEnEspece entitySaved=null;
-            entitySaved= modePaiementEnEspeceRepository.save(entityToSave);
+            ModePaiementEnEspece entitySaved= modePaiementEnEspeceRepository.save(entityToSave);
             items.add(entitySaved);
         }
         if (CollectionUtils.isEmpty(items)) {
@@ -107,16 +98,16 @@ public class ModePaiementEnEspeceBusiness implements IBasicBusiness<Request<Mode
 
     @Override
     public Response<ModePaiementEnEspeceDTO> update(Request<ModePaiementEnEspeceDTO> request, Locale locale) throws ParseException {
-        Response<ModePaiementEnEspeceDTO> response = new Response<ModePaiementEnEspeceDTO>();
-        List<ModePaiementEnEspece> items = new ArrayList<ModePaiementEnEspece>();
+        Response<ModePaiementEnEspeceDTO> response = new Response<>();
+        List<ModePaiementEnEspece> items = new ArrayList<>();
         if(request.getDatas() == null  || request.getDatas().isEmpty()){
             response.setStatus(functionalError.DATA_NOT_EXIST("Liste vide",locale));
             response.setHasError(true);
             return response;
         }
-        List<ModePaiementEnEspeceDTO>itemsDtos = Collections.synchronizedList(new ArrayList<ModePaiementEnEspeceDTO>());
+        List<ModePaiementEnEspeceDTO>itemsDtos = Collections.synchronizedList(new ArrayList<>());
         for(ModePaiementEnEspeceDTO dto: request.getDatas() ) {
-            Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+            Map<String, Object> fieldsToVerify = new HashMap<>();
             fieldsToVerify.put("id", dto.getId());
             if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
                 response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
@@ -138,8 +129,7 @@ public class ModePaiementEnEspeceBusiness implements IBasicBusiness<Request<Mode
                 return response;
             }
             entityToSave.setUpdatedAt(Utilities.getCurrentDate());
-            ModePaiementEnEspece entityUpdated=null;
-            entityUpdated= modePaiementEnEspeceRepository.save(entityToSave);
+            ModePaiementEnEspece entityUpdated = modePaiementEnEspeceRepository.save(entityToSave);
             items.add(entityUpdated);
         }
         if(CollectionUtils.isEmpty(items)){

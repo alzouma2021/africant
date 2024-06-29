@@ -1,6 +1,5 @@
 package com.africanb.africanb.helper.dto.reservationBilletVoyage;
 
-
 import com.africanb.africanb.dao.entity.reservationBilletVoyage.ClientDetails;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -14,7 +13,6 @@ import java.util.Date;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder(alphabetic = true)
 public class ReservationBilletVoyageDTO {
-
     private Long id ;
     private String designation;
     private String description;
@@ -32,7 +30,7 @@ public class ReservationBilletVoyageDTO {
     private String offreVoyageDesignation;
     private String programmeDesignation;
     private String userEmail;
-    private String categorieVoyageur;  // Enfant ou Adulte.
+    private String categorieVoyageur;
     private String statusActualDesignation;
 
     private Boolean isDeleted;
@@ -42,5 +40,4 @@ public class ReservationBilletVoyageDTO {
     private Long  createdBy;
     private String deletedAt;
     private Long  deletedBy;
-
 }

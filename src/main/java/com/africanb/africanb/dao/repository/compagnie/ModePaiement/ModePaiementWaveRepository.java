@@ -1,6 +1,5 @@
 package com.africanb.africanb.dao.repository.compagnie.ModePaiement;
 
-import com.africanb.africanb.dao.entity.compagnie.ModeAbonnement.AbonnementPeriodique;
 import com.africanb.africanb.dao.entity.compagnie.ModePaiment.ModePaiementWave;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

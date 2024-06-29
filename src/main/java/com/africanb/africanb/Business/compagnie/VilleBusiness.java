@@ -20,7 +20,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -55,18 +55,17 @@ public class VilleBusiness implements IBasicBusiness<Request<VilleDTO>, Response
 
     @Override
     public Response<VilleDTO> create(Request<VilleDTO> request, Locale locale) throws ParseException {
-        Response<VilleDTO> response = new Response<VilleDTO>();
-        List<Ville> items = new ArrayList<Ville>();
+        Response<VilleDTO> response = new Response<>();
+        List<Ville> items = new ArrayList<>();
         if(request.getDatas() == null || request.getDatas().isEmpty()){
             response.setStatus(functionalError.DATA_NOT_EXIST("Liste vide",locale));
             response.setHasError(true);
             return response;
         }
-        List<VilleDTO> itemsDtos =  Collections.synchronizedList(new ArrayList<VilleDTO>());
+        List<VilleDTO> itemsDtos =  Collections.synchronizedList(new ArrayList<>());
         for(VilleDTO dto: request.getDatas() ) {
-            Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+            Map<String, Object> fieldsToVerify = new HashMap<>();
             fieldsToVerify.put("designation", dto.getDesignation());
-            //fieldsToVerify.put("paysDesignation", dto.getPaysDesignation());
             fieldsToVerify.put("paysId", dto.getPaysId());
             if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
                 response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
@@ -81,29 +80,24 @@ public class VilleBusiness implements IBasicBusiness<Request<VilleDTO>, Response
             itemsDtos.add(dto);
         }
         for(VilleDTO itemDto : itemsDtos){
-            Ville existingVille = null;
-            existingVille = villeRepository.findByDesignation(itemDto.getDesignation(), false);
+            Ville existingVille = villeRepository.findByDesignation(itemDto.getDesignation(), false);
             if (existingVille != null) {
                 response.setStatus(functionalError.DATA_EXIST("Ville ayant  pour designation -> " + itemDto.getDesignation() +", existe déjà", locale));
                 response.setHasError(true);
                 return response;
             }
-            Pays existingPays = null;
-            existingPays=paysRepository.findOne(itemDto.getPaysId(),false);
+            Pays existingPays = paysRepository.findOne(itemDto.getPaysId(),false);
             if (existingPays == null) {
                 response.setStatus(functionalError.DATA_EXIST("Pays ayant  pour identifiant -> " + itemDto.getPaysId() +", n'existe pas", locale));
                 response.setHasError(true);
                 return response;
             }
             Ville entityToSave = VilleTransformer.INSTANCE.toEntity(itemDto,existingPays);
-            log.info("_105 VilleDTO transform to Entity :: ="+ entityToSave.toString());
             entityToSave.setIsDeleted(false);
             entityToSave.setCreatedAt(Utilities.getCurrentDate());
-            //entityToSave.setCreatedBy(request.user); // à modifier
             items.add(entityToSave);
         }
-        List<Ville> itemsSaved = null;
-        itemsSaved = villeRepository.saveAll((Iterable<Ville>) items);
+        List<Ville> itemsSaved = villeRepository.saveAll(items);
         if (CollectionUtils.isEmpty(itemsSaved)) {
             response.setStatus(functionalError.SAVE_FAIL("Erreur de creation", locale));
             response.setHasError(true);
@@ -120,17 +114,16 @@ public class VilleBusiness implements IBasicBusiness<Request<VilleDTO>, Response
 
     @Override
     public Response<VilleDTO> update(Request<VilleDTO> request, Locale locale) throws ParseException {
-
-        Response<VilleDTO> response = new Response<VilleDTO>();
-        List<Ville> items = new ArrayList<Ville>();
+        Response<VilleDTO> response = new Response<>();
+        List<Ville> items = new ArrayList<>();
         if(request.getDatas() == null  || request.getDatas().isEmpty()){
             response.setStatus(functionalError.DATA_NOT_EXIST("Liste vide",locale));
             response.setHasError(true);
             return response;
         }
-        List<VilleDTO>itemsDtos =  Collections.synchronizedList(new ArrayList<VilleDTO>());
+        List<VilleDTO> itemsDtos =  Collections.synchronizedList(new ArrayList<>());
         for(VilleDTO dto: request.getDatas() ) {
-            Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+            Map<String, Object> fieldsToVerify = new HashMap<>();
             fieldsToVerify.put("id", dto.getId());
             if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
                 response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
@@ -187,7 +180,6 @@ public class VilleBusiness implements IBasicBusiness<Request<VilleDTO>, Response
                 entityToSave.setDescription(dto.getDescription());
             }
             entityToSave.setUpdatedAt(Utilities.getCurrentDate());
-            //entityToSave.setUpdatedBy(request.user);
             items.add(entityToSave);
         }
         if(CollectionUtils.isEmpty(items)){
@@ -230,14 +222,12 @@ public class VilleBusiness implements IBasicBusiness<Request<VilleDTO>, Response
     public  Response<VilleDTO> getAllCities(Request<VilleDTO> request, Locale locale) throws ParseException {
         Response<VilleDTO> response = new Response<>();
         Long count = villeRepository.countAllCities(false);
-
         List<Ville> items = villeRepository.getAllCities(false );
         if(CollectionUtils.isEmpty(items)){
             response.setStatus(functionalError.DATA_NOT_EXIST("Aucune ville n'est trouvée",locale));
             response.setHasError(true);
             return response;
         }
-
         List<VilleDTO> itemsDto = (Utilities.isTrue(request.getIsSimpleLoading()))
                                 ? VilleTransformer.INSTANCE.toLiteDtos(items)
                                 : VilleTransformer.INSTANCE.toDtos(items);

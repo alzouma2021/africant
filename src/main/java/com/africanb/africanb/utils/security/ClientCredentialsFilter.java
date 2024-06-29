@@ -1,6 +1,5 @@
 package com.africanb.africanb.utils.security;
 
-import com.africanb.africanb.helper.ExceptionUtils;
 import com.africanb.africanb.helper.FunctionalError;
 import com.africanb.africanb.helper.contrat.Response;
 import com.africanb.africanb.helper.dto.security.UsersDTO;
@@ -11,10 +10,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.*;
-import javax.servlet.http.HttpFilter;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.*;
+import jakarta.servlet.http.HttpFilter;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Locale;
 
@@ -29,28 +28,25 @@ public class ClientCredentialsFilter extends HttpFilter {
     @Value("${client.id}")
     private String clientId;
     private final FunctionalError functionalError;
-    private final ExceptionUtils exceptionUtils;
+
 
     @Autowired
-    public ClientCredentialsFilter(FunctionalError functionalError, ExceptionUtils exceptionUtils) {
+    public ClientCredentialsFilter(FunctionalError functionalError) {
         this.functionalError = functionalError;
-        this.exceptionUtils = exceptionUtils;
     }
 
     @Override
     public void doFilter(HttpServletRequest servletRequest, HttpServletResponse servletResponse, FilterChain chain) throws IOException, ServletException {
         //Get Parameters Client
-        Response<UsersDTO> resp = new Response<UsersDTO>();
+        Response<UsersDTO> resp = new Response<>();
         Locale locale     = new Locale("Fr", "");
-        //Initialize Headers
+
         String serverIdProvider = servletRequest.getHeader("server_id");
         String clientIdProvider = servletRequest.getHeader("client_id");
-        ClientCredentials clientCredentials = new ClientCredentials();
         String serverIdConsumer =  serverId;
         String clientIdConsumer =  clientId;
 
-        //Check Options
-        if (SecurityUtils.doesPathNotRequireAuthentication(servletRequest, servletResponse, chain)) return;
+        if (JwtUtils.doesPathNotRequireAuthentication(servletRequest, servletResponse, chain)) return;
         //Check
         if(Utilities.isBlank(serverIdProvider) || Utilities.isBlank(clientIdProvider)){
                 servletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // HTTP 401.

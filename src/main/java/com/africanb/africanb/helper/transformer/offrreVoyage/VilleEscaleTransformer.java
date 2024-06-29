@@ -15,6 +15,7 @@ import org.mapstruct.factory.Mappers;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Mapper
 public interface VilleEscaleTransformer {
@@ -41,7 +42,7 @@ public interface VilleEscaleTransformer {
     @IterableMapping(qualifiedBy = {FullTransformerQualifier.class})
     List<VilleEscaleDTO> toDtos(List<VilleEscale> entities) throws ParseException;
 
-    public default VilleEscaleDTO toLiteDto(VilleEscale entity) {
+    default VilleEscaleDTO toLiteDto(VilleEscale entity) {
         if (entity == null) {
             return null;
         }
@@ -52,11 +53,11 @@ public interface VilleEscaleTransformer {
         return dto;
     }
 
-    public default List<VilleEscaleDTO> toLiteDtos(List<VilleEscale> entities) {
-        if (entities == null || entities.stream().allMatch(o -> o == null)) {
+    default List<VilleEscaleDTO> toLiteDtos(List<VilleEscale> entities) {
+        if (entities == null || entities.stream().allMatch(Objects::isNull)) {
             return null;
         }
-        List<VilleEscaleDTO> dtos = new ArrayList<VilleEscaleDTO>();
+        List<VilleEscaleDTO> dtos = new ArrayList<>();
         for (VilleEscale entity : entities) {
             dtos.add(toLiteDto(entity));
         }

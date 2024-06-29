@@ -25,12 +25,12 @@ import com.africanb.africanb.helper.transformer.offrreVoyage.OffreVoyageTransfor
 import com.africanb.africanb.helper.searchFunctions.Utilities;
 import com.africanb.africanb.helper.validation.Validate;
 import com.africanb.africanb.utils.Reference.Reference;
+import jakarta.persistence.EntityManager;
 import lombok.extern.java.Log;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import javax.persistence.EntityManager;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -95,9 +95,9 @@ public class OffreVoyageBusiness implements IBasicBusiness<Request<OffreVoyageDT
             response.setHasError(true);
             return response;
         }
-        List<OffreVoyageDTO> itemsDtos =  Collections.synchronizedList(new ArrayList<OffreVoyageDTO>());
+        List<OffreVoyageDTO> itemsDtos =  Collections.synchronizedList(new ArrayList<>());
         for(OffreVoyageDTO dto: request.getDatas() ) {
-            Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+            Map<String, Object> fieldsToVerify = new HashMap<>();
             fieldsToVerify.put("designation", dto.getDesignation());
             fieldsToVerify.put("villeDepartDesignation", dto.getVilleDepartDesignation());
             fieldsToVerify.put("villeDestinationDesignation", dto.getVilleDestinationDesignation());
@@ -151,18 +151,10 @@ public class OffreVoyageBusiness implements IBasicBusiness<Request<OffreVoyageDT
                 response.setHasError(true);
                 return response;
             }
-
             OffreVoyage entityToSave = OffreVoyageTransformer.INSTANCE.toEntity(itemDto,existingVilleDepart,existingVilleDestination,existingTypeOffreVoyage,existingCompagnieTransport);
             entityToSave.setIsDeleted(false);
             entityToSave.setCreatedAt(Utilities.getCurrentDate());
-
             OffreVoyage entitySaved = offreVoyageRepository.save(entityToSave);
-            if(Objects.isNull(entitySaved)){
-                response.setStatus(functionalError.SAVE_FAIL("Erreur de creation", locale));
-                response.setHasError(true);
-                return response;
-            }
-
             if(!CollectionUtils.isEmpty(itemDto.getPrixOffreVoyageDTOList())){
                     Request<PrixOffreVoyageDTO> subRequest = new Request<>();
                     subRequest.setDatas(itemDto.getPrixOffreVoyageDTOList());
@@ -176,7 +168,6 @@ public class OffreVoyageBusiness implements IBasicBusiness<Request<OffreVoyageDT
                         return response;
                     }
             }
-
             if(!CollectionUtils.isEmpty(itemDto.getJourSemaineDTOList())){
                 Request<JourSemaineDTO> subRequestJourSemaine = new Request<>();
                 subRequestJourSemaine.setDatas(itemDto.getJourSemaineDTOList());
@@ -190,7 +181,6 @@ public class OffreVoyageBusiness implements IBasicBusiness<Request<OffreVoyageDT
                     return response;
                 }
             }
-
             if(!CollectionUtils.isEmpty(itemDto.getVilleEscaleDTOList())){
                 Request<VilleEscaleDTO> subRequestVilleEscale = new Request<>();
                 subRequestVilleEscale.setDatas(itemDto.getVilleEscaleDTOList());
@@ -204,7 +194,6 @@ public class OffreVoyageBusiness implements IBasicBusiness<Request<OffreVoyageDT
                     return response;
                 }
             }
-
             if(!CollectionUtils.isEmpty(itemDto.getValeurCaracteristiqueOffreVoyageDTOList())){
                 Request<ValeurCaracteristiqueOffreVoyageDTO> subRequestValeurCaracteristiqueOffreVoyage = new Request<>();
                 subRequestValeurCaracteristiqueOffreVoyage.setDatas(itemDto.getValeurCaracteristiqueOffreVoyageDTOList());
@@ -361,13 +350,7 @@ public class OffreVoyageBusiness implements IBasicBusiness<Request<OffreVoyageDT
                 entityToSave.setIsActif(dto.getIsActif());
             }
             entityToSave.setUpdatedAt(Utilities.getCurrentDate());
-            //entityToSave.setUpdatedBy(request.user);
-            OffreVoyage entityupdated=offreVoyageRepository.save(entityToSave);
-            if(entityupdated==null){
-                response.setStatus(functionalError.SAVE_FAIL("Erreur de Modification", locale));
-                response.setHasError(true);
-                return response;
-            }
+            OffreVoyage entityupdated = offreVoyageRepository.save(entityToSave);
             if(!CollectionUtils.isEmpty(dto.getPrixOffreVoyageDTOList())){
                 Request<PrixOffreVoyageDTO> subRequest = new Request<>();
                 subRequest.setDatas( dto.getPrixOffreVoyageDTOList());
@@ -526,12 +509,7 @@ public class OffreVoyageBusiness implements IBasicBusiness<Request<OffreVoyageDT
                 }
             }
             existingOffreVoyage.setIsActif(true);
-            OffreVoyage entityToActive = offreVoyageRepository.save(existingOffreVoyage);
-            if(entityToActive==null){
-                response.setStatus(functionalError.DATA_EXIST("Echec d'activation de l'offe de voyage", locale));
-                response.setHasError(true);
-                return response;
-            }
+            offreVoyageRepository.save(existingOffreVoyage);
         }
         response.setItem(true);
         response.setHasError(false);
@@ -542,14 +520,14 @@ public class OffreVoyageBusiness implements IBasicBusiness<Request<OffreVoyageDT
 
     @Transactional(rollbackFor = {RuntimeException.class, Exception.class})
     public Response<OffreVoyageDTO> getTravelOfferByCompagnieTransport(Request<OffreVoyageDTO> request, Locale locale) throws ParseException {
-        Response<OffreVoyageDTO> response = new Response<OffreVoyageDTO>();
+        Response<OffreVoyageDTO> response = new Response<>();
         List<OffreVoyage> items;
         if (request.getData() == null ) {
             response.setStatus(functionalError.DATA_NOT_EXIST("Aucune donnée definie", locale));
             response.setHasError(true);
             return response;
         }
-        Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+        Map<String, Object> fieldsToVerify = new HashMap<>();
         fieldsToVerify.put("idCompagnieTransport", request.getData().getCompagnieTransportRaisonSociale());
         if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
             response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
@@ -590,7 +568,7 @@ public class OffreVoyageBusiness implements IBasicBusiness<Request<OffreVoyageDT
             response.setHasError(true);
             return response;
         }
-        Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+        Map<String, Object> fieldsToVerify = new HashMap<>();
         fieldsToVerify.put("villeDepart", request.getData().getVilleDepart());
         fieldsToVerify.put("villeDestination", request.getData().getVilleDepart());
         fieldsToVerify.put("dateDepart", request.getData().getVilleDepart());

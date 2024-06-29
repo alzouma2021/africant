@@ -28,7 +28,6 @@ public class BusDTO {
     private String deletedAt;
     private Long  deletedBy;
 
-
     // Search param
     private SearchParam<String> designationParam;
     private SearchParam<String>   modeDesignationParam ;
@@ -42,5 +41,4 @@ public class BusDTO {
 
     private String orderField;
     private String orderDirection;
-
 }

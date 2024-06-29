@@ -24,15 +24,13 @@ import lombok.extern.java.Log;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
-/**
- * @Author Alzouma Moussa Mahamadou
- */
+
 
 @Log
 @Component
@@ -64,21 +62,12 @@ public class RoleBusiness implements IBasicBusiness<Request<RoleDTO>, Response<R
 
     @Override
     public Response<RoleDTO> create(Request<RoleDTO> request, Locale locale) throws ParseException {
-        log.info("----begin create Role-----");
-        Response<RoleDTO> response = new Response<RoleDTO>();
-        List<Role> items = new ArrayList<Role>();
-        List<RoleDTO>itemsDtos =  Collections.synchronizedList(new ArrayList<RoleDTO>());
-        //Verification des permissions
-        /*boolean isUserAuthenticatedHaveFunctinality=usersBusiness.checkIfUserAuthenticatedHasThisFunctionnality(Request.userID, SecurityConstants.PERMISSION_PROFILE_CREATE);
-        if(isUserAuthenticatedHaveFunctinality==false){
-            response.setStatus(functionalError.SAVE_FAIL("Vous ne pouvez pas créer un rôle.Car, vous n'avez pas les permissions nécessaires", locale));
-            response.setHasError(true);
-            return response;
-        }*/
-        Response<RoleDTO> response1 = blockDuplicationData(request, locale, response, itemsDtos);
-        if (response1 != null) return response1;
+        Response<RoleDTO> response = new Response<>();
+        List<Role> items = new ArrayList<>();
+        List<RoleDTO>itemsDtos =  Collections.synchronizedList(new ArrayList<>());
+        blockDuplicationData(request, locale, response, itemsDtos);
         for(RoleDTO dto : request.getDatas()){
-            Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+            Map<String, Object> fieldsToVerify = new HashMap<>();
             fieldsToVerify.put("code", dto.getCode());
             fieldsToVerify.put("libelle", dto.getLibelle());
             if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
@@ -86,7 +75,7 @@ public class RoleBusiness implements IBasicBusiness<Request<RoleDTO>, Response<R
                 response.setHasError(true);
                 return response;
             }
-            Role existingEntity = roleRepository.findByCode(dto.getCode(), false); //verification en base
+            Role existingEntity = roleRepository.findByCode(dto.getCode(), false);
             if (existingEntity != null) {
                 response.setStatus(functionalError.DATA_EXIST("Role code -> " + dto.getCode(), locale));
                 response.setHasError(true);
@@ -95,9 +84,6 @@ public class RoleBusiness implements IBasicBusiness<Request<RoleDTO>, Response<R
             Role entityToSave = RoleTransformer.INSTANCE.toEntity(dto);
             entityToSave.setIsDeleted(false);
             entityToSave.setCreatedAt(Utilities.getCurrentDate());
-            //if(Utilities.isValidID(request.userID)){
-            //entityToSave.setCreatedBy(request.userID);
-            //} //TODO A mettre à jour
             Role entitySaved = roleRepository.save(entityToSave);
             items.add(entitySaved);
             if(CollectionUtils.isEmpty(dto.getDatasFunctionalities())){
@@ -106,14 +92,14 @@ public class RoleBusiness implements IBasicBusiness<Request<RoleDTO>, Response<R
                 return response;
             }
             else {
-                List<RoleFunctionalityDTO> datasProfilFunctionality = new ArrayList<RoleFunctionalityDTO>();
+                List<RoleFunctionalityDTO> datasProfilFunctionality = new ArrayList<>();
                 dto.getDatasFunctionalities().forEach(f -> {
                     RoleFunctionalityDTO roleFunctionalityDto = new RoleFunctionalityDTO();
                     roleFunctionalityDto.setRoleCode(entitySaved.getCode());
                     roleFunctionalityDto.setFunctionalityCode(f.getCode());
                     datasProfilFunctionality.add(roleFunctionalityDto);
                 });
-                Request<RoleFunctionalityDTO> subRequest = new Request<RoleFunctionalityDTO>();
+                Request<RoleFunctionalityDTO> subRequest = new Request<>();
                 subRequest.setDatas(datasProfilFunctionality);
                 Response<RoleFunctionalityDTO> subResponse = roleFunctionalityBusiness.create(subRequest, locale);
                 if (subResponse.isHasError()) {
@@ -124,12 +110,7 @@ public class RoleBusiness implements IBasicBusiness<Request<RoleDTO>, Response<R
             }
         }
         if (!items.isEmpty()) {
-            List<Role>  itemsSaved = roleRepository.saveAll((Iterable<Role>) items);
-            if (itemsSaved == null) {
-                response.setStatus(functionalError.SAVE_FAIL("Role", locale));
-                response.setHasError(true);
-                return response;
-            }
+            List<Role>  itemsSaved = roleRepository.saveAll(items);
             List<RoleDTO> itemsDto = (Utilities.isTrue(request.getIsSimpleLoading())) ? RoleTransformer.INSTANCE.toLiteDtos(itemsSaved) : RoleTransformer.INSTANCE.toDtos(itemsSaved);
             response.setItems(itemsDto);
             response.setHasError(false);
@@ -139,49 +120,40 @@ public class RoleBusiness implements IBasicBusiness<Request<RoleDTO>, Response<R
         return response;
     }
 
-    private Response<RoleDTO> blockDuplicationData(Request<RoleDTO> request, Locale locale, Response<RoleDTO> response, List<RoleDTO> itemsDtos) {
+    private void blockDuplicationData(Request<RoleDTO> request, Locale locale, Response<RoleDTO> response, List<RoleDTO> itemsDtos) {
         for(RoleDTO dto: request.getDatas() ) {
-            // Definir les parametres obligatoires
-            Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+            Map<String, Object> fieldsToVerify = new HashMap<>();
             fieldsToVerify.put("code", dto.getCode());
             fieldsToVerify.put("libelle", dto.getLibelle());
             if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
                 response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
                 response.setHasError(true);
-                return response;
+                return;
             }
             if(itemsDtos.stream().anyMatch(a->a.getCode().equalsIgnoreCase(dto.getCode()))){
                 response.setStatus(functionalError.DATA_DUPLICATE("Tentative de duplication du code '" + dto.getCode() + "' pour les rôles", locale));
                 response.setHasError(true);
-                return response;
+                return;
             }
             itemsDtos.add(dto);
         }
-        return null;
     }
 
     @Override
     public Response<RoleDTO> update(Request<RoleDTO> request, Locale locale) throws ParseException {
-        Response<RoleDTO> response = new Response<RoleDTO>();
-        List<Role> items = new ArrayList<Role>();
-        List<RoleDTO>itemsDtos =  Collections.synchronizedList(new ArrayList<RoleDTO>());
-       /* boolean isUserAuthenticatedHaveFunctinality=usersBusiness.checkIfUserAuthenticatedHasThisFunctionnality(Request.userID, SecurityConstants.PERMISSION_PROFILE_UPDATE);
-        if(isUserAuthenticatedHaveFunctinality==false){
-            response.setStatus(functionalError.SAVE_FAIL("Vous ne pouvez pas modifier rôle.Car, vous n'avez pas les permissions nécessaires", locale));
-            response.setHasError(true);
-            return response;
-        }*/
-        Response<RoleDTO> response1 = blockDuplicationDataUpdate(request, locale, response, itemsDtos);
+        Response<RoleDTO> response = new Response<>();
+        List<Role> items = new ArrayList<>();
+        List<RoleDTO> itemsDtos =  Collections.synchronizedList(new ArrayList<>());
+        blockDuplicationDataUpdate(request, locale, response, itemsDtos);
         for(RoleDTO dto : request.getDatas()){
-            Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+            Map<String, Object> fieldsToVerify = new HashMap<>();
             fieldsToVerify.put("id", dto.getId());
             if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
                 response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
                 response.setHasError(true);
                 return response;
             }
-            Role entityToSave = null;
-            entityToSave = roleRepository.findOne(dto.getId(), false);
+            Role entityToSave = roleRepository.findOne(dto.getId(), false);
             if (entityToSave == null) {
                 response.setStatus(functionalError.DATA_NOT_EXIST("Role id -> " + dto.getId(), locale));
                 response.setHasError(true);
@@ -207,13 +179,12 @@ public class RoleBusiness implements IBasicBusiness<Request<RoleDTO>, Response<R
                 entityToSave.setLibelle(dto.getLibelle());
             }
             if (Utilities.isNotEmpty(dto.getDatasFunctionalities())) {
-                List<RoleFunctionality> list = roleFunctionalityRepository
-                        .findByRoleId(entityToSaveId, false);
+                List<RoleFunctionality> list = roleFunctionalityRepository.findByRoleId(entityToSaveId, false);
                 if(Utilities.isNotEmpty(list)) {
                     for (RoleFunctionality rf : list) {
                         RoleFunctionalityDTO itemsData = RoleFunctionalityTransformer.INSTANCE.toDto(rf);
-                        Request<RoleFunctionalityDTO> subRequest = new Request<RoleFunctionalityDTO>();
-                        subRequest.setDatas(Arrays.asList(itemsData));
+                        Request<RoleFunctionalityDTO> subRequest = new Request<>();
+                        subRequest.setDatas(Collections.singletonList(itemsData));
                         Response<RoleFunctionalityDTO> subResponse = roleFunctionalityBusiness.delete(subRequest, locale);
                         if (subResponse.isHasError()) {
                             response.setStatus(subResponse.getStatus());
@@ -224,10 +195,10 @@ public class RoleBusiness implements IBasicBusiness<Request<RoleDTO>, Response<R
                 }
                 for (FunctionalityDTO f : dto.getDatasFunctionalities()) {
                     RoleFunctionalityDTO roleFunctionalityDto = new RoleFunctionalityDTO();
-                    roleFunctionalityDto.setRoleId(Long.valueOf(entityToSaveId));
+                    roleFunctionalityDto.setRoleId(entityToSaveId);
                     roleFunctionalityDto.setFunctionalityId(f.getId());
-                    Request<RoleFunctionalityDTO> subRequests = new Request<RoleFunctionalityDTO>();
-                    subRequests.setDatas(Arrays.asList(roleFunctionalityDto));
+                    Request<RoleFunctionalityDTO> subRequests = new Request<>();
+                    subRequests.setDatas(List.of(roleFunctionalityDto));
                     Response<RoleFunctionalityDTO> subResponses = roleFunctionalityBusiness.create(subRequests,
                             locale);
                     if (subResponses.isHasError()) {
@@ -238,21 +209,14 @@ public class RoleBusiness implements IBasicBusiness<Request<RoleDTO>, Response<R
                 }
             }
             entityToSave.setUpdatedAt(Utilities.getCurrentDate());
-            //entityToSave.setUpdatedBy(request.userID); //TODO A mettre à jour
             items.add(entityToSave);
         }
         if (!items.isEmpty()) {
-            List<Role> itemsSaved = null;
-            itemsSaved = roleRepository.saveAll((Iterable<Role>) items);
-            if (itemsSaved == null) {
-                response.setStatus(functionalError.SAVE_FAIL("Role", locale));
-                response.setHasError(true);
-                return response;
-            }
+            List<Role> itemsSaved = roleRepository.saveAll(items);
             List<RoleDTO> itemsDto = (Utilities.isTrue(request.getIsSimpleLoading())) ? RoleTransformer.INSTANCE.toLiteDtos(itemsSaved) : RoleTransformer.INSTANCE.toDtos(itemsSaved);
             for(RoleDTO roleDto : itemsDto){
                 try{
-                    roleDto = getFullInfos(roleDto,1,Boolean.FALSE,locale);
+                    getFullInfos(roleDto);
                 }catch (Exception e){
                      e.printStackTrace();
                 }
@@ -261,33 +225,23 @@ public class RoleBusiness implements IBasicBusiness<Request<RoleDTO>, Response<R
             response.setHasError(false);
             response.setStatus(functionalError.SUCCESS("", locale));
         }
-        log.info("----end update Role-----");
         return response;
     }
 
     @Override
     public Response<RoleDTO> delete(Request<RoleDTO> request, Locale locale) {
         log.info("----begin delete Role-----");
-        Response<RoleDTO> response = new Response<RoleDTO>();
-        List<Role> items = new ArrayList<Role>();
-        //Verification des permissions
-       /* boolean isUserAuthenticatedHaveFunctinality=usersBusiness.checkIfUserAuthenticatedHasThisFunctionnality(Request.userID, SecurityConstants.PERMISSION_PROFILE_DELETE);
-        if(isUserAuthenticatedHaveFunctinality==false){
-            response.setStatus(functionalError.SAVE_FAIL("Vous ne pouvez pas modifier rôle.Car, vous n'avez pas les permissions nécessaires", locale));
-            response.setHasError(true);
-            return response;
-        }*/
-        //Suppression
+        Response<RoleDTO> response = new Response<>();
+        List<Role> items = new ArrayList<>();
         for(RoleDTO dto : request.getDatas()){
-            Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+            Map<String, Object> fieldsToVerify = new HashMap<>();
             fieldsToVerify.put("id", dto.getId());
             if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
                 response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
                 response.setHasError(true);
                 return response;
             }
-            Role existingEntity = null;
-            existingEntity = roleRepository.findOne(dto.getId(), false);
+            Role existingEntity = roleRepository.findOne(dto.getId(), false);
             if (existingEntity == null) {
                 response.setStatus(functionalError.DATA_NOT_EXIST("Role id -> " + dto.getId(), locale));
                 response.setHasError(true);
@@ -295,7 +249,6 @@ public class RoleBusiness implements IBasicBusiness<Request<RoleDTO>, Response<R
             }
             existingEntity.setIsDeleted(true);
             existingEntity.setDeletedAt(Utilities.getCurrentDate());
-            //existingEntity.setDeletedBy(request.userID); //TODO A mettre à jour
             items.add(existingEntity);
         }
         if (!items.isEmpty()) {
@@ -308,18 +261,17 @@ public class RoleBusiness implements IBasicBusiness<Request<RoleDTO>, Response<R
 
     @Override
     public Response<RoleDTO> forceDelete(Request<RoleDTO> request, Locale locale) throws ParseException {
-        Response<RoleDTO> response = new Response<RoleDTO>();
-        List<Role> items = new ArrayList<Role>();
+        Response<RoleDTO> response = new Response<>();
+        List<Role> items = new ArrayList<>();
         for(RoleDTO dto : request.getDatas()){
-            Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+            Map<String, Object> fieldsToVerify = new HashMap<>();
             fieldsToVerify.put("id", dto.getId());
             if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
                 response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
                 response.setHasError(true);
                 return response;
             }
-            Role existingEntity = null;
-            existingEntity = roleRepository.findOne(dto.getId(), false);
+            Role existingEntity = roleRepository.findOne(dto.getId(), false);
             if (existingEntity == null) {
                 response.setStatus(functionalError.DATA_NOT_EXIST("Role id -> " + dto.getId(), locale));
                 response.setHasError(true);
@@ -327,7 +279,7 @@ public class RoleBusiness implements IBasicBusiness<Request<RoleDTO>, Response<R
             }
             List<RoleFunctionality> listOfRoleFunctionality = roleFunctionalityRepository.findByRoleId(existingEntity.getId(), false);
             if (listOfRoleFunctionality != null && !listOfRoleFunctionality.isEmpty()) {
-                Request<RoleFunctionalityDTO> deleteRequest = new Request<RoleFunctionalityDTO>();
+                Request<RoleFunctionalityDTO> deleteRequest = new Request<>();
                 deleteRequest.setDatas(RoleFunctionalityTransformer.INSTANCE.toDtos(listOfRoleFunctionality));
                 Response<RoleFunctionalityDTO> deleteResponse = roleFunctionalityBusiness.delete(deleteRequest, locale);
                 if (deleteResponse.isHasError()) {
@@ -338,7 +290,6 @@ public class RoleBusiness implements IBasicBusiness<Request<RoleDTO>, Response<R
             }
             existingEntity.setIsDeleted(true);
             existingEntity.setDeletedAt(Utilities.getCurrentDate());
-            //existingEntity.setDeletedBy(request.userID); //TODO A mettre à jour
             items.add(existingEntity);
         }
         if (!items.isEmpty()) {
@@ -351,31 +302,27 @@ public class RoleBusiness implements IBasicBusiness<Request<RoleDTO>, Response<R
 
     @Override
     public Response<RoleDTO> getAll(Locale locale) throws ParseException {
-        Response<RoleDTO> response = new Response<RoleDTO>();
-        Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
-        List<Role> roles = null;
-        roles = roleRepository.findByIsDeleted(false);
-        List<RoleDTO> roleDtos = RoleTransformer.INSTANCE.toDtos(roles);
-        response.setItems(roleDtos);
+        Response<RoleDTO> response = new Response<>();
+        List<Role> roles = roleRepository.findByIsDeleted(false);
+        response.setItems(RoleTransformer.INSTANCE.toDtos(roles));
         response.setHasError(false);
         response.setStatus(functionalError.SUCCESS("",locale));
-        log.info("----end get role -----");
         return response;
     }
 
-    private Response<RoleDTO> blockDuplicationDataUpdate(Request<RoleDTO> request, Locale locale, Response<RoleDTO> response, List<RoleDTO> itemsDtos) {
+    private void blockDuplicationDataUpdate(Request<RoleDTO> request, Locale locale, Response<RoleDTO> response, List<RoleDTO> itemsDtos) {
         for(RoleDTO dto: request.getDatas() ) {
-            Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+            Map<String, Object> fieldsToVerify = new HashMap<>();
             fieldsToVerify.put("id", dto.getId());
             if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
                 response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
                 response.setHasError(true);
-                return response;
+                return;
             }
             if(itemsDtos.stream().anyMatch(a->a.getId().equals(dto.getId()))){
                 response.setStatus(functionalError.DATA_DUPLICATE("Tentative de duplication de l'id '" + dto.getCode() + "' pour les fonctionnalités", locale));
                 response.setHasError(true);
-                return response;
+                return;
             }
             if(Utilities.isNotBlank(dto.getCode())){
                 itemsDtos = itemsDtos.stream().filter(a-> Utilities.isNotBlank(a.getCode())).collect(Collectors.toList());
@@ -383,69 +330,24 @@ public class RoleBusiness implements IBasicBusiness<Request<RoleDTO>, Response<R
                     if(itemsDtos.stream().anyMatch(a->a.getCode().equals(dto.getCode()))){
                         response.setStatus(functionalError.DATA_DUPLICATE("Tentative de duplication du code '" + dto.getCode() + "' pour les fonctionnalités", locale));
                         response.setHasError(true);
-                        return response;
+                        return;
                     }
                 }
             }
             itemsDtos.add(dto);
         }
-        return null;
     }
 
     @Override
     public Response<RoleDTO> getByCriteria(Request<RoleDTO> request, Locale locale) {
-        log.info("----begin get Role-----");
-        /*Response<RoleDto> response = new Response<RoleDto>();
-        //Verification des permissions
-        boolean isUserAuthenticatedHaveFunctinality=usersBusiness.checkIfUserAuthenticatedHasThisFunctionnality(Request.userID, SecurityConstants.PERMISSION_PROFILE_LIST);
-        if(isUserAuthenticatedHaveFunctinality==false){
-            response.setStatus(functionalError.SAVE_FAIL("Vous ne pouvez pas lister les rôles.Car, vous n'avez pas les permissions nécessaires", locale));
-            response.setHasError(true);
-            return response;
-        }
-        if (Utilities.blank(request.getData().getOrderField())) {
-            request.getData().setOrderField("");
-        }
-        if (Utilities.blank(request.getData().getOrderDirection())) {
-            request.getData().setOrderDirection("asc");
-        }
-        List<Role> items = roleRepository.getByCriteria(request, em, locale);
-        if (Utilities.isEmpty(items)) {
-            response.setStatus(functionalError.DATA_EMPTY("Role", locale));
-            response.setHasError(false);
-            return response;
-        }
-        List<RoleDto> itemsDto = Collections.synchronizedList(new ArrayList<RoleDto>());
-         itemsDto = (Utilities.isTrue(request.getIsSimpleLoading())) ? RoleTransformer.INSTANCE.toLiteDtos(items) : RoleTransformer.INSTANCE.toDtos(items);
-         itemsDto.parallelStream().forEach(i->{
-             try {
-                 i=getFullInfos(i,items.size(), Boolean.FALSE,locale);
-             } catch (Exception e) {
-                 throw new RuntimeException(e);
-             }
-         });
-        response.setItems(itemsDto);
-        response.setCount(roleRepository.count(request, em, locale));
-        response.setHasError(false);
-        response.setStatus(functionalError.SUCCESS("", locale));
-        log.info("----end get Role-----");
-        return response;*/
         return null;
     }
 
-    private RoleDTO getFullInfos(RoleDTO dto, Integer size, Boolean isSimpleLoading,Locale locale) throws Exception {
-        // put code here
+    private void getFullInfos(RoleDTO dto) throws Exception {
           List<Functionality> functionalities = roleFunctionalityRepository.findFunctionalityByRoleId(dto.getId(), Boolean.FALSE);
           if(Utilities.isNotEmpty(functionalities)){
                   List<FunctionalityDTO> functionalityDtos = FunctionalityTransformer.INSTANCE.toDtos(functionalities);
                   dto.setDatasFunctionalities(functionalityDtos);
           }
-          if (Utilities.isTrue(isSimpleLoading)) {
-             return dto;
-          }
-          if (size > 1) {
-            return dto;
-          }
-        return dto;
     }
 }

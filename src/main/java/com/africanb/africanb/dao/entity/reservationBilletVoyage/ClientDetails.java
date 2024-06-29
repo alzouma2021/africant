@@ -1,11 +1,15 @@
 package com.africanb.africanb.dao.entity.reservationBilletVoyage;
 
-import lombok.Data;
+import lombok.*;
 
-import javax.persistence.Embeddable;
+import jakarta.persistence.Embeddable;
 
 @Embeddable
-@Data
+@Getter
+@Setter
+@ToString
+@EqualsAndHashCode(callSuper = false)
+@NoArgsConstructor
 public class ClientDetails {
     private String nom;
     private String prenoms;

@@ -22,7 +22,7 @@ import lombok.extern.java.Log;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -60,17 +60,10 @@ public class FunctionalityBusiness implements IBasicBusiness<Request<Functionali
     @Override
     public Response<FunctionalityDTO> create(Request<FunctionalityDTO> request, Locale locale) throws ParseException {
         log.info("----begin create Functionality-----");
-        Response<FunctionalityDTO> response = new Response<FunctionalityDTO>();
-        List<Functionality> items = new ArrayList<Functionality>();
-        List<FunctionalityDTO>itemsDtos =  Collections.synchronizedList(new ArrayList<FunctionalityDTO>());
-        //Verification des permissions
-        /*boolean isUserAuthenticatedHaveFunctinality=usersBusiness.checkIfUserAuthenticatedHasThisFunctionnality(Request.userID, SecurityConstants.PERMISSION_FEATURE_CREATE);
-        if(isUserAuthenticatedHaveFunctinality==false){
-            response.setStatus(functionalError.SAVE_FAIL("Vous ne pouvez pas créer des fonctionalités.Car, vous n'avez pas les permissions nécessaires", locale));
-            response.setHasError(true);
-            return response;
-        }*/
-        Response<FunctionalityDTO> response1 = blockDuplicationData(request, locale, response, itemsDtos);
+        Response<FunctionalityDTO> response = new Response<>();
+        List<Functionality> items = new ArrayList<>();
+        List<FunctionalityDTO>itemsDtos =  Collections.synchronizedList(new ArrayList<>());
+        blockDuplicationData(request, locale, response, itemsDtos);
         for(FunctionalityDTO dto : request.getDatas()){
             Functionality  existingEntity = functionalityRepository.findByCode(dto.getCode(), false);
             if (existingEntity != null) {
@@ -81,16 +74,10 @@ public class FunctionalityBusiness implements IBasicBusiness<Request<Functionali
             Functionality entityToSave = FunctionalityTransformer.INSTANCE.toEntity(dto);
             entityToSave.setIsDeleted(false);
             entityToSave.setCreatedAt(Utilities.getCurrentDate());
-            //entityToSave.setCreatedBy(request.userID); //TODO A remettre à jour
             items.add(entityToSave);
         }
         if (!items.isEmpty()) {
-            List<Functionality> itemsSaved = functionalityRepository.saveAll((Iterable<Functionality>) items);
-            if (itemsSaved == null) {
-                response.setStatus(functionalError.SAVE_FAIL("Functionality", locale));
-                response.setHasError(true);
-                return response;
-            }
+            List<Functionality> itemsSaved = functionalityRepository.saveAll(items);
             List<FunctionalityDTO> itemsDto = (Utilities.isTrue(request.getIsSimpleLoading())) ? FunctionalityTransformer.INSTANCE.toLiteDtos(itemsSaved) : FunctionalityTransformer.INSTANCE.toDtos(itemsSaved);
             response.setItems(itemsDto);
             response.setHasError(false);
@@ -102,8 +89,7 @@ public class FunctionalityBusiness implements IBasicBusiness<Request<Functionali
 
     private Response<FunctionalityDTO> blockDuplicationData(Request<FunctionalityDTO> request, Locale locale, Response<FunctionalityDTO> response, List<FunctionalityDTO> itemsDtos) {
         for(FunctionalityDTO dto: request.getDatas() ) {
-            // Definir les parametres obligatoires
-            Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+            Map<String, Object> fieldsToVerify = new HashMap<>();
             fieldsToVerify.put("code", dto.getCode());
             fieldsToVerify.put("libelle", dto.getLibelle());
             if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
@@ -128,8 +114,7 @@ public class FunctionalityBusiness implements IBasicBusiness<Request<Functionali
 
     private Response<FunctionalityDTO> blockDuplicationDataUpdate(Request<FunctionalityDTO> request, Locale locale, Response<FunctionalityDTO> response, List<FunctionalityDTO> itemsDtos) {
         for(FunctionalityDTO dto: request.getDatas() ) {
-            // Definir les parametres obligatoires
-            Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+            Map<String, Object> fieldsToVerify = new HashMap<>();
             fieldsToVerify.put("id", dto.getId());
             if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
                 response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
@@ -158,30 +143,19 @@ public class FunctionalityBusiness implements IBasicBusiness<Request<Functionali
 
     @Override
     public Response<FunctionalityDTO> update(Request<FunctionalityDTO> request, Locale locale) throws ParseException {
-
-        log.info("----begin update Functionality-----");
-        Response<FunctionalityDTO> response = new Response<FunctionalityDTO>();
-        List<Functionality> items = new ArrayList<Functionality>();
-        List<FunctionalityDTO>itemsDtos =  Collections.synchronizedList(new ArrayList<FunctionalityDTO>());
-        //Verification des permissions
-        /*boolean isUserAuthenticatedHaveFunctinality=usersBusiness.checkIfUserAuthenticatedHasThisFunctionnality(Request.userID, SecurityConstants.PERMISSION_FEATURE_UPDATE);
-        if(isUserAuthenticatedHaveFunctinality==false){
-            response.setStatus(functionalError.SAVE_FAIL("Vous ne pouvez pas modifier des fonctionalités.Car, vous n'avez pas les permissions nécessaires", locale));
-            response.setHasError(true);
-            return response;
-        }*/
-        //empêcher la duplication des données
-        Response<FunctionalityDTO> response1 = blockDuplicationDataUpdate(request, locale, response, itemsDtos);
+        Response<FunctionalityDTO> response = new Response<>();
+        List<Functionality> items = new ArrayList<>();
+        List<FunctionalityDTO>itemsDtos =  Collections.synchronizedList(new ArrayList<>());
+        blockDuplicationDataUpdate(request, locale, response, itemsDtos);
         for(FunctionalityDTO dto : request.getDatas()){
-            Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+            Map<String, Object> fieldsToVerify = new HashMap<>();
             fieldsToVerify.put("id", dto.getId());
             if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
                 response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
                 response.setHasError(true);
                 return response;
             }
-            Functionality entityToSave = null;
-            entityToSave = functionalityRepository.findOne(dto.getId(), false);
+            Functionality entityToSave = functionalityRepository.findOne(dto.getId(), false);
             if (entityToSave == null) {
                 response.setStatus(functionalError.DATA_NOT_EXIST("Functionality id -> " + dto.getId(), locale));
                 response.setHasError(true);
@@ -212,17 +186,10 @@ public class FunctionalityBusiness implements IBasicBusiness<Request<Functionali
                 entityToSave.setLibelle(dto.getLibelle());
             }
             entityToSave.setUpdatedAt(Utilities.getCurrentDate());
-            //entityToSave.setUpdatedBy(request.userID);
             items.add(entityToSave);
         }
         if (!items.isEmpty()) {
-            List<Functionality> itemsSaved = null;
-            itemsSaved = functionalityRepository.saveAll((Iterable<Functionality>) items);
-            if (itemsSaved == null) {
-                response.setStatus(functionalError.SAVE_FAIL("Functionality", locale));
-                response.setHasError(true);
-                return response;
-            }
+            List<Functionality> itemsSaved = functionalityRepository.saveAll(items);
             List<FunctionalityDTO> itemsDto = (Utilities.isTrue(request.getIsSimpleLoading())) ? FunctionalityTransformer.INSTANCE.toLiteDtos(itemsSaved) : FunctionalityTransformer.INSTANCE.toDtos(itemsSaved);
             response.setItems(itemsDto);
             response.setHasError(false);
@@ -235,49 +202,37 @@ public class FunctionalityBusiness implements IBasicBusiness<Request<Functionali
     @Override
     public Response<FunctionalityDTO> delete(Request<FunctionalityDTO> request, Locale locale) {
         log.info("----begin update Functionality-----");
-        Response<FunctionalityDTO> response = new Response<FunctionalityDTO>();
-        List<Functionality> items = new ArrayList<Functionality>();
-        //Verification des permissions
-        /*boolean isUserAuthenticatedHaveFunctinality=usersBusiness.checkIfUserAuthenticatedHasThisFunctionnality(Request.userID, SecurityConstants.PERMISSION_FEATURE_DELETE);
-        if(isUserAuthenticatedHaveFunctinality==false){
-            response.setStatus(functionalError.SAVE_FAIL("Vous ne pouvez pas supprimer des fonctionalités.Car, vous n'avez pas les permissions nécessaires", locale));
-            response.setHasError(true);
-            return response;
-        }*/
-        List<RoleFunctionality> rolesFonc = Collections.synchronizedList(new ArrayList<RoleFunctionality>());
+        Response<FunctionalityDTO> response = new Response<>();
+        List<Functionality> items = new ArrayList<>();
+        List<RoleFunctionality> rolesFonc = Collections.synchronizedList(new ArrayList<>());
         for(FunctionalityDTO dto : request.getDatas()){
-            Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+            Map<String, Object> fieldsToVerify = new HashMap<>();
             fieldsToVerify.put("id", dto.getId());
             if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
                 response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
                 response.setHasError(true);
                 return response;
             }
-            Functionality existingEntity = null;
-            existingEntity = functionalityRepository.findOne(dto.getId(), false);
+            Functionality existingEntity = functionalityRepository.findOne(dto.getId(), false);
             if (existingEntity == null) {
                 response.setStatus(functionalError.DATA_NOT_EXIST("Functionality id -> " + dto.getId(), locale));
                 response.setHasError(true);
                 return response;
             }
-            existingEntity.setIsDeleted(true); // element de suppression, ici nous soomme dans un context de persistance donc le set permet d'enregistrer en base
+            existingEntity.setIsDeleted(true);
             existingEntity.setDeletedAt(Utilities.getCurrentDate());
-            //existingEntity.setDeletedBy(request.userID);// a modifier
             List<RoleFunctionality> roleFunctionalities = roleFunctionalityRepository.findByFunctionalityId(dto.getId(), Boolean.FALSE);
             if(Utilities.isNotEmpty(roleFunctionalities)){
                   roleFunctionalities.forEach(rf->{
-                           rf.setIsDeleted(Boolean.TRUE);
+                      rf.setIsDeleted(Boolean.TRUE);
                       rf.setDeletedAt(Utilities.getCurrentDate());
-                      //if(Utilities.isValidID(request.userID)){
-                          //   rf.setDeletedBy(request.userID);
-                      //}
                   });
                 rolesFonc.addAll(roleFunctionalities);
             }
             items.add(existingEntity);
         }
         if(Utilities.isNotEmpty(rolesFonc)){
-                 roleFunctionalityRepository.saveAll(rolesFonc);
+            roleFunctionalityRepository.saveAll(rolesFonc);
         }
         if (!items.isEmpty()) {
             response.setHasError(false);
@@ -289,27 +244,17 @@ public class FunctionalityBusiness implements IBasicBusiness<Request<Functionali
 
     @Override
     public Response<FunctionalityDTO> forceDelete(Request<FunctionalityDTO> request, Locale locale) throws ParseException { // cette methode permet de supprimer l'entité ainsi que tout les autres entité rattachées à elle
-        log.info("----begin update Functionality-----");
-        Response<FunctionalityDTO> response = new Response<FunctionalityDTO>();
-        List<Functionality> items = new ArrayList<Functionality>();
-        //Verification des permissions
-        /*boolean isUserAuthenticatedHaveFunctinality=usersBusiness.checkIfUserAuthenticatedHasThisFunctionnality(Request.userID, SecurityConstants.PERMISSION_FEATURE_DELETE);
-        if(isUserAuthenticatedHaveFunctinality==false){
-            response.setStatus(functionalError.SAVE_FAIL("Vous ne pouvez pas supprimer des fonctionalités.Car, vous n'avez pas les permissions nécessaires", locale));
-            response.setHasError(true);
-            return response;
-        }*/
-        //Suppresssions forcée
+        Response<FunctionalityDTO> response = new Response<>();
+        List<Functionality> items = new ArrayList<>();
         for(FunctionalityDTO dto : request.getDatas()){
-            Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+            Map<String, Object> fieldsToVerify = new HashMap<>();
             fieldsToVerify.put("id", dto.getId());
             if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
                 response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
                 response.setHasError(true);
                 return response;
             }
-            Functionality existingEntity = null;
-            existingEntity = functionalityRepository.findOne(dto.getId(), false);
+            Functionality existingEntity = functionalityRepository.findOne(dto.getId(), false);
             if (existingEntity == null) {
                 response.setStatus(functionalError.DATA_NOT_EXIST("Functionality id -> " + dto.getId(), locale));
                 response.setHasError(true);
@@ -317,7 +262,7 @@ public class FunctionalityBusiness implements IBasicBusiness<Request<Functionali
             }
             List<RoleFunctionality> listOfRoleFunctionality = roleFunctionalityRepository.findByFunctionalityId(existingEntity.getId(), false);
             if (listOfRoleFunctionality != null && !listOfRoleFunctionality.isEmpty()) {
-                Request<RoleFunctionalityDTO> deleteRequest = new Request<RoleFunctionalityDTO>();
+                Request<RoleFunctionalityDTO> deleteRequest = new Request<>();
                 deleteRequest.setDatas(RoleFunctionalityTransformer.INSTANCE.toDtos(listOfRoleFunctionality));
                 Response<RoleFunctionalityDTO> deleteResponse = roleFunctionalityBusiness.delete(deleteRequest, locale);
                 if (deleteResponse.isHasError()) {
@@ -328,7 +273,6 @@ public class FunctionalityBusiness implements IBasicBusiness<Request<Functionali
             }
             existingEntity.setIsDeleted(true);
             existingEntity.setDeletedAt(Utilities.getCurrentDate());
-            //existingEntity.setDeletedBy(request.userID); //TODO a modifier
             items.add(existingEntity);
         }
         if (!items.isEmpty()) {
@@ -341,27 +285,24 @@ public class FunctionalityBusiness implements IBasicBusiness<Request<Functionali
 
     @Override
     public Response<FunctionalityDTO> getAll(Locale locale) throws ParseException {
-        Response<FunctionalityDTO> response = new Response<FunctionalityDTO>();
-        Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
-        List<Functionality> functionalities = null;
-        functionalities = functionalityRepository.findByIsDeleted(false);
+        Response<FunctionalityDTO> response = new Response<>();
+        List<Functionality> functionalities = functionalityRepository.findByIsDeleted(false);
         List<FunctionalityDTO> functionalityDtos = FunctionalityTransformer.INSTANCE.toDtos(functionalities);
         response.setItems(functionalityDtos);
         response.setHasError(false);
         response.setStatus(functionalError.SUCCESS("",locale));
-        log.info("----end get Functionalities -----");
         return response;
     }
 
     @Transactional(rollbackFor = {RuntimeException.class, Exception.class})
     public Response<FunctionalityDTO> getFunctionalitiesByRole(Request<RoleDTO> request, Locale locale) throws Exception {
-        Response<FunctionalityDTO> response = new Response<FunctionalityDTO>();
+        Response<FunctionalityDTO> response = new Response<>();
         if(request==null||request.getData()==null){
             response.setStatus(functionalError.FIELD_EMPTY("Aucune donnée", locale));
             response.setHasError(true);
             return response;
         }
-        Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+        Map<String, Object> fieldsToVerify = new HashMap<>();
         fieldsToVerify.put("code", request.getData().getCode());
         if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
             response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
@@ -369,47 +310,16 @@ public class FunctionalityBusiness implements IBasicBusiness<Request<Functionali
             return response;
         }
         String roleCode = request.getData().getCode();
-        List<Functionality> functionalities = null;
-        functionalities = roleFunctionalityRepository.findFunctionalityByRoleCode(roleCode , false);
+        List<Functionality> functionalities = roleFunctionalityRepository.findFunctionalityByRoleCode(roleCode , false);
         List<FunctionalityDTO> functionalityDtos = FunctionalityTransformer.INSTANCE.toDtos(functionalities);
         response.setItems(functionalityDtos);
         response.setHasError(false);
         response.setStatus(functionalError.SUCCESS("",locale));
-        log.info("----end get FUnctionalities by role-----");
         return response;
     }
 
     @Override
     public Response<FunctionalityDTO> getByCriteria(Request<FunctionalityDTO> request, Locale locale) {
-
-        /*log.info("----begin get Functionality-----");
-        Response<FunctionalityDto> response = new Response<FunctionalityDto>();
-        //Verification des permissions
-        boolean isUserAuthenticatedHaveFunctinality=usersBusiness.checkIfUserAuthenticatedHasThisFunctionnality(Request.userID, SecurityConstants.PERMISSION_FEATURE_LIST);
-        if(isUserAuthenticatedHaveFunctinality==false){
-            response.setStatus(functionalError.SAVE_FAIL("Vous ne pouvez pas lister les fonctionalités.Car, vous n'avez pas les permissions nécessaires", locale));
-            response.setHasError(true);
-            return response;
-        }
-        if (Utilities.blank(request.getData().getOrderField())) {
-            request.getData().setOrderField("");
-        }
-        if (Utilities.blank(request.getData().getOrderDirection())) {
-            request.getData().setOrderDirection("asc");
-        }
-        List<Functionality> items = functionalityRepository.getByCriteria(request, em, locale);
-        if (Utilities.isEmpty(items)) {
-            response.setStatus(functionalError.DATA_EMPTY("Functionality", locale));
-            response.setHasError(false);
-            return response;
-        }
-        List<FunctionalityDto> itemsDto = (Utilities.isTrue(request.getIsSimpleLoading())) ? FunctionalityTransformer.INSTANCE.toLiteDtos(items) : FunctionalityTransformer.INSTANCE.toDtos(items);
-        response.setItems(itemsDto);
-        response.setCount(functionalityRepository.count(request, em, locale));
-        response.setHasError(false);
-        response.setStatus(functionalError.SUCCESS("", locale));
-        log.info("----end get Functionality-----");
-        return response;*/
         return null;
     }
 

@@ -4,7 +4,6 @@ import com.africanb.africanb.dao.entity.security.Functionality;
 import com.africanb.africanb.dao.entity.security.Role;
 import com.africanb.africanb.dao.entity.security.RoleFunctionality;
 import com.africanb.africanb.helper.contrat.FullTransformerQualifier;
-import com.africanb.africanb.helper.dto.security.FunctionalityDTO;
 import com.africanb.africanb.helper.dto.security.RoleFunctionalityDTO;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
@@ -12,6 +11,7 @@ import org.mapstruct.factory.Mappers;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Mapper
 public interface RoleFunctionalityTransformer {
@@ -37,7 +37,7 @@ public interface RoleFunctionalityTransformer {
     @IterableMapping(qualifiedBy = {FullTransformerQualifier.class})
     List<RoleFunctionalityDTO> toDtos(List<RoleFunctionality> entities) throws ParseException;
 
-    public default RoleFunctionalityDTO toLiteDto(RoleFunctionality entity) {
+    default RoleFunctionalityDTO toLiteDto(RoleFunctionality entity) {
         if (entity == null) {
             return null;
         }
@@ -50,11 +50,11 @@ public interface RoleFunctionalityTransformer {
         return dto;
     }
 
-    public default List<RoleFunctionalityDTO> toLiteDtos(List<RoleFunctionality> entities) {
-        if (entities == null || entities.stream().allMatch(o -> o == null)) {
+    default List<RoleFunctionalityDTO> toLiteDtos(List<RoleFunctionality> entities) {
+        if (entities == null || entities.stream().allMatch(Objects::isNull)) {
             return null;
         }
-        List<RoleFunctionalityDTO> dtos = new ArrayList<RoleFunctionalityDTO>();
+        List<RoleFunctionalityDTO> dtos = new ArrayList<>();
         for (RoleFunctionality entity : entities) {
             dtos.add(toLiteDto(entity));
         }

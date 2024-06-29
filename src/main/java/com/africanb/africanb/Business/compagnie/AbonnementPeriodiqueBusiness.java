@@ -21,14 +21,12 @@ import lombok.extern.java.Log;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-/**
- * @Author ALZOUMA MOUSSA MAHAAMADOU
- */
+
 @Log
 @Component
 public class AbonnementPeriodiqueBusiness implements IBasicBusiness<Request<AbonnementPeriodiqueDTO>, Response<AbonnementPeriodiqueDTO>> {
@@ -60,25 +58,21 @@ public class AbonnementPeriodiqueBusiness implements IBasicBusiness<Request<Abon
 
     @Override
     public Response<AbonnementPeriodiqueDTO> create(Request<AbonnementPeriodiqueDTO> request, Locale locale) throws ParseException {
-        Response<AbonnementPeriodiqueDTO> response = new Response<AbonnementPeriodiqueDTO>();
-        List<AbonnementPeriodique> items = new ArrayList<AbonnementPeriodique>();
+        Response<AbonnementPeriodiqueDTO> response = new Response<>();
+        List<AbonnementPeriodique> items = new ArrayList<>();
         if(request.getDatas() == null || request.getDatas().isEmpty()){
             response.setStatus(functionalError.DATA_NOT_EXIST("Liste vide",locale));
             response.setHasError(true);
             return response;
         }
         for(AbonnementPeriodiqueDTO itemDto : request.getDatas() ){
-            //Chech If CompagnieTransport exists
-            CompagnieTransport exitingCompagnieTransport=null;
-            exitingCompagnieTransport=compagnieTransportRepository.findByRaisonSociale(itemDto.getCompagnieTransportRaisonSociale(), false);
+            CompagnieTransport exitingCompagnieTransport=compagnieTransportRepository.findByRaisonSociale(itemDto.getCompagnieTransportRaisonSociale(), false);
             if (exitingCompagnieTransport == null) {
                 response.setStatus(functionalError.DATA_EXIST("Compagnie de transport ayant la raison sociale"+itemDto.getCompagnieTransportRaisonSociale()+" n'existe pas", locale)) ;
                 response.setHasError(true);
                 return response;
             }
-            //Check if periodiciteAbonnement exists
-            Reference existingPeriodiciteAbonnement = null;
-            existingPeriodiciteAbonnement = periodiciteAbonnementRepository.findByDesignation(itemDto.getPeriodiciteAbonnementDesignation(),false);
+            Reference existingPeriodiciteAbonnement = periodiciteAbonnementRepository.findByDesignation(itemDto.getPeriodiciteAbonnementDesignation(),false);
             if (existingPeriodiciteAbonnement == null) {
                 response.setStatus(functionalError.DATA_EXIST("La periodicite abonnement n'existe pas", locale));
                 response.setHasError(true);
@@ -87,8 +81,7 @@ public class AbonnementPeriodiqueBusiness implements IBasicBusiness<Request<Abon
             AbonnementPeriodique entityToSave = AbonnementPeriodiqueTransformer.INSTANCE.toEntity(itemDto,exitingCompagnieTransport,existingPeriodiciteAbonnement);
             entityToSave.setIsDeleted(false);
             entityToSave.setCreatedAt(Utilities.getCurrentDate());
-            AbonnementPeriodique entitySaved=null;
-            entitySaved=abonnementPeriodiqueRepository.save(entityToSave);
+            AbonnementPeriodique entitySaved = abonnementPeriodiqueRepository.save(entityToSave);
             items.add(entitySaved);
         }
         if (CollectionUtils.isEmpty(items)) {
@@ -107,16 +100,16 @@ public class AbonnementPeriodiqueBusiness implements IBasicBusiness<Request<Abon
 
     @Override
     public Response<AbonnementPeriodiqueDTO> update(Request<AbonnementPeriodiqueDTO> request, Locale locale) throws ParseException {
-        Response<AbonnementPeriodiqueDTO> response = new Response<AbonnementPeriodiqueDTO>();
-        List<AbonnementPeriodique> items = new ArrayList<AbonnementPeriodique>();
+        Response<AbonnementPeriodiqueDTO> response = new Response<>();
+        List<AbonnementPeriodique> items = new ArrayList<>();
         if(request.getDatas() == null  || request.getDatas().isEmpty()){
             response.setStatus(functionalError.DATA_NOT_EXIST("Liste vide",locale));
             response.setHasError(true);
             return response;
         }
-        List<AbonnementPeriodiqueDTO>itemsDtos = Collections.synchronizedList(new ArrayList<AbonnementPeriodiqueDTO>());
+        List<AbonnementPeriodiqueDTO>itemsDtos = Collections.synchronizedList(new ArrayList<>());
         for(AbonnementPeriodiqueDTO dto: request.getDatas() ) {
-            Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+            Map<String, Object> fieldsToVerify = new HashMap<>();
             fieldsToVerify.put("id", dto.getId());
             if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
                 response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
@@ -168,8 +161,7 @@ public class AbonnementPeriodiqueBusiness implements IBasicBusiness<Request<Abon
                 entityToSave.setRedevancePublicite(dto.getRedevancePublicite());
             }
             entityToSave.setUpdatedAt(Utilities.getCurrentDate());
-            AbonnementPeriodique entityUpdated=null;
-            entityUpdated=abonnementPeriodiqueRepository.save(entityToSave);
+            AbonnementPeriodique entityUpdated = abonnementPeriodiqueRepository.save(entityToSave);
             items.add(entityUpdated);
         }
         if(CollectionUtils.isEmpty(items)){

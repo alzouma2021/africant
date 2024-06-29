@@ -21,20 +21,16 @@ import lombok.extern.java.Log;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-/**
- * @Author ALZOUMA MOUSSA MAHAAMADOU
- */
+
 @Log
 @Component
 public class ModePaiementMoovMoneyBusiness implements IBasicBusiness<Request<ModePaiementMoovMoneyDTO>, Response<ModePaiementMoovMoneyDTO>> {
 
-
-    private Response<ModePaiementMoovMoneyDTO> response;
 
     private final ModePaiementMoovMoneyRepository modePaiementMoovMoneyRepository;
     private final FunctionalError functionalError;
@@ -61,16 +57,16 @@ public class ModePaiementMoovMoneyBusiness implements IBasicBusiness<Request<Mod
 
     @Override
     public Response<ModePaiementMoovMoneyDTO> create(Request<ModePaiementMoovMoneyDTO> request, Locale locale) throws ParseException {
-        Response<ModePaiementMoovMoneyDTO> response = new Response<ModePaiementMoovMoneyDTO>();
-        List<ModePaiementMoovMoney> items = new ArrayList<ModePaiementMoovMoney>();
+        Response<ModePaiementMoovMoneyDTO> response = new Response<>();
+        List<ModePaiementMoovMoney> items = new ArrayList<>();
         if(request.getDatas() == null || request.getDatas().isEmpty()){
             response.setStatus(functionalError.DATA_NOT_EXIST("Liste vide",locale));
             response.setHasError(true);
             return response;
         }
-        List<ModePaiementMoovMoneyDTO>itemsDtos = Collections.synchronizedList(new ArrayList<ModePaiementMoovMoneyDTO>());
+        List<ModePaiementMoovMoneyDTO>itemsDtos = Collections.synchronizedList(new ArrayList<>());
         for(ModePaiementMoovMoneyDTO dto: request.getDatas() ) {
-            Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+            Map<String, Object> fieldsToVerify = new HashMap<>();
             fieldsToVerify.put("telephoneMoovMoney", dto.getTelephoneMoovMoney());
             if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
                 response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
@@ -80,17 +76,13 @@ public class ModePaiementMoovMoneyBusiness implements IBasicBusiness<Request<Mod
             itemsDtos.add(dto);
         }
         for(ModePaiementMoovMoneyDTO itemDto : request.getDatas() ){
-            //Chech If CompagnieTransport exists
-            CompagnieTransport exitingCompagnieTransport=null;
-            exitingCompagnieTransport=compagnieTransportRepository.findByRaisonSociale(itemDto.getCompagnieTransportRaisonSociale(), false);
+            CompagnieTransport exitingCompagnieTransport=compagnieTransportRepository.findByRaisonSociale(itemDto.getCompagnieTransportRaisonSociale(), false);
             if (exitingCompagnieTransport == null) {
                 response.setStatus(functionalError.DATA_EXIST("Compagnie de transport ayant la raison sociale"+itemDto.getCompagnieTransportRaisonSociale()+" n'existe pas", locale)) ;
                 response.setHasError(true);
                 return response;
             }
-            //Check if periodiciteAbonnement exists
-            Reference existingTypeModePaiement = null;
-            existingTypeModePaiement = typeModePaiementRepository.findByDesignation(itemDto.getTypeModePaiementDesignation(),false);
+            Reference existingTypeModePaiement = typeModePaiementRepository.findByDesignation(itemDto.getTypeModePaiementDesignation(),false);
             if (existingTypeModePaiement == null) {
                 response.setStatus(functionalError.DATA_EXIST("Le mode de paiment n'existe pas", locale));
                 response.setHasError(true);
@@ -99,8 +91,7 @@ public class ModePaiementMoovMoneyBusiness implements IBasicBusiness<Request<Mod
             ModePaiementMoovMoney entityToSave = ModePaimentMoovMoneyTransformer.INSTANCE.toEntity(itemDto,exitingCompagnieTransport,existingTypeModePaiement);
             entityToSave.setIsDeleted(false);
             entityToSave.setCreatedAt(Utilities.getCurrentDate());
-            ModePaiementMoovMoney entitySaved=null;
-            entitySaved= modePaiementMoovMoneyRepository.save(entityToSave);
+            ModePaiementMoovMoney entitySaved = modePaiementMoovMoneyRepository.save(entityToSave);
             items.add(entitySaved);
         }
         if (CollectionUtils.isEmpty(items)) {
@@ -119,16 +110,16 @@ public class ModePaiementMoovMoneyBusiness implements IBasicBusiness<Request<Mod
 
     @Override
     public Response<ModePaiementMoovMoneyDTO> update(Request<ModePaiementMoovMoneyDTO> request, Locale locale) throws ParseException {
-        Response<ModePaiementMoovMoneyDTO> response = new Response<ModePaiementMoovMoneyDTO>();
-        List<ModePaiementMoovMoney> items = new ArrayList<ModePaiementMoovMoney>();
+        Response<ModePaiementMoovMoneyDTO> response = new Response<>();
+        List<ModePaiementMoovMoney> items = new ArrayList<>();
         if(request.getDatas() == null  || request.getDatas().isEmpty()){
             response.setStatus(functionalError.DATA_NOT_EXIST("Liste vide",locale));
             response.setHasError(true);
             return response;
         }
-        List<ModePaiementMoovMoneyDTO>itemsDtos = Collections.synchronizedList(new ArrayList<ModePaiementMoovMoneyDTO>());
+        List<ModePaiementMoovMoneyDTO> itemsDtos = Collections.synchronizedList(new ArrayList<>());
         for(ModePaiementMoovMoneyDTO dto: request.getDatas() ) {
-            Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+            Map<String, Object> fieldsToVerify = new HashMap<>();
             fieldsToVerify.put("id", dto.getId());
             if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
                 response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
@@ -153,8 +144,7 @@ public class ModePaiementMoovMoneyBusiness implements IBasicBusiness<Request<Mod
                 entityToSave.setTelephoneMoovMoney(dto.getTelephoneMoovMoney());
             }
             entityToSave.setUpdatedAt(Utilities.getCurrentDate());
-            ModePaiementMoovMoney entityUpdated=null;
-            entityUpdated= modePaiementMoovMoneyRepository.save(entityToSave);
+            ModePaiementMoovMoney entityUpdated= modePaiementMoovMoneyRepository.save(entityToSave);
             items.add(entityUpdated);
         }
         if(CollectionUtils.isEmpty(items)){
@@ -180,7 +170,7 @@ public class ModePaiementMoovMoneyBusiness implements IBasicBusiness<Request<Mod
 
     @Override
     public Response<ModePaiementMoovMoneyDTO> forceDelete(Request<ModePaiementMoovMoneyDTO> request, Locale locale) {
-        return null ;
+        return null;
     }
 
     @Override

@@ -14,6 +14,7 @@ import org.mapstruct.factory.Mappers;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Mapper
 public interface ProgrammeTransformer {
@@ -41,7 +42,7 @@ public interface ProgrammeTransformer {
             @Mapping(source = "entity.deletedBy", target="deletedBy"),
             @Mapping(source = "entity.isDeleted", target="isDeleted"),
     })
-    ProgrammeDTO toDto(Programme entity) throws ParseException;;
+    ProgrammeDTO toDto(Programme entity) throws ParseException;
 
     @IterableMapping(qualifiedBy = {FullTransformerQualifier.class})
     List<ProgrammeDTO> toDtos(List<Programme> entities) throws ParseException;
@@ -59,10 +60,10 @@ public interface ProgrammeTransformer {
     }
 
     default List<ProgrammeDTO> toLiteDtos(List<Programme> entities) {
-        if (entities == null || entities.stream().allMatch(o -> o == null)) {
+        if (entities == null || entities.stream().allMatch(Objects::isNull)) {
             return null;
         }
-        List<ProgrammeDTO> dtos = new ArrayList<ProgrammeDTO>();
+        List<ProgrammeDTO> dtos = new ArrayList<>();
         for (Programme entity : entities) {
             dtos.add(toLiteDto(entity));
         }

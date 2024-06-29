@@ -1,7 +1,6 @@
 package com.africanb.africanb.dao.repository.compagnie;
 
 import com.africanb.africanb.dao.entity.compagnie.Bagage;
-import com.africanb.africanb.dao.entity.offreVoyage.PrixOffreVoyage;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

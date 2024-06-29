@@ -1,15 +1,10 @@
 package com.africanb.africanb.helper.dto.offreVoyage;
 
-import com.africanb.africanb.dao.entity.offreVoyage.JourSemaine;
 import com.africanb.africanb.helper.searchFunctions.SearchParam;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Data;
 import lombok.ToString;
-
-import javax.persistence.ManyToOne;
-import java.sql.Time;
-import java.util.Date;
 
 @Data
 @ToString

@@ -14,6 +14,7 @@ import org.mapstruct.factory.Mappers;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Mapper
 public interface ModePaimentWaveTransformer {
@@ -39,7 +40,7 @@ public interface ModePaimentWaveTransformer {
             @Mapping(source = "entity.deletedBy", target="deletedBy"),
             @Mapping(source = "entity.isDeleted", target="isDeleted"),
     })
-    ModePaiementWaveDTO toDto(ModePaiementWave entity) throws ParseException;;
+    ModePaiementWaveDTO toDto(ModePaiementWave entity) throws ParseException;
 
     @IterableMapping(qualifiedBy = {FullTransformerQualifier.class})
     List<ModePaiementWaveDTO> toDtos(List<ModePaiementWave> entities) throws ParseException;
@@ -57,10 +58,10 @@ public interface ModePaimentWaveTransformer {
     }
 
     default List<ModePaiementWaveDTO> toLiteDtos(List<ModePaiementWave> entities) {
-        if (entities == null || entities.stream().allMatch(o -> o == null)) {
+        if (entities == null || entities.stream().allMatch(Objects::isNull)) {
             return null;
         }
-        List<ModePaiementWaveDTO> dtos = new ArrayList<ModePaiementWaveDTO>();
+        List<ModePaiementWaveDTO> dtos = new ArrayList<>();
         for (ModePaiementWave entity : entities) {
             dtos.add(toLiteDto(entity));
         }

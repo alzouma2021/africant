@@ -1,29 +1,25 @@
 package com.africanb.africanb.dao.entity.offreVoyage;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
-import javax.persistence.*;
-import com.sun.istack.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
 
-/**
- * @Author Alzouma Moussa Mahamadou
- */
+
 @Inheritance(strategy = InheritanceType.JOINED)
 @Entity
 @Table(name="valeurcaracteristiqueoffrevoyage")
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter
+@Setter
 @ToString
+@EqualsAndHashCode(callSuper = false)
+@NoArgsConstructor
 public class ValeurCaracteristiqueOffreVoyage implements Serializable{
 
+	@Serial
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -34,7 +30,7 @@ public class ValeurCaracteristiqueOffreVoyage implements Serializable{
 	private String designation;
 	private String description;
 	@Transient
-	private String valeurTexte; //Contient la valeur de la propriété.En fonction,du type de la propriété,elle sera convertie dans le bon type
+	private String valeurTexte;
 
 	@ManyToOne
 	private OffreVoyage offreVoyage;
@@ -53,5 +49,4 @@ public class ValeurCaracteristiqueOffreVoyage implements Serializable{
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date deletedAt;
 	private Long  deletedBy;
-
 }

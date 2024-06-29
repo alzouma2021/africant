@@ -97,6 +97,7 @@ D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\dao\entity\c
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\Business\security\FunctionalityBusiness.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\dao\entity\compagnie\ModePaiment\ModePaiementEnEspece.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\dao\entity\compagnie\ModePaiment\ModePaiementMoovMoney.java
+D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\utils\security\JwtUtils.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\helper\transformer\compagnie\ModePaiement\ModePaimentWaveTransformer.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\utils\htmltopdf\PdfController.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\rest\api\compagnie\GareController.java
@@ -244,7 +245,6 @@ D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\helper\dto\s
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\helper\ExceptionUtils.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\helper\transformer\compagnie\BagageTransformer.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\helper\transformer\compagnie\StatusUtilCompagnieTransportTransformer.java
-D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\utils\security\SecurityUtils.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\Business\offreVoyage\ValeurCaracteristiqueOffreVoyageBooleanBusiness.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\dao\entity\offreVoyage\Bus.java
 D:\Projects SpringBoot\africanb\src\main\java\com\africanb\africanb\dao\entity\offreVoyage\ValeurCaracteristiqueOffreVoyageLong.java

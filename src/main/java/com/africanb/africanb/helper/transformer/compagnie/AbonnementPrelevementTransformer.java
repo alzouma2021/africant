@@ -16,6 +16,7 @@ import org.mapstruct.factory.Mappers;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Mapper
 public interface AbonnementPrelevementTransformer {
@@ -43,7 +44,7 @@ public interface AbonnementPrelevementTransformer {
             @Mapping(source = "entity.deletedBy", target="deletedBy"),
             @Mapping(source = "entity.isDeleted", target="isDeleted"),
     })
-    AbonnementPrelevementDTO toDto(AbonnementPrelevement entity) throws ParseException;;
+    AbonnementPrelevementDTO toDto(AbonnementPrelevement entity) throws ParseException;
 
     @IterableMapping(qualifiedBy = {FullTransformerQualifier.class})
     List<AbonnementPrelevementDTO> toDtos(List<AbonnementPrelevement> entities) throws ParseException;
@@ -62,10 +63,10 @@ public interface AbonnementPrelevementTransformer {
     }
 
     default List<AbonnementPrelevementDTO> toLiteDtos(List<AbonnementPrelevement> entities) {
-        if (entities == null || entities.stream().allMatch(o -> o == null)) {
+        if (entities == null || entities.stream().allMatch(Objects::isNull)) {
             return null;
         }
-        List<AbonnementPrelevementDTO> dtos = new ArrayList<AbonnementPrelevementDTO>();
+        List<AbonnementPrelevementDTO> dtos = new ArrayList<>();
         for (AbonnementPrelevement entity : entities) {
             dtos.add(toLiteDto(entity));
         }

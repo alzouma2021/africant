@@ -1,18 +1,17 @@
 package com.africanb.africanb.rest;
 
-import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
+import org.springframework.web.servlet.HandlerInterceptor;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
-public class RestInterceptor extends HandlerInterceptorAdapter {
+public class RestInterceptor implements HandlerInterceptor {
 
     private static final String	defaultTenant	= "null";
-
     private static final String defaultLanguage = "fr";
 
     @Override
-    public boolean preHandle(HttpServletRequest req, HttpServletResponse res, Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest req, HttpServletResponse res, Object handler) {
         String tenantValue = req.getHeader("tenantID");
         if (tenantValue != null) {
             req.setAttribute("CURRENT_TENANT_IDENTIFIER", tenantValue);

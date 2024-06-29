@@ -1,18 +1,19 @@
 package com.africanb.africanb.dao.entity.security;
 
 import com.africanb.africanb.dao.entity.compagnie.CompagnieTransport;
-import com.africanb.africanb.dao.entity.compagnie.Gare;
-import com.sun.istack.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.Entity;
+import lombok.*;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Date;
 
-@Entity @Data @NoArgsConstructor @AllArgsConstructor
+@Entity
+@Getter
+@Setter
+@ToString
+@EqualsAndHashCode(callSuper = false)
+@NoArgsConstructor
 public class Users implements Serializable {
 
     @Id
@@ -34,7 +35,7 @@ public class Users implements Serializable {
     private String telephone;
     private String gareDesignation;
 
-    @ManyToOne//(fetch = FetchType.EAGER)
+    @ManyToOne
     private Role role;
     @ManyToOne(cascade = CascadeType.ALL)
     private CompagnieTransport compagnieTransport;
@@ -42,7 +43,7 @@ public class Users implements Serializable {
     private Boolean isDeleted;
     private Boolean isActif;
     private Boolean isFirst;
-    private Long numberOfConnections; //Permet de compter le nombre de fois qu'un utilisateur s'est authentifié
+    private Long numberOfConnections;
 
     private Date createdAt;
     private Date updatedAt;

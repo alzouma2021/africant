@@ -56,5 +56,4 @@ public class FamilleStatusUtilController {
         log.info("end method /famillestatusutil/getByCriteria");
         return response;
     }
-
 }

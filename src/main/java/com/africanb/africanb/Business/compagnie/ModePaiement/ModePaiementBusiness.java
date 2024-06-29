@@ -25,19 +25,18 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-/**
- * @Author ALZOUMA MOUSSA MAHAAMADOU
- */
+
+
 @Log
 @Component
 public class ModePaiementBusiness implements IBasicBusiness<Request<ModePaiementDTO>, Response<ModePaiementDTO>> {
 
-    private Response<ModePaiementDTO> response;
+    private  Response<ModePaiementDTO> response;
 
     private final FunctionalError functionalError;
     private final ModePaiementRepository modePaiementRepository;
@@ -48,7 +47,6 @@ public class ModePaiementBusiness implements IBasicBusiness<Request<ModePaiement
     private final ModePaiementMoovMoneyBusiness modePaiementMoovMoneyBusiness;
     private final ModePaiementOrangeMoneyBusiness modePaiementOrangeMoneyBusiness;
     private final ModePaiementMtnMoneyBusiness modePaiementMtnMoneyBusiness;
-    private final ModePaiementWaveBusiness modePaiementWaveBusiness;
     private final TechnicalError technicalError;
     private final ExceptionUtils exceptionUtils;
     private final EntityManager em;
@@ -56,7 +54,7 @@ public class ModePaiementBusiness implements IBasicBusiness<Request<ModePaiement
     private final SimpleDateFormat dateFormat;
     private final SimpleDateFormat dateTimeFormat;
 
-    public ModePaiementBusiness(FunctionalError functionalError, ModePaiementRepository modePaiementRepository, ModeAbonnementRepository modeAbonnementRepository, CompagnieTransportRepository compagnieTransportRepository, ReferenceRepository typeModePaiementRepository, ModePaiementEnEspeceBusiness modePaiementEnEspeceBusiness, ModePaiementMoovMoneyBusiness modePaiementMoovMoneyBusiness, ModePaiementOrangeMoneyBusiness modePaiementOrangeMoneyBusiness, ModePaiementMtnMoneyBusiness modePaiementMtnMoneyBusiness, ModePaiementWaveBusiness modePaiementWaveBusiness, TechnicalError technicalError, ExceptionUtils exceptionUtils, EntityManager em) {
+    public ModePaiementBusiness(FunctionalError functionalError, ModePaiementRepository modePaiementRepository, ModeAbonnementRepository modeAbonnementRepository, CompagnieTransportRepository compagnieTransportRepository, ReferenceRepository typeModePaiementRepository, ModePaiementEnEspeceBusiness modePaiementEnEspeceBusiness, ModePaiementMoovMoneyBusiness modePaiementMoovMoneyBusiness, ModePaiementOrangeMoneyBusiness modePaiementOrangeMoneyBusiness, ModePaiementMtnMoneyBusiness modePaiementMtnMoneyBusiness, TechnicalError technicalError, ExceptionUtils exceptionUtils, EntityManager em) {
         this.functionalError = functionalError;
         this.modePaiementRepository = modePaiementRepository;
         this.modeAbonnementRepository = modeAbonnementRepository;
@@ -66,7 +64,6 @@ public class ModePaiementBusiness implements IBasicBusiness<Request<ModePaiement
         this.modePaiementMoovMoneyBusiness = modePaiementMoovMoneyBusiness;
         this.modePaiementOrangeMoneyBusiness = modePaiementOrangeMoneyBusiness;
         this.modePaiementMtnMoneyBusiness = modePaiementMtnMoneyBusiness;
-        this.modePaiementWaveBusiness = modePaiementWaveBusiness;
         this.technicalError = technicalError;
         this.exceptionUtils = exceptionUtils;
         this.em = em;
@@ -87,7 +84,7 @@ public class ModePaiementBusiness implements IBasicBusiness<Request<ModePaiement
         List<ModePaiementDTO>itemsDtos =  Collections.synchronizedList(new ArrayList<>());
         for(ModePaiementDTO dto: request.getDatas() ) {
             if(dto!=null){
-                Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+                Map<String, Object> fieldsToVerify = new HashMap<>();
                 fieldsToVerify.put("designation", dto.getDesignation());
                 fieldsToVerify.put("compagnieTransportRaisonSociale", dto.getCompagnieTransportRaisonSociale());
                 fieldsToVerify.put("typeModeAbonnementDesignation", dto.getTypeModePaiementDesignation());
@@ -164,7 +161,7 @@ public class ModePaiementBusiness implements IBasicBusiness<Request<ModePaiement
         List<ModePaiementDTO>itemsDtos =  Collections.synchronizedList(new ArrayList<>());
         for(ModePaiementDTO dto: request.getDatas() ) {
             if(dto!=null){
-                Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+                Map<String, Object> fieldsToVerify = new HashMap<>();
                 fieldsToVerify.put("id", dto.getId());
                 fieldsToVerify.put("compagnieTransportRaisonSociale", dto.getCompagnieTransportRaisonSociale());
                 fieldsToVerify.put("typeModePaiementDesignation", dto.getTypeModePaiementDesignation());
@@ -200,10 +197,9 @@ public class ModePaiementBusiness implements IBasicBusiness<Request<ModePaiement
                 response.setStatus(functionalError.DATA_EXIST("Le type de mode d'abonnement n'existe pas", locale));
                 response.setHasError(true);
                 return response;
-            };
+            }
             itemDto=Utilities.transformerLaClasseModePaiementtEnClasseFilleCorrespondante(itemDto);
-            ModePaiementDTO entitySaved=null;
-            entitySaved=updateModePaiementEnFonctionDeLaClasseFilleCorrespondante(itemDto,locale);
+            ModePaiementDTO entitySaved=updateModePaiementEnFonctionDeLaClasseFilleCorrespondante(itemDto,locale);
             itemsDto.add(entitySaved);
         }
         if (CollectionUtils.isEmpty(itemsDto)) {
@@ -238,7 +234,7 @@ public class ModePaiementBusiness implements IBasicBusiness<Request<ModePaiement
     }
 
     @Transactional(rollbackFor = {RuntimeException.class, Exception.class})
-    public Response<ModePaiementDTO> getModePaiementByCompagnieTransport(Request<ModePaiementDTO> request, Locale locale) throws ParseException {
+    public Response<ModePaiementDTO> getModePaiementByCompagnieTransport(Request<ModePaiementDTO> request, Locale locale) {
         Response<ModePaiementDTO> response = new Response<>();
         if (request.getData() == null ) {
             response.setStatus(functionalError.DATA_NOT_EXIST("Aucune donnée definie", locale));
@@ -274,9 +270,8 @@ public class ModePaiementBusiness implements IBasicBusiness<Request<ModePaiement
     }
 
     public ModePaiementDTO saveModePaiementEnFonctionDeLaClasseFilleCorrespondante(ModePaiementDTO modePaiementDTO, Locale locale) throws ParseException {
-        if(modePaiementDTO instanceof ModePaiementMtnMoneyDTO ){
+        if(modePaiementDTO instanceof ModePaiementMtnMoneyDTO modePaiementMtnMoneyDTO){
             Request<ModePaiementMtnMoneyDTO> subRequest = new Request<>();
-            ModePaiementMtnMoneyDTO modePaiementMtnMoneyDTO = (ModePaiementMtnMoneyDTO) modePaiementDTO;
             List<ModePaiementMtnMoneyDTO> itemsDTO = Collections.synchronizedList(new ArrayList<>());
             itemsDTO.add(modePaiementMtnMoneyDTO);
             subRequest.setDatas( itemsDTO);
@@ -291,11 +286,9 @@ public class ModePaiementBusiness implements IBasicBusiness<Request<ModePaiement
             rtn.setId( subResponse.getItems().get(0).getId());
             rtn.setDesignation( subResponse.getItems().get(0).getDesignation());
             rtn.setDescription( subResponse.getItems().get(0).getDescription());
-
             rtn.setTelephoneGenerique( subResponse.getItems().get(0).getTelephoneMtnMoney());
             rtn.setTypeModePaiementDesignation(subResponse.getItems().get(0).getTypeModePaiementDesignation());
             rtn.setCompagnieTransportRaisonSociale(subResponse.getItems().get(0).getCompagnieTransportRaisonSociale());
-
             rtn.setDeletedAt( subResponse.getItems().get(0).getDeletedAt());
             rtn.setUpdatedAt( subResponse.getItems().get(0).getUpdatedAt());
             rtn.setCreatedAt( subResponse.getItems().get(0).getCreatedAt());
@@ -312,11 +305,9 @@ public class ModePaiementBusiness implements IBasicBusiness<Request<ModePaiement
 
             return rtn;
         }
-        else if(modePaiementDTO instanceof ModePaiementOrangeMoneyDTO){
-            Request<ModePaiementOrangeMoneyDTO> subRequest = new Request<ModePaiementOrangeMoneyDTO>();
-            List<ModePaiementOrangeMoneyDTO> itemsDTO = Collections.synchronizedList(new ArrayList<ModePaiementOrangeMoneyDTO>());
-            ModePaiementOrangeMoneyDTO modePaiementOrangeMoneyDTO = (ModePaiementOrangeMoneyDTO) modePaiementDTO;
-            //Conversion
+        else if(modePaiementDTO instanceof ModePaiementOrangeMoneyDTO modePaiementOrangeMoneyDTO){
+            Request<ModePaiementOrangeMoneyDTO> subRequest = new Request<>();
+            List<ModePaiementOrangeMoneyDTO> itemsDTO = Collections.synchronizedList(new ArrayList<>());
             itemsDTO.add(modePaiementOrangeMoneyDTO);
             subRequest.setDatas( itemsDTO);
             Response<ModePaiementOrangeMoneyDTO> subResponse = modePaiementOrangeMoneyBusiness.create(subRequest,locale);
@@ -329,11 +320,9 @@ public class ModePaiementBusiness implements IBasicBusiness<Request<ModePaiement
             rtn.setId( subResponse.getItems().get(0).getId());
             rtn.setDesignation( subResponse.getItems().get(0).getDesignation());
             rtn.setDescription( subResponse.getItems().get(0).getDescription());
-
             rtn.setTelephoneGenerique( subResponse.getItems().get(0).getTelephoneOrangeMoney());
             rtn.setTypeModePaiementDesignation(subResponse.getItems().get(0).getTypeModePaiementDesignation());
             rtn.setCompagnieTransportRaisonSociale(subResponse.getItems().get(0).getCompagnieTransportRaisonSociale());
-
             rtn.setDeletedAt( subResponse.getItems().get(0).getDeletedAt());
             rtn.setUpdatedAt( subResponse.getItems().get(0).getUpdatedAt());
             rtn.setCreatedAt( subResponse.getItems().get(0).getCreatedAt());
@@ -349,11 +338,9 @@ public class ModePaiementBusiness implements IBasicBusiness<Request<ModePaiement
             rtn.setOrderDirection(subResponse.getItems().get(0).getOrderDirection());
             return rtn;
         }
-        else if(modePaiementDTO instanceof ModePaiementMoovMoneyDTO){
-            Request<ModePaiementMoovMoneyDTO> subRequest = new Request<ModePaiementMoovMoneyDTO>();
-            List<ModePaiementMoovMoneyDTO> itemsDTO = Collections.synchronizedList(new ArrayList<ModePaiementMoovMoneyDTO>());
-            ModePaiementMoovMoneyDTO modePaiementMoovMoneyDTO = (ModePaiementMoovMoneyDTO) modePaiementDTO;
-            //Conversion
+        else if(modePaiementDTO instanceof ModePaiementMoovMoneyDTO modePaiementMoovMoneyDTO){
+            Request<ModePaiementMoovMoneyDTO> subRequest = new Request<>();
+            List<ModePaiementMoovMoneyDTO> itemsDTO = Collections.synchronizedList(new ArrayList<>());
             itemsDTO.add(modePaiementMoovMoneyDTO);
             subRequest.setDatas( itemsDTO);
             Response<ModePaiementMoovMoneyDTO> subResponse = modePaiementMoovMoneyBusiness.create(subRequest,locale);
@@ -385,11 +372,9 @@ public class ModePaiementBusiness implements IBasicBusiness<Request<ModePaiement
             rtn.setUpdatedByParam(subResponse.getItems().get(0).getUpdatedByParam());
             rtn.setOrderDirection(subResponse.getItems().get(0).getOrderDirection());
             return rtn;
-        }else if(modePaiementDTO instanceof ModePaiementEnEspeceDTO){
-            Request<ModePaiementEnEspeceDTO> subRequest = new Request<ModePaiementEnEspeceDTO>();
-            List<ModePaiementEnEspeceDTO> itemsDTO = Collections.synchronizedList(new ArrayList<ModePaiementEnEspeceDTO>());
-            ModePaiementEnEspeceDTO modePaiementEnEspeceDTO = (ModePaiementEnEspeceDTO) modePaiementDTO;
-            //Conversion
+        }else if(modePaiementDTO instanceof ModePaiementEnEspeceDTO modePaiementEnEspeceDTO){
+            Request<ModePaiementEnEspeceDTO> subRequest = new Request<>();
+            List<ModePaiementEnEspeceDTO> itemsDTO = Collections.synchronizedList(new ArrayList<>());
             itemsDTO.add(modePaiementEnEspeceDTO);
             subRequest.setDatas( itemsDTO);
             Response<ModePaiementEnEspeceDTO> subResponse = modePaiementEnEspeceBusiness.create(subRequest,locale);
@@ -402,10 +387,8 @@ public class ModePaiementBusiness implements IBasicBusiness<Request<ModePaiement
             rtn.setId( subResponse.getItems().get(0).getId());
             rtn.setDesignation( subResponse.getItems().get(0).getDesignation());
             rtn.setDescription( subResponse.getItems().get(0).getDescription());
-            //rtn.setTelephoneGenerique( subResponse.getItems().get(0).getTelephoneMoovMoney());
             rtn.setTypeModePaiementDesignation(subResponse.getItems().get(0).getTypeModePaiementDesignation());
             rtn.setCompagnieTransportRaisonSociale(subResponse.getItems().get(0).getCompagnieTransportRaisonSociale());
-
             rtn.setDeletedAt( subResponse.getItems().get(0).getDeletedAt());
             rtn.setUpdatedAt( subResponse.getItems().get(0).getUpdatedAt());
             rtn.setCreatedAt( subResponse.getItems().get(0).getCreatedAt());
@@ -421,19 +404,13 @@ public class ModePaiementBusiness implements IBasicBusiness<Request<ModePaiement
             rtn.setOrderDirection(subResponse.getItems().get(0).getOrderDirection());
             return rtn;
         }
-        else{
-
-        }
         return new ModePaiementDTO();
     }
 
     public ModePaiementDTO updateModePaiementEnFonctionDeLaClasseFilleCorrespondante(ModePaiementDTO modePaiementDTO, Locale locale) throws ParseException {
-
-        if(modePaiementDTO instanceof ModePaiementMtnMoneyDTO){
-            Request<ModePaiementMtnMoneyDTO> subRequest = new Request<ModePaiementMtnMoneyDTO>();
-            List<ModePaiementMtnMoneyDTO> itemsDTO = Collections.synchronizedList(new ArrayList<ModePaiementMtnMoneyDTO>());
-            ModePaiementMtnMoneyDTO modePaiementMtnMoneyDTO = (ModePaiementMtnMoneyDTO) modePaiementDTO;
-            //Conversion
+        if(modePaiementDTO instanceof ModePaiementMtnMoneyDTO modePaiementMtnMoneyDTO){
+            Request<ModePaiementMtnMoneyDTO> subRequest = new Request<>();
+            List<ModePaiementMtnMoneyDTO> itemsDTO = Collections.synchronizedList(new ArrayList<>());
             itemsDTO.add(modePaiementMtnMoneyDTO);
             subRequest.setDatas( itemsDTO);
             Response<ModePaiementMtnMoneyDTO> subResponse = modePaiementMtnMoneyBusiness.update(subRequest,locale);
@@ -466,11 +443,9 @@ public class ModePaiementBusiness implements IBasicBusiness<Request<ModePaiement
             rtn.setOrderDirection(subResponse.getItems().get(0).getOrderDirection());
             return rtn;
         }
-        else if(modePaiementDTO instanceof ModePaiementOrangeMoneyDTO){
-            Request<ModePaiementOrangeMoneyDTO> subRequest = new Request<ModePaiementOrangeMoneyDTO>();
-            List<ModePaiementOrangeMoneyDTO> itemsDTO = Collections.synchronizedList(new ArrayList<ModePaiementOrangeMoneyDTO>());
-            ModePaiementOrangeMoneyDTO modePaiementOrangeMoneyDTO = (ModePaiementOrangeMoneyDTO) modePaiementDTO;
-            //Conversion
+        else if(modePaiementDTO instanceof ModePaiementOrangeMoneyDTO modePaiementOrangeMoneyDTO){
+            Request<ModePaiementOrangeMoneyDTO> subRequest = new Request<>();
+            List<ModePaiementOrangeMoneyDTO> itemsDTO = Collections.synchronizedList(new ArrayList<>());
             itemsDTO.add(modePaiementOrangeMoneyDTO);
             subRequest.setDatas( itemsDTO);
             Response<ModePaiementOrangeMoneyDTO> subResponse = modePaiementOrangeMoneyBusiness.update(subRequest,locale);
@@ -483,11 +458,9 @@ public class ModePaiementBusiness implements IBasicBusiness<Request<ModePaiement
             rtn.setId( subResponse.getItems().get(0).getId());
             rtn.setDesignation( subResponse.getItems().get(0).getDesignation());
             rtn.setDescription( subResponse.getItems().get(0).getDescription());
-
             rtn.setTelephoneGenerique( subResponse.getItems().get(0).getTelephoneOrangeMoney());
             rtn.setTypeModePaiementDesignation(subResponse.getItems().get(0).getTypeModePaiementDesignation());
             rtn.setCompagnieTransportRaisonSociale(subResponse.getItems().get(0).getCompagnieTransportRaisonSociale());
-
             rtn.setDeletedAt( subResponse.getItems().get(0).getDeletedAt());
             rtn.setUpdatedAt( subResponse.getItems().get(0).getUpdatedAt());
             rtn.setCreatedAt( subResponse.getItems().get(0).getCreatedAt());
@@ -503,11 +476,9 @@ public class ModePaiementBusiness implements IBasicBusiness<Request<ModePaiement
             rtn.setOrderDirection(subResponse.getItems().get(0).getOrderDirection());
             return rtn;
         }
-        else if(modePaiementDTO instanceof ModePaiementMoovMoneyDTO){
-            Request<ModePaiementMoovMoneyDTO> subRequest = new Request<ModePaiementMoovMoneyDTO>();
-            List<ModePaiementMoovMoneyDTO> itemsDTO = Collections.synchronizedList(new ArrayList<ModePaiementMoovMoneyDTO>());
-            ModePaiementMoovMoneyDTO modePaiementMoovMoneyDTO = (ModePaiementMoovMoneyDTO) modePaiementDTO;
-            //Conversion
+        else if(modePaiementDTO instanceof ModePaiementMoovMoneyDTO modePaiementMoovMoneyDTO){
+            Request<ModePaiementMoovMoneyDTO> subRequest = new Request<>();
+            List<ModePaiementMoovMoneyDTO> itemsDTO = Collections.synchronizedList(new ArrayList<>());
             itemsDTO.add(modePaiementMoovMoneyDTO);
             subRequest.setDatas( itemsDTO);
             Response<ModePaiementMoovMoneyDTO> subResponse = modePaiementMoovMoneyBusiness.update(subRequest,locale);
@@ -520,11 +491,9 @@ public class ModePaiementBusiness implements IBasicBusiness<Request<ModePaiement
             rtn.setId( subResponse.getItems().get(0).getId());
             rtn.setDesignation( subResponse.getItems().get(0).getDesignation());
             rtn.setDescription( subResponse.getItems().get(0).getDescription());
-
             rtn.setTelephoneGenerique( subResponse.getItems().get(0).getTelephoneMoovMoney());
             rtn.setTypeModePaiementDesignation(subResponse.getItems().get(0).getTypeModePaiementDesignation());
             rtn.setCompagnieTransportRaisonSociale(subResponse.getItems().get(0).getCompagnieTransportRaisonSociale());
-
             rtn.setDeletedAt( subResponse.getItems().get(0).getDeletedAt());
             rtn.setUpdatedAt( subResponse.getItems().get(0).getUpdatedAt());
             rtn.setCreatedAt( subResponse.getItems().get(0).getCreatedAt());
@@ -539,11 +508,9 @@ public class ModePaiementBusiness implements IBasicBusiness<Request<ModePaiement
             rtn.setUpdatedByParam(subResponse.getItems().get(0).getUpdatedByParam());
             rtn.setOrderDirection(subResponse.getItems().get(0).getOrderDirection());
             return rtn;
-        }else if(modePaiementDTO instanceof ModePaiementEnEspeceDTO){
-            Request<ModePaiementEnEspeceDTO> subRequest = new Request<ModePaiementEnEspeceDTO>();
-            List<ModePaiementEnEspeceDTO> itemsDTO = Collections.synchronizedList(new ArrayList<ModePaiementEnEspeceDTO>());
-            ModePaiementEnEspeceDTO modePaiementEnEspeceDTO = (ModePaiementEnEspeceDTO) modePaiementDTO;
-            //Conversion
+        }else if(modePaiementDTO instanceof ModePaiementEnEspeceDTO modePaiementEnEspeceDTO){
+            Request<ModePaiementEnEspeceDTO> subRequest = new Request<>();
+            List<ModePaiementEnEspeceDTO> itemsDTO = Collections.synchronizedList(new ArrayList<>());
             itemsDTO.add(modePaiementEnEspeceDTO);
             subRequest.setDatas( itemsDTO);
             Response<ModePaiementEnEspeceDTO> subResponse = modePaiementEnEspeceBusiness.update(subRequest,locale);
@@ -556,10 +523,8 @@ public class ModePaiementBusiness implements IBasicBusiness<Request<ModePaiement
             rtn.setId( subResponse.getItems().get(0).getId());
             rtn.setDesignation( subResponse.getItems().get(0).getDesignation());
             rtn.setDescription( subResponse.getItems().get(0).getDescription());
-            //rtn.setTelephoneGenerique( subResponse.getItems().get(0).getTelephoneMoovMoney());
             rtn.setTypeModePaiementDesignation(subResponse.getItems().get(0).getTypeModePaiementDesignation());
             rtn.setCompagnieTransportRaisonSociale(subResponse.getItems().get(0).getCompagnieTransportRaisonSociale());
-
             rtn.setDeletedAt( subResponse.getItems().get(0).getDeletedAt());
             rtn.setUpdatedAt( subResponse.getItems().get(0).getUpdatedAt());
             rtn.setCreatedAt( subResponse.getItems().get(0).getCreatedAt());
@@ -573,31 +538,23 @@ public class ModePaiementBusiness implements IBasicBusiness<Request<ModePaiement
             rtn.setCreatedByParam( subResponse.getItems().get(0).getCreatedByParam());
             rtn.setUpdatedByParam(subResponse.getItems().get(0).getUpdatedByParam());
             rtn.setOrderDirection(subResponse.getItems().get(0).getOrderDirection());
-            return rtn;
-        }
-        else{
 
+            return rtn;
         }
         return new ModePaiementDTO();
     }
 
     public  List<ModePaiementDTO> transformerClasseFilleEnClasseModePaiementDTO(List<ModePaiement> modePaiementList) {
-        List<ModePaiementDTO> itemsDTO = Collections.synchronizedList(new ArrayList<ModePaiementDTO>());
-
+        List<ModePaiementDTO> itemsDTO = Collections.synchronizedList(new ArrayList<>());
         for(ModePaiement modePaiement:modePaiementList) {
-            if(modePaiement instanceof ModePaiementMoovMoney){
-                ModePaiementMoovMoney modePaiementMoovMoney = new ModePaiementMoovMoney();
-                modePaiementMoovMoney= (ModePaiementMoovMoney) modePaiement;
+            if(modePaiement instanceof ModePaiementMoovMoney modePaiementMoovMoney){
                 ModePaiementDTO rtn = new ModePaiementDTO();
-
                 rtn.setId(modePaiementMoovMoney.getId());
                 rtn.setDesignation(modePaiementMoovMoney.getDesignation());
                 rtn.setDescription(modePaiementMoovMoney.getDescription());
-
                 rtn.setTelephoneGenerique(modePaiementMoovMoney.getTelephoneMoovMoney());
                 rtn.setTypeModePaiementDesignation(modePaiementMoovMoney.getTypeModePaiement().getDesignation());
                 rtn.setCompagnieTransportRaisonSociale(modePaiementMoovMoney.getCompagnieTransport().getRaisonSociale());
-
                 rtn.setDeletedAt(modePaiementMoovMoney.getDeletedAt()!=null?modePaiementMoovMoney.getDeletedAt().toString():null);
                 rtn.setUpdatedAt(modePaiementMoovMoney.getUpdatedAt()!=null?modePaiementMoovMoney.getUpdatedAt().toString():null);
                 rtn.setCreatedAt(modePaiementMoovMoney.getCreatedAt()!=null?modePaiementMoovMoney.getCreatedAt().toString():null);
@@ -605,22 +562,16 @@ public class ModePaiementBusiness implements IBasicBusiness<Request<ModePaiement
                 rtn.setIsDeleted(modePaiementMoovMoney.getIsDeleted());
                 rtn.setDeletedBy(modePaiementMoovMoney.getDeletedBy());
                 rtn.setUpdatedBy(modePaiementMoovMoney.getUpdatedBy());
-
                 itemsDTO.add(rtn);
             }
-            else if(modePaiement instanceof ModePaiementOrangeMoney){
-                ModePaiementOrangeMoney modePaiementOrangeMoney = new ModePaiementOrangeMoney();
-                modePaiementOrangeMoney= (ModePaiementOrangeMoney) modePaiement;
+            else if(modePaiement instanceof ModePaiementOrangeMoney modePaiementOrangeMoney){
                 ModePaiementDTO rtn = new ModePaiementDTO();
-
                 rtn.setId(modePaiementOrangeMoney.getId());
                 rtn.setDesignation(modePaiementOrangeMoney.getDesignation());
                 rtn.setDescription(modePaiementOrangeMoney.getDescription());
-
                 rtn.setTelephoneGenerique(modePaiementOrangeMoney.getTelephoneOrangeMoney());
                 rtn.setTypeModePaiementDesignation(modePaiementOrangeMoney.getTypeModePaiement().getDesignation());
                 rtn.setCompagnieTransportRaisonSociale(modePaiementOrangeMoney.getCompagnieTransport().getRaisonSociale());
-
                 rtn.setDeletedAt(modePaiementOrangeMoney.getDeletedAt()!=null?modePaiementOrangeMoney.getDeletedAt().toString():null);
                 rtn.setUpdatedAt(modePaiementOrangeMoney.getUpdatedAt()!=null?modePaiementOrangeMoney.getUpdatedAt().toString():null);
                 rtn.setCreatedAt(modePaiementOrangeMoney.getCreatedAt()!=null?modePaiementOrangeMoney.getCreatedAt().toString():null);
@@ -628,21 +579,15 @@ public class ModePaiementBusiness implements IBasicBusiness<Request<ModePaiement
                 rtn.setIsDeleted(modePaiementOrangeMoney.getIsDeleted());
                 rtn.setDeletedBy(modePaiementOrangeMoney.getDeletedBy());
                 rtn.setUpdatedBy(modePaiementOrangeMoney.getUpdatedBy());
-
                 itemsDTO.add(rtn);
-            }else if(modePaiement instanceof ModePaiementMtnMoney){
-                ModePaiementMtnMoney modePaiementMtnMoney = new ModePaiementMtnMoney();
-                modePaiementMtnMoney= (ModePaiementMtnMoney) modePaiement;
+            }else if(modePaiement instanceof ModePaiementMtnMoney modePaiementMtnMoney){
                 ModePaiementDTO rtn = new ModePaiementDTO();
-
                 rtn.setId(modePaiementMtnMoney.getId());
                 rtn.setDesignation(modePaiementMtnMoney.getDesignation());
                 rtn.setDescription(modePaiementMtnMoney.getDescription());
-
                 rtn.setTelephoneGenerique(modePaiementMtnMoney.getTelephoneMtnMoney());
                 rtn.setTypeModePaiementDesignation(modePaiementMtnMoney.getTypeModePaiement().getDesignation());
                 rtn.setCompagnieTransportRaisonSociale(modePaiementMtnMoney.getCompagnieTransport().getRaisonSociale());
-
                 rtn.setDeletedAt(modePaiementMtnMoney.getDeletedAt()!=null?modePaiementMtnMoney.getDeletedAt().toString():null);
                 rtn.setUpdatedAt(modePaiementMtnMoney.getUpdatedAt()!=null?modePaiementMtnMoney.getUpdatedAt().toString():null);
                 rtn.setCreatedAt(modePaiementMtnMoney.getCreatedAt()!=null?modePaiementMtnMoney.getCreatedAt().toString():null);
@@ -650,21 +595,15 @@ public class ModePaiementBusiness implements IBasicBusiness<Request<ModePaiement
                 rtn.setIsDeleted(modePaiementMtnMoney.getIsDeleted());
                 rtn.setDeletedBy(modePaiementMtnMoney.getDeletedBy());
                 rtn.setUpdatedBy(modePaiementMtnMoney.getUpdatedBy());
-
                 itemsDTO.add(rtn);
-            }else if(modePaiement instanceof ModePaiementWave){
-                ModePaiementWave modePaiementWave = new ModePaiementWave();
-                modePaiementWave = (ModePaiementWave) modePaiement;
+            }else if(modePaiement instanceof ModePaiementWave modePaiementWave){
                 ModePaiementDTO rtn = new ModePaiementDTO();
-
                 rtn.setId(modePaiementWave.getId());
                 rtn.setDesignation(modePaiementWave.getDesignation());
                 rtn.setDescription(modePaiementWave.getDescription());
-
                 rtn.setTelephoneGenerique(modePaiementWave.getTelephoneWave());
                 rtn.setTypeModePaiementDesignation(modePaiementWave.getTypeModePaiement().getDesignation());
                 rtn.setCompagnieTransportRaisonSociale(modePaiementWave.getCompagnieTransport().getRaisonSociale());
-
                 rtn.setDeletedAt(modePaiementWave.getDeletedAt()!=null?modePaiementWave.getDeletedAt().toString():null);
                 rtn.setUpdatedAt(modePaiementWave.getUpdatedAt()!=null?modePaiementWave.getUpdatedAt().toString():null);
                 rtn.setCreatedAt(modePaiementWave.getCreatedAt()!=null?modePaiementWave.getCreatedAt().toString():null);
@@ -672,20 +611,14 @@ public class ModePaiementBusiness implements IBasicBusiness<Request<ModePaiement
                 rtn.setIsDeleted(modePaiementWave.getIsDeleted());
                 rtn.setDeletedBy(modePaiementWave.getDeletedBy());
                 rtn.setUpdatedBy(modePaiementWave.getUpdatedBy());
-
                 itemsDTO.add(rtn);
-            }else if(modePaiement instanceof ModePaiementEnEspece){
-                ModePaiementEnEspece modePaiementEnEspece = new ModePaiementEnEspece();
-                modePaiementEnEspece = (ModePaiementEnEspece) modePaiement;
+            }else if(modePaiement instanceof ModePaiementEnEspece modePaiementEnEspece){
                 ModePaiementDTO rtn = new ModePaiementDTO();
-
                 rtn.setId(modePaiementEnEspece.getId());
                 rtn.setDesignation(modePaiementEnEspece.getDesignation());
                 rtn.setDescription(modePaiementEnEspece.getDescription());
-
                 rtn.setTypeModePaiementDesignation(modePaiementEnEspece.getTypeModePaiement().getDesignation());
                 rtn.setCompagnieTransportRaisonSociale(modePaiementEnEspece.getCompagnieTransport().getRaisonSociale());
-
                 rtn.setDeletedAt(modePaiementEnEspece.getDeletedAt()!=null?modePaiementEnEspece.getDeletedAt().toString():null);
                 rtn.setUpdatedAt(modePaiementEnEspece.getUpdatedAt()!=null?modePaiementEnEspece.getUpdatedAt().toString():null);
                 rtn.setCreatedAt(modePaiementEnEspece.getCreatedAt()!=null?modePaiementEnEspece.getCreatedAt().toString():null);
@@ -693,11 +626,7 @@ public class ModePaiementBusiness implements IBasicBusiness<Request<ModePaiement
                 rtn.setIsDeleted(modePaiementEnEspece.getIsDeleted());
                 rtn.setDeletedBy(modePaiementEnEspece.getDeletedBy());
                 rtn.setUpdatedBy(modePaiementEnEspece.getUpdatedBy());
-
                 itemsDTO.add(rtn);
-            }
-            else{
-
             }
         }
         return itemsDTO;

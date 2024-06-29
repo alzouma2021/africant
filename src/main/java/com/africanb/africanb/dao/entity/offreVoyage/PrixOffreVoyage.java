@@ -1,27 +1,26 @@
 package com.africanb.africanb.dao.entity.offreVoyage;
 
 import com.africanb.africanb.utils.Reference.Reference;
-import com.sun.istack.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
+
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
 
-/**
- * @author Alzouma Moussa Mahamadou
- */
+
 @Entity
 @Table(name = "prixoffrevoyage")
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter
+@Setter
 @ToString
+@EqualsAndHashCode(callSuper = false)
+@NoArgsConstructor
 public class PrixOffreVoyage implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -34,12 +33,11 @@ public class PrixOffreVoyage implements Serializable {
     private Long prix;
 
     @ManyToOne
-    private Reference mode;  //FamilleReferenceMode
+    private Reference mode;
     @ManyToOne
-    private Reference categorieVoyageur; //FamilleReferenceCategorieVoyageur
+    private Reference categorieVoyageur;
     @ManyToOne
     private OffreVoyage offreVoyage;
-
 
     @Column(name="is_deleted")
     private Boolean    isDeleted ;
@@ -53,5 +51,4 @@ public class PrixOffreVoyage implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date deletedAt;
     private Long  deletedBy;
-
 }

@@ -6,16 +6,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import java.util.Date;
 
-/**
- * @Author Alzouma Moussa Mahamadou
- */
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 @ToString
 public class ModeAbonnementDTO {
 
@@ -28,9 +21,6 @@ public class ModeAbonnementDTO {
 	private String compagnieTransportRaisonSociale;
 	private String periodiciteAbonnementDesignation;
 	private String typeModeAbonnementDesignation;
-
-	//Si l'abonnement correspond à un mode d'abonnement periodique alors la propriété taux sera null ou 0
-	//Si l'abonnement correspond à un mode d'abonnement prelevement alors les propriétés redevance et redevancePublicite seront null
 
 	private long redevance;
 	private long redevancePublicite;

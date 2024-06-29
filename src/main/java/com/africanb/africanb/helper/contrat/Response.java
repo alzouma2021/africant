@@ -2,13 +2,10 @@ package com.africanb.africanb.helper.contrat;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-
-import javax.xml.bind.annotation.XmlRootElement;
 import java.util.List;
 import java.util.Map;
 
 
-@XmlRootElement
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Response<T> extends ResponseBase {
 

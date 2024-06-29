@@ -51,8 +51,6 @@ public class SearchParam<T> {
                 '}';
     }
 
-    //public SearchParam() {}
-
     public SearchParam(String operator, T start, T end, List<T> datas) {
         super();
         this.operator = operator;
@@ -72,7 +70,4 @@ public class SearchParam<T> {
     public SearchParam(String operator, List<T> datas) {
         this(operator, null, null, datas);
     }
-
-
-
 }

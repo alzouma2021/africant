@@ -12,7 +12,7 @@ import com.africanb.africanb.rest.fact.ControllerFactory;
 import lombok.extern.java.Log;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 
 @Log

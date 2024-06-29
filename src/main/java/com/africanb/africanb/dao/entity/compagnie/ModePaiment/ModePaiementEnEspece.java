@@ -1,25 +1,20 @@
 package com.africanb.africanb.dao.entity.compagnie.ModePaiment;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 
-import javax.persistence.Column;
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-import javax.persistence.Table;
 import java.io.Serializable;
 
-/**
- * @Author Alzouma Moussa Mahamadou
- */
+
 @Entity
 @Table(name="modepaiementenespece")
 @DiscriminatorValue("enespece")
-@Data
-//@NoArgsConstructor
-//@AllArgsConstructor
+@Getter
+@Setter
 @ToString
+@EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor
 public class ModePaiementEnEspece extends ModePaiement implements Serializable {
 }

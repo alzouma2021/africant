@@ -21,14 +21,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-/**
- * @Author ALZOUMA MOUSSA MAHAAMADOU
- */
+
 @Log
 @Component
 public class GareBusiness implements IBasicBusiness<Request<GareDTO>, Response<GareDTO>> {
@@ -58,16 +56,16 @@ public class GareBusiness implements IBasicBusiness<Request<GareDTO>, Response<G
 
     @Override
     public Response<GareDTO> create(Request<GareDTO> request, Locale locale) throws ParseException {
-        Response<GareDTO> response = new Response<GareDTO>();
-        List<Gare> items = new ArrayList<Gare>();
+        Response<GareDTO> response = new Response<>();
+        List<Gare> items = new ArrayList<>();
         if(request.getDatas() == null || request.getDatas().isEmpty()){
             response.setStatus(functionalError.DATA_NOT_EXIST("Liste vide",locale));
             response.setHasError(true);
             return response;
         }
-        List<GareDTO> itemsDtos = Collections.synchronizedList(new ArrayList<GareDTO>());
+        List<GareDTO> itemsDtos = Collections.synchronizedList(new ArrayList<>());
         for(GareDTO dto: request.getDatas() ) {
-            Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+            Map<String, Object> fieldsToVerify = new HashMap<>();
             fieldsToVerify.put("designation", dto.getDesignation());
             fieldsToVerify.put("email", dto.getEmail());
             fieldsToVerify.put("telephone1", dto.getTelephone1());
@@ -86,21 +84,19 @@ public class GareBusiness implements IBasicBusiness<Request<GareDTO>, Response<G
             itemsDtos.add(dto);
         }
         for(GareDTO itemDto : itemsDtos){
-            Gare existingGare;
-            existingGare = gareRepository.findByDesignation(itemDto.getDesignation(), false);
+            Gare existingGare = gareRepository.findByDesignation(itemDto.getDesignation(), false);
             if (existingGare != null) {
                 response.setStatus(functionalError.DATA_EXIST("La Gare ayant  pour designation -> " + itemDto.getDesignation() +", existe déjà", locale));
                 response.setHasError(true);
                 return response;
             }
-            CompagnieTransport existingCompagnieTransport;
-            existingCompagnieTransport = compagnieTransportRepository.findByRaisonSociale(itemDto.getCompagnieTransportRaisonSociale(),false);
+            CompagnieTransport existingCompagnieTransport = compagnieTransportRepository.findByRaisonSociale(itemDto.getCompagnieTransportRaisonSociale(),false);
             if (existingCompagnieTransport == null) {
                 response.setStatus(functionalError.DATA_EXIST("La compagnie de transport ayant  pour raison sociale -> " + itemDto.getCompagnieTransportRaisonSociale() +", n'existe pas", locale));
                 response.setHasError(true);
                 return response;
             }
-            if (existingCompagnieTransport.getIsValidate()==null || existingCompagnieTransport.getIsValidate() == false) {
+            if (existingCompagnieTransport.getIsValidate() == null || !existingCompagnieTransport.getIsValidate() ) {
                 response.setStatus(functionalError.DATA_NOT_EXIST("Impossible de créer une gare.Compagnie de transport non validée", locale));
                 response.setHasError(true);
                 return response;
@@ -108,19 +104,19 @@ public class GareBusiness implements IBasicBusiness<Request<GareDTO>, Response<G
             Gare entityToSave = GareTransformer.INSTANCE.toEntity(itemDto,existingCompagnieTransport);
             entityToSave.setIsDeleted(false);
             entityToSave.setCreatedAt(Utilities.getCurrentDate());
-            //entityToSave.setCreatedBy(request.user); // à modifier
             items.add(entityToSave);
         }
-        List<Gare> itemsSaved = null;
-        itemsSaved = gareRepository.saveAll((Iterable<Gare>) items);
+        List<Gare> itemsSaved = gareRepository.saveAll(items);
         if (CollectionUtils.isEmpty(itemsSaved)) {
             response.setStatus(functionalError.SAVE_FAIL("Erreur de creation", locale));
             response.setHasError(true);
             return response;
         }
+
         List<GareDTO> itemsDto = (Utilities.isTrue(request.getIsSimpleLoading()))
                 ? GareTransformer.INSTANCE.toLiteDtos(itemsSaved)
                 : GareTransformer.INSTANCE.toDtos(itemsSaved);
+
         response.setItems(itemsDto);
         response.setHasError(false);
         response.setStatus(functionalError.SUCCESS("", locale));
@@ -129,16 +125,16 @@ public class GareBusiness implements IBasicBusiness<Request<GareDTO>, Response<G
 
     @Override
     public Response<GareDTO> update(Request<GareDTO> request, Locale locale) throws ParseException {
-        Response<GareDTO> response = new Response<GareDTO>();
-        List<Gare> items = new ArrayList<Gare>();
+        Response<GareDTO> response = new Response<>();
+        List<Gare> items = new ArrayList<>();
         if(request.getDatas() == null  || request.getDatas().isEmpty()){
             response.setStatus(functionalError.DATA_NOT_EXIST("Liste vide",locale));
             response.setHasError(true);
             return response;
         }
-        List<GareDTO>itemsDtos =  Collections.synchronizedList(new ArrayList<GareDTO>());
+        List<GareDTO>itemsDtos = Collections.synchronizedList(new ArrayList<>());
         for(GareDTO dto: request.getDatas() ) {
-            Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+            Map<String, Object> fieldsToVerify = new HashMap<>();
             fieldsToVerify.put("id", dto.getId());
             if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
                 response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
@@ -177,7 +173,6 @@ public class GareBusiness implements IBasicBusiness<Request<GareDTO>, Response<G
                 response.setHasError(true);
                 return response;
             }
-            //Autres
             if(Utilities.isNotBlank(dto.getEmail()) && !dto.getEmail().equals(entityToSave.getEmail())){
                 entityToSave.setEmail(dto.getEmail());
             }
@@ -191,7 +186,6 @@ public class GareBusiness implements IBasicBusiness<Request<GareDTO>, Response<G
                 entityToSave.setAdresseLocalisation(dto.getAdresseLocalisation());
             }
             entityToSave.setUpdatedAt(Utilities.getCurrentDate());
-            //entityToSave.setUpdatedBy(request.user);
             items.add(entityToSave);
         }
         if(CollectionUtils.isEmpty(items)){
@@ -232,14 +226,13 @@ public class GareBusiness implements IBasicBusiness<Request<GareDTO>, Response<G
 
     @Transactional(rollbackFor = {RuntimeException.class, Exception.class})
     public Response<GareDTO> getGareByCompagnieTransportRaisonScoiale(Request<GareDTO> request, Locale locale) throws ParseException {
-        Response<GareDTO> response = new Response<GareDTO>();
-        List<Gare> items;
+        Response<GareDTO> response = new Response<>();
         if (request.getData() == null ) {
             response.setStatus(functionalError.DATA_NOT_EXIST("Aucune donnée definie", locale));
             response.setHasError(true);
             return response;
         }
-        Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+        Map<String, Object> fieldsToVerify = new HashMap<>();
         fieldsToVerify.put("compagnieTransportRaisonSociale", request.getData().getCompagnieTransportRaisonSociale());
         if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
             response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
@@ -247,14 +240,13 @@ public class GareBusiness implements IBasicBusiness<Request<GareDTO>, Response<G
             return response;
         }
         String raisonSociale=request.getData().getCompagnieTransportRaisonSociale();
-        CompagnieTransport existingCompagnieTransport;
-        existingCompagnieTransport= compagnieTransportRepository.findByRaisonSociale(raisonSociale,false);
+        CompagnieTransport existingCompagnieTransport= compagnieTransportRepository.findByRaisonSociale(raisonSociale,false);
         if (existingCompagnieTransport == null) {
             response.setStatus(functionalError.DATA_EXIST("La compagnie de transport n'existe pas", locale));
             response.setHasError(true);
             return response;
         }
-        items =gareRepository.findByCompagnieTransportRaisonSociale(raisonSociale,false);
+        List<Gare> items =gareRepository.findByCompagnieTransportRaisonSociale(raisonSociale,false);
         if (CollectionUtils.isEmpty(items)) {
             response.setStatus(functionalError.DATA_NOT_EXIST("La compagnie de transport ne dispose d'aucune gare", locale));
             response.setHasError(true);

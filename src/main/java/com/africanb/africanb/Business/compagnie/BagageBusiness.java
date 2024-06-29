@@ -22,20 +22,17 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-/**
- * @Author ALZOUMA MOUSSA MAHAAMADOU
- */
+
+
 @Log
 @Component
 public class BagageBusiness implements IBasicBusiness<Request<BagageDTO>, Response<BagageDTO>> {
 
-
-    private Response<BagageDTO> response;
 
     private final ReferenceRepository referenceRepository;
     private final BagageRepository bagageRepository;
@@ -61,16 +58,16 @@ public class BagageBusiness implements IBasicBusiness<Request<BagageDTO>, Respon
 
     @Override
     public Response<BagageDTO> create(Request<BagageDTO> request, Locale locale) throws ParseException {
-        Response<BagageDTO> response = new Response<BagageDTO>();
-        List<Bagage> items = new ArrayList<Bagage>();
+        Response<BagageDTO> response = new Response<>();
+        List<Bagage> items = new ArrayList<>();
         if(request.getDatas() == null || request.getDatas().isEmpty()){
             response.setStatus(functionalError.DATA_NOT_EXIST("Liste vide",locale));
             response.setHasError(true);
             return response;
         }
-        List<BagageDTO> itemsDtos =  Collections.synchronizedList(new ArrayList<BagageDTO>());
+        List<BagageDTO> itemsDtos =  Collections.synchronizedList(new ArrayList<>());
         for(BagageDTO dto: request.getDatas() ) {
-            Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+            Map<String, Object> fieldsToVerify = new HashMap<>();
             fieldsToVerify.put("designation", dto.getDesignation());
             fieldsToVerify.put("coutBagageParTypeBagage", dto.getCoutBagageParTypeBagage());
             fieldsToVerify.put("nombreBagageGratuitParTypeBagage", dto.getNombreBagageGratuitParTypeBagage());
@@ -89,36 +86,30 @@ public class BagageBusiness implements IBasicBusiness<Request<BagageDTO>, Respon
             itemsDtos.add(dto);
         }
         for(BagageDTO itemDto : itemsDtos){
-            Bagage existingBagage = null;
-            existingBagage = bagageRepository.findByDesignation(itemDto.getDesignation(), false);
+            Bagage existingBagage = bagageRepository.findByDesignation(itemDto.getDesignation(), false);
             if (existingBagage != null) {
                 response.setStatus(functionalError.DATA_EXIST("Le Bagage ayant  pour designation -> " + itemDto.getDesignation() +", existe déjà", locale));
                 response.setHasError(true);
                 return response;
             }
-            CompagnieTransport existingCompagneTransport = null;
-            existingCompagneTransport= compagnieTransportRepository.findByRaisonSociale(itemDto.getCompagnieTransportRaisonSociale(),false);
+            CompagnieTransport existingCompagneTransport= compagnieTransportRepository.findByRaisonSociale(itemDto.getCompagnieTransportRaisonSociale(),false);
             if (existingCompagneTransport == null) {
                 response.setStatus(functionalError.DATA_EXIST("La compagnie de transport ayant  pour raison sociale -> " + itemDto.getCompagnieTransportRaisonSociale() +", n'existe pas", locale));
                 response.setHasError(true);
                 return response;
             }
-            Reference existingTypeBagage = null;
-            existingTypeBagage= referenceRepository.findByDesignation(itemDto.getTypeBagageDesignation(),false);
+            Reference existingTypeBagage = referenceRepository.findByDesignation(itemDto.getTypeBagageDesignation(),false);
             if (existingTypeBagage == null) {
                 response.setStatus(functionalError.DATA_EXIST("Type bagage ayant  pour designation -> " + itemDto.getTypeBagageDesignation() +", n'existe pas", locale));
                 response.setHasError(true);
                 return response;
             }
             Bagage entityToSave = BagageTransformer.INSTANCE.toEntity(itemDto,existingTypeBagage,existingCompagneTransport);
-            log.info("_105 BaggaeDTO transform to Entity :: ="+ entityToSave.toString());
             entityToSave.setIsDeleted(false);
             entityToSave.setCreatedAt(Utilities.getCurrentDate());
-            //entityToSave.setCreatedBy(request.user); // à modifier
             items.add(entityToSave);
         }
-        List<Bagage> itemsSaved = null;
-        itemsSaved = bagageRepository.saveAll((Iterable<Bagage>) items);
+        List<Bagage> itemsSaved = bagageRepository.saveAll(items);
         if (CollectionUtils.isEmpty(itemsSaved)) {
             response.setStatus(functionalError.SAVE_FAIL("Erreur de creation", locale));
             response.setHasError(true);
@@ -135,16 +126,16 @@ public class BagageBusiness implements IBasicBusiness<Request<BagageDTO>, Respon
 
     @Override
     public Response<BagageDTO> update(Request<BagageDTO> request, Locale locale) throws ParseException {
-        Response<BagageDTO> response = new Response<BagageDTO>();
-        List<Bagage> items = new ArrayList<Bagage>();
+        Response<BagageDTO> response = new Response<>();
+        List<Bagage> items = new ArrayList<>();
         if(request.getDatas() == null  || request.getDatas().isEmpty()){
             response.setStatus(functionalError.DATA_NOT_EXIST("Liste vide",locale));
             response.setHasError(true);
             return response;
         }
-        List<BagageDTO>itemsDtos =  Collections.synchronizedList(new ArrayList<BagageDTO>());
+        List<BagageDTO>itemsDtos =  Collections.synchronizedList(new ArrayList<>());
         for(BagageDTO dto: request.getDatas() ) {
-            Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+            Map<String, Object> fieldsToVerify = new HashMap<>();
             fieldsToVerify.put("id", dto.getId());
             if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
                 response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
@@ -182,7 +173,6 @@ public class BagageBusiness implements IBasicBusiness<Request<BagageDTO>, Respon
                 response.setHasError(true);
                 return response;
             }
-            //typeBagage
             Reference existingTypeBagage = referenceRepository.findByDesignation(typeBagageDesignation,false);
             if (existingTypeBagage == null) {
                 response.setStatus(functionalError.DATA_NOT_EXIST("Le type de bagage -> " + dto.getId() +", n'existe pas", locale));
@@ -198,7 +188,6 @@ public class BagageBusiness implements IBasicBusiness<Request<BagageDTO>, Respon
                 }
                 entityToSave.setTypeBagage(typeBagageToSave);
             }
-            //CompagnieTransport
             String compagnieTransportRaisonSociale=entityToSave.getCompagnieTransport()!=null&&entityToSave.getCompagnieTransport().getRaisonSociale()!=null
                     ?entityToSave.getCompagnieTransport().getRaisonSociale()
                     :null;
@@ -222,7 +211,6 @@ public class BagageBusiness implements IBasicBusiness<Request<BagageDTO>, Respon
                 }
                 entityToSave.setCompagnieTransport(CompgnaieTransportToSave);
             }
-            //Autres
             if(Utilities.isNotBlank(dto.getDescription()) && !dto.getDescription().equals(entityToSave.getDescription())){
                 entityToSave.setDescription(dto.getDescription());
             }
@@ -233,7 +221,6 @@ public class BagageBusiness implements IBasicBusiness<Request<BagageDTO>, Respon
                 entityToSave.setNombreBagageGratuitParTypeBagage(dto.getNombreBagageGratuitParTypeBagage());
             }
             entityToSave.setUpdatedAt(Utilities.getCurrentDate());
-            //entityToSave.setUpdatedBy(request.user);
             items.add(entityToSave);
         }
         if(CollectionUtils.isEmpty(items)){
@@ -274,14 +261,13 @@ public class BagageBusiness implements IBasicBusiness<Request<BagageDTO>, Respon
 
     @Transactional(rollbackFor = {RuntimeException.class, Exception.class})
     public Response<BagageDTO> getAllBagageByCompagnieTransportRaisonSociale(Request<BagageDTO> request, Locale locale) throws ParseException {
-        Response<BagageDTO> response = new Response<BagageDTO>();
-        List<Bagage> items = new ArrayList<Bagage>();
+        Response<BagageDTO> response = new Response<>();
         if (request.getData() == null ) {
             response.setStatus(functionalError.DATA_NOT_EXIST("Aucune donnée definie", locale));
             response.setHasError(true);
             return response;
         }
-        Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+        Map<String, Object> fieldsToVerify = new HashMap<>();
         fieldsToVerify.put("compagnieTransportRaisonSociale", request.getData().getCompagnieTransportRaisonSociale());
         if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
             response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
@@ -289,19 +275,19 @@ public class BagageBusiness implements IBasicBusiness<Request<BagageDTO>, Respon
             return response;
         }
         String compagnieTransportRaisonSociale=request.getData().getCompagnieTransportRaisonSociale();
-        CompagnieTransport existingCompagnieTransport = null;
-        existingCompagnieTransport= compagnieTransportRepository.findByRaisonSociale(compagnieTransportRaisonSociale,false);
+        CompagnieTransport existingCompagnieTransport= compagnieTransportRepository.findByRaisonSociale(compagnieTransportRaisonSociale,false);
         if (existingCompagnieTransport == null) {
             response.setStatus(functionalError.DATA_EXIST("La compagnie de transport n'existe pas", locale));
             response.setHasError(true);
             return response;
         }
-        items = bagageRepository.findByCompagnieTransportRaisonSociale(compagnieTransportRaisonSociale,false);
+        List<Bagage> items = bagageRepository.findByCompagnieTransportRaisonSociale(compagnieTransportRaisonSociale,false);
         if (CollectionUtils.isEmpty(items)) {
             response.setStatus(functionalError.DATA_NOT_EXIST("La compagnie de transport ne possede aucun bagage", locale));
             response.setHasError(true);
             return response;
         }
+
         List<BagageDTO> itemsDto = (Utilities.isTrue(request.getIsSimpleLoading()))
                 ? BagageTransformer.INSTANCE.toLiteDtos(items)
                 : BagageTransformer.INSTANCE.toDtos(items);

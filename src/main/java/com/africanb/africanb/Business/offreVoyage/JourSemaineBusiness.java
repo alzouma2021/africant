@@ -27,20 +27,16 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-/**
- * @Author ALZOUMA MOUSSA MAHAAMADOU
- */
+
 @Log
 @Component
 public class JourSemaineBusiness implements IBasicBusiness<Request<JourSemaineDTO>, Response<JourSemaineDTO>> {
 
-
-    private Response<JourSemaineDTO> response;
 
     private final ReferenceRepository referenceRepository;
     private final JourSemaineRepository jourSemaineRepository;
@@ -119,7 +115,7 @@ public class JourSemaineBusiness implements IBasicBusiness<Request<JourSemaineDT
             entityToSave.setCreatedAt(Utilities.getCurrentDate());
             JourSemaine entitySaved = jourSemaineRepository.save(entityToSave);
             if(!CollectionUtils.isEmpty(itemDto.getProgrammeDTOList())){
-                Request<ProgrammeDTO> subRequest = new Request<ProgrammeDTO>();
+                Request<ProgrammeDTO> subRequest = new Request<>();
                 subRequest.setDatas(itemDto.getProgrammeDTOList());
                 for(ProgrammeDTO programmeDTO: itemDto.getProgrammeDTOList()){
                     programmeDTO.setJourSemaineDesignation(entitySaved.getDesignation());
@@ -158,7 +154,7 @@ public class JourSemaineBusiness implements IBasicBusiness<Request<JourSemaineDT
         }
         List<JourSemaineDTO>itemsDtos =  Collections.synchronizedList(new ArrayList<>());
         for(JourSemaineDTO dto: request.getDatas() ) {
-            Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+            Map<String, Object> fieldsToVerify = new HashMap<>();
             fieldsToVerify.put("id", dto.getId());
             if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
                 response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
@@ -225,7 +221,7 @@ public class JourSemaineBusiness implements IBasicBusiness<Request<JourSemaineDT
                 response.setHasError(true);
                 return response;
             }
-            if (existingOffreVoyage.getIsActif()!=null && existingOffreVoyage.getIsActif() == true) {
+            if (existingOffreVoyage.getIsActif()!=null && existingOffreVoyage.getIsActif()) {
                 response.setStatus(functionalError.DATA_NOT_EXIST("Desactivez l'offre de voyage avant de proceder au changement du prix", locale));
                 response.setHasError(true);
                 return response;
@@ -243,14 +239,7 @@ public class JourSemaineBusiness implements IBasicBusiness<Request<JourSemaineDT
                 entityToSave.setDescription(dto.getDescription());
             }
             entityToSave.setUpdatedAt(Utilities.getCurrentDate());
-            JourSemaine entityUpdated=null;
-            entityUpdated=jourSemaineRepository.save(entityToSave);
-            if (entityUpdated == null) {
-                response.setStatus(functionalError.DATA_NOT_EXIST("Erreur de modification", locale));
-                response.setHasError(true);
-                return response;
-            }
-
+            JourSemaine entityUpdated=jourSemaineRepository.save(entityToSave);
             if(!CollectionUtils.isEmpty(dto.getProgrammeDTOList())){
                 Request<ProgrammeDTO> subRequest = new Request<>();
                 subRequest.setDatas(dto.getProgrammeDTOList());
@@ -312,7 +301,7 @@ public class JourSemaineBusiness implements IBasicBusiness<Request<JourSemaineDT
             response.setHasError(true);
             return response;
         }
-        Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+        Map<String, Object> fieldsToVerify = new HashMap<>();
         fieldsToVerify.put("offrVoyageDesignation", request.getData().getDesignation());
         if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
             response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));

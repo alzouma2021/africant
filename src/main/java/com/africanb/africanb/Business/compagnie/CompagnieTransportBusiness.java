@@ -1,8 +1,4 @@
 
-/**
- * @Author ALZOUMA MOUSSA MAHAMADOU
- */
-
 package com.africanb.africanb.Business.compagnie;
 
 import com.africanb.africanb.Business.document.DocumentBusiness;
@@ -12,9 +8,7 @@ import com.africanb.africanb.dao.entity.compagnie.StatusUtil;
 import com.africanb.africanb.dao.entity.compagnie.Ville;
 import com.africanb.africanb.dao.entity.document.Document;
 import com.africanb.africanb.dao.repository.compagnie.*;
-import com.africanb.africanb.helper.ExceptionUtils;
 import com.africanb.africanb.helper.FunctionalError;
-import com.africanb.africanb.helper.TechnicalError;
 import com.africanb.africanb.helper.contrat.IBasicBusiness;
 import com.africanb.africanb.helper.contrat.Request;
 import com.africanb.africanb.helper.contrat.Response;
@@ -28,7 +22,7 @@ import com.africanb.africanb.helper.searchFunctions.Utilities;
 import com.africanb.africanb.helper.validation.Validate;
 import com.africanb.africanb.utils.Constants.ProjectConstants;
 import com.africanb.africanb.utils.document.DocumentUtils;
-import com.africanb.africanb.utils.emailService.BodiesOfEmail;
+import com.africanb.africanb.utils.emailService.EmailUtils;
 import com.africanb.africanb.utils.emailService.EmailDTO;
 import com.africanb.africanb.utils.emailService.EmailServiceBusiness;
 import lombok.extern.java.Log;
@@ -36,7 +30,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.EntityManager;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -51,8 +44,6 @@ import org.springframework.web.multipart.MultipartFile;
 @Component
 public class CompagnieTransportBusiness implements IBasicBusiness<Request<CompagnieTransportDTO>, Response<CompagnieTransportDTO>> {
 
-    private Response<CompagnieTransportDTO> response;
-
     @Value("${africanb.attestionTransport.path}")
     private String documentpath;
     @Value("${taille.limite.attestation.transport}")
@@ -66,53 +57,42 @@ public class CompagnieTransportBusiness implements IBasicBusiness<Request<Compag
     private final DocumentBusiness documentBusiness;
     private final CompagnieAttestionTransportBusiness compagnieAttestionTransportBusiness;
     private final CompagnieAttestationTransportRepository compagnieAttestationTransportRepository;
-    private final StatusUtilCompagnieTransportRepository statusUtilCompagnieTransportRepository;
     private final FunctionalError functionalError;
-    private final TechnicalError technicalError;
-    private final ExceptionUtils exceptionUtils;
-    private final EntityManager em;
     private final EmailServiceBusiness emailServiceBusiness;
     private final StatusUtilCompagnieTransportBusiness statusUtilCompagnieTransportBusiness;
 
-    private SimpleDateFormat dateFormat;
-    private SimpleDateFormat dateTimeFormat;
+    private final SimpleDateFormat dateFormat;
 
-    public CompagnieTransportBusiness(StatusUtilRepository statusUtilRepository, CompagnieTransportRepository compagnieTransportRepository, VilleRepository villeRepository, DocumentBusiness documentBusiness, CompagnieAttestionTransportBusiness compagnieAttestionTransportBusiness, CompagnieAttestationTransportRepository compagnieAttestationTransportRepository, StatusUtilCompagnieTransportRepository statusUtilCompagnieTransportRepository, FunctionalError functionalError, TechnicalError technicalError, ExceptionUtils exceptionUtils, EntityManager em, EmailServiceBusiness emailServiceBusiness, StatusUtilCompagnieTransportBusiness statusUtilCompagnieTransportBusiness) {
+    public CompagnieTransportBusiness(StatusUtilRepository statusUtilRepository, CompagnieTransportRepository compagnieTransportRepository, VilleRepository villeRepository, DocumentBusiness documentBusiness, CompagnieAttestionTransportBusiness compagnieAttestionTransportBusiness, CompagnieAttestationTransportRepository compagnieAttestationTransportRepository, FunctionalError functionalError, EmailServiceBusiness emailServiceBusiness, StatusUtilCompagnieTransportBusiness statusUtilCompagnieTransportBusiness) {
         this.statusUtilRepository = statusUtilRepository;
         this.compagnieTransportRepository = compagnieTransportRepository;
         this.villeRepository = villeRepository;
         this.documentBusiness = documentBusiness;
         this.compagnieAttestionTransportBusiness = compagnieAttestionTransportBusiness;
         this.compagnieAttestationTransportRepository = compagnieAttestationTransportRepository;
-        this.statusUtilCompagnieTransportRepository = statusUtilCompagnieTransportRepository;
         this.functionalError = functionalError;
-        this.technicalError = technicalError;
-        this.exceptionUtils = exceptionUtils;
-        this.em = em;
         this.emailServiceBusiness = emailServiceBusiness;
         this.statusUtilCompagnieTransportBusiness = statusUtilCompagnieTransportBusiness;
         dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        dateTimeFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
     }
 
     @Override
     public Response<CompagnieTransportDTO> create(Request<CompagnieTransportDTO> request, Locale locale) throws ParseException {
-        Response<CompagnieTransportDTO> response = new Response<CompagnieTransportDTO>();
-        List<CompagnieTransport> items = new ArrayList<CompagnieTransport>();
+        Response<CompagnieTransportDTO> response = new Response<>();
+        List<CompagnieTransport> items = new ArrayList<>();
         if(request.getDatas() == null  || CollectionUtils.isEmpty(request.getDatas())){
             response.setStatus(functionalError.DATA_NOT_EXIST("Liste vide ",locale));
             response.setHasError(true);
             return response;
         }
-        List<CompagnieTransportDTO> itemsDtos =  Collections.synchronizedList(new ArrayList<CompagnieTransportDTO>());
+        List<CompagnieTransportDTO> itemsDtos =  Collections.synchronizedList(new ArrayList<>());
         for (CompagnieTransportDTO dto : request.getDatas()) {
-            Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+            Map<String, Object> fieldsToVerify = new HashMap<>();
             fieldsToVerify.put("designation", dto.getDesignation());
             fieldsToVerify.put("raisonSociale", dto.getRaisonSociale());
             fieldsToVerify.put("telephone", dto.getTelephone());
             fieldsToVerify.put("sigle", dto.getSigle());
             fieldsToVerify.put("email", dto.getEmail());
-            //fieldsToVerify.put("ville", dto.getVilleId());
             fieldsToVerify.put("villeDesignation", dto.getVilleDesignation());
             if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
                 response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
@@ -137,22 +117,19 @@ public class CompagnieTransportBusiness implements IBasicBusiness<Request<Compag
             itemsDtos.add(dto);
         }
         for(CompagnieTransportDTO dto: itemsDtos) {
-            CompagnieTransport existingEntity=null;
-            existingEntity=compagnieTransportRepository.findByDesignation(dto.getVilleDesignation(),false);
+            CompagnieTransport existingEntity=compagnieTransportRepository.findByDesignation(dto.getVilleDesignation(),false);
             if (existingEntity != null) {
                 response.setStatus(functionalError.DATA_EXIST("CompagnieTransport  -> " + dto.getVilleDesignation(), locale));
                 response.setHasError(true);
                 return response;
             }
-            Ville existingVille=null;
-            existingVille=villeRepository.findByDesignation(dto.getVilleDesignation(),false);
+            Ville existingVille=villeRepository.findByDesignation(dto.getVilleDesignation(),false);
             if (existingVille == null) {
                 response.setStatus(functionalError.DATA_NOT_EXIST("Ville  -> " + dto.getVilleDesignation(), locale));
                 response.setHasError(true);
                 return response;
             }
-            StatusUtil existingStatusUtilActual=null;
-            existingStatusUtilActual=statusUtilRepository.findByDesignation(ProjectConstants.COMPAGNIE_TRANSPORT_ENCOURS_TRAITEMENT,false);
+            StatusUtil existingStatusUtilActual=statusUtilRepository.findByDesignation(ProjectConstants.COMPAGNIE_TRANSPORT_ENCOURS_TRAITEMENT,false);
             if (existingStatusUtilActual == null) {
                 response.setStatus(functionalError.DATA_NOT_EXIST("StatusUtilActual  -> " + ProjectConstants.COMPAGNIE_TRANSPORT_ENCOURS_TRAITEMENT, locale));
                 response.setHasError(true);
@@ -164,42 +141,37 @@ public class CompagnieTransportBusiness implements IBasicBusiness<Request<Compag
             entityToSave.setIsDeleted(false);
             entityToSave.setIsActif(false);
             entityToSave.setCreatedAt(Utilities.getCurrentDate());
-            //entityToSave.setCreatedBy((long) request.getUser());
             CompagnieTransport entitySaved = compagnieTransportRepository.save(entityToSave);
             if(entitySaved==null){
                 response.setStatus(functionalError.SAVE_FAIL("Erreur creation",locale));
                 response.setHasError(true);
                 return response;
             }
-            //
-            List<StatusUtilCompagnieTransportDTO> itemsDatas =  Collections.synchronizedList(new ArrayList<StatusUtilCompagnieTransportDTO>());
+            List<StatusUtilCompagnieTransportDTO> itemsDatas =  Collections.synchronizedList(new ArrayList<>());
             StatusUtilCompagnieTransportDTO statusUtilCompagnieTransportDTO= new StatusUtilCompagnieTransportDTO();
             statusUtilCompagnieTransportDTO.setStatusUtilId(existingStatusUtilActual.getId());
             statusUtilCompagnieTransportDTO.setCompagnieTransportId(entitySaved.getId());
             itemsDatas.add(statusUtilCompagnieTransportDTO);
-            Request<StatusUtilCompagnieTransportDTO> subRequest = new Request<StatusUtilCompagnieTransportDTO>();
+            Request<StatusUtilCompagnieTransportDTO> subRequest = new Request<>();
             subRequest.setDatas(itemsDatas);
-            //subRequest.setUser(request.getUser());
             Response<StatusUtilCompagnieTransportDTO> subResponse = statusUtilCompagnieTransportBusiness.create(subRequest, locale);
             if (subResponse.isHasError()) {
                 response.setStatus(subResponse.getStatus());
                 response.setHasError(Boolean.TRUE);
                 return response;
             }
-            //Send mail de création
-            Runnable runnable = () -> {
-                BodiesOfEmail bodiesOfEmail= new BodiesOfEmail();
-                EmailDTO emailDTO = new EmailDTO();
-                Request<EmailDTO> subRequestEmail = new Request<EmailDTO>();
 
+            Runnable runnable = () -> {
+                EmailDTO emailDTO = new EmailDTO();
+                Request<EmailDTO> subRequestEmail = new Request<>();
                 emailDTO.setSubject("Creation de compagnie de transport");
-                emailDTO.setMessage(bodiesOfEmail.bodyHtmlMailCreateCompagny());
+                emailDTO.setMessage(EmailUtils.bodyHtmlMailCreateCompagny());
                 emailDTO.setToAddress(entitySaved.getEmail());
                 subRequestEmail.setData(emailDTO);
-
                 emailServiceBusiness.sendSimpleEmail(subRequestEmail,locale);
             };
             runnable.run();
+
             items.add(entitySaved);
         }
         if(CollectionUtils.isEmpty(items)){
@@ -218,16 +190,16 @@ public class CompagnieTransportBusiness implements IBasicBusiness<Request<Compag
 
     @Override
     public Response<CompagnieTransportDTO> update(Request<CompagnieTransportDTO> request, Locale locale) throws ParseException {
-        Response<CompagnieTransportDTO> response = new Response<CompagnieTransportDTO>();
-        List<CompagnieTransport> items = new ArrayList<CompagnieTransport>();
+        Response<CompagnieTransportDTO> response = new Response<>();
+        List<CompagnieTransport> items = new ArrayList<>();
         if(request.getDatas() == null  || CollectionUtils.isEmpty(request.getDatas())){
             response.setStatus(functionalError.DATA_NOT_EXIST("Liste vide ",locale));
             response.setHasError(true);
             return response;
         }
-        List<CompagnieTransportDTO> itemsDtos =  Collections.synchronizedList(new ArrayList<CompagnieTransportDTO>());
+        List<CompagnieTransportDTO> itemsDtos =  Collections.synchronizedList(new ArrayList<>());
         for (CompagnieTransportDTO dto : request.getDatas()) {
-            Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+            Map<String, Object> fieldsToVerify = new HashMap<>();
             fieldsToVerify.put("id", dto.getId());
             if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
                 response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
@@ -242,8 +214,7 @@ public class CompagnieTransportBusiness implements IBasicBusiness<Request<Compag
             itemsDtos.add(dto);
         }
         for (CompagnieTransportDTO dto :itemsDtos) {
-            CompagnieTransport entityToSave = null;
-            entityToSave = compagnieTransportRepository.findOne(dto.getId(), false);
+            CompagnieTransport entityToSave = compagnieTransportRepository.findOne(dto.getId(), false);
             if (entityToSave == null) {
                 response.setStatus(functionalError.DATA_NOT_EXIST("CompagnieTransport CompagnieTransportID -> " + dto.getId(), locale));
                 response.setHasError(true);
@@ -298,8 +269,7 @@ public class CompagnieTransportBusiness implements IBasicBusiness<Request<Compag
             response.setStatus(functionalError.DATA_NOT_EXIST("Erreur de modification ",locale));
             response.setHasError(true);
         }
-        List<CompagnieTransport> itemsSaved = null;
-        itemsSaved = compagnieTransportRepository.saveAll((Iterable<CompagnieTransport>) items);
+        List<CompagnieTransport> itemsSaved = compagnieTransportRepository.saveAll(items);
         if (CollectionUtils.isEmpty(itemsSaved)) {
             response.setStatus(functionalError.SAVE_FAIL("CompagnieTransport", locale));
             response.setHasError(true);
@@ -378,15 +348,13 @@ public class CompagnieTransportBusiness implements IBasicBusiness<Request<Compag
             response.setHasError(true);
             return response;
         }
-        CompagnieTransport existingEntity=null;
-        existingEntity=compagnieTransportRepository.findOne(request.getData().getId(),false);
+        CompagnieTransport existingEntity=compagnieTransportRepository.findOne(request.getData().getId(),false);
         if (existingEntity == null) {
             response.setStatus(functionalError.DATA_NOT_EXIST("La compagnie de transport n'existe pas", locale));
             response.setHasError(true);
             return response;
         }
-        StatusUtil existingStatusUtilActual=null;
-        existingStatusUtilActual=statusUtilRepository.findByDesignation(ProjectConstants.COMPAGNIE_TRANSPORT_VALIDE,false);
+        StatusUtil existingStatusUtilActual=statusUtilRepository.findByDesignation(ProjectConstants.COMPAGNIE_TRANSPORT_VALIDE,false);
         if (existingStatusUtilActual == null) {
             response.setStatus(functionalError.DATA_NOT_EXIST("StatusUtilActual  -> " + ProjectConstants.COMPAGNIE_TRANSPORT_VALIDE, locale));
             response.setHasError(true);
@@ -395,18 +363,18 @@ public class CompagnieTransportBusiness implements IBasicBusiness<Request<Compag
         existingEntity.setStatusUtilActual(existingStatusUtilActual);
         existingEntity.setIsValidate(true);
         existingEntity.setUpdatedAt(Utilities.getCurrentDate());
-        CompagnieTransport entityUpdate=compagnieTransportRepository.save(existingEntity);
-        if (entityUpdate == null || entityUpdate.getIsValidate()==false) {
+        CompagnieTransport entityUpdate = compagnieTransportRepository.save(existingEntity);
+        if (entityUpdate == null || !entityUpdate.getIsValidate()) {
             response.setStatus(functionalError.DATA_NOT_EXIST("La compagnie de transport n'a pas été validée", locale));
             response.setHasError(true);
             return response;
         }
-        List<StatusUtilCompagnieTransportDTO> itemsDatas =  Collections.synchronizedList(new ArrayList<StatusUtilCompagnieTransportDTO>());
+        List<StatusUtilCompagnieTransportDTO> itemsDatas =  Collections.synchronizedList(new ArrayList<>());
         StatusUtilCompagnieTransportDTO statusUtilCompagnieTransportDTO=new StatusUtilCompagnieTransportDTO();
         statusUtilCompagnieTransportDTO.setStatusUtilId(existingStatusUtilActual.getId());
         statusUtilCompagnieTransportDTO.setCompagnieTransportId(entityUpdate.getId());
         itemsDatas.add(statusUtilCompagnieTransportDTO);
-        Request<StatusUtilCompagnieTransportDTO> subRequest = new Request<StatusUtilCompagnieTransportDTO>();
+        Request<StatusUtilCompagnieTransportDTO> subRequest = new Request<>();
         subRequest.setDatas(itemsDatas);
         Response<StatusUtilCompagnieTransportDTO> subResponse = statusUtilCompagnieTransportBusiness.create(subRequest, locale);
         if (subResponse.isHasError()) {
@@ -414,13 +382,12 @@ public class CompagnieTransportBusiness implements IBasicBusiness<Request<Compag
             response.setHasError(Boolean.TRUE);
             return response;
         }
-        //Send mail de validation
+
         Runnable runnable = () -> {
-            BodiesOfEmail bodiesOfEmail= new BodiesOfEmail();
             EmailDTO emailDTO = new EmailDTO();
             Request<EmailDTO> subRequestEmail = new Request<>();
             emailDTO.setSubject("Validation de compagnie de transport");
-            emailDTO.setMessage(bodiesOfEmail.bodyHtmlMailValidationCompagny());
+            emailDTO.setMessage(EmailUtils.bodyHtmlMailValidationCompagny());
             emailDTO.setToAddress(entityUpdate.getEmail());
             subRequestEmail.setData(emailDTO);
             emailServiceBusiness.sendSimpleEmail(subRequestEmail,locale);
@@ -468,7 +435,6 @@ public class CompagnieTransportBusiness implements IBasicBusiness<Request<Compag
     @Transactional(rollbackFor = {RuntimeException.class, Exception.class,IllegalArgumentException.class, IOException.class})
     public  Response<DocumentDTO> uploadAttestionTransport(Request<CompagnieTransportDTO> request, MultipartFile file, Locale locale) throws ParseException, IOException {
         Response<DocumentDTO> response = new Response<>();
-        List<CompagnieTransport> items = new ArrayList<>();
         if(request.getData()==null){
             response.setStatus(functionalError.DATA_NOT_EXIST("Aucune donnée définie ",locale));
             response.setHasError(true);
@@ -493,12 +459,11 @@ public class CompagnieTransportBusiness implements IBasicBusiness<Request<Compag
             return response;
         }
         String extension = StringUtils.getFilenameExtension(file.getOriginalFilename());
-        if(!extension.equalsIgnoreCase("PDF")){
+        if( extension != null && !extension.equalsIgnoreCase("PDF")){
             response.setStatus(functionalError.DATA_NOT_EXIST("Le document doit être au format PDF ",locale));
             response.setHasError(true);
             return response;
         }
-        //Check file size
         Double limitSize = Double.parseDouble(limitFileSizeDefault);
         boolean compareFileSizeToLimitSize= DocumentUtils.compareFileSizeToLimitSize(file,limitSize);
         if(!compareFileSizeToLimitSize){
@@ -506,17 +471,14 @@ public class CompagnieTransportBusiness implements IBasicBusiness<Request<Compag
             response.setHasError(true);
             return response;
         }
-        //Check the file size
         byte[] content = file.getBytes();
         String contentType = file.getContentType();
         String filename = UUID.randomUUID().toString();
-        //Initialisation documentDTO
         DocumentDTO documentDTO = new DocumentDTO();
         documentDTO.setDesignation(request.getData().getRaisonSociale());
         documentDTO.setPath(filename);
         documentDTO.setTypeMime(contentType);
         documentDTO.setExtension(extension);
-        //Check if directory exists on hard disk
         boolean checkIfDirectoryExists = DocumentUtils.checkIfDirectoryExists(documentpath);
         if(!checkIfDirectoryExists){
             boolean createDirectoryOnHardDisk = DocumentUtils.createDirectoryOnHardDisk(documentpath);
@@ -526,17 +488,14 @@ public class CompagnieTransportBusiness implements IBasicBusiness<Request<Compag
                 return response;
             }
         }
-        //Create a file on disk local
-        boolean createFileOnDiskHard=false;
         String fileLocation = documentpath + filename + "." + extension;
-        createFileOnDiskHard=DocumentUtils.createFileOnDiskHard(content, fileLocation);
+        boolean createFileOnDiskHard=DocumentUtils.createFileOnDiskHard(content, fileLocation);
         if(!createFileOnDiskHard){
             response.setStatus(functionalError.SAVE_FAIL("Erreur de creation du fichier",locale));
             response.setHasError(true);
             return response;
         }
-        //Creating documentDTO
-        Request<DocumentDTO> subRequest = new Request<DocumentDTO>();
+        Request<DocumentDTO> subRequest = new Request<>();
         subRequest.setData(documentDTO);
         Response<DocumentDTO> subResponse = documentBusiness.create(subRequest, locale);
         if (subResponse.isHasError()) {
@@ -544,8 +503,7 @@ public class CompagnieTransportBusiness implements IBasicBusiness<Request<Compag
             response.setHasError(Boolean.TRUE);
             return response;
         }
-        //Creating compagnieAttestionTransportDTO
-        List<CompagnieAttestionTransportDTO> itemsDTO = new ArrayList<CompagnieAttestionTransportDTO>();
+        List<CompagnieAttestionTransportDTO> itemsDTO = new ArrayList<>();
         CompagnieAttestionTransportDTO compagnieAttestionTransportDTO = new CompagnieAttestionTransportDTO();
         compagnieAttestionTransportDTO.setCompagnieRaisonSociale(request.getData().getRaisonSociale());
         compagnieAttestionTransportDTO.setDocumentDesignation(subResponse.getItem().getDesignation());
@@ -553,12 +511,11 @@ public class CompagnieTransportBusiness implements IBasicBusiness<Request<Compag
         Request<CompagnieAttestionTransportDTO> subRequest1 = new Request<>();
         subRequest1.setDatas(itemsDTO);
         Response<CompagnieAttestionTransportDTO> subResponse1 = compagnieAttestionTransportBusiness.create(subRequest1, locale);
-        if (subResponse.isHasError()) {
-            response.setStatus(subResponse.getStatus());
+        if (subResponse1.isHasError()) {
+            response.setStatus(subResponse1.getStatus());
             response.setHasError(Boolean.TRUE);
             return response;
         }
-        //return document for response
         response.setItem(subResponse.getItem());
         response.setHasError(false);
         response.setStatus(functionalError.SUCCESS("", locale));
@@ -566,10 +523,9 @@ public class CompagnieTransportBusiness implements IBasicBusiness<Request<Compag
     }
 
     @Transactional(rollbackFor = {RuntimeException.class, Exception.class,IllegalArgumentException.class, IOException.class})
-    public  Response<DocumentReponseDTO> getLinkedAttestionTransport(Request<CompagnieTransportDTO> request, Locale locale) throws ParseException, IOException {
-        Response<DocumentReponseDTO> response = new Response<DocumentReponseDTO>();
-        List<CompagnieTransport> items = new ArrayList<CompagnieTransport>();
-        Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+    public  Response<DocumentReponseDTO> getLinkedAttestionTransport(Request<CompagnieTransportDTO> request, Locale locale) {
+        Response<DocumentReponseDTO> response = new Response<>();
+        Map<String, Object> fieldsToVerify = new HashMap<>();
         if(request.getData()==null){
             response.setStatus(functionalError.DATA_NOT_EXIST("Aucune donnée définie ",locale));
             response.setHasError(true);
@@ -581,7 +537,7 @@ public class CompagnieTransportBusiness implements IBasicBusiness<Request<Compag
             response.setHasError(true);
             return response;
         }
-        CompagnieTransport existingEntity=compagnieTransportRepository.findByRaisonSociale(request.getData().getRaisonSociale(),false);
+        CompagnieTransport existingEntity = compagnieTransportRepository.findByRaisonSociale(request.getData().getRaisonSociale(),false);
         if (existingEntity == null) {
             response.setStatus(functionalError.DATA_NOT_EXIST("La compagnie de transport n'existe pas", locale));
             response.setHasError(true);
@@ -600,7 +556,6 @@ public class CompagnieTransportBusiness implements IBasicBusiness<Request<Compag
             response.setHasError(true);
             return response;
         }
-        //Check if the attestion transport exists on hard disk
         documentpath = documentpath + attestationTransportEntity.getPath() +"."+ attestationTransportEntity.getExtension();
         boolean checkIfDocumentExistsOnDirectory = DocumentUtils.checkIfDocumentExistsOnDirectory(documentpath);
         if(!checkIfDocumentExistsOnDirectory){

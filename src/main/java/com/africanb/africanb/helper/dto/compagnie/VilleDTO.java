@@ -11,7 +11,6 @@ import lombok.ToString;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder(alphabetic = true)
 public class VilleDTO {
-
     private Long id ;
     private String designation;
     private String description;
@@ -37,5 +36,4 @@ public class VilleDTO {
 
     private String orderField;
     private String orderDirection;
-
 }

@@ -5,25 +5,27 @@ import com.africanb.africanb.dao.entity.compagnie.StatusUtil;
 import com.africanb.africanb.dao.entity.offreVoyage.OffreVoyage;
 import com.africanb.africanb.dao.entity.offreVoyage.Programme;
 import com.africanb.africanb.dao.entity.security.Users;
-import com.sun.istack.NotNull;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
+
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
 
-/**
- * @author Alzouma Moussa Mahamadou
- */
 @Entity
 @Table(name = "reservationbilletvoyage")
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@Getter
+@Setter
 @ToString
+@EqualsAndHashCode(callSuper = false)
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class ReservationBilletVoyage implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -69,5 +71,4 @@ public class ReservationBilletVoyage implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date deletedAt;
     private Long  deletedBy;
-
 }

@@ -55,6 +55,7 @@ com\africanb\africanb\helper\dto\compagnie\ModePaiement\ModePaiementMoovMoneyDTO
 com\africanb\africanb\rest\api\compagnie\CompagnieTransportController.class
 com\africanb\africanb\dao\entity\compagnie\StatusUtilCompagnieTransport.class
 com\africanb\africanb\helper\dto\document\DocumentReponseDTO.class
+com\africanb\africanb\utils\emailService\EmailUtils.class
 com\africanb\africanb\helper\transformer\security\RoleTransformer.class
 com\africanb\africanb\helper\transformer\compagnie\AbonnementPeriodiqueTransformer.class
 com\africanb\africanb\rest\api\offreVoyage\ProgrammeController.class
@@ -104,6 +105,7 @@ com\africanb\africanb\helper\dto\offreVoyage\ProgrammeDTO.class
 com\africanb\africanb\helper\contrat\Response.class
 com\africanb\africanb\rest\api\mail\EmailServiceController.class
 com\africanb\africanb\rest\RestInterceptor.class
+com\africanb\africanb\utils\security\JwtUtils.class
 com\africanb\africanb\helper\ExceptionUtils.class
 com\africanb\africanb\dao\repository\compagnie\AbonnementPeriodiqueRepository.class
 com\africanb\africanb\helper\transformer\compagnie\StatusUtilTransformer.class
@@ -111,7 +113,6 @@ com\africanb\africanb\helper\transformer\compagnie\BagageTransformer.class
 com\africanb\africanb\dao\repository\compagnie\FamilleStatusUtilRepository.class
 com\africanb\africanb\helper\dto\offreVoyage\ValeurCaracteristiqueOffreVoyageLongDTO.class
 com\africanb\africanb\helper\enums\OperatorEnum.class
-com\africanb\africanb\utils\emailService\BodiesOfEmail.class
 com\africanb\africanb\helper\dto\offreVoyage\ProprieteOffreVoyageDTO.class
 com\africanb\africanb\helper\dto\offreVoyage\VilleEscaleDTO.class
 com\africanb\africanb\dao\entity\offreVoyage\Bus.class
@@ -267,7 +268,6 @@ com\africanb\africanb\Business\compagnie\CompagnieAttestionTransportBusiness.cla
 com\africanb\africanb\helper\transformer\offrreVoyage\JourSemaineTransformerImpl.class
 com\africanb\africanb\rest\api\compagnie\GareController.class
 com\africanb\africanb\dao\repository\offreVoyage\VilleEscaleRepository.class
-com\africanb\africanb\utils\security\SecurityUtils.class
 com\africanb\africanb\dao\entity\compagnie\ModePaiment\ModePaiementWave.class
 com\africanb\africanb\Business\offreVoyage\ValeurCaracteristiqueOffreVoyageBusiness.class
 com\africanb\africanb\dao\repository\Reference\ReferenceFamilleRepository.class

@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -60,9 +60,7 @@ public class ReferenceBusines implements IBasicBusiness<Request<ReferenceDTO>, R
         for(ReferenceDTO dto: request.getDatas() ) {
             Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
             fieldsToVerify.put("designation", dto.getDesignation());
-            //fieldsToVerify.put("referenceFamilleId", dto.getReferenceFamilleId());
             fieldsToVerify.put("referenceFamilleDesignation", dto.getReferenceFamilleDesignation());
-            //fieldsToVerify.put("familleStatusUtilDesignation", dto.getFamilleStatusUtilDesignation());
             if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
                 response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
                 response.setHasError(true);
@@ -76,29 +74,24 @@ public class ReferenceBusines implements IBasicBusiness<Request<ReferenceDTO>, R
             itemsDtos.add(dto);
         }
         for(ReferenceDTO itemDto : itemsDtos){
-            Reference existingStatusUtil = null;
-            existingStatusUtil = referenceRepository.findByDesignation(itemDto.getDesignation(), false);
+            Reference existingStatusUtil = referenceRepository.findByDesignation(itemDto.getDesignation(), false);
             if (existingStatusUtil != null) {
                 response.setStatus(functionalError.DATA_EXIST("Reference ayant  pour designation -> " + itemDto.getDesignation() +", existe déjà", locale));
                 response.setHasError(true);
                 return response;
             }
-            ReferenceFamille existingReferenceFamille = null;
-            existingReferenceFamille= referenceFamilleRepository.findByDesignation(itemDto.getReferenceFamilleDesignation(),false);
+            ReferenceFamille existingReferenceFamille= referenceFamilleRepository.findByDesignation(itemDto.getReferenceFamilleDesignation(),false);
             if (existingReferenceFamille == null) {
                 response.setStatus(functionalError.DATA_NOT_EXIST("ReferencFamille ayant pour identifiant -> " + itemDto.getReferenceFamilleId() +", n'existe pas", locale));
                 response.setHasError(true);
                 return response;
             }
             Reference entityToSave = ReferenceTransformer.INSTANCE.toEntity(itemDto,existingReferenceFamille);
-            log.info("_110 StatusUtilDTO transform to Entity :: ="+ entityToSave.toString());
             entityToSave.setIsDeleted(false);
             entityToSave.setCreatedAt(Utilities.getCurrentDate());
-            //entityToSave.setCreatedBy(request.user); // à modifier
             items.add(entityToSave);
         }
-        List<Reference> itemsSaved = null;
-        itemsSaved = referenceRepository.saveAll((Iterable<Reference>) items);
+        List<Reference> itemsSaved = referenceRepository.saveAll(items);
         if (CollectionUtils.isEmpty(itemsSaved)) {
             response.setStatus(functionalError.SAVE_FAIL("Erreur de creation", locale));
             response.setHasError(true);
@@ -116,15 +109,14 @@ public class ReferenceBusines implements IBasicBusiness<Request<ReferenceDTO>, R
 
     @Override
     public Response<ReferenceDTO> update(Request<ReferenceDTO> request, Locale locale) throws ParseException {
-
-        Response<ReferenceDTO> response = new Response<ReferenceDTO>();
-        List<Reference> items = new ArrayList<Reference>();
+        Response<ReferenceDTO> response = new Response<>();
+        List<Reference> items = new ArrayList<>();
         if(request.getDatas() == null  || request.getDatas().isEmpty()){
             response.setStatus(functionalError.DATA_NOT_EXIST("Liste vide",locale));
             response.setHasError(true);
             return response;
         }
-        List<ReferenceDTO>itemsDtos =  Collections.synchronizedList(new ArrayList<ReferenceDTO>());
+        List<ReferenceDTO>itemsDtos =  Collections.synchronizedList(new ArrayList<>());
         for(ReferenceDTO dto: request.getDatas() ) {
             Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
             fieldsToVerify.put("id", dto.getId());
@@ -174,7 +166,6 @@ public class ReferenceBusines implements IBasicBusiness<Request<ReferenceDTO>, R
                 entityToSave.setDescription(dto.getDescription());
             }
             entityToSave.setUpdatedAt(Utilities.getCurrentDate());
-            //entityToSave.setUpdatedBy(request.user);
             items.add(entityToSave);
         }
         if(CollectionUtils.isEmpty(items)){
@@ -195,16 +186,14 @@ public class ReferenceBusines implements IBasicBusiness<Request<ReferenceDTO>, R
 
     @Transactional(rollbackFor = {RuntimeException.class, Exception.class})
     public Response<ReferenceDTO> getReferenceByReferenceFamilleDesignation(Request<RechercherReferenceDTO> request, Locale locale) throws ParseException {
-       log.info("_200 Debut de traitement");
-        Response<ReferenceDTO> response = new Response<ReferenceDTO>();
+        Response<ReferenceDTO> response = new Response<>();
         if(request.getDatas() == null  || request.getDatas().isEmpty()){
             response.setStatus(functionalError.DATA_NOT_EXIST("Liste vide",locale));
             response.setHasError(true);
             return response;
         }
-        List<RechercherReferenceDTO>itemsDtos =  Collections.synchronizedList(new ArrayList<RechercherReferenceDTO>());
         for(RechercherReferenceDTO dto: request.getDatas() ) {
-            Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+            Map<String, Object> fieldsToVerify = new HashMap<>();
             fieldsToVerify.put("referenceFamilleDesignation", dto.getReferenceFamilleDesignation());
             if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
                 response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
@@ -214,7 +203,6 @@ public class ReferenceBusines implements IBasicBusiness<Request<ReferenceDTO>, R
         }
         List<Reference> items = null;
         for(RechercherReferenceDTO dto: request.getDatas()) {
-            log.info("_Affichage de la designation de la reference famille="+dto.getReferenceFamilleDesignation());
             items=referenceRepository.findByReferenceFamilleDesignation(dto.getReferenceFamilleDesignation(),false);
         }
         if(CollectionUtils.isEmpty(items)){
@@ -236,79 +224,6 @@ public class ReferenceBusines implements IBasicBusiness<Request<ReferenceDTO>, R
 
     @Override
     public Response<ReferenceDTO> delete(Request<ReferenceDTO> request, Locale locale) {
-
-/*        log.info("----begin delete agence-----");
-
-        Response<AgenceDto> response = new Response<AgenceDto>();
-        List<Agence> items = new ArrayList<Agence>();
-
-        //Verification
-        if(request.getDatas().isEmpty() || request.getDatas() == null){
-            response.setStatus(functionalError.DATA_NOT_EXIST("Liste de données est vide ",locale));
-            response.setHasError(true);
-            return response;
-        }
-
-        //Verification des champs obligatoires
-        for(AgenceDto dto : request.getDatas()) {
-
-            Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
-            fieldsToVerify.put("id", dto.getId());
-
-            if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
-                response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
-                response.setHasError(true);
-                return response;
-            }
-
-        }
-
-        //Parcourir la liste
-        for(AgenceDto dto : request.getDatas()){
-
-            // Verification du parametre identifiant
-            Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
-            fieldsToVerify.put("id", dto.getId());
-
-            if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
-                response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
-                response.setHasError(true);
-                return response;
-            }
-
-            // Verify if Functionality  exist
-            Agence existingEntity = null;
-
-            existingEntity = agenceRepository.findOne(dto.getId(), false);
-
-            if (existingEntity == null) {
-                response.setStatus(functionalError.DATA_NOT_EXIST("L'agence ayant  id -> " + dto.getId() + ",n'existe pas", locale));
-                response.setHasError(true);
-                return response;
-            }
-
-            log.info("_413 Verification d'existence de l'objet"+existingEntity.toString()); //TODO A effacer
-
-            //Suppression logique
-            existingEntity.setIsDeleted(true);
-            existingEntity.setDeletedAt(Utilities.getCurrentDate());
-            existingEntity.setDeletedBy(request.user);// a modifier
-
-            items.add(existingEntity);
-
-        }
-
-        //Verificatioon de la liste de données recues
-        if(items == null  || items.isEmpty()){
-            response.setStatus(functionalError.DATA_NOT_EXIST("Liste de données est vide ",locale));
-            response.setHasError(true);
-            return response;
-        }
-
-        response.setHasError(false);
-        response.setStatus(functionalError.SUCCESS("", locale));
-
-        return response;*/
         return null;
     }
 
@@ -324,40 +239,6 @@ public class ReferenceBusines implements IBasicBusiness<Request<ReferenceDTO>, R
 
     @Override
     public Response<ReferenceDTO> getByCriteria(Request<ReferenceDTO> request, Locale locale) {
-       /*
-        log.info("----begin get agence-----");
-
-        Response<AgenceDto> response = new Response<AgenceDto>();
-
-        if (Utilities.blank(request.getData().getOrderField())) {
-            request.getData().setOrderField("");
-        }
-        if (Utilities.blank(request.getData().getOrderDirection())) {
-            request.getData().setOrderDirection("asc");
-        }
-
-        List<Agence> items = agenceRepository.getByCriteria(request, em, locale);
-
-        if (Utilities.isEmpty(items)) {
-            response.setStatus(functionalError.DATA_EMPTY("Aucune agence ne correspond aux critères de recherche definis", locale));
-            response.setHasError(false);
-            return response;
-        }
-
-        List<AgenceDto> itemsDto = (Utilities.isTrue(request.getIsSimpleLoading()))
-                                 ? AgenceTransformer.INSTANCE.toLiteDtos(items)
-                                 : AgenceTransformer.INSTANCE.toDtos(items);
-
-
-        response.setItems(itemsDto);
-        response.setCount(agenceRepository.count(request, em, locale));
-        response.setHasError(false);
-        response.setStatus(functionalError.SUCCESS("", locale));
-
-        log.info("----end get agence-----");
-
-        return response;
-*/
         return null;
     }
 

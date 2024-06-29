@@ -1,13 +1,9 @@
 package com.africanb.africanb.utils.emailService;
 
-import com.africanb.africanb.helper.ExceptionUtils;
 import com.africanb.africanb.helper.FunctionalError;
-import com.africanb.africanb.helper.TechnicalError;
 import com.africanb.africanb.helper.contrat.Request;
 import com.africanb.africanb.helper.contrat.Response;
 import com.africanb.africanb.helper.validation.Validate;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.MailException;
@@ -17,53 +13,34 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ResourceUtils;
 
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
-import javax.persistence.EntityManager;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import java.io.FileNotFoundException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
-/**
- * @Author ALZOUMA MOUSSA MAHAMADOU
- */
+
 @Component
 public class EmailServiceBusiness implements EmailServiceInterface {
 
-    private static final Logger log = LoggerFactory.getLogger(EmailServiceBusiness.class);
-
-    @Autowired(required = true)
+    @Autowired
     public JavaMailSender emailSender;
 
-    private Response<EmailDTO> response;
-
     private final FunctionalError functionalError;
-    private final TechnicalError technicalError;
-    private final ExceptionUtils exceptionUtils;
-    private final EntityManager em;
 
-    private final SimpleDateFormat dateFormat;
-    private final SimpleDateFormat dateTimeFormat;
-
-    public EmailServiceBusiness(FunctionalError functionalError, TechnicalError technicalError, ExceptionUtils exceptionUtils, EntityManager em) {
+    public EmailServiceBusiness(FunctionalError functionalError) {
         this.functionalError = functionalError;
-        this.technicalError = technicalError;
-        this.exceptionUtils = exceptionUtils;
-        this.em = em;
-        dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        dateTimeFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
     }
 
     @Override
     public Response<EmailDTO> sendSimpleEmail(Request<EmailDTO> request, Locale locale) {
-        Response<EmailDTO> response = new Response<EmailDTO>();
+        Response<EmailDTO> response = new Response<>();
         if(request.getData() == null){
             response.setStatus(functionalError.DATA_NOT_EXIST("Aucune donnée",locale));
             response.setHasError(true);
             return response;
         }
         EmailDTO dto = request.getData();
-        Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+        Map<String, Object> fieldsToVerify = new HashMap<>();
         fieldsToVerify.put("toAddress", dto.getToAddress());
         fieldsToVerify.put("subject", dto.getSubject());
         fieldsToVerify.put("message", dto.getMessage());
@@ -79,8 +56,6 @@ public class EmailServiceBusiness implements EmailServiceInterface {
         try{
             emailSender.send(simpleMailMessage);
         }catch (MailException ex){
-            log.info("_82 Affichage de log ="+ex.getMessage());
-            //response.setStatus(functionalError.SEND_MAIL_FAIL("Erreur d'envoi", locale));
             response.setHasError(true);
             dto.setIsSent(false);
             response.setItem(dto);
@@ -89,21 +64,19 @@ public class EmailServiceBusiness implements EmailServiceInterface {
         dto.setIsSent(true);
         response.setItem(dto);
         response.setHasError(false);
-        log.info("_92 Affichage de locale=="+locale);
-        //response.setStatus(functionalError.SUCCESS("", locale));
         return response;
     }
 
     @Override
-    public Response<EmailDTO> sendEmailWithAttachment(Request<EmailDTO> request, Locale locale) throws MessagingException, FileNotFoundException {
-        Response<EmailDTO> response = new Response<EmailDTO>();
+    public Response<EmailDTO> sendEmailWithAttachment(Request<EmailDTO> request, Locale locale) throws FileNotFoundException, MessagingException {
+        Response<EmailDTO> response = new Response<>();
         if(request.getData() == null){
             response.setStatus(functionalError.DATA_NOT_EXIST("Aucune donnée",locale));
             response.setHasError(true);
             return response;
         }
         EmailDTO dto = request.getData();
-        Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+        Map<String, Object> fieldsToVerify = new HashMap<>();
         fieldsToVerify.put("toAddress", dto.getToAddress());
         fieldsToVerify.put("subject", dto.getSubject());
         fieldsToVerify.put("message", dto.getMessage());
@@ -132,7 +105,6 @@ public class EmailServiceBusiness implements EmailServiceInterface {
         dto.setIsSent(true);
         response.setItem(dto);
         response.setHasError(false);
-        //response.setStatus(functionalError.SUCCESS("", locale));
         return response;
     }
 }

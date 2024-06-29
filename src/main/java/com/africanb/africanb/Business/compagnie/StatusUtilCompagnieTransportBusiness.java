@@ -21,7 +21,7 @@ import lombok.extern.java.Log;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -57,16 +57,16 @@ public class StatusUtilCompagnieTransportBusiness implements IBasicBusiness<Requ
     
     @Override
     public Response<StatusUtilCompagnieTransportDTO> create(Request<StatusUtilCompagnieTransportDTO> request, Locale locale) throws ParseException {
-        Response<StatusUtilCompagnieTransportDTO> response = new Response<StatusUtilCompagnieTransportDTO>();
-        List<StatusUtilCompagnieTransport> items = new ArrayList<StatusUtilCompagnieTransport>();
+        Response<StatusUtilCompagnieTransportDTO> response = new Response<>();
+        List<StatusUtilCompagnieTransport> items = new ArrayList<>();
         if(request.getDatas().isEmpty() || request.getDatas() == null){
             response.setStatus(functionalError.DATA_NOT_EXIST("Liste vide ",locale));
             response.setHasError(true);
             return response;
         }
-        List<StatusUtilCompagnieTransportDTO> itemsDtos =  Collections.synchronizedList(new ArrayList<StatusUtilCompagnieTransportDTO>());
+        List<StatusUtilCompagnieTransportDTO> itemsDtos =  Collections.synchronizedList(new ArrayList<>());
         for(StatusUtilCompagnieTransportDTO dto: request.getDatas() ) {
-            Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+            Map<String, Object> fieldsToVerify = new HashMap<>();
             fieldsToVerify.put("compagnieTransportId", dto.getCompagnieTransportId());
             fieldsToVerify.put("statusUtilId", dto.getStatusUtilId());
             if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
@@ -82,8 +82,7 @@ public class StatusUtilCompagnieTransportBusiness implements IBasicBusiness<Requ
             itemsDtos.add(dto);
         }
         for(StatusUtilCompagnieTransportDTO dto : itemsDtos){
-            StatusUtilCompagnieTransport existingEntity = null;
-            existingEntity = statusUtilCompagnieTransportRepository.findByCompagnieTransportAndStatusUtil(dto.getCompagnieTransportId(),dto.getStatusUtilId(),false);
+            StatusUtilCompagnieTransport existingEntity = statusUtilCompagnieTransportRepository.findByCompagnieTransportAndStatusUtil(dto.getCompagnieTransportId(),dto.getStatusUtilId(),false);
             if (existingEntity != null) {
                 response.setStatus(functionalError.DATA_EXIST("StatusUtilCompagnieTransport ", locale));
                 response.setHasError(true);
@@ -111,7 +110,6 @@ public class StatusUtilCompagnieTransportBusiness implements IBasicBusiness<Requ
                                         .INSTANCE.toEntity(dto, existingCompagnieTransport, existingStatusUtil);
             entityToSave.setIsDeleted(false);
             entityToSave.setCreatedAt(Utilities.getCurrentDate());
-            //entityToSave.setCreatedBy(request.user);
             items.add(entityToSave);
         }
         if(CollectionUtils.isEmpty(items)){
@@ -119,8 +117,7 @@ public class StatusUtilCompagnieTransportBusiness implements IBasicBusiness<Requ
             response.setHasError(true);
             return response;
         }
-        List<StatusUtilCompagnieTransport> itemsSaved = null;
-        itemsSaved = statusUtilCompagnieTransportRepository.saveAll((Iterable<StatusUtilCompagnieTransport>) items);
+        List<StatusUtilCompagnieTransport> itemsSaved = statusUtilCompagnieTransportRepository.saveAll(items);
         if (CollectionUtils.isEmpty(itemsSaved)) {
             response.setStatus(functionalError.SAVE_FAIL("StatusUtilCompagnieTransport", locale));
             response.setHasError(true);
@@ -137,16 +134,16 @@ public class StatusUtilCompagnieTransportBusiness implements IBasicBusiness<Requ
 
     @Override
     public Response<StatusUtilCompagnieTransportDTO> update(Request<StatusUtilCompagnieTransportDTO> request, Locale locale) throws ParseException {
-        Response<StatusUtilCompagnieTransportDTO> response = new Response<StatusUtilCompagnieTransportDTO>();
-        List<StatusUtilCompagnieTransport> items = new ArrayList<StatusUtilCompagnieTransport>();
+        Response<StatusUtilCompagnieTransportDTO> response = new Response<>();
+        List<StatusUtilCompagnieTransport> items = new ArrayList<>();
         if(request.getDatas() == null  || CollectionUtils.isEmpty(request.getDatas())){
             response.setStatus(functionalError.DATA_NOT_EXIST("Liste vide ",locale));
             response.setHasError(true);
             return response;
         }
-        List<StatusUtilCompagnieTransportDTO> itemsDtos =  Collections.synchronizedList(new ArrayList<StatusUtilCompagnieTransportDTO>());
+        List<StatusUtilCompagnieTransportDTO> itemsDtos =  Collections.synchronizedList(new ArrayList<>());
         for(StatusUtilCompagnieTransportDTO dto: request.getDatas() ) {
-            Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+            Map<String, Object> fieldsToVerify = new HashMap<>();
             fieldsToVerify.put("id", dto.getId());
             if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
                 response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
@@ -161,16 +158,14 @@ public class StatusUtilCompagnieTransportBusiness implements IBasicBusiness<Requ
             itemsDtos.add(dto);
         }
         for(StatusUtilCompagnieTransportDTO dto : itemsDtos){
-            StatusUtilCompagnieTransport entityToSave = null;
-            entityToSave = statusUtilCompagnieTransportRepository.findOne(dto.getId(), false);
+            StatusUtilCompagnieTransport entityToSave = statusUtilCompagnieTransportRepository.findOne(dto.getId(), false);
             if (entityToSave == null) {
                 response.setStatus(functionalError.DATA_NOT_EXIST("StatusUtilCompagnieTransport id -> " + dto.getId(), locale));
                 response.setHasError(true);
                 return response;
             }
-            CompagnieTransport existingCompagnieTransport = null;
             if (Utilities.isValidID(dto.getCompagnieTransportId()) && !entityToSave.getCompagnieTransport().getId().equals(dto.getCompagnieTransportId())) {
-                existingCompagnieTransport = compagnieTransportRepository.findOne(dto.getCompagnieTransportId(), false);
+                CompagnieTransport existingCompagnieTransport = compagnieTransportRepository.findOne(dto.getCompagnieTransportId(), false);
                 if (existingCompagnieTransport == null) {
                     response.setStatus(functionalError.DATA_NOT_EXIST("CompagnieTRansport CompagnieTransportId -> " + dto.getCompagnieTransportId(), locale));
                     response.setHasError(true);
@@ -178,9 +173,8 @@ public class StatusUtilCompagnieTransportBusiness implements IBasicBusiness<Requ
                 }
                 entityToSave.setCompagnieTransport(existingCompagnieTransport);
             }
-            StatusUtil existingStatusUtil = null;
             if (Utilities.isValidID(dto.getStatusUtilId()) && !entityToSave.getStatusUtil().getId().equals(dto.getStatusUtilId())) {
-                existingStatusUtil = statusUtilRepository.findOne(dto.getStatusUtilId(), false);
+                StatusUtil existingStatusUtil = statusUtilRepository.findOne(dto.getStatusUtilId(), false);
                 if (existingStatusUtil == null) {
                     response.setStatus(functionalError.DATA_NOT_EXIST("StatusUtil StatusUtilId -> " + dto.getStatusUtilId(), locale));
                     response.setHasError(true);
@@ -189,21 +183,19 @@ public class StatusUtilCompagnieTransportBusiness implements IBasicBusiness<Requ
                 entityToSave.setStatusUtil(existingStatusUtil);
             }
             entityToSave.setUpdatedAt(Utilities.getCurrentDate());
-            //entityToSave.setUpdatedBy(request.user);
             items.add(entityToSave);
         }
         if (CollectionUtils.isEmpty(items)) {
             response.setStatus(functionalError.DATA_NOT_EXIST("Erreur de modification ",locale));
             response.setHasError(true);
         }
-        List<StatusUtilCompagnieTransport> itemsSaved = null;
-        itemsSaved = statusUtilCompagnieTransportRepository.saveAll((Iterable<StatusUtilCompagnieTransport>) items);
+        List<StatusUtilCompagnieTransport> itemsSaved = statusUtilCompagnieTransportRepository.saveAll(items);
         if (CollectionUtils.isEmpty(itemsSaved)) {
                 response.setStatus(functionalError.SAVE_FAIL("StatusUtilCompagnieTransport", locale));
                 response.setHasError(true);
                 return response;
         }
-        //Transformation
+
         List<StatusUtilCompagnieTransportDTO> itemsDto = (Utilities.isTrue(request.getIsSimpleLoading()))
                                     ? StatusUtilCompagnieTransportTransformer.INSTANCE.toLiteDtos(itemsSaved)
                                     : StatusUtilCompagnieTransportTransformer.INSTANCE.toDtos(itemsSaved);
@@ -215,15 +207,15 @@ public class StatusUtilCompagnieTransportBusiness implements IBasicBusiness<Requ
 
     @Override
     public Response<StatusUtilCompagnieTransportDTO> delete(Request<StatusUtilCompagnieTransportDTO> request, Locale locale) {
-        Response<StatusUtilCompagnieTransportDTO> response = new Response<StatusUtilCompagnieTransportDTO>();
-        List<StatusUtilCompagnieTransport> items = new ArrayList<StatusUtilCompagnieTransport>();
+        Response<StatusUtilCompagnieTransportDTO> response = new Response<>();
+        List<StatusUtilCompagnieTransport> items = new ArrayList<>();
         if(request.getDatas() == null  || CollectionUtils.isEmpty(request.getDatas())){
             response.setStatus(functionalError.DATA_NOT_EXIST("Liste vide ",locale));
             response.setHasError(true);
             return response;
         }
         for(StatusUtilCompagnieTransportDTO dto: request.getDatas() ) {
-            Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+            Map<String, Object> fieldsToVerify = new HashMap<>();
             fieldsToVerify.put("id", dto.getId());
             if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
                 response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
@@ -232,8 +224,7 @@ public class StatusUtilCompagnieTransportBusiness implements IBasicBusiness<Requ
             }
         }
         for(StatusUtilCompagnieTransportDTO dto : request.getDatas()){
-            StatusUtilCompagnieTransport existingEntity = null;
-            existingEntity = statusUtilCompagnieTransportRepository.findOne(dto.getId(), false);
+            StatusUtilCompagnieTransport existingEntity = statusUtilCompagnieTransportRepository.findOne(dto.getId(), false);
             if (existingEntity == null) {
                 response.setStatus(functionalError.DATA_NOT_EXIST("StatusUtilCompagnieTransport id -> " + dto.getId(), locale));
                 response.setHasError(true);
@@ -241,7 +232,6 @@ public class StatusUtilCompagnieTransportBusiness implements IBasicBusiness<Requ
             }
             existingEntity.setIsDeleted(true);
             existingEntity.setDeletedAt(Utilities.getCurrentDate());
-            //existingEntity.setDeletedBy(request.user);
             items.add(existingEntity);
         }
         if (CollectionUtils.isEmpty(items)) {

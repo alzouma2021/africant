@@ -10,11 +10,9 @@ import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 
 import javax.crypto.spec.SecretKeySpec;
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.math.BigInteger;
 import java.security.Key;
 import java.security.MessageDigest;
@@ -24,19 +22,20 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Base64;
 import java.util.Date;
+import java.util.Objects;
 import java.util.Optional;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 @Log
-public class SecurityUtils {
+public class JwtUtils {
 
-    private static String	defaultTenant = "null";
-    private static String defaultLanguage = "fr";
+    private static final String	defaultTenant = "null";
+    private static final String defaultLanguage = "fr";
     public static final String SESSION_TOKEN_FIELD_SECRET_PHRASE = "asdfSFS34wfsdfsdfSDSD32dfsddDDerQSNCK34SOWEK5354fdgdf4";
     private static final long TOKEN_EXPIRATION_MINUTES = 3000L;
     private final UsersRepository usersRepository;
-    public SecurityUtils(UsersRepository usersRepository) {
+    public JwtUtils(UsersRepository usersRepository) {
         this.usersRepository = usersRepository;
     }
 
@@ -120,11 +119,11 @@ public class SecurityUtils {
             MessageDigest md = MessageDigest.getInstance("MD5");
             byte[] messageDigest = md.digest(password.getBytes());
             BigInteger no = new BigInteger(1, messageDigest);
-            String hashedPassword = no.toString(16);
+            StringBuilder hashedPassword = new StringBuilder(no.toString(16));
             while (hashedPassword.length() < 32) {
-                hashedPassword = "0" + hashedPassword;
+                hashedPassword.insert(0, "0");
             }
-            return hashedPassword;
+            return hashedPassword.toString();
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
             return null;
@@ -142,18 +141,9 @@ public class SecurityUtils {
 
     public static void languageManager(HttpServletRequest req){
         String tenantValue = req.getHeader("tenantID");
-        if (tenantValue != null) {
-            req.setAttribute("CURRENT_TENANT_IDENTIFIER", tenantValue);
-        } else {
-            req.setAttribute("CURRENT_TENANT_IDENTIFIER", defaultTenant);
-        }
-
+        req.setAttribute("CURRENT_TENANT_IDENTIFIER", Objects.requireNonNullElse(tenantValue, defaultTenant));
         String langValue = req.getHeader("lang");
-        if (langValue != null) {
-            req.setAttribute("CURRENT_LANGUAGE_IDENTIFIER", langValue);
-        } else {
-            req.setAttribute("CURRENT_LANGUAGE_IDENTIFIER", defaultLanguage);
-        }
+        req.setAttribute("CURRENT_LANGUAGE_IDENTIFIER", Objects.requireNonNullElse(langValue, defaultLanguage));
     }
 
     @SneakyThrows
@@ -169,7 +159,7 @@ public class SecurityUtils {
     }
 
     private static boolean isSwaggerPath(String servletPath) {
-        return servletPath.contains("swagger");
+        return servletPath.contains("swagger") || servletPath.contains("/v3/api-docs");
     }
 
     private static boolean isApiVersionPath(String servletPath) {

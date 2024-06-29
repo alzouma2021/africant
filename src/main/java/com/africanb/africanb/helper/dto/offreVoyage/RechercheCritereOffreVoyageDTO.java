@@ -13,6 +13,6 @@ import lombok.ToString;
 public class RechercheCritereOffreVoyageDTO {
     private String villeDepart;
     private String villeDestination;
-    private String dateDepart; //Format iso dd/mm/yyyy
+    private String dateDepart;
     private String jourSemaine;
 }

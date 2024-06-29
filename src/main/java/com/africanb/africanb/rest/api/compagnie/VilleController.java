@@ -16,7 +16,7 @@ import org.springframework.transaction.CannotCreateTransactionException;
 import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.Locale;
 
 
@@ -25,7 +25,6 @@ import java.util.Locale;
 @RestController
 @RequestMapping(value="/villes")
 public class VilleController {
-
 
     private final ControllerFactory<VilleDTO> controllerFactory;
     private final VilleBusiness villeBusiness;

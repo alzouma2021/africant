@@ -10,6 +10,8 @@ import org.mapstruct.factory.Mappers;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
 @Mapper
 public interface FunctionalityTransformer {
 
@@ -32,7 +34,7 @@ public interface FunctionalityTransformer {
     @IterableMapping(qualifiedBy = {FullTransformerQualifier.class})
     List<FunctionalityDTO> toDtos(List<Functionality> entities) throws ParseException;
 
-    public default FunctionalityDTO toLiteDto(Functionality entity) {
+    default FunctionalityDTO toLiteDto(Functionality entity) {
         if (entity == null) {
             return null;
         }
@@ -43,11 +45,11 @@ public interface FunctionalityTransformer {
         return dto;
     }
 
-    public default List<FunctionalityDTO> toLiteDtos(List<Functionality> entities) {
-        if (entities == null || entities.stream().allMatch(o -> o == null)) {
+    default List<FunctionalityDTO> toLiteDtos(List<Functionality> entities) {
+        if (entities == null || entities.stream().allMatch(Objects::isNull)) {
             return null;
         }
-        List<FunctionalityDTO> dtos = new ArrayList<FunctionalityDTO>();
+        List<FunctionalityDTO> dtos = new ArrayList<>();
         for (Functionality entity : entities) {
             dtos.add(toLiteDto(entity));
         }

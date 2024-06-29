@@ -36,7 +36,7 @@ public class BusinessFactory<DTO> {
      */
     @Transactional(rollbackFor = {RuntimeException.class, Exception.class})
     public Response<DTO> create(IBasicBusiness<Request<DTO>, Response<DTO>> iBasicBusiness, Request<DTO> request, FunctionalityEnum functionalityEnum, Locale locale) {
-        Response<DTO> response = new Response<DTO>();
+        Response<DTO> response = new Response<>();
         try {
             response = iBasicBusiness.create(request, locale);
         } catch (PermissionDeniedDataAccessException e) {
@@ -95,7 +95,7 @@ public class BusinessFactory<DTO> {
      */
     @Transactional(rollbackFor = {RuntimeException.class, Exception.class})
     public Response<DTO> delete(IBasicBusiness<Request<DTO>, Response<DTO>> iBasicBusiness, Request<DTO> request, FunctionalityEnum functionalityEnum, Locale locale) {
-        Response<DTO> response = new Response<DTO>();
+        Response<DTO> response = new Response<>();
         try {
             response = iBasicBusiness.delete(request, locale);
         } catch (PermissionDeniedDataAccessException e) {

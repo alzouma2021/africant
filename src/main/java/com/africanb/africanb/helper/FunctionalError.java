@@ -2,23 +2,20 @@ package com.africanb.africanb.helper;
 
 import com.africanb.africanb.helper.status.Status;
 import com.africanb.africanb.helper.status.StatusCode;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
 
-import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Locale;
 
 
-@XmlRootElement
 @Component
 public class FunctionalError {
-    private String code;
-    private String message;
-    @Autowired
-    private MessageSource messageSource;
 
-    //private static Status	status	= new Status();
+    private final MessageSource messageSource;
+
+    public FunctionalError(MessageSource messageSource) {
+        this.messageSource = messageSource;
+    }
 
     public Status FIELD_EMPTY(String message, Locale locale) {
         Status status = new Status();
@@ -46,12 +43,14 @@ public class FunctionalError {
         status.setMessage(messageSource.getMessage("StatusMessage.FUNC_SAVE_FAIL", new Object[] {}, locale) + ": " + message);
         return status;
     }
+
     public Status DATA_NOT_DELETABLE(String message, Locale locale) {
         Status status = new Status();
         status.setCode(StatusCode.FUNC_DATA_NOT_DELETABLE);
         status.setMessage(messageSource.getMessage("StatusMessage.FUNC_DATA_NOT_DELETABLE", new Object[] {}, locale) + ": " + message);
         return status;
     }
+
     public Status DATA_NOT_EXIST(String message, Locale locale) {
         Status status = new Status();
         status.setCode(StatusCode.FUNC_DATA_NOT_EXIST);

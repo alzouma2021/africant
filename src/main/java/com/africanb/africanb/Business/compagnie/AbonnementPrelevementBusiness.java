@@ -21,19 +21,15 @@ import lombok.extern.java.Log;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-/**
- * @Author ALZOUMA MOUSSA MAHAAMADOU
- */
+
 @Log
 @Component
 public class AbonnementPrelevementBusiness implements IBasicBusiness<Request<AbonnementPrelevementDTO>, Response<AbonnementPrelevementDTO>> {
-
-    private Response<AbonnementPrelevementDTO> response;
 
     private final AbonnementPrelevementRepository abonnementPrelevementRepository;
     private final ModeAbonnementRepository modeAbonnementRepository;
@@ -61,17 +57,15 @@ public class AbonnementPrelevementBusiness implements IBasicBusiness<Request<Abo
 
     @Override
     public Response<AbonnementPrelevementDTO> create(Request<AbonnementPrelevementDTO> request, Locale locale) throws ParseException {
-        Response<AbonnementPrelevementDTO> response = new Response<AbonnementPrelevementDTO>();
-        List<AbonnementPrelevement> items = new ArrayList<AbonnementPrelevement>();
+        Response<AbonnementPrelevementDTO> response = new Response<>();
+        List<AbonnementPrelevement> items = new ArrayList<>();
         if(request.getDatas() == null || request.getDatas().isEmpty()){
             response.setStatus(functionalError.DATA_NOT_EXIST("Liste vide",locale));
             response.setHasError(true);
             return response;
         }
         for(AbonnementPrelevementDTO itemDto : request.getDatas() ){
-            //Chech If CompagnieTransport exists
-            CompagnieTransport exitingCompagnieTransport=null;
-            exitingCompagnieTransport=compagnieTransportRepository.findByRaisonSociale(itemDto.getCompagnieTransportRaisonSociale(), false);
+            CompagnieTransport exitingCompagnieTransport=compagnieTransportRepository.findByRaisonSociale(itemDto.getCompagnieTransportRaisonSociale(), false);
             if (exitingCompagnieTransport == null) {
                 response.setStatus(functionalError.DATA_EXIST("Compagnie de transport ayant la raison sociale"+itemDto.getCompagnieTransportRaisonSociale()+" n'existe pas", locale)) ;
                 response.setHasError(true);
@@ -86,8 +80,7 @@ public class AbonnementPrelevementBusiness implements IBasicBusiness<Request<Abo
             AbonnementPrelevement entityToSave = AbonnementPrelevementTransformer.INSTANCE.toEntity(itemDto,exitingCompagnieTransport,existingPeriodiciteAbonnement);
             entityToSave.setIsDeleted(false);
             entityToSave.setCreatedAt(Utilities.getCurrentDate());
-            AbonnementPrelevement entitySaved=null;
-            entitySaved= abonnementPrelevementRepository.save(entityToSave);
+            AbonnementPrelevement entitySaved = abonnementPrelevementRepository.save(entityToSave);
             items.add(entitySaved);
         }
         if (CollectionUtils.isEmpty(items)) {
@@ -106,18 +99,16 @@ public class AbonnementPrelevementBusiness implements IBasicBusiness<Request<Abo
 
     @Override
     public Response<AbonnementPrelevementDTO> update(Request<AbonnementPrelevementDTO> request, Locale locale) throws ParseException {
-        log.info("_115 debut de modification");
-        Response<AbonnementPrelevementDTO> response = new Response<AbonnementPrelevementDTO>();
-        List<AbonnementPrelevement> items = new ArrayList<AbonnementPrelevement>();
+        Response<AbonnementPrelevementDTO> response = new Response<>();
+        List<AbonnementPrelevement> items = new ArrayList<>();
         if(request.getDatas() == null  || request.getDatas().isEmpty()){
             response.setStatus(functionalError.DATA_NOT_EXIST("Liste vide",locale));
             response.setHasError(true);
             return response;
         }
-        log.info("_123 Affichage de la variable ="+request.getDatas() .toString());
-        List<AbonnementPrelevementDTO>itemsDtos = Collections.synchronizedList(new ArrayList<AbonnementPrelevementDTO>());
+        List<AbonnementPrelevementDTO>itemsDtos = Collections.synchronizedList(new ArrayList<>());
         for(AbonnementPrelevementDTO dto: request.getDatas() ) {
-            Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+            Map<String, Object> fieldsToVerify = new HashMap<>();
             fieldsToVerify.put("id", dto.getId());
             if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
                 response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
@@ -132,15 +123,12 @@ public class AbonnementPrelevementBusiness implements IBasicBusiness<Request<Abo
             itemsDtos.add(dto);
         }
         for(AbonnementPrelevementDTO dto: itemsDtos) {
-            //Check If AbonnenementPrelevelent exists
-            AbonnementPrelevement entityToSave=null;
-            entityToSave=abonnementPrelevementRepository.findOne(dto.getId(), false);
+            AbonnementPrelevement entityToSave=abonnementPrelevementRepository.findOne(dto.getId(), false);
             if (entityToSave == null) {
                 response.setStatus(functionalError.DATA_EXIST("L'abonnement ayant l'identifiant"+dto.getId()+" n'existe pas", locale)) ;
                 response.setHasError(true);
                 return response;
             }
-            //entityToSave= Utilities.transformerEntityModeAbonnementEnEntityAbonnementPrelevement(existingModeAbonnement);
             String periodiciteAbonnementDesignation=entityToSave.getPeriodiciteAbonnement()!=null&&entityToSave.getPeriodiciteAbonnement().getDesignation()!=null
                                  ?  entityToSave.getPeriodiciteAbonnement().getDesignation()
                                  :  null;
@@ -169,8 +157,7 @@ public class AbonnementPrelevementBusiness implements IBasicBusiness<Request<Abo
                 entityToSave.setTaux(dto.getTaux());
             }
             entityToSave.setUpdatedAt(Utilities.getCurrentDate());
-            AbonnementPrelevement entityUpdated=null;
-            entityUpdated= abonnementPrelevementRepository.save(entityToSave);
+            AbonnementPrelevement entityUpdated = abonnementPrelevementRepository.save(entityToSave);
             items.add(entityUpdated);
         }
         if(CollectionUtils.isEmpty(items)){

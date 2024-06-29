@@ -20,20 +20,16 @@ import lombok.extern.java.Log;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-/**
- * @Author ALZOUMA MOUSSA MAHAAMADOU
- */
+
 @Log
 @Component
 public class ProgrammeBusiness implements IBasicBusiness<Request<ProgrammeDTO>, Response<ProgrammeDTO>> {
 
-
-    private Response<ProgrammeDTO> response;
 
     private final JourSemaineRepository jourSemaineRepository;
     private final ProgrammeRepository programmeRepository;
@@ -60,18 +56,16 @@ public class ProgrammeBusiness implements IBasicBusiness<Request<ProgrammeDTO>, 
 
     @Override
     public Response<ProgrammeDTO> create(Request<ProgrammeDTO> request, Locale locale) throws ParseException {
-        Response<ProgrammeDTO> response = new Response<ProgrammeDTO>();
-
-        List<Programme> items = new ArrayList<Programme>();
+        Response<ProgrammeDTO> response = new Response<>();
+        List<Programme> items = new ArrayList<>();
         if(request.getDatas() == null || request.getDatas().isEmpty()){
             response.setStatus(functionalError.DATA_NOT_EXIST("Liste vide",locale));
             response.setHasError(true);
             return response;
         }
-
-        List<ProgrammeDTO> itemsDtos =  Collections.synchronizedList(new ArrayList<ProgrammeDTO>());
+        List<ProgrammeDTO> itemsDtos =  Collections.synchronizedList(new ArrayList<>());
         for(ProgrammeDTO dto: request.getDatas() ) {
-            Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+            Map<String, Object> fieldsToVerify = new HashMap<>();
             fieldsToVerify.put("designation", dto.getDesignation());
             fieldsToVerify.put("nombrePlaceDisponible", dto.getNombrePlaceDisponible());
             fieldsToVerify.put("heureArrivee", dto.getHeureArrivee());
@@ -89,17 +83,14 @@ public class ProgrammeBusiness implements IBasicBusiness<Request<ProgrammeDTO>, 
             }
             itemsDtos.add(dto);
         }
-
         for(ProgrammeDTO itemDto : itemsDtos){
-            Programme existingProgramme = null;
-            existingProgramme = programmeRepository.findByDesignation(itemDto.getDesignation(), false);
+            Programme existingProgramme = programmeRepository.findByDesignation(itemDto.getDesignation(), false);
             if (existingProgramme != null) {
                 response.setStatus(functionalError.DATA_EXIST("Programme ayant  pour designation -> " + itemDto.getDesignation() +", existe déjà", locale));
                 response.setHasError(true);
                 return response;
             }
-            JourSemaine existingJourSemaine = null;
-            existingJourSemaine= jourSemaineRepository.findByDesignation(itemDto.getJourSemaineDesignation(),false);
+            JourSemaine existingJourSemaine = jourSemaineRepository.findByDesignation(itemDto.getJourSemaineDesignation(),false);
             if (existingJourSemaine == null) {
                 response.setStatus(functionalError.DATA_EXIST("Jour semaine ayant  pour identifiant -> " + itemDto.getJourSemaineDesignation() +", n'existe pas", locale));
                 response.setHasError(true);
@@ -108,22 +99,17 @@ public class ProgrammeBusiness implements IBasicBusiness<Request<ProgrammeDTO>, 
             Programme entityToSave = ProgrammeTransformer.INSTANCE.toEntity(itemDto,existingJourSemaine);
             entityToSave.setIsDeleted(false);
             entityToSave.setCreatedAt(Utilities.getCurrentDate());
-            //entityToSave.setCreatedBy(request.user); // à modifier
             items.add(entityToSave);
         }
-
-        List<Programme> itemsSaved = null;
-        itemsSaved = programmeRepository.saveAll((Iterable<Programme>) items);
+        List<Programme> itemsSaved = programmeRepository.saveAll(items);
         if (CollectionUtils.isEmpty(itemsSaved)) {
             response.setStatus(functionalError.SAVE_FAIL("Erreur de creation", locale));
             response.setHasError(true);
             return response;
         }
-
         List<ProgrammeDTO> itemsDto = (Utilities.isTrue(request.getIsSimpleLoading()))
                                     ? ProgrammeTransformer.INSTANCE.toLiteDtos(itemsSaved)
                                     : ProgrammeTransformer.INSTANCE.toDtos(itemsSaved);
-
         response.setItems(itemsDto);
         response.setHasError(false);
         response.setStatus(functionalError.SUCCESS("", locale));
@@ -132,16 +118,16 @@ public class ProgrammeBusiness implements IBasicBusiness<Request<ProgrammeDTO>, 
 
     @Override
     public Response<ProgrammeDTO> update(Request<ProgrammeDTO> request, Locale locale) throws ParseException {
-        Response<ProgrammeDTO> response = new Response<ProgrammeDTO>();
-        List<Programme> items = new ArrayList<Programme>();
+        Response<ProgrammeDTO> response = new Response<>();
+        List<Programme> items = new ArrayList<>();
         if(request.getDatas() == null  || request.getDatas().isEmpty()){
             response.setStatus(functionalError.DATA_NOT_EXIST("Liste vide",locale));
             response.setHasError(true);
             return response;
         }
-        List<ProgrammeDTO>itemsDtos =  Collections.synchronizedList(new ArrayList<ProgrammeDTO>());
+        List<ProgrammeDTO> itemsDtos =  Collections.synchronizedList(new ArrayList<>());
         for(ProgrammeDTO dto: request.getDatas() ) {
-            Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+            Map<String, Object> fieldsToVerify = new HashMap<>();
             fieldsToVerify.put("id", dto.getId());
             if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
                 response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
@@ -174,12 +160,11 @@ public class ProgrammeBusiness implements IBasicBusiness<Request<ProgrammeDTO>, 
             String jourSemaineDesignation=entityToSave.getJourSemaine()!=null&&entityToSave.getJourSemaine().getDesignation()!=null
                                        ?entityToSave.getJourSemaine().getDesignation()
                                        :null;
-            if(jourSemaineDesignation==null){
+            if(jourSemaineDesignation == null){
                 response.setStatus(functionalError.DATA_NOT_EXIST("Jour semaine n'existe pas", locale));
                 response.setHasError(true);
                 return response;
             }
-            //Mode
             JourSemaine existingJourSemaine = jourSemaineRepository.findByDesignation(jourSemaineDesignation,false);
             if (existingJourSemaine == null) {
                 response.setStatus(functionalError.DATA_NOT_EXIST("Le mode du prix de l'offre de voyage -> " + dto.getId() +", n'existe pas", locale));
@@ -211,7 +196,6 @@ public class ProgrammeBusiness implements IBasicBusiness<Request<ProgrammeDTO>, 
                 entityToSave.setHeureDepart(dto.getHeureDepart());
             }
             entityToSave.setUpdatedAt(Utilities.getCurrentDate());
-            //entityToSave.setUpdatedBy(request.user);
             items.add(entityToSave);
         }
         if(CollectionUtils.isEmpty(items)){

@@ -15,6 +15,7 @@ import org.mapstruct.factory.Mappers;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Mapper
 public interface PrixOffreVoyageTransformer {
@@ -40,7 +41,7 @@ public interface PrixOffreVoyageTransformer {
             @Mapping(source = "entity.deletedBy", target="deletedBy"),
             @Mapping(source = "entity.isDeleted", target="isDeleted"),
     })
-    PrixOffreVoyageDTO toDto(PrixOffreVoyage entity) throws ParseException;;
+    PrixOffreVoyageDTO toDto(PrixOffreVoyage entity) throws ParseException;
 
     @IterableMapping(qualifiedBy = {FullTransformerQualifier.class})
     List<PrixOffreVoyageDTO> toDtos(List<PrixOffreVoyage> entities) throws ParseException;
@@ -58,10 +59,10 @@ public interface PrixOffreVoyageTransformer {
     }
 
     default List<PrixOffreVoyageDTO> toLiteDtos(List<PrixOffreVoyage> entities) {
-        if (entities == null || entities.stream().allMatch(o -> o == null)) {
+        if (entities == null || entities.stream().allMatch(Objects::isNull)) {
             return null;
         }
-        List<PrixOffreVoyageDTO> dtos = new ArrayList<PrixOffreVoyageDTO>();
+        List<PrixOffreVoyageDTO> dtos = new ArrayList<>();
         for (PrixOffreVoyage entity : entities) {
             dtos.add(toLiteDto(entity));
         }

@@ -16,6 +16,7 @@ import org.mapstruct.factory.Mappers;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Mapper
 public interface OffreVoyageTransformer {
@@ -42,7 +43,7 @@ public interface OffreVoyageTransformer {
             @Mapping(source = "entity.deletedBy", target="deletedBy"),
             @Mapping(source = "entity.isDeleted", target="isDeleted"),
     })
-    OffreVoyageDTO toDto(OffreVoyage entity) throws ParseException;;
+    OffreVoyageDTO toDto(OffreVoyage entity) throws ParseException;
 
     @IterableMapping(qualifiedBy = {FullTransformerQualifier.class})
     List<OffreVoyageDTO> toDtos(List<OffreVoyage> entities) throws ParseException;
@@ -59,10 +60,10 @@ public interface OffreVoyageTransformer {
     }
 
     default List<OffreVoyageDTO> toLiteDtos(List<OffreVoyage> entities) {
-        if (entities == null || entities.stream().allMatch(o -> o == null)) {
+        if (entities == null || entities.stream().allMatch(Objects::isNull)) {
             return null;
         }
-        List<OffreVoyageDTO> dtos = new ArrayList<OffreVoyageDTO>();
+        List<OffreVoyageDTO> dtos = new ArrayList<>();
         for (OffreVoyage entity : entities) {
             dtos.add(toLiteDto(entity));
         }

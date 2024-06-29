@@ -1,25 +1,20 @@
 package com.africanb.africanb.utils.Reference;
 
-import com.africanb.africanb.dao.entity.compagnie.FamilleStatusUtil;
-import com.sun.istack.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
-/**
- * @author Alzouma Moussa Mahamadou
- */
+
 @Entity
 @Table(name = "reference")
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter
+@Setter
 @ToString
+@EqualsAndHashCode(callSuper = false)
+@NoArgsConstructor
 public class Reference implements Serializable {
 
     private static final long serialVersionUID = 1L;

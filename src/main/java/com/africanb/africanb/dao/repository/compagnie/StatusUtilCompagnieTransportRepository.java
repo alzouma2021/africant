@@ -17,7 +17,4 @@ public interface StatusUtilCompagnieTransportRepository extends JpaRepository<St
     @Query("select suct from  StatusUtilCompagnieTransport suct where suct.id = :id and suct.isDeleted= :isDeleted")
     StatusUtilCompagnieTransport findOne(@Param("id") Long id, @Param("isDeleted") Boolean isDeleted);
 
-    @Query("select suct from  StatusUtilCompagnieTransport suct where suct.compagnieTransport.id = :compagnieTransportId and suct.isDeleted= :isDeleted")
-    List<StatusUtilCompagnieTransport>  findByCompagnieTranportId(@Param("compagnieTransportId") Long compagnieTransportId, @Param("isDeleted") Boolean isDeleted);
-
 }

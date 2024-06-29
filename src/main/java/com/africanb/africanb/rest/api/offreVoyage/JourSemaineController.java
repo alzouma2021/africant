@@ -3,7 +3,6 @@ package com.africanb.africanb.rest.api.offreVoyage;
 
 import com.africanb.africanb.Business.offreVoyage.JourSemaineBusiness;
 import com.africanb.africanb.helper.ExceptionUtils;
-import com.africanb.africanb.helper.TechnicalError;
 import com.africanb.africanb.helper.contrat.Request;
 import com.africanb.africanb.helper.contrat.Response;
 import com.africanb.africanb.helper.dto.offreVoyage.JourSemaineDTO;
@@ -17,7 +16,7 @@ import org.springframework.transaction.CannotCreateTransactionException;
 import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.Locale;
 
 
@@ -29,14 +28,12 @@ public class JourSemaineController {
 
     private final ControllerFactory<JourSemaineDTO> controllerFactory;
     private final JourSemaineBusiness jourSemaineBusiness;
-    private final TechnicalError technicalError;
     private final ExceptionUtils exceptionUtils;
     private final HttpServletRequest requestBasic;
 
-    public JourSemaineController(ControllerFactory<JourSemaineDTO> controllerFactory, JourSemaineBusiness jourSemaineBusiness, TechnicalError technicalError, ExceptionUtils exceptionUtils, HttpServletRequest requestBasic) {
+    public JourSemaineController(ControllerFactory<JourSemaineDTO> controllerFactory, JourSemaineBusiness jourSemaineBusiness, ExceptionUtils exceptionUtils, HttpServletRequest requestBasic) {
         this.controllerFactory = controllerFactory;
         this.jourSemaineBusiness = jourSemaineBusiness;
-        this.technicalError = technicalError;
         this.exceptionUtils = exceptionUtils;
         this.requestBasic = requestBasic;
     }
@@ -76,7 +73,7 @@ public class JourSemaineController {
     @RequestMapping(value="/getJourSemaineByVoyageDesignation",method= RequestMethod.POST,consumes = {"application/json"},produces={"application/json"})
     public Response<JourSemaineDTO> getJourSemaineByVoyageDesignation(@RequestBody Request<OffreVoyageDTO> request) {
         log.info("start method getJourSemaineByVoyageDesignation");
-        Response<JourSemaineDTO> response = new Response<JourSemaineDTO>();
+        Response<JourSemaineDTO> response = new Response<>();
         //requestBasic.setAttribute("CURRENT_LANGUAGE_IDENTIFIER", "fr");
         String languageID = (String) requestBasic.getAttribute("CURRENT_LANGUAGE_IDENTIFIER");
         Locale locale = new Locale(languageID, "");

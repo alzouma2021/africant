@@ -11,6 +11,7 @@ import org.mapstruct.factory.Mappers;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Mapper
 public interface VilleTransformer {
@@ -39,7 +40,7 @@ public interface VilleTransformer {
     @IterableMapping(qualifiedBy = {FullTransformerQualifier.class})
     List<VilleDTO> toDtos(List<Ville> entities) throws ParseException;
 
-    public default VilleDTO toLiteDto(Ville entity) {
+    default VilleDTO toLiteDto(Ville entity) {
         if (entity == null) {
             return null;
         }
@@ -50,11 +51,11 @@ public interface VilleTransformer {
         return dto;
     }
 
-    public default List<VilleDTO> toLiteDtos(List<Ville> entities) {
-        if (entities == null || entities.stream().allMatch(o -> o == null)) {
+    default List<VilleDTO> toLiteDtos(List<Ville> entities) {
+        if (entities == null || entities.stream().allMatch(Objects::isNull)) {
             return null;
         }
-        List<VilleDTO> dtos = new ArrayList<VilleDTO>();
+        List<VilleDTO> dtos = new ArrayList<>();
         for (Ville entity : entities) {
             dtos.add(toLiteDto(entity));
         }

@@ -15,6 +15,7 @@ import org.mapstruct.factory.Mappers;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Mapper
 public interface JourSemaineTransformer {
@@ -38,7 +39,7 @@ public interface JourSemaineTransformer {
             @Mapping(source = "entity.deletedBy", target="deletedBy"),
             @Mapping(source = "entity.isDeleted", target="isDeleted"),
     })
-    JourSemaineDTO toDto(JourSemaine entity) throws ParseException;;
+    JourSemaineDTO toDto(JourSemaine entity) throws ParseException;
 
     @IterableMapping(qualifiedBy = {FullTransformerQualifier.class})
     List<JourSemaineDTO> toDtos(List<JourSemaine> entities) throws ParseException;
@@ -56,10 +57,10 @@ public interface JourSemaineTransformer {
     }
 
     default List<JourSemaineDTO> toLiteDtos(List<JourSemaine> entities) {
-        if (entities == null || entities.stream().allMatch(o -> o == null)) {
+        if (entities == null || entities.stream().allMatch(Objects::isNull)) {
             return null;
         }
-        List<JourSemaineDTO> dtos = new ArrayList<JourSemaineDTO>();
+        List<JourSemaineDTO> dtos = new ArrayList<>();
         for (JourSemaine entity : entities) {
             dtos.add(toLiteDto(entity));
         }

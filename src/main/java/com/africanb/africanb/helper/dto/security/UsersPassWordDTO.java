@@ -8,7 +8,8 @@ import lombok.Data;
 import lombok.ToString;
 
 @Data
-@ToString @JsonInclude(JsonInclude.Include.NON_NULL) @JsonPropertyOrder(alphabetic = true)
+@ToString @JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonPropertyOrder(alphabetic = true)
 public class UsersPassWordDTO {
     private String email;
     private String oldPassWord;

@@ -10,6 +10,8 @@ import org.mapstruct.factory.Mappers;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
 @Mapper
 public interface RoleTransformer {
 
@@ -31,7 +33,7 @@ public interface RoleTransformer {
     @IterableMapping(qualifiedBy = {FullTransformerQualifier.class})
     List<RoleDTO> toDtos(List<Role> entities) throws ParseException;
 
-    public default RoleDTO toLiteDto(Role entity) {
+    default RoleDTO toLiteDto(Role entity) {
         if (entity == null) {
             return null;
         }
@@ -42,11 +44,11 @@ public interface RoleTransformer {
         return dto;
     }
 
-    public default List<RoleDTO> toLiteDtos(List<Role> entities) {
-        if (entities == null || entities.stream().allMatch(o -> o == null)) {
+    default List<RoleDTO> toLiteDtos(List<Role> entities) {
+        if (entities == null || entities.stream().allMatch(Objects::isNull)) {
             return null;
         }
-        List<RoleDTO> dtos = new ArrayList<RoleDTO>();
+        List<RoleDTO> dtos = new ArrayList<>();
         for (Role entity : entities) {
             dtos.add(toLiteDto(entity));
         }

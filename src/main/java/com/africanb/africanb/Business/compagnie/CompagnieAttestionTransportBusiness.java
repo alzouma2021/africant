@@ -21,7 +21,7 @@ import lombok.extern.java.Log;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -57,16 +57,16 @@ public class CompagnieAttestionTransportBusiness implements IBasicBusiness<Reque
     
     @Override
     public Response<CompagnieAttestionTransportDTO> create(Request<CompagnieAttestionTransportDTO> request, Locale locale) throws ParseException {
-        Response<CompagnieAttestionTransportDTO> response = new Response<CompagnieAttestionTransportDTO>();
-        List<CompagnieAttestionTransport> items = new ArrayList<CompagnieAttestionTransport>();
+        Response<CompagnieAttestionTransportDTO> response = new Response<>();
+        List<CompagnieAttestionTransport> items = new ArrayList<>();
         if(request.getDatas().isEmpty() || request.getDatas() == null){
             response.setStatus(functionalError.DATA_NOT_EXIST("Liste vide ",locale));
             response.setHasError(true);
             return response;
         }
-        List<CompagnieAttestionTransportDTO> itemsDtos =  Collections.synchronizedList(new ArrayList<CompagnieAttestionTransportDTO>());
+        List<CompagnieAttestionTransportDTO> itemsDtos =  Collections.synchronizedList(new ArrayList<>());
         for(CompagnieAttestionTransportDTO dto: request.getDatas() ) {
-            Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+            Map<String, Object> fieldsToVerify = new HashMap<>();
             fieldsToVerify.put("compagnieRaisonSociale", dto.getCompagnieRaisonSociale());
             fieldsToVerify.put("documentDesignation", dto.getDocumentDesignation());
             if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
@@ -87,22 +87,19 @@ public class CompagnieAttestionTransportBusiness implements IBasicBusiness<Reque
             itemsDtos.add(dto);
         }
         for(CompagnieAttestionTransportDTO dto : itemsDtos){
-            CompagnieTransport existingCompagnieTransport = null;
-            existingCompagnieTransport = compagnieTransportRepository.findByRaisonSociale(dto.getCompagnieRaisonSociale(), false);
+            CompagnieTransport existingCompagnieTransport = compagnieTransportRepository.findByRaisonSociale(dto.getCompagnieRaisonSociale(), false);
             if (existingCompagnieTransport == null) {
                 response.setStatus(functionalError.DATA_NOT_EXIST("CompagnieTransport Raison sociale -> " + dto.getCompagnieRaisonSociale() +"n'existe pas", locale));
                 response.setHasError(true);
                 return response;
             }
-            Document existingDocument = null;
-            existingDocument = documentRepository.findByDesignation(dto.getDocumentDesignation(), false);
+            Document existingDocument = documentRepository.findByDesignation(dto.getDocumentDesignation(), false);
             if (existingDocument == null) {
                 response.setStatus(functionalError.DATA_NOT_EXIST("Document -> " + dto.getDocumentDesignation() +"n'existe pas", locale));
                 response.setHasError(true);
                 return response;
             }
-            CompagnieAttestionTransport existingEntity = null;
-            existingEntity = compagnieAttestionTransportRepository.findByRaisonSociale(dto.getCompagnieRaisonSociale(),false);
+            CompagnieAttestionTransport existingEntity = compagnieAttestionTransportRepository.findByRaisonSociale(dto.getCompagnieRaisonSociale(),false);
             if (existingEntity != null) {
                 response.setStatus(functionalError.DATA_EXIST("La compagnie de transport dispose déjà d'une attestionde transport", locale));
                 response.setHasError(true);
@@ -112,7 +109,6 @@ public class CompagnieAttestionTransportBusiness implements IBasicBusiness<Reque
                                         .INSTANCE.toEntity(dto,existingCompagnieTransport,existingDocument);
             entityToSave.setIsDeleted(false);
             entityToSave.setCreatedAt(Utilities.getCurrentDate());
-            //entityToSave.setCreatedBy(request.user);
             items.add(entityToSave);
         }
         if(CollectionUtils.isEmpty(items)){
@@ -120,9 +116,7 @@ public class CompagnieAttestionTransportBusiness implements IBasicBusiness<Reque
             response.setHasError(true);
             return response;
         }
-        List<CompagnieAttestionTransport> itemsSaved = null;
-        log.info("_130 Affichage CompagnieAttestionTransport ="+ items.toString());
-        itemsSaved = compagnieAttestionTransportRepository.saveAll((Iterable<CompagnieAttestionTransport>) items);
+        List<CompagnieAttestionTransport> itemsSaved = compagnieAttestionTransportRepository.saveAll(items);
         if (CollectionUtils.isEmpty(itemsSaved)) {
             response.setStatus(functionalError.SAVE_FAIL("CompagnieAttestionTransport", locale));
             response.setHasError(true);

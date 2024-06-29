@@ -20,20 +20,15 @@ import com.africanb.africanb.helper.validation.Validate;
 import lombok.extern.java.Log;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-/**
- * @author  Alzouma Moussa Mahamadou
- */
 
 @Log
 @Component
 public class RoleFunctionalityBusiness implements IBasicBusiness<Request<RoleFunctionalityDTO>, Response<RoleFunctionalityDTO>> {
-
-    private Response<RoleFunctionalityDTO> response;
 
     private final RoleFunctionalityRepository roleFunctionalityRepository;
     private final RoleRepository roleRepository;
@@ -59,10 +54,10 @@ public class RoleFunctionalityBusiness implements IBasicBusiness<Request<RoleFun
 
     @Override
     public Response<RoleFunctionalityDTO> create(Request<RoleFunctionalityDTO> request, Locale locale) throws ParseException {
-        Response<RoleFunctionalityDTO> response = new Response<RoleFunctionalityDTO>();
-        List<RoleFunctionality> items = new ArrayList<RoleFunctionality>();
+        Response<RoleFunctionalityDTO> response = new Response<>();
+        List<RoleFunctionality> items = new ArrayList<>();
         for(RoleFunctionalityDTO dto : request.getDatas()){
-            Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+            Map<String, Object> fieldsToVerify = new HashMap<>();
             fieldsToVerify.put("roleCode", dto.getRoleCode());
             fieldsToVerify.put("functionalityCode", dto.getFunctionalityCode());
             if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
@@ -70,8 +65,7 @@ public class RoleFunctionalityBusiness implements IBasicBusiness<Request<RoleFun
                 response.setHasError(true);
                 return response;
             }
-            RoleFunctionality existingEntity = null;
-            existingEntity = roleFunctionalityRepository.findByRoleAndFunctionalityCode(dto.getRoleCode(),dto.getFunctionalityCode(), false);
+            RoleFunctionality existingEntity = roleFunctionalityRepository.findByRoleAndFunctionalityCode(dto.getRoleCode(),dto.getFunctionalityCode(), false);
             if (existingEntity != null) {
                 response.setStatus(functionalError.DATA_EXIST("RoleFunctionality roleCode -> " + dto.getRoleCode() + "RoleFunctionality FunctionalityCode -> " + dto.getFunctionalityCode(), locale));
                 response.setHasError(true);
@@ -92,19 +86,10 @@ public class RoleFunctionalityBusiness implements IBasicBusiness<Request<RoleFun
             RoleFunctionality entityToSave = RoleFunctionalityTransformer.INSTANCE.toEntity(dto, existingFunctionality, existingRole);
             entityToSave.setIsDeleted(false);
             entityToSave.setCreatedAt(Utilities.getCurrentDate());
-            //if(Utilities.isValidID(request.userID)){
-            //    entityToSave.setCreatedBy(request.userID);
-            //} //TODO A mettre à jour
             items.add(entityToSave);
         }
         if (!items.isEmpty()) {
-            List<RoleFunctionality> itemsSaved = null;
-            itemsSaved = roleFunctionalityRepository.saveAll((Iterable<RoleFunctionality>) items);
-            if (itemsSaved == null) {
-                response.setStatus(functionalError.SAVE_FAIL("RoleFunctionality", locale));
-                response.setHasError(true);
-                return response;
-            }
+            List<RoleFunctionality> itemsSaved = roleFunctionalityRepository.saveAll(items);
             List<RoleFunctionalityDTO> itemsDto = (Utilities.isTrue(request.getIsSimpleLoading())) ? RoleFunctionalityTransformer.INSTANCE.toLiteDtos(itemsSaved) : RoleFunctionalityTransformer.INSTANCE.toDtos(itemsSaved);
             response.setItems(itemsDto);
             response.setHasError(false);
@@ -116,24 +101,22 @@ public class RoleFunctionalityBusiness implements IBasicBusiness<Request<RoleFun
 
     @Override
     public Response<RoleFunctionalityDTO> update(Request<RoleFunctionalityDTO> request, Locale locale) throws ParseException {
-        Response<RoleFunctionalityDTO> response = new Response<RoleFunctionalityDTO>();
-        List<RoleFunctionality> items = new ArrayList<RoleFunctionality>();
+        Response<RoleFunctionalityDTO> response = new Response<>();
+        List<RoleFunctionality> items = new ArrayList<>();
         for(RoleFunctionalityDTO dto : request.getDatas()){
-            Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+            Map<String, Object> fieldsToVerify = new HashMap<>();
             fieldsToVerify.put("id", dto.getId());
             if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
                 response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
                 response.setHasError(true);
                 return response;
             }
-            RoleFunctionality entityToSave = null;
-            entityToSave = roleFunctionalityRepository.findOne(dto.getId(), false);
+            RoleFunctionality entityToSave = roleFunctionalityRepository.findOne(dto.getId(), false);
             if (entityToSave == null) {
                 response.setStatus(functionalError.DATA_NOT_EXIST("RoleFunctionality id -> " + dto.getId(), locale));
                 response.setHasError(true);
                 return response;
             }
-            Long entityToSaveId = entityToSave.getId();
             RoleFunctionalityDTO entityToSaveDto = RoleFunctionalityTransformer.INSTANCE.toDto(entityToSave);
             Role existingRole = entityToSave.getRole();
             if (Utilities.isValidID(dto.getRoleId()) && !entityToSave.getRole().getId().equals(dto.getRoleId())) {
@@ -155,17 +138,10 @@ public class RoleFunctionalityBusiness implements IBasicBusiness<Request<RoleFun
             }
             RoleFunctionality roleFunctionalityEntity = RoleFunctionalityTransformer.INSTANCE.toEntity(entityToSaveDto, existingFunctionality, existingRole);
             roleFunctionalityEntity.setUpdatedAt(Utilities.getCurrentDate());
-            //roleFunctionalityEntity.setUpdatedBy(request.userID); ///TODO A mettre jour
             items.add(roleFunctionalityEntity);
         }
         if (!items.isEmpty()) {
-            List<RoleFunctionality> itemsSaved = null;
-            itemsSaved = roleFunctionalityRepository.saveAll((Iterable<RoleFunctionality>) items);
-            if (itemsSaved == null) {
-                response.setStatus(functionalError.SAVE_FAIL("RoleFunctionality", locale));
-                response.setHasError(true);
-                return response;
-            }
+            List<RoleFunctionality> itemsSaved = roleFunctionalityRepository.saveAll(items);
             List<RoleFunctionalityDTO> itemsDto =  RoleFunctionalityTransformer.INSTANCE.toDtos(itemsSaved);
             response.setItems(itemsDto);
             response.setHasError(false);
@@ -177,18 +153,17 @@ public class RoleFunctionalityBusiness implements IBasicBusiness<Request<RoleFun
 
     @Override
     public Response<RoleFunctionalityDTO> delete(Request<RoleFunctionalityDTO> request, Locale locale) {
-        Response<RoleFunctionalityDTO> response = new Response<RoleFunctionalityDTO>();
-        List<RoleFunctionality> items = new ArrayList<RoleFunctionality>();
+        Response<RoleFunctionalityDTO> response = new Response<>();
+        List<RoleFunctionality> items = new ArrayList<>();
         for(RoleFunctionalityDTO dto : request.getDatas()){
-            Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+            Map<String, Object> fieldsToVerify = new HashMap<>();
             fieldsToVerify.put("id", dto.getId());
             if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
                 response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
                 response.setHasError(true);
                 return response;
             }
-            RoleFunctionality existingEntity = null;
-            existingEntity = roleFunctionalityRepository.findOne(dto.getId(), false);
+            RoleFunctionality existingEntity = roleFunctionalityRepository.findOne(dto.getId(), false);
             if (existingEntity == null) {
                 response.setStatus(functionalError.DATA_NOT_EXIST("RoleFunctionality id -> " + dto.getId(), locale));
                 response.setHasError(true);
@@ -196,7 +171,6 @@ public class RoleFunctionalityBusiness implements IBasicBusiness<Request<RoleFun
             }
             existingEntity.setIsDeleted(true);
             existingEntity.setDeletedAt(Utilities.getCurrentDate());
-            //existingEntity.setDeletedBy(request.userID); //TODO A mettre à jour
             items.add(existingEntity);
         }
         if (!items.isEmpty()) {
@@ -208,18 +182,17 @@ public class RoleFunctionalityBusiness implements IBasicBusiness<Request<RoleFun
 
     @Override
     public Response<RoleFunctionalityDTO> forceDelete(Request<RoleFunctionalityDTO> request, Locale locale) {
-        Response<RoleFunctionalityDTO> response = new Response<RoleFunctionalityDTO>();
-        List<RoleFunctionality> items = new ArrayList<RoleFunctionality>();
+        Response<RoleFunctionalityDTO> response = new Response<>();
+        List<RoleFunctionality> items = new ArrayList<>();
         for(RoleFunctionalityDTO dto : request.getDatas()){
-            Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+            Map<String, Object> fieldsToVerify = new HashMap<>();
             fieldsToVerify.put("id", dto.getId());
             if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
                 response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
                 response.setHasError(true);
                 return response;
             }
-            RoleFunctionality existingEntity = null;
-            existingEntity = roleFunctionalityRepository.findOne(dto.getId(), false);
+            RoleFunctionality existingEntity = roleFunctionalityRepository.findOne(dto.getId(), false);
             if (existingEntity == null) {
                 response.setStatus(functionalError.DATA_NOT_EXIST("RoleFunctionality id -> " + dto.getId(), locale));
                 response.setHasError(true);
@@ -227,7 +200,6 @@ public class RoleFunctionalityBusiness implements IBasicBusiness<Request<RoleFun
             }
             existingEntity.setIsDeleted(true);
             existingEntity.setDeletedAt(Utilities.getCurrentDate());
-            //existingEntity.setDeletedBy(request.userID); //TODO A mettre a jour
             items.add(existingEntity);
         }
         if (!items.isEmpty()) {
@@ -245,26 +217,6 @@ public class RoleFunctionalityBusiness implements IBasicBusiness<Request<RoleFun
 
     @Override
     public Response<RoleFunctionalityDTO> getByCriteria(Request<RoleFunctionalityDTO> request, Locale locale) {
-        /*Response<RoleFunctionalityDTO> response = new Response<RoleFunctionalityDTO>();
-        if (Utilities.blank(request.getData().getOrderField())) {
-            request.getData().setOrderField("");
-        }
-        if (Utilities.blank(request.getData().getOrderDirection())) {
-            request.getData().setOrderDirection("asc");
-        }
-        List<RoleFunctionality> items = roleFunctionalityRepository.getByCriteria(request, em, locale);
-        if (Utilities.isEmpty(items)) {
-            response.setStatus(functionalError.DATA_EMPTY("RoleFunctionality", locale));
-            response.setHasError(false);
-            return response;
-        }
-        List<RoleFunctionalityDto> itemsDto = (Utilities.isTrue(request.getIsSimpleLoading())) ? RoleFunctionalityTransformer.INSTANCE.toLiteDtos(items) : RoleFunctionalityTransformer.INSTANCE.toDtos(items);
-        response.setItems(itemsDto);
-        response.setCount(roleFunctionalityRepository.count(request, em, locale));
-        response.setHasError(false);
-        response.setStatus(functionalError.SUCCESS("", locale));
-        log.info("----end get RoleFunctionality-----");
-        return response;*/
         return null;
     }
 }

@@ -17,6 +17,7 @@ import org.mapstruct.factory.Mappers;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Mapper
 public interface ReservationBilletVoyageTransformer {
@@ -50,7 +51,7 @@ public interface ReservationBilletVoyageTransformer {
             @Mapping(source = "entity.deletedBy", target="deletedBy"),
             @Mapping(source = "entity.isDeleted", target="isDeleted"),
     })
-    ReservationBilletVoyageDTO toDto(ReservationBilletVoyage entity) throws ParseException;;
+    ReservationBilletVoyageDTO toDto(ReservationBilletVoyage entity) throws ParseException;
 
     @IterableMapping(qualifiedBy = {FullTransformerQualifier.class})
     List<ReservationBilletVoyageDTO> toDtos(List<ReservationBilletVoyage> entities) throws ParseException;
@@ -67,10 +68,10 @@ public interface ReservationBilletVoyageTransformer {
     }
 
     default List<ReservationBilletVoyageDTO> toLiteDtos(List<ReservationBilletVoyage> entities) {
-        if (entities == null || entities.stream().allMatch(o -> o == null)) {
+        if (entities == null || entities.stream().allMatch(Objects::isNull)) {
             return null;
         }
-        List<ReservationBilletVoyageDTO> dtos = new ArrayList<ReservationBilletVoyageDTO>();
+        List<ReservationBilletVoyageDTO> dtos = new ArrayList<>();
         for (ReservationBilletVoyage entity : entities) {
             dtos.add(toLiteDto(entity));
         }

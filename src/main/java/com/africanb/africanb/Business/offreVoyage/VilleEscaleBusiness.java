@@ -13,10 +13,8 @@ import com.africanb.africanb.helper.TechnicalError;
 import com.africanb.africanb.helper.contrat.IBasicBusiness;
 import com.africanb.africanb.helper.contrat.Request;
 import com.africanb.africanb.helper.contrat.Response;
-import com.africanb.africanb.helper.dto.compagnie.VilleDTO;
 import com.africanb.africanb.helper.dto.offreVoyage.OffreVoyageDTO;
 import com.africanb.africanb.helper.dto.offreVoyage.VilleEscaleDTO;
-import com.africanb.africanb.helper.transformer.compagnie.VilleTransformer;
 import com.africanb.africanb.helper.transformer.offrreVoyage.VilleEscaleTransformer;
 import com.africanb.africanb.helper.searchFunctions.Utilities;
 import com.africanb.africanb.helper.validation.Validate;
@@ -25,7 +23,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -69,7 +67,7 @@ public class VilleEscaleBusiness implements IBasicBusiness<Request<VilleEscaleDT
         }
         List<VilleEscaleDTO> itemsDtos =  Collections.synchronizedList(new ArrayList<>());
         for(VilleEscaleDTO dto: request.getDatas() ) {
-            Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+            Map<String, Object> fieldsToVerify = new HashMap<>();
             fieldsToVerify.put("villeDesignation", dto.getVilleDesignation());
             fieldsToVerify.put("position", dto.getPosition());
             fieldsToVerify.put("offreVoyageDesignation", dto.getOffreVoyageDesignation());
@@ -127,8 +125,8 @@ public class VilleEscaleBusiness implements IBasicBusiness<Request<VilleEscaleDT
 
     @Override
     public Response<VilleEscaleDTO> update(Request<VilleEscaleDTO> request, Locale locale) throws ParseException {
-        Response<VilleEscaleDTO> response = new Response<VilleEscaleDTO>();
-        List<VilleEscale> items = new ArrayList<VilleEscale>();
+        Response<VilleEscaleDTO> response = new Response<>();
+        List<VilleEscale> items = new ArrayList<>();
         if(request.getDatas() == null  || CollectionUtils.isEmpty(request.getDatas())){
             response.setStatus(functionalError.DATA_NOT_EXIST("Liste vide ",locale));
             response.setHasError(true);
@@ -136,7 +134,7 @@ public class VilleEscaleBusiness implements IBasicBusiness<Request<VilleEscaleDT
         }
         List<VilleEscaleDTO> itemsDtos =  Collections.synchronizedList(new ArrayList<>());
         for(VilleEscaleDTO dto: request.getDatas() ) {
-            Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+            Map<String, Object> fieldsToVerify = new HashMap<>();
             fieldsToVerify.put("id", dto.getId());
             if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
                 response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
@@ -157,9 +155,8 @@ public class VilleEscaleBusiness implements IBasicBusiness<Request<VilleEscaleDT
                 response.setHasError(true);
                 return response;
             }
-            OffreVoyage existingOffreVoyage;
             if (Utilities.isNotBlank(dto.getOffreVoyageDesignation()) && !entityToSave.getOffreVoyage().getDesignation().equalsIgnoreCase(dto.getOffreVoyageDesignation())) {
-                existingOffreVoyage = offreVoyageRepository.findByDesignation(dto.getOffreVoyageDesignation(), false);
+                OffreVoyage existingOffreVoyage = offreVoyageRepository.findByDesignation(dto.getOffreVoyageDesignation(), false);
                 if (existingOffreVoyage == null) {
                     response.setStatus(functionalError.DATA_NOT_EXIST("OffreVoyageDesignation -> " + dto.getOffreVoyageDesignation(), locale));
                     response.setHasError(true);
@@ -167,9 +164,8 @@ public class VilleEscaleBusiness implements IBasicBusiness<Request<VilleEscaleDT
                 }
                 entityToSave.setOffreVoyage(existingOffreVoyage);
             }
-            Ville existingVille;
             if (Utilities.isNotBlank(dto.getVilleDesignation()) && !entityToSave.getVille().getDesignation().equalsIgnoreCase(dto.getVilleDesignation())) {
-                existingVille = villeRepository.findByDesignation(dto.getVilleDesignation(), false);
+                Ville existingVille = villeRepository.findByDesignation(dto.getVilleDesignation(), false);
                 if (existingVille == null) {
                     response.setStatus(functionalError.DATA_NOT_EXIST("Ville villeDesignation -> " + dto.getVilleDesignation(), locale));
                     response.setHasError(true);
@@ -265,7 +261,7 @@ public class VilleEscaleBusiness implements IBasicBusiness<Request<VilleEscaleDT
             response.setHasError(true);
             return response;
         }
-        Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+        Map<String, Object> fieldsToVerify = new HashMap<>();
         fieldsToVerify.put("offrVoyageDesigntaion", request.getData().getDesignation());
         if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
             response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));

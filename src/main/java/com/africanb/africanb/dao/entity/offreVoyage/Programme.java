@@ -1,29 +1,26 @@
 package com.africanb.africanb.dao.entity.offreVoyage;
 
-import com.africanb.africanb.utils.Reference.Reference;
-import com.sun.istack.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
 
-import javax.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
+
+import jakarta.persistence.*;
+
+import java.io.Serial;
 import java.io.Serializable;
-import java.sql.Time;
 import java.util.Date;
 
-/**
- * @Authir Alzouma Moussa Mahamadou
- * Cette classe consiste à programme une offre de voyage
- */
+
 @Entity
 @Table(name = "programme")
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter
+@Setter
 @ToString
+@EqualsAndHashCode(callSuper = false)
+@NoArgsConstructor
 public class Programme implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -34,12 +31,12 @@ public class Programme implements Serializable {
     private String designation;
     private String description;
     @ManyToOne
-    JourSemaine jourSemaine;
+    private JourSemaine jourSemaine;
     private Date dateDepart;
     private Date dateArrivee;
     private String HeureDepart;
     private String HeureArrivee;
-    private Integer nombrePlaceDisponible; //Ce nombre de place sera impacté par le nombre de réservatioo
+    private Integer nombrePlaceDisponible;
 
     @Column(name="is_deleted")
     private Boolean    isDeleted ;

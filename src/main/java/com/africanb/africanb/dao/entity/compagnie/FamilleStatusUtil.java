@@ -1,28 +1,25 @@
 package com.africanb.africanb.dao.entity.compagnie;
 
-import com.sun.istack.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
+
+import java.io.Serial;
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.Date;
-import java.util.Objects;
 
-/**
- * @author Alzouma Moussa Mahamadou
- */
+
 @Entity
 @Table(name = "famillestatusutil")
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter
+@Setter
 @ToString
+@EqualsAndHashCode(callSuper = false)
+@NoArgsConstructor
 public class FamilleStatusUtil implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Id

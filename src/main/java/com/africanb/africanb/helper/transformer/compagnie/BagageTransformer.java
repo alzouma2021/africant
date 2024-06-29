@@ -1,13 +1,9 @@
 package com.africanb.africanb.helper.transformer.compagnie;
 
-
 import com.africanb.africanb.dao.entity.compagnie.Bagage;
 import com.africanb.africanb.dao.entity.compagnie.CompagnieTransport;
-import com.africanb.africanb.dao.entity.offreVoyage.OffreVoyage;
-import com.africanb.africanb.dao.entity.offreVoyage.PrixOffreVoyage;
 import com.africanb.africanb.helper.contrat.FullTransformerQualifier;
 import com.africanb.africanb.helper.dto.compagnie.BagageDTO;
-import com.africanb.africanb.helper.dto.offreVoyage.PrixOffreVoyageDTO;
 import com.africanb.africanb.utils.Reference.Reference;
 import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
@@ -18,6 +14,7 @@ import org.mapstruct.factory.Mappers;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Mapper
 public interface BagageTransformer {
@@ -43,7 +40,7 @@ public interface BagageTransformer {
             @Mapping(source = "entity.deletedBy", target="deletedBy"),
             @Mapping(source = "entity.isDeleted", target="isDeleted"),
     })
-    BagageDTO toDto(Bagage entity) throws ParseException;;
+    BagageDTO toDto(Bagage entity) throws ParseException;
 
     @IterableMapping(qualifiedBy = {FullTransformerQualifier.class})
     List<BagageDTO> toDtos(List<Bagage> entities) throws ParseException;
@@ -62,10 +59,10 @@ public interface BagageTransformer {
     }
 
     default List<BagageDTO> toLiteDtos(List<Bagage> entities) {
-        if (entities == null || entities.stream().allMatch(o -> o == null)) {
+        if (entities == null || entities.stream().allMatch(Objects::isNull)) {
             return null;
         }
-        List<BagageDTO> dtos = new ArrayList<BagageDTO>();
+        List<BagageDTO> dtos = new ArrayList<>();
         for (Bagage entity : entities) {
             dtos.add(toLiteDto(entity));
         }

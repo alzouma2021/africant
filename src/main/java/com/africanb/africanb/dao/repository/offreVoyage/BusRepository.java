@@ -22,5 +22,4 @@ public interface BusRepository extends JpaRepository<Bus,Long> {
 
     @Query("select bus from Bus bus where bus.offreVoyage.designation = :offreVoyageDesignation and bus.isDeleted= :isDeleted")
     List<Bus> findByOffreVoyageDesignation(@Param("offreVoyageDesignation") String offreVoyageDesignation, @Param("isDeleted") Boolean isDeleted);
-
 }

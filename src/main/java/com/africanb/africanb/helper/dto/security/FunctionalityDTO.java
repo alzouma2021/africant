@@ -8,9 +8,9 @@ import lombok.ToString;
 
 @Data
 @ToString
-@JsonInclude(JsonInclude.Include.NON_NULL) @JsonPropertyOrder(alphabetic = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonPropertyOrder(alphabetic = true)
 public class FunctionalityDTO {
-
     private Long id;
     private String code;
     private String libelle;
@@ -24,8 +24,6 @@ public class FunctionalityDTO {
     private Long updatedBy;
     private Long deletedBy;
 
-    /// SEARCH PARAM//
-
     private SearchParam<String> codeParam;
     private SearchParam<String>   libelleParam;
     private SearchParam<Boolean> isDeletedParam;
@@ -36,7 +34,6 @@ public class FunctionalityDTO {
     private SearchParam<Long> updatedByParam;
     private SearchParam<Long> deletedByParam;
 
-    // order param
     private String orderField;
     private String orderDirection;
 }

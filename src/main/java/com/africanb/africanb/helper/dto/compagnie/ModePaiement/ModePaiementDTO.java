@@ -1,16 +1,12 @@
 package com.africanb.africanb.helper.dto.compagnie.ModePaiement;
 
 import com.africanb.africanb.helper.searchFunctions.SearchParam;
-import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.springframework.lang.Nullable;
 
-/**
- * @Author Alzouma Moussa Mahamadou
- */
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

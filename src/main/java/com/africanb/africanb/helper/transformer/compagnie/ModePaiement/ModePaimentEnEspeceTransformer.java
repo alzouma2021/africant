@@ -2,10 +2,8 @@ package com.africanb.africanb.helper.transformer.compagnie.ModePaiement;
 
 import com.africanb.africanb.dao.entity.compagnie.CompagnieTransport;
 import com.africanb.africanb.dao.entity.compagnie.ModePaiment.ModePaiementEnEspece;
-import com.africanb.africanb.dao.entity.compagnie.ModePaiment.ModePaiementMoovMoney;
 import com.africanb.africanb.helper.contrat.FullTransformerQualifier;
 import com.africanb.africanb.helper.dto.compagnie.ModePaiement.ModePaiementEnEspeceDTO;
-import com.africanb.africanb.helper.dto.compagnie.ModePaiement.ModePaiementMoovMoneyDTO;
 import com.africanb.africanb.utils.Reference.Reference;
 import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
@@ -16,6 +14,7 @@ import org.mapstruct.factory.Mappers;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Mapper
 public interface ModePaimentEnEspeceTransformer {
@@ -40,7 +39,7 @@ public interface ModePaimentEnEspeceTransformer {
             @Mapping(source = "entity.deletedBy", target="deletedBy"),
             @Mapping(source = "entity.isDeleted", target="isDeleted"),
     })
-    ModePaiementEnEspeceDTO toDto(ModePaiementEnEspece entity) throws ParseException;;
+    ModePaiementEnEspeceDTO toDto(ModePaiementEnEspece entity) throws ParseException;
 
     @IterableMapping(qualifiedBy = {FullTransformerQualifier.class})
     List<ModePaiementEnEspeceDTO> toDtos(List<ModePaiementEnEspece> entities) throws ParseException;
@@ -57,10 +56,10 @@ public interface ModePaimentEnEspeceTransformer {
     }
 
     default List<ModePaiementEnEspeceDTO> toLiteDtos(List<ModePaiementEnEspece> entities) {
-        if (entities == null || entities.stream().allMatch(o -> o == null)) {
+        if (entities == null || entities.stream().allMatch(Objects::isNull)) {
             return null;
         }
-        List<ModePaiementEnEspeceDTO> dtos = new ArrayList<ModePaiementEnEspeceDTO>();
+        List<ModePaiementEnEspeceDTO> dtos = new ArrayList<>();
         for (ModePaiementEnEspece entity : entities) {
             dtos.add(toLiteDto(entity));
         }

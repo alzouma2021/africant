@@ -5,6 +5,7 @@ import com.africanb.africanb.dao.entity.compagnie.StatusUtil;
 import com.africanb.africanb.dao.entity.offreVoyage.OffreVoyage;
 import com.africanb.africanb.dao.entity.offreVoyage.Programme;
 import com.africanb.africanb.dao.entity.reservationBilletVoyage.ReservationBilletVoyage;
+import com.africanb.africanb.dao.entity.reservationBilletVoyage.ReservationBilletVoyage.ReservationBilletVoyageBuilder;
 import com.africanb.africanb.helper.dto.reservationBilletVoyage.ReservationBilletVoyageDTO;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -14,8 +15,8 @@ import javax.annotation.processing.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-06-11T18:20:25+0000",
-    comments = "version: 1.4.2.Final, compiler: javac, environment: Java 11.0.0.1 (Oracle Corporation)"
+    date = "2024-06-29T16:17:01+0000",
+    comments = "version: 1.4.2.Final, compiler: javac, environment: Java 17.0.8 (Oracle Corporation)"
 )
 public class ReservationBilletVoyageTransformerImpl implements ReservationBilletVoyageTransformer {
 
@@ -79,48 +80,48 @@ public class ReservationBilletVoyageTransformerImpl implements ReservationBillet
             return null;
         }
 
-        ReservationBilletVoyage reservationBilletVoyage = new ReservationBilletVoyage();
+        ReservationBilletVoyageBuilder reservationBilletVoyage = ReservationBilletVoyage.builder();
 
         if ( dto != null ) {
-            reservationBilletVoyage.setId( dto.getId() );
-            reservationBilletVoyage.setDesignation( dto.getDesignation() );
-            reservationBilletVoyage.setDescription( dto.getDescription() );
-            reservationBilletVoyage.setDateReservation( dto.getDateReservation() );
-            reservationBilletVoyage.setDateEffectiveDepart( dto.getDateEffectiveDepart() );
-            reservationBilletVoyage.setMontantTotalReservation( dto.getMontantTotalReservation() );
-            reservationBilletVoyage.setNombrePlace( dto.getNombrePlace() );
-            reservationBilletVoyage.setIsOtherPerson( dto.getIsOtherPerson() );
-            reservationBilletVoyage.setClientDetails( dto.getClientDetails() );
-            reservationBilletVoyage.setIsCanceled( dto.getIsCanceled() );
-            reservationBilletVoyage.setRaisonAnnulation( dto.getRaisonAnnulation() );
+            reservationBilletVoyage.id( dto.getId() );
+            reservationBilletVoyage.designation( dto.getDesignation() );
+            reservationBilletVoyage.description( dto.getDescription() );
+            reservationBilletVoyage.dateReservation( dto.getDateReservation() );
+            reservationBilletVoyage.dateEffectiveDepart( dto.getDateEffectiveDepart() );
+            reservationBilletVoyage.montantTotalReservation( dto.getMontantTotalReservation() );
+            reservationBilletVoyage.nombrePlace( dto.getNombrePlace() );
+            reservationBilletVoyage.isOtherPerson( dto.getIsOtherPerson() );
+            reservationBilletVoyage.clientDetails( dto.getClientDetails() );
+            reservationBilletVoyage.isCanceled( dto.getIsCanceled() );
+            reservationBilletVoyage.raisonAnnulation( dto.getRaisonAnnulation() );
             if ( dto.getUpdatedAt() != null ) {
-                reservationBilletVoyage.setUpdatedAt( new SimpleDateFormat( "dd/MM/yyyy" ).parse( dto.getUpdatedAt() ) );
+                reservationBilletVoyage.updatedAt( new SimpleDateFormat( "dd/MM/yyyy" ).parse( dto.getUpdatedAt() ) );
             }
             if ( dto.getCreatedAt() != null ) {
-                reservationBilletVoyage.setCreatedAt( new SimpleDateFormat( "dd/MM/yyyy" ).parse( dto.getCreatedAt() ) );
+                reservationBilletVoyage.createdAt( new SimpleDateFormat( "dd/MM/yyyy" ).parse( dto.getCreatedAt() ) );
             }
             if ( dto.getDeletedAt() != null ) {
-                reservationBilletVoyage.setDeletedAt( new SimpleDateFormat( "dd/MM/yyyy" ).parse( dto.getDeletedAt() ) );
+                reservationBilletVoyage.deletedAt( new SimpleDateFormat( "dd/MM/yyyy" ).parse( dto.getDeletedAt() ) );
             }
-            reservationBilletVoyage.setUpdatedBy( dto.getUpdatedBy() );
-            reservationBilletVoyage.setCreatedBy( dto.getCreatedBy() );
-            reservationBilletVoyage.setDeletedBy( dto.getDeletedBy() );
-            reservationBilletVoyage.setIsDeleted( dto.getIsDeleted() );
+            reservationBilletVoyage.updatedBy( dto.getUpdatedBy() );
+            reservationBilletVoyage.createdBy( dto.getCreatedBy() );
+            reservationBilletVoyage.deletedBy( dto.getDeletedBy() );
+            reservationBilletVoyage.isDeleted( dto.getIsDeleted() );
         }
         if ( gare != null ) {
-            reservationBilletVoyage.setGare( gare );
+            reservationBilletVoyage.gare( gare );
         }
         if ( offreVoyage != null ) {
-            reservationBilletVoyage.setOffreVoyage( offreVoyage );
+            reservationBilletVoyage.offreVoyage( offreVoyage );
         }
         if ( programme != null ) {
-            reservationBilletVoyage.setProgramme( programme );
+            reservationBilletVoyage.programme( programme );
         }
         if ( statusUtilActual != null ) {
-            reservationBilletVoyage.setStatusUtilActual( statusUtilActual );
+            reservationBilletVoyage.statusUtilActual( statusUtilActual );
         }
 
-        return reservationBilletVoyage;
+        return reservationBilletVoyage.build();
     }
 
     private String entityGareDesignation(ReservationBilletVoyage reservationBilletVoyage) {

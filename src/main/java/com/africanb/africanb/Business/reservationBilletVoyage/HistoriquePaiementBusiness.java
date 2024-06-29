@@ -29,14 +29,12 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-/**
- * @Author ALZOUMA MOUSSA MAHAAMADOU
- */
+
 @Log
 @Component
 public class HistoriquePaiementBusiness implements IBasicBusiness<Request<HistoriquePaiementDTO>, Response<HistoriquePaiementDTO>> {
@@ -77,7 +75,6 @@ public class HistoriquePaiementBusiness implements IBasicBusiness<Request<Histor
     public Response<HistoriquePaiementDTO> create(Request<HistoriquePaiementDTO> request, Locale locale) throws ParseException {
         Response<HistoriquePaiementDTO> response = new Response<>();
         List<HistoriquePaiement> items = new ArrayList<>();
-
         if(Optional.of(request.getData()).isEmpty()){
             response.setStatus(functionalError.DATA_NOT_EXIST("Aucune donnée",locale));
             response.setHasError(true);
@@ -93,14 +90,12 @@ public class HistoriquePaiementBusiness implements IBasicBusiness<Request<Histor
             response.setHasError(true);
             return response;
         }
-
         ReservationBilletVoyage existingReservationBilletVoyage = reservationBilletVoyageRepository.findByDesignation(dto.getReservationBilletVoyageDesignation(),false);
         if (existingReservationBilletVoyage==null) {
             response.setStatus(functionalError.SAVE_FAIL("reservationBilletVoyage inexistante !!!!", locale));
             response.setHasError(true);
             return response;
         }
-
         ModePaiement existinModePaiement = modePaiementRepository.findByDesignation(dto.getModePaiementDesignation(),false);
         if (existinModePaiement==null) {
             response.setStatus(functionalError.SAVE_FAIL("Mode paiement inexistant !!!!", locale));
@@ -109,12 +104,7 @@ public class HistoriquePaiementBusiness implements IBasicBusiness<Request<Histor
         }
         dto.setIdentifiantUnique(RandomStringUtils.randomAlphanumeric(10,30));
         HistoriquePaiement entityToSave = HistoriquePaiementTransformer.INSTANCE.toEntity(dto,existinModePaiement,existingReservationBilletVoyage);
-        HistoriquePaiement entitySaved =  historiquePaiementRepository.save(entityToSave);
-        if(entitySaved==null){
-            response.setStatus(functionalError.SAVE_FAIL("Erreur creation",locale));
-            response.setHasError(true);
-            return response;
-        }
+        historiquePaiementRepository.save(entityToSave);
         if(existingReservationBilletVoyage.getProgramme()==null){
             response.setStatus(functionalError.SAVE_FAIL("Programme reservation non trouvé",locale));
             response.setHasError(true);
@@ -125,14 +115,12 @@ public class HistoriquePaiementBusiness implements IBasicBusiness<Request<Histor
             programme.setNombrePlaceDisponible(programme.getNombrePlaceDisponible() - nombreDePlace);
             existingReservationBilletVoyage.setDateReservation(Utilities.getCurrentDate());
             programmeRepository.save(programme);
-
             StatusUtil existingStatusUtilActual = statusUtilRepository.findByDesignation(ProjectConstants.REF_ELEMENT_RESERVATION_PAYEE_ET_NON_EFFECTIVE,false);
             if (existingStatusUtilActual==null) {
                 response.setStatus(functionalError.SAVE_FAIL("Status inexistant !!!!", locale));
                 response.setHasError(true);
                 return response;
             }
-
             existingReservationBilletVoyage.setStatusUtilActual(existingStatusUtilActual);
             Request<StatusUtilReservationBilletVoyageDTO> subRequest = new Request<>();
             subRequest.setDatas(getStatusUtilReservationBilletVoyageDTOS(existingReservationBilletVoyage, existingStatusUtilActual));
@@ -180,7 +168,6 @@ public class HistoriquePaiementBusiness implements IBasicBusiness<Request<Histor
             response.setHasError(true);
             return response;
         }
-
         HistoriquePaiementDTO dto = request.getData();
         HistoriquePaiement existingHistoriquePaiement = historiquePaiementRepository.findByIdentifiantUnique(dto.getIdentifiantUnique());
         if(existingHistoriquePaiement == null){
@@ -189,7 +176,6 @@ public class HistoriquePaiementBusiness implements IBasicBusiness<Request<Histor
             return response;
         }
         items.add(existingHistoriquePaiement);
-
         List<HistoriquePaiementDTO> itemsDto = (Utilities.isTrue(request.getIsSimpleLoading()))
                 ? HistoriquePaiementTransformer.INSTANCE.toLiteDtos(items)
                 : HistoriquePaiementTransformer.INSTANCE.toDtos(items);

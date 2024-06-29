@@ -15,6 +15,7 @@ import org.mapstruct.factory.Mappers;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Mapper
 public interface ValeurCaracteristiqueOffreVoyageLongTransformer {
@@ -40,7 +41,7 @@ public interface ValeurCaracteristiqueOffreVoyageLongTransformer {
             @Mapping(source = "entity.deletedBy", target="deletedBy"),
             @Mapping(source = "entity.isDeleted", target="isDeleted"),
     })
-    ValeurCaracteristiqueOffreVoyageLongDTO toDto(ValeurCaracteristiqueOffreVoyageLong entity) throws ParseException;;
+    ValeurCaracteristiqueOffreVoyageLongDTO toDto(ValeurCaracteristiqueOffreVoyageLong entity) throws ParseException;
 
     @IterableMapping(qualifiedBy = {FullTransformerQualifier.class})
     List<ValeurCaracteristiqueOffreVoyageLongDTO> toDtos(List<ValeurCaracteristiqueOffreVoyageLong> entities) throws ParseException;
@@ -54,15 +55,14 @@ public interface ValeurCaracteristiqueOffreVoyageLongTransformer {
         dto.setDesignation( entity.getDesignation() );
         dto.setDescription(entity.getDescription());
         dto.setValeur(entity.getValeur());
-        //dto.setJourSemaineDesignation(entity.getJourSemaine().getDesignation());
         return dto;
     }
 
     default List<ValeurCaracteristiqueOffreVoyageLongDTO> toLiteDtos(List<ValeurCaracteristiqueOffreVoyageLong> entities) {
-        if (entities == null || entities.stream().allMatch(o -> o == null)) {
+        if (entities == null || entities.stream().allMatch(Objects::isNull)) {
             return null;
         }
-        List<ValeurCaracteristiqueOffreVoyageLongDTO> dtos = new ArrayList<ValeurCaracteristiqueOffreVoyageLongDTO>();
+        List<ValeurCaracteristiqueOffreVoyageLongDTO> dtos = new ArrayList<>();
         for (ValeurCaracteristiqueOffreVoyageLong entity : entities) {
             dtos.add(toLiteDto(entity));
         }

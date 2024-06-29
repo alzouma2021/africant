@@ -1,7 +1,6 @@
 package com.africanb.africanb.dao.repository.compagnie.ModePaiement;
 
 import com.africanb.africanb.dao.entity.compagnie.ModePaiment.ModePaiementMtnMoney;
-import com.africanb.africanb.dao.entity.compagnie.ModePaiment.ModePaiementOrangeMoney;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

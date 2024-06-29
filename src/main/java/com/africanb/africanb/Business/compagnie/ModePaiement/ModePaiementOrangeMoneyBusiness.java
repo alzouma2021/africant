@@ -21,20 +21,16 @@ import lombok.extern.java.Log;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-/**
- * @Author ALZOUMA MOUSSA MAHAAMADOU
- */
+
 @Log
 @Component
 public class ModePaiementOrangeMoneyBusiness implements IBasicBusiness<Request<ModePaiementOrangeMoneyDTO>, Response<ModePaiementOrangeMoneyDTO>> {
 
-
-    private Response<ModePaiementOrangeMoneyDTO> response;
 
     private final ModePaiementOrangeMoneyRepository modePaiementOrangeMoneyRepository;
     private final FunctionalError functionalError;
@@ -61,16 +57,16 @@ public class ModePaiementOrangeMoneyBusiness implements IBasicBusiness<Request<M
 
     @Override
     public Response<ModePaiementOrangeMoneyDTO> create(Request<ModePaiementOrangeMoneyDTO> request, Locale locale) throws ParseException {
-        Response<ModePaiementOrangeMoneyDTO> response = new Response<ModePaiementOrangeMoneyDTO>();
-        List<ModePaiementOrangeMoney> items = new ArrayList<ModePaiementOrangeMoney>();
+        Response<ModePaiementOrangeMoneyDTO> response = new Response<>();
+        List<ModePaiementOrangeMoney> items = new ArrayList<>();
         if(request.getDatas() == null || request.getDatas().isEmpty()){
             response.setStatus(functionalError.DATA_NOT_EXIST("Liste vide",locale));
             response.setHasError(true);
             return response;
         }
-        List<ModePaiementOrangeMoneyDTO>itemsDtos = Collections.synchronizedList(new ArrayList<ModePaiementOrangeMoneyDTO>());
+        List<ModePaiementOrangeMoneyDTO>itemsDtos = Collections.synchronizedList(new ArrayList<>());
         for(ModePaiementOrangeMoneyDTO dto: request.getDatas() ) {
-            Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+            Map<String, Object> fieldsToVerify = new HashMap<>();
             fieldsToVerify.put("telephoneOrangeMoney", dto.getTelephoneOrangeMoney());
             if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
                 response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
@@ -80,17 +76,13 @@ public class ModePaiementOrangeMoneyBusiness implements IBasicBusiness<Request<M
             itemsDtos.add(dto);
         }
         for(ModePaiementOrangeMoneyDTO itemDto : request.getDatas() ){
-            //Chech If CompagnieTransport exists
-            CompagnieTransport exitingCompagnieTransport=null;
-            exitingCompagnieTransport=compagnieTransportRepository.findByRaisonSociale(itemDto.getCompagnieTransportRaisonSociale(), false);
+            CompagnieTransport exitingCompagnieTransport=compagnieTransportRepository.findByRaisonSociale(itemDto.getCompagnieTransportRaisonSociale(), false);
             if (exitingCompagnieTransport == null) {
                 response.setStatus(functionalError.DATA_EXIST("Compagnie de transport ayant la raison sociale"+itemDto.getCompagnieTransportRaisonSociale()+" n'existe pas", locale)) ;
                 response.setHasError(true);
                 return response;
             }
-            //Check if periodiciteAbonnement exists
-            Reference existingTypeModePaiement = null;
-            existingTypeModePaiement = typeModePaiementRepository.findByDesignation(itemDto.getTypeModePaiementDesignation(),false);
+            Reference existingTypeModePaiement = typeModePaiementRepository.findByDesignation(itemDto.getTypeModePaiementDesignation(),false);
             if (existingTypeModePaiement == null) {
                 response.setStatus(functionalError.DATA_EXIST("Le mode de paiment n'existe pas", locale));
                 response.setHasError(true);
@@ -99,8 +91,7 @@ public class ModePaiementOrangeMoneyBusiness implements IBasicBusiness<Request<M
             ModePaiementOrangeMoney entityToSave = ModePaimentOrangeMoneyTransformer.INSTANCE.toEntity(itemDto,exitingCompagnieTransport,existingTypeModePaiement);
             entityToSave.setIsDeleted(false);
             entityToSave.setCreatedAt(Utilities.getCurrentDate());
-            ModePaiementOrangeMoney entitySaved=null;
-            entitySaved= modePaiementOrangeMoneyRepository.save(entityToSave);
+            ModePaiementOrangeMoney entitySaved = modePaiementOrangeMoneyRepository.save(entityToSave);
             items.add(entitySaved);
         }
         if (CollectionUtils.isEmpty(items)) {
@@ -119,16 +110,16 @@ public class ModePaiementOrangeMoneyBusiness implements IBasicBusiness<Request<M
 
     @Override
     public Response<ModePaiementOrangeMoneyDTO> update(Request<ModePaiementOrangeMoneyDTO> request, Locale locale) throws ParseException {
-        Response<ModePaiementOrangeMoneyDTO> response = new Response<ModePaiementOrangeMoneyDTO>();
-        List<ModePaiementOrangeMoney> items = new ArrayList<ModePaiementOrangeMoney>();
+        Response<ModePaiementOrangeMoneyDTO> response = new Response<>();
+        List<ModePaiementOrangeMoney> items = new ArrayList<>();
         if(request.getDatas() == null  || request.getDatas().isEmpty()){
             response.setStatus(functionalError.DATA_NOT_EXIST("Liste vide",locale));
             response.setHasError(true);
             return response;
         }
-        List<ModePaiementOrangeMoneyDTO>itemsDtos = Collections.synchronizedList(new ArrayList<ModePaiementOrangeMoneyDTO>());
+        List<ModePaiementOrangeMoneyDTO>itemsDtos = Collections.synchronizedList(new ArrayList<>());
         for(ModePaiementOrangeMoneyDTO dto: request.getDatas() ) {
-            Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+            Map<String, Object> fieldsToVerify = new HashMap<>();
             fieldsToVerify.put("id", dto.getId());
             if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
                 response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
@@ -153,8 +144,7 @@ public class ModePaiementOrangeMoneyBusiness implements IBasicBusiness<Request<M
                 entityToSave.setTelephoneOrangeMoney(dto.getTelephoneOrangeMoney());
             }
             entityToSave.setUpdatedAt(Utilities.getCurrentDate());
-            ModePaiementOrangeMoney entityUpdated=null;
-            entityUpdated= modePaiementOrangeMoneyRepository.save(entityToSave);
+            ModePaiementOrangeMoney entityUpdated = modePaiementOrangeMoneyRepository.save(entityToSave);
             items.add(entityUpdated);
         }
         if(CollectionUtils.isEmpty(items)){

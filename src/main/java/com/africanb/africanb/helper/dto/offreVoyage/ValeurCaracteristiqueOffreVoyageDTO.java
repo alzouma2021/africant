@@ -1,27 +1,16 @@
 package com.africanb.africanb.helper.dto.offreVoyage;
 
-import com.africanb.africanb.dao.entity.offreVoyage.OffreVoyage;
-import com.africanb.africanb.dao.entity.offreVoyage.ProprieteOffreVoyage;
 import com.africanb.africanb.helper.searchFunctions.SearchParam;
-import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import javax.persistence.*;
-import java.io.Serializable;
-import java.util.Date;
-
-/**
- * @Author Alzouma Moussa Mahamadou
- */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
 public class ValeurCaracteristiqueOffreVoyageDTO {
-
 
 	private Long id;
 	private String designation;

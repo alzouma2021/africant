@@ -1,29 +1,25 @@
 package com.africanb.africanb.dao.entity.offreVoyage;
 
-import com.africanb.africanb.dao.entity.compagnie.CompagnieTransport;
-import com.africanb.africanb.dao.entity.compagnie.StatusUtil;
 import com.africanb.africanb.dao.entity.compagnie.Ville;
-import com.sun.istack.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
+
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
 
-/**
- * @Author Alzouma Moussa Mahamadou
- */
+
 @Entity
 @Table(name = "villeescale")
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter
+@Setter
 @ToString
+@EqualsAndHashCode(callSuper = false)
+@NoArgsConstructor
 public class VilleEscale implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Id

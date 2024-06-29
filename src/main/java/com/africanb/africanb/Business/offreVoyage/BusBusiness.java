@@ -21,14 +21,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-/**
- * @Author ALZOUMA MOUSSA MAHAAMADOU
- */
+
 @Log
 @Component
 public class BusBusiness implements IBasicBusiness<Request<BusDTO>, Response<BusDTO>> {
@@ -59,16 +57,16 @@ public class BusBusiness implements IBasicBusiness<Request<BusDTO>, Response<Bus
 
     @Override
     public Response<BusDTO> create(Request<BusDTO> request, Locale locale) throws ParseException {
-        Response<BusDTO> response = new Response<BusDTO>();
-        List<Bus> items = new ArrayList<Bus>();
+        Response<BusDTO> response = new Response<>();
+        List<Bus> items = new ArrayList<>();
         if(request.getDatas() == null || request.getDatas().isEmpty()){
             response.setStatus(functionalError.DATA_NOT_EXIST("Liste vide",locale));
             response.setHasError(true);
             return response;
         }
-        List<BusDTO> itemsDtos =  Collections.synchronizedList(new ArrayList<BusDTO>());
+        List<BusDTO> itemsDtos =  Collections.synchronizedList(new ArrayList<>());
         for(BusDTO dto: request.getDatas() ) {
-            Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+            Map<String, Object> fieldsToVerify = new HashMap<>();
             fieldsToVerify.put("designation", dto.getDesignation());
             fieldsToVerify.put("numeroBus", dto.getNumeroBus());
             fieldsToVerify.put("nombrePlace", dto.getNombrePlace());
@@ -91,29 +89,24 @@ public class BusBusiness implements IBasicBusiness<Request<BusDTO>, Response<Bus
             itemsDtos.add(dto);
         }
         for(BusDTO itemDto : itemsDtos){
-            Bus existingBus = null;
-            existingBus = busRepository.findByNumeroBus(itemDto.getDesignation(), false);
+            Bus existingBus = busRepository.findByNumeroBus(itemDto.getDesignation(), false);
             if (existingBus != null) {
                 response.setStatus(functionalError.DATA_EXIST("Le bus ayant le numéro -> " + itemDto.getNumeroBus() +", existe déjà", locale));
                 response.setHasError(true);
                 return response;
             }
-            OffreVoyage existingOffreVoyage = null;
-            existingOffreVoyage= offreVoyageRepository.findByDesignation(itemDto.getOffreVoyageDesignation(),false);
+            OffreVoyage existingOffreVoyage = offreVoyageRepository.findByDesignation(itemDto.getOffreVoyageDesignation(),false);
             if (existingOffreVoyage == null) {
                 response.setStatus(functionalError.DATA_EXIST("L'offre de voyage ayant  pour identifiant -> " + itemDto.getOffreVoyageDesignation() +", n'existe pas", locale));
                 response.setHasError(true);
                 return response;
             }
             Bus entityToSave = BusTransformer.INSTANCE.toEntity(itemDto,existingOffreVoyage);
-            log.info("_105 VilleDTO transform to Entity :: ="+ entityToSave.toString());
             entityToSave.setIsDeleted(false);
             entityToSave.setCreatedAt(Utilities.getCurrentDate());
-            //entityToSave.setCreatedBy(request.user); // à modifier
             items.add(entityToSave);
         }
-        List<Bus> itemsSaved = null;
-        itemsSaved = busRepository.saveAll((Iterable<Bus>) items);
+        List<Bus> itemsSaved = busRepository.saveAll(items);
         if (CollectionUtils.isEmpty(itemsSaved)) {
             response.setStatus(functionalError.SAVE_FAIL("Erreur de creation", locale));
             response.setHasError(true);
@@ -130,16 +123,16 @@ public class BusBusiness implements IBasicBusiness<Request<BusDTO>, Response<Bus
 
     @Override
     public Response<BusDTO> update(Request<BusDTO> request, Locale locale) throws ParseException {
-        Response<BusDTO> response = new Response<BusDTO>();
-        List<Bus> items = new ArrayList<Bus>();
+        Response<BusDTO> response = new Response<>();
+        List<Bus> items = new ArrayList<>();
         if(request.getDatas() == null  || request.getDatas().isEmpty()){
             response.setStatus(functionalError.DATA_NOT_EXIST("Liste vide",locale));
             response.setHasError(true);
             return response;
         }
-        List<BusDTO>itemsDtos =  Collections.synchronizedList(new ArrayList<BusDTO>());
+        List<BusDTO>itemsDtos =  Collections.synchronizedList(new ArrayList<>());
         for(BusDTO dto: request.getDatas() ) {
-            Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+            Map<String, Object> fieldsToVerify = new HashMap<>();
             fieldsToVerify.put("id", dto.getId());
             if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
                 response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
@@ -178,7 +171,6 @@ public class BusBusiness implements IBasicBusiness<Request<BusDTO>, Response<Bus
                 }
                 entityToSave.setNumeroBus(dto.getNumeroBus());
             }
-            //Autres
             if(Utilities.isNotBlank(dto.getNumeroBus()) && !dto.getDescription().equals(entityToSave.getNumeroBus())){
                 entityToSave.setNumeroBus(dto.getNumeroBus());
             }
@@ -186,7 +178,6 @@ public class BusBusiness implements IBasicBusiness<Request<BusDTO>, Response<Bus
                 entityToSave.setNombrePlace(dto.getNombrePlace());
             }
             entityToSave.setUpdatedAt(Utilities.getCurrentDate());
-            //entityToSave.setUpdatedBy(request.user);
             items.add(entityToSave);
         }
         if(CollectionUtils.isEmpty(items)){
@@ -197,7 +188,6 @@ public class BusBusiness implements IBasicBusiness<Request<BusDTO>, Response<Bus
         List<BusDTO> itemsDto = (Utilities.isTrue(request.getIsSimpleLoading()))
                 ? BusTransformer.INSTANCE.toLiteDtos(items)
                 : BusTransformer.INSTANCE.toDtos(items);
-
         response.setItems(itemsDto);
         response.setHasError(false);
         response.setStatus(functionalError.SUCCESS("", locale));
@@ -207,60 +197,6 @@ public class BusBusiness implements IBasicBusiness<Request<BusDTO>, Response<Bus
 
     @Override
     public Response<BusDTO> delete(Request<BusDTO> request, Locale locale) {
-
-/*        log.info("----begin delete agence-----");
-        Response<AgenceDto> response = new Response<AgenceDto>();
-        List<Agence> items = new ArrayList<Agence>();
-        //Verification
-        if(request.getDatas().isEmpty() || request.getDatas() == null){
-            response.setStatus(functionalError.DATA_NOT_EXIST("Liste de données est vide ",locale));
-            response.setHasError(true);
-            return response;
-        }
-        //Verification des champs obligatoires
-        for(AgenceDto dto : request.getDatas()) {
-            Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
-            fieldsToVerify.put("id", dto.getId());
-            if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
-                response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
-                response.setHasError(true);
-                return response;
-            }
-        }
-        //Parcourir la liste
-        for(AgenceDto dto : request.getDatas()){
-            // Verification du parametre identifiant
-            Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
-            fieldsToVerify.put("id", dto.getId());
-            if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
-                response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
-                response.setHasError(true);
-                return response;
-            }
-            // Verify if Functionality  exist
-            Agence existingEntity = null;
-            existingEntity = agenceRepository.findOne(dto.getId(), false);
-            if (existingEntity == null) {
-                response.setStatus(functionalError.DATA_NOT_EXIST("L'agence ayant  id -> " + dto.getId() + ",n'existe pas", locale));
-                response.setHasError(true);
-                return response;
-            }
-            log.info("_413 Verification d'existence de l'objet"+existingEntity.toString()); //TODO A effacer
-            //Suppression logique
-            existingEntity.setIsDeleted(true);
-            existingEntity.setDeletedAt(Utilities.getCurrentDate());
-            existingEntity.setDeletedBy(request.user);// a modifier
-            items.add(existingEntity);
-        }
-        //Verificatioon de la liste de données recues
-        if(items == null  || items.isEmpty()){
-            response.setStatus(functionalError.DATA_NOT_EXIST("Liste de données est vide ",locale));
-            response.setHasError(true);
-            return response;
-        }
-        response.setHasError(false);
-        response.setStatus(functionalError.SUCCESS("", locale));
-        return response;*/
         return null;
     }
 
@@ -276,44 +212,18 @@ public class BusBusiness implements IBasicBusiness<Request<BusDTO>, Response<Bus
 
     @Override
     public Response<BusDTO> getByCriteria(Request<BusDTO> request, Locale locale) {
-       /*
-        log.info("----begin get agence-----");
-        Response<AgenceDto> response = new Response<AgenceDto>();
-        if (Utilities.blank(request.getData().getOrderField())) {
-            request.getData().setOrderField("");
-        }
-        if (Utilities.blank(request.getData().getOrderDirection())) {
-            request.getData().setOrderDirection("asc");
-        }
-        List<Agence> items = agenceRepository.getByCriteria(request, em, locale);
-        if (Utilities.isEmpty(items)) {
-            response.setStatus(functionalError.DATA_EMPTY("Aucune agence ne correspond aux critères de recherche definis", locale));
-            response.setHasError(false);
-            return response;
-        }
-        List<AgenceDto> itemsDto = (Utilities.isTrue(request.getIsSimpleLoading()))
-                                 ? AgenceTransformer.INSTANCE.toLiteDtos(items)
-                                 : AgenceTransformer.INSTANCE.toDtos(items);
-        response.setItems(itemsDto);
-        response.setCount(agenceRepository.count(request, em, locale));
-        response.setHasError(false);
-        response.setStatus(functionalError.SUCCESS("", locale));
-        log.info("----end get agence-----");
-        return response;
-    */
         return null;
     }
 
     @Transactional(rollbackFor = {RuntimeException.class, Exception.class})
     public Response<BusDTO> getBusByOffreVoyage(Request<BusDTO> request, Locale locale) throws ParseException {
-        Response<BusDTO> response = new Response<BusDTO>();
-        List<Bus> items = new ArrayList<Bus>();
+        Response<BusDTO> response = new Response<>();
         if (request.getData() == null ) {
             response.setStatus(functionalError.DATA_NOT_EXIST("Aucune donnée definie", locale));
             response.setHasError(true);
             return response;
         }
-        Map<String, Object> fieldsToVerify = new HashMap<String, Object>();
+        Map<String, Object> fieldsToVerify = new HashMap<>();
         fieldsToVerify.put("offrVoyageDesigntaion", request.getData().getDesignation());
         if (!Validate.RequiredValue(fieldsToVerify).isGood()) {
             response.setStatus(functionalError.FIELD_EMPTY(Validate.getValidate().getField(), locale));
@@ -321,14 +231,13 @@ public class BusBusiness implements IBasicBusiness<Request<BusDTO>, Response<Bus
             return response;
         }
         String offreVoyageDesignation=request.getData().getDesignation();
-        OffreVoyage existingOffreVoyage = null;
-        existingOffreVoyage= offreVoyageRepository.findByDesignation(offreVoyageDesignation,false);
+        OffreVoyage existingOffreVoyage= offreVoyageRepository.findByDesignation(offreVoyageDesignation,false);
         if (existingOffreVoyage == null) {
             response.setStatus(functionalError.DATA_EXIST("L'offre de voyage n'existe pas", locale));
             response.setHasError(true);
             return response;
         }
-        items = busRepository.findByOffreVoyageDesignation(offreVoyageDesignation,false);
+        List<Bus> items = busRepository.findByOffreVoyageDesignation(offreVoyageDesignation,false);
         if (CollectionUtils.isEmpty(items)) {
             response.setStatus(functionalError.DATA_NOT_EXIST("L'offre de voayage ne dispose d'aucun prix", locale));
             response.setHasError(true);

@@ -14,6 +14,7 @@ import org.mapstruct.factory.Mappers;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Mapper
 public interface HistoriquePaiementTransformer {
@@ -29,7 +30,7 @@ public interface HistoriquePaiementTransformer {
             @Mapping(source = "entity.modePaiement.designation", target = "modePaiementDesignation"),
             @Mapping(source = "entity.reservationBilletVoyage.designation", target = "reservationBilletVoyageDesignation")
     })
-    HistoriquePaiementDTO toDto(HistoriquePaiement entity) throws ParseException;;
+    HistoriquePaiementDTO toDto(HistoriquePaiement entity) throws ParseException;
 
     @IterableMapping(qualifiedBy = {FullTransformerQualifier.class})
     List<HistoriquePaiementDTO> toDtos(List<HistoriquePaiement> entities) throws ParseException;
@@ -46,10 +47,10 @@ public interface HistoriquePaiementTransformer {
     }
 
     default List<HistoriquePaiementDTO> toLiteDtos(List<HistoriquePaiement> entities) {
-        if (entities == null || entities.stream().allMatch(o -> o == null)) {
+        if (entities == null || entities.stream().allMatch(Objects::isNull)) {
             return null;
         }
-        List<HistoriquePaiementDTO> dtos = new ArrayList<HistoriquePaiementDTO>();
+        List<HistoriquePaiementDTO> dtos = new ArrayList<>();
         for (HistoriquePaiement entity : entities) {
             dtos.add(toLiteDto(entity));
         }
