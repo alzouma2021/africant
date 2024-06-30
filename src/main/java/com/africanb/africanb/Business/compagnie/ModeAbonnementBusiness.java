@@ -1,10 +1,8 @@
 package com.africanb.africanb.Business.compagnie;
 
 import com.africanb.africanb.Business.design.factory.modeAbonnement.ModeAbonnementDTOCreator;
-import com.africanb.africanb.Business.design.factory.modeAbonnement.ModeAbonnementFromEntityCreator;
+import com.africanb.africanb.Business.design.factory.modeAbonnement.ModeAbonnementEntityCreator;
 import com.africanb.africanb.dao.entity.compagnie.CompagnieTransport;
-import com.africanb.africanb.dao.entity.compagnie.ModeAbonnement.AbonnementPeriodique;
-import com.africanb.africanb.dao.entity.compagnie.ModeAbonnement.AbonnementPrelevement;
 import com.africanb.africanb.dao.entity.compagnie.ModeAbonnement.ModeAbonnement;
 import com.africanb.africanb.dao.repository.Reference.ReferenceRepository;
 import com.africanb.africanb.dao.repository.compagnie.CompagnieTransportRepository;
@@ -31,6 +29,7 @@ import jakarta.persistence.EntityManager;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Log
@@ -240,13 +239,13 @@ public class ModeAbonnementBusiness implements IBasicBusiness<Request<ModeAbonne
             response.setHasError(true);
             return response;
         }
-        List<ModeAbonnement>  items = modeAbonnementRepository.findByCompagnieTransport(compagnieTransportRaisonScoiale,false);
+        List<ModeAbonnement> items = modeAbonnementRepository.findByCompagnieTransport(compagnieTransportRaisonScoiale,false);
         if (CollectionUtils.isEmpty(items)) {
             response.setStatus(functionalError.DATA_NOT_EXIST("La compagnie de transport ne dispose d'aucun mode d'abonnement", locale));
             response.setHasError(true);
             return response;
         }
-        List<ModeAbonnementDTO> itemsDto = transformerClasseFilleEnClasseModeAbonnementDTO(items);
+        List<ModeAbonnementDTO> itemsDto = buildModeAbonnementDTOFromEntity(items);
         response.setItems(itemsDto);
         response.setHasError(false);
         response.setStatus(functionalError.SUCCESS("", locale));
@@ -320,18 +319,10 @@ public class ModeAbonnementBusiness implements IBasicBusiness<Request<ModeAbonne
       return new ModeAbonnementDTO();
     }
 
-    public  List<ModeAbonnementDTO> transformerClasseFilleEnClasseModeAbonnementDTO(List<ModeAbonnement> modeAbonnementList) {
-        List<ModeAbonnementDTO> itemsDTO = Collections.synchronizedList(new ArrayList<>());
-        for(ModeAbonnement modeAbonnement:modeAbonnementList) {
-            if(modeAbonnement instanceof AbonnementPrelevement abonnementPrelevement){
-                ModeAbonnementDTO dto = ModeAbonnementFromEntityCreator.createModeAbonnementDTO(abonnementPrelevement);
-                itemsDTO.add(dto);
-            }
-            if(modeAbonnement instanceof AbonnementPeriodique abonnementPeriodique){
-                ModeAbonnementDTO dto = ModeAbonnementFromEntityCreator.createModeAbonnementDTO(abonnementPeriodique);
-                itemsDTO.add(dto);
-            }
-        }
-        return itemsDTO;
+    public  List<ModeAbonnementDTO> buildModeAbonnementDTOFromEntity(List<ModeAbonnement> modeAbonnementList) {
+        return modeAbonnementList.stream()
+                .filter(Objects::nonNull)
+                .map(modeAbonnement -> ModeAbonnementEntityCreator.createModeAbonnementDTO(modeAbonnement))
+                .collect(Collectors.toList());
     }
 }

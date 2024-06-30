@@ -1,6 +1,7 @@
 package com.africanb.africanb.Business.compagnie.ModePaiement;
 
-
+import com.africanb.africanb.Business.design.factory.modePaiment.ModePaiementDTOCreator;
+import com.africanb.africanb.Business.design.factory.modePaiment.ModePaiementEntityCreator;
 import com.africanb.africanb.dao.entity.compagnie.CompagnieTransport;
 import com.africanb.africanb.dao.entity.compagnie.ModeAbonnement.AbonnementPrelevement;
 import com.africanb.africanb.dao.entity.compagnie.ModeAbonnement.ModeAbonnement;
@@ -29,7 +30,7 @@ import jakarta.persistence.EntityManager;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-
+import java.util.stream.Collectors;
 
 
 @Log
@@ -46,6 +47,7 @@ public class ModePaiementBusiness implements IBasicBusiness<Request<ModePaiement
     private final ModePaiementEnEspeceBusiness modePaiementEnEspeceBusiness;
     private final ModePaiementMoovMoneyBusiness modePaiementMoovMoneyBusiness;
     private final ModePaiementOrangeMoneyBusiness modePaiementOrangeMoneyBusiness;
+    private  final ModePaiementWaveBusiness modePaiementWaveBusiness;
     private final ModePaiementMtnMoneyBusiness modePaiementMtnMoneyBusiness;
     private final TechnicalError technicalError;
     private final ExceptionUtils exceptionUtils;
@@ -54,7 +56,7 @@ public class ModePaiementBusiness implements IBasicBusiness<Request<ModePaiement
     private final SimpleDateFormat dateFormat;
     private final SimpleDateFormat dateTimeFormat;
 
-    public ModePaiementBusiness(FunctionalError functionalError, ModePaiementRepository modePaiementRepository, ModeAbonnementRepository modeAbonnementRepository, CompagnieTransportRepository compagnieTransportRepository, ReferenceRepository typeModePaiementRepository, ModePaiementEnEspeceBusiness modePaiementEnEspeceBusiness, ModePaiementMoovMoneyBusiness modePaiementMoovMoneyBusiness, ModePaiementOrangeMoneyBusiness modePaiementOrangeMoneyBusiness, ModePaiementMtnMoneyBusiness modePaiementMtnMoneyBusiness, TechnicalError technicalError, ExceptionUtils exceptionUtils, EntityManager em) {
+    public ModePaiementBusiness(FunctionalError functionalError, ModePaiementRepository modePaiementRepository, ModeAbonnementRepository modeAbonnementRepository, CompagnieTransportRepository compagnieTransportRepository, ReferenceRepository typeModePaiementRepository, ModePaiementEnEspeceBusiness modePaiementEnEspeceBusiness, ModePaiementMoovMoneyBusiness modePaiementMoovMoneyBusiness, ModePaiementOrangeMoneyBusiness modePaiementOrangeMoneyBusiness, ModePaiementWaveBusiness modePaiementWaveBusiness, ModePaiementMtnMoneyBusiness modePaiementMtnMoneyBusiness, TechnicalError technicalError, ExceptionUtils exceptionUtils, EntityManager em) {
         this.functionalError = functionalError;
         this.modePaiementRepository = modePaiementRepository;
         this.modeAbonnementRepository = modeAbonnementRepository;
@@ -63,6 +65,7 @@ public class ModePaiementBusiness implements IBasicBusiness<Request<ModePaiement
         this.modePaiementEnEspeceBusiness = modePaiementEnEspeceBusiness;
         this.modePaiementMoovMoneyBusiness = modePaiementMoovMoneyBusiness;
         this.modePaiementOrangeMoneyBusiness = modePaiementOrangeMoneyBusiness;
+        this.modePaiementWaveBusiness = modePaiementWaveBusiness;
         this.modePaiementMtnMoneyBusiness = modePaiementMtnMoneyBusiness;
         this.technicalError = technicalError;
         this.exceptionUtils = exceptionUtils;
@@ -134,7 +137,7 @@ public class ModePaiementBusiness implements IBasicBusiness<Request<ModePaiement
                 return response;
             }
             itemDto=Utilities.transformerLaClasseModePaiementtEnClasseFilleCorrespondante(itemDto);
-            ModePaiementDTO entitySaved= saveModePaiementEnFonctionDeLaClasseFilleCorrespondante(itemDto,locale);
+            ModePaiementDTO entitySaved= saveModePaiement(itemDto,locale);
             itemsDto.add(entitySaved);
         }
         if (CollectionUtils.isEmpty(itemsDto)) {
@@ -199,7 +202,7 @@ public class ModePaiementBusiness implements IBasicBusiness<Request<ModePaiement
                 return response;
             }
             itemDto=Utilities.transformerLaClasseModePaiementtEnClasseFilleCorrespondante(itemDto);
-            ModePaiementDTO entitySaved=updateModePaiementEnFonctionDeLaClasseFilleCorrespondante(itemDto,locale);
+            ModePaiementDTO entitySaved= updateModePaiement(itemDto,locale);
             itemsDto.add(entitySaved);
         }
         if (CollectionUtils.isEmpty(itemsDto)) {
@@ -261,7 +264,7 @@ public class ModePaiementBusiness implements IBasicBusiness<Request<ModePaiement
             response.setHasError(true);
             return response;
         }
-        List<ModePaiementDTO> itemsDto = transformerClasseFilleEnClasseModePaiementDTO(items);
+        List<ModePaiementDTO> itemsDto = buildModePaiementDTOFromEntity(items);
         response.setItems(itemsDto);
         response.setHasError(false);
         response.setStatus(functionalError.SUCCESS("", locale));
@@ -269,7 +272,7 @@ public class ModePaiementBusiness implements IBasicBusiness<Request<ModePaiement
         return response;
     }
 
-    public ModePaiementDTO saveModePaiementEnFonctionDeLaClasseFilleCorrespondante(ModePaiementDTO modePaiementDTO, Locale locale) throws ParseException {
+    public ModePaiementDTO saveModePaiement(ModePaiementDTO modePaiementDTO, Locale locale) throws ParseException {
         if(modePaiementDTO instanceof ModePaiementMtnMoneyDTO modePaiementMtnMoneyDTO){
             Request<ModePaiementMtnMoneyDTO> subRequest = new Request<>();
             List<ModePaiementMtnMoneyDTO> itemsDTO = Collections.synchronizedList(new ArrayList<>());
@@ -281,31 +284,9 @@ public class ModePaiementBusiness implements IBasicBusiness<Request<ModePaiement
                 response.setHasError(Boolean.TRUE);
                 return new ModePaiementDTO();
             }
-
-            ModePaiementDTO rtn = new ModePaiementDTO();
-            rtn.setId( subResponse.getItems().get(0).getId());
-            rtn.setDesignation( subResponse.getItems().get(0).getDesignation());
-            rtn.setDescription( subResponse.getItems().get(0).getDescription());
-            rtn.setTelephoneGenerique( subResponse.getItems().get(0).getTelephoneMtnMoney());
-            rtn.setTypeModePaiementDesignation(subResponse.getItems().get(0).getTypeModePaiementDesignation());
-            rtn.setCompagnieTransportRaisonSociale(subResponse.getItems().get(0).getCompagnieTransportRaisonSociale());
-            rtn.setDeletedAt( subResponse.getItems().get(0).getDeletedAt());
-            rtn.setUpdatedAt( subResponse.getItems().get(0).getUpdatedAt());
-            rtn.setCreatedAt( subResponse.getItems().get(0).getCreatedAt());
-            rtn.setCreatedBy( subResponse.getItems().get(0).getCreatedBy());
-            rtn.setIsDeleted( subResponse.getItems().get(0).getIsDeleted());
-            rtn.setDeletedBy( subResponse.getItems().get(0).getDeletedBy());
-            rtn.setUpdatedBy( subResponse.getItems().get(0).getUpdatedBy());
-            rtn.setIsDeletedParam( subResponse.getItems().get(0).getIsDeletedParam());
-            rtn.setUpdatedAtParam( subResponse.getItems().get(0).getUpdatedAtParam());
-            rtn.setCreatedAtParam( subResponse.getItems().get(0).getCreatedAtParam());
-            rtn.setCreatedByParam( subResponse.getItems().get(0).getCreatedByParam());
-            rtn.setUpdatedByParam(subResponse.getItems().get(0).getUpdatedByParam());
-            rtn.setOrderDirection(subResponse.getItems().get(0).getOrderDirection());
-
-            return rtn;
+            return ModePaiementDTOCreator.createModePaiementDTO(subResponse.getItems().get(0));
         }
-        else if(modePaiementDTO instanceof ModePaiementOrangeMoneyDTO modePaiementOrangeMoneyDTO){
+         if(modePaiementDTO instanceof ModePaiementOrangeMoneyDTO modePaiementOrangeMoneyDTO){
             Request<ModePaiementOrangeMoneyDTO> subRequest = new Request<>();
             List<ModePaiementOrangeMoneyDTO> itemsDTO = Collections.synchronizedList(new ArrayList<>());
             itemsDTO.add(modePaiementOrangeMoneyDTO);
@@ -316,29 +297,9 @@ public class ModePaiementBusiness implements IBasicBusiness<Request<ModePaiement
                 response.setHasError(Boolean.TRUE);
                 return new ModePaiementDTO();
             }
-            ModePaiementDTO rtn = new ModePaiementDTO();
-            rtn.setId( subResponse.getItems().get(0).getId());
-            rtn.setDesignation( subResponse.getItems().get(0).getDesignation());
-            rtn.setDescription( subResponse.getItems().get(0).getDescription());
-            rtn.setTelephoneGenerique( subResponse.getItems().get(0).getTelephoneOrangeMoney());
-            rtn.setTypeModePaiementDesignation(subResponse.getItems().get(0).getTypeModePaiementDesignation());
-            rtn.setCompagnieTransportRaisonSociale(subResponse.getItems().get(0).getCompagnieTransportRaisonSociale());
-            rtn.setDeletedAt( subResponse.getItems().get(0).getDeletedAt());
-            rtn.setUpdatedAt( subResponse.getItems().get(0).getUpdatedAt());
-            rtn.setCreatedAt( subResponse.getItems().get(0).getCreatedAt());
-            rtn.setCreatedBy( subResponse.getItems().get(0).getCreatedBy());
-            rtn.setIsDeleted( subResponse.getItems().get(0).getIsDeleted());
-            rtn.setDeletedBy( subResponse.getItems().get(0).getDeletedBy());
-            rtn.setUpdatedBy( subResponse.getItems().get(0).getUpdatedBy());
-            rtn.setIsDeletedParam( subResponse.getItems().get(0).getIsDeletedParam());
-            rtn.setUpdatedAtParam( subResponse.getItems().get(0).getUpdatedAtParam());
-            rtn.setCreatedAtParam( subResponse.getItems().get(0).getCreatedAtParam());
-            rtn.setCreatedByParam( subResponse.getItems().get(0).getCreatedByParam());
-            rtn.setUpdatedByParam(subResponse.getItems().get(0).getUpdatedByParam());
-            rtn.setOrderDirection(subResponse.getItems().get(0).getOrderDirection());
-            return rtn;
+             return ModePaiementDTOCreator.createModePaiementDTO(subResponse.getItems().get(0));
         }
-        else if(modePaiementDTO instanceof ModePaiementMoovMoneyDTO modePaiementMoovMoneyDTO){
+         if(modePaiementDTO instanceof ModePaiementMoovMoneyDTO modePaiementMoovMoneyDTO){
             Request<ModePaiementMoovMoneyDTO> subRequest = new Request<>();
             List<ModePaiementMoovMoneyDTO> itemsDTO = Collections.synchronizedList(new ArrayList<>());
             itemsDTO.add(modePaiementMoovMoneyDTO);
@@ -349,30 +310,9 @@ public class ModePaiementBusiness implements IBasicBusiness<Request<ModePaiement
                 response.setHasError(Boolean.TRUE);
                 return new ModePaiementDTO();
             }
-            ModePaiementDTO rtn = new ModePaiementDTO();
-            rtn.setId( subResponse.getItems().get(0).getId());
-            rtn.setDesignation( subResponse.getItems().get(0).getDesignation());
-            rtn.setDescription( subResponse.getItems().get(0).getDescription());
-
-            rtn.setTelephoneGenerique( subResponse.getItems().get(0).getTelephoneMoovMoney());
-            rtn.setTypeModePaiementDesignation(subResponse.getItems().get(0).getTypeModePaiementDesignation());
-            rtn.setCompagnieTransportRaisonSociale(subResponse.getItems().get(0).getCompagnieTransportRaisonSociale());
-
-            rtn.setDeletedAt( subResponse.getItems().get(0).getDeletedAt());
-            rtn.setUpdatedAt( subResponse.getItems().get(0).getUpdatedAt());
-            rtn.setCreatedAt( subResponse.getItems().get(0).getCreatedAt());
-            rtn.setCreatedBy( subResponse.getItems().get(0).getCreatedBy());
-            rtn.setIsDeleted( subResponse.getItems().get(0).getIsDeleted());
-            rtn.setDeletedBy( subResponse.getItems().get(0).getDeletedBy());
-            rtn.setUpdatedBy( subResponse.getItems().get(0).getUpdatedBy());
-            rtn.setIsDeletedParam( subResponse.getItems().get(0).getIsDeletedParam());
-            rtn.setUpdatedAtParam( subResponse.getItems().get(0).getUpdatedAtParam());
-            rtn.setCreatedAtParam( subResponse.getItems().get(0).getCreatedAtParam());
-            rtn.setCreatedByParam( subResponse.getItems().get(0).getCreatedByParam());
-            rtn.setUpdatedByParam(subResponse.getItems().get(0).getUpdatedByParam());
-            rtn.setOrderDirection(subResponse.getItems().get(0).getOrderDirection());
-            return rtn;
-        }else if(modePaiementDTO instanceof ModePaiementEnEspeceDTO modePaiementEnEspeceDTO){
+             return ModePaiementDTOCreator.createModePaiementDTO(subResponse.getItems().get(0));
+        }
+         if(modePaiementDTO instanceof ModePaiementEnEspeceDTO modePaiementEnEspeceDTO){
             Request<ModePaiementEnEspeceDTO> subRequest = new Request<>();
             List<ModePaiementEnEspeceDTO> itemsDTO = Collections.synchronizedList(new ArrayList<>());
             itemsDTO.add(modePaiementEnEspeceDTO);
@@ -383,31 +323,25 @@ public class ModePaiementBusiness implements IBasicBusiness<Request<ModePaiement
                 response.setHasError(Boolean.TRUE);
                 return new ModePaiementDTO();
             }
-            ModePaiementDTO rtn = new ModePaiementDTO();
-            rtn.setId( subResponse.getItems().get(0).getId());
-            rtn.setDesignation( subResponse.getItems().get(0).getDesignation());
-            rtn.setDescription( subResponse.getItems().get(0).getDescription());
-            rtn.setTypeModePaiementDesignation(subResponse.getItems().get(0).getTypeModePaiementDesignation());
-            rtn.setCompagnieTransportRaisonSociale(subResponse.getItems().get(0).getCompagnieTransportRaisonSociale());
-            rtn.setDeletedAt( subResponse.getItems().get(0).getDeletedAt());
-            rtn.setUpdatedAt( subResponse.getItems().get(0).getUpdatedAt());
-            rtn.setCreatedAt( subResponse.getItems().get(0).getCreatedAt());
-            rtn.setCreatedBy( subResponse.getItems().get(0).getCreatedBy());
-            rtn.setIsDeleted( subResponse.getItems().get(0).getIsDeleted());
-            rtn.setDeletedBy( subResponse.getItems().get(0).getDeletedBy());
-            rtn.setUpdatedBy( subResponse.getItems().get(0).getUpdatedBy());
-            rtn.setIsDeletedParam( subResponse.getItems().get(0).getIsDeletedParam());
-            rtn.setUpdatedAtParam( subResponse.getItems().get(0).getUpdatedAtParam());
-            rtn.setCreatedAtParam( subResponse.getItems().get(0).getCreatedAtParam());
-            rtn.setCreatedByParam( subResponse.getItems().get(0).getCreatedByParam());
-            rtn.setUpdatedByParam(subResponse.getItems().get(0).getUpdatedByParam());
-            rtn.setOrderDirection(subResponse.getItems().get(0).getOrderDirection());
-            return rtn;
+             return ModePaiementDTOCreator.createModePaiementDTO(subResponse.getItems().get(0));
+        }
+        if(modePaiementDTO instanceof ModePaiementWaveDTO modePaiementWaveDTO){
+            Request<ModePaiementWaveDTO> subRequest = new Request<>();
+            List<ModePaiementWaveDTO> itemsDTO = Collections.synchronizedList(new ArrayList<>());
+            itemsDTO.add(modePaiementWaveDTO);
+            subRequest.setDatas( itemsDTO);
+            Response<ModePaiementWaveDTO> subResponse = modePaiementWaveBusiness.create(subRequest,locale);
+            if (subResponse.isHasError()) {
+                response.setStatus(subResponse.getStatus());
+                response.setHasError(Boolean.TRUE);
+                return new ModePaiementDTO();
+            }
+            return ModePaiementDTOCreator.createModePaiementDTO(subResponse.getItems().get(0));
         }
         return new ModePaiementDTO();
     }
 
-    public ModePaiementDTO updateModePaiementEnFonctionDeLaClasseFilleCorrespondante(ModePaiementDTO modePaiementDTO, Locale locale) throws ParseException {
+    public ModePaiementDTO updateModePaiement(ModePaiementDTO modePaiementDTO, Locale locale) throws ParseException {
         if(modePaiementDTO instanceof ModePaiementMtnMoneyDTO modePaiementMtnMoneyDTO){
             Request<ModePaiementMtnMoneyDTO> subRequest = new Request<>();
             List<ModePaiementMtnMoneyDTO> itemsDTO = Collections.synchronizedList(new ArrayList<>());
@@ -419,31 +353,9 @@ public class ModePaiementBusiness implements IBasicBusiness<Request<ModePaiement
                 response.setHasError(Boolean.TRUE);
                 return new ModePaiementDTO();
             }
-            ModePaiementDTO rtn = new ModePaiementDTO();
-            rtn.setId( subResponse.getItems().get(0).getId());
-            rtn.setDesignation( subResponse.getItems().get(0).getDesignation());
-            rtn.setDescription( subResponse.getItems().get(0).getDescription());
-
-            rtn.setTelephoneGenerique( subResponse.getItems().get(0).getTelephoneMtnMoney());
-            rtn.setTypeModePaiementDesignation(subResponse.getItems().get(0).getTypeModePaiementDesignation());
-            rtn.setCompagnieTransportRaisonSociale(subResponse.getItems().get(0).getCompagnieTransportRaisonSociale());
-
-            rtn.setDeletedAt( subResponse.getItems().get(0).getDeletedAt());
-            rtn.setUpdatedAt( subResponse.getItems().get(0).getUpdatedAt());
-            rtn.setCreatedAt( subResponse.getItems().get(0).getCreatedAt());
-            rtn.setCreatedBy( subResponse.getItems().get(0).getCreatedBy());
-            rtn.setIsDeleted( subResponse.getItems().get(0).getIsDeleted());
-            rtn.setDeletedBy( subResponse.getItems().get(0).getDeletedBy());
-            rtn.setUpdatedBy( subResponse.getItems().get(0).getUpdatedBy());
-            rtn.setIsDeletedParam( subResponse.getItems().get(0).getIsDeletedParam());
-            rtn.setUpdatedAtParam( subResponse.getItems().get(0).getUpdatedAtParam());
-            rtn.setCreatedAtParam( subResponse.getItems().get(0).getCreatedAtParam());
-            rtn.setCreatedByParam( subResponse.getItems().get(0).getCreatedByParam());
-            rtn.setUpdatedByParam(subResponse.getItems().get(0).getUpdatedByParam());
-            rtn.setOrderDirection(subResponse.getItems().get(0).getOrderDirection());
-            return rtn;
+            ModePaiementDTOCreator.createModePaiementDTO(subResponse.getItems().get(0));
         }
-        else if(modePaiementDTO instanceof ModePaiementOrangeMoneyDTO modePaiementOrangeMoneyDTO){
+        if(modePaiementDTO instanceof ModePaiementOrangeMoneyDTO modePaiementOrangeMoneyDTO){
             Request<ModePaiementOrangeMoneyDTO> subRequest = new Request<>();
             List<ModePaiementOrangeMoneyDTO> itemsDTO = Collections.synchronizedList(new ArrayList<>());
             itemsDTO.add(modePaiementOrangeMoneyDTO);
@@ -454,29 +366,9 @@ public class ModePaiementBusiness implements IBasicBusiness<Request<ModePaiement
                 response.setHasError(Boolean.TRUE);
                 return new ModePaiementDTO();
             }
-            ModePaiementDTO rtn = new ModePaiementDTO();
-            rtn.setId( subResponse.getItems().get(0).getId());
-            rtn.setDesignation( subResponse.getItems().get(0).getDesignation());
-            rtn.setDescription( subResponse.getItems().get(0).getDescription());
-            rtn.setTelephoneGenerique( subResponse.getItems().get(0).getTelephoneOrangeMoney());
-            rtn.setTypeModePaiementDesignation(subResponse.getItems().get(0).getTypeModePaiementDesignation());
-            rtn.setCompagnieTransportRaisonSociale(subResponse.getItems().get(0).getCompagnieTransportRaisonSociale());
-            rtn.setDeletedAt( subResponse.getItems().get(0).getDeletedAt());
-            rtn.setUpdatedAt( subResponse.getItems().get(0).getUpdatedAt());
-            rtn.setCreatedAt( subResponse.getItems().get(0).getCreatedAt());
-            rtn.setCreatedBy( subResponse.getItems().get(0).getCreatedBy());
-            rtn.setIsDeleted( subResponse.getItems().get(0).getIsDeleted());
-            rtn.setDeletedBy( subResponse.getItems().get(0).getDeletedBy());
-            rtn.setUpdatedBy( subResponse.getItems().get(0).getUpdatedBy());
-            rtn.setIsDeletedParam( subResponse.getItems().get(0).getIsDeletedParam());
-            rtn.setUpdatedAtParam( subResponse.getItems().get(0).getUpdatedAtParam());
-            rtn.setCreatedAtParam( subResponse.getItems().get(0).getCreatedAtParam());
-            rtn.setCreatedByParam( subResponse.getItems().get(0).getCreatedByParam());
-            rtn.setUpdatedByParam(subResponse.getItems().get(0).getUpdatedByParam());
-            rtn.setOrderDirection(subResponse.getItems().get(0).getOrderDirection());
-            return rtn;
+            ModePaiementDTOCreator.createModePaiementDTO(subResponse.getItems().get(0));
         }
-        else if(modePaiementDTO instanceof ModePaiementMoovMoneyDTO modePaiementMoovMoneyDTO){
+        if(modePaiementDTO instanceof ModePaiementMoovMoneyDTO modePaiementMoovMoneyDTO){
             Request<ModePaiementMoovMoneyDTO> subRequest = new Request<>();
             List<ModePaiementMoovMoneyDTO> itemsDTO = Collections.synchronizedList(new ArrayList<>());
             itemsDTO.add(modePaiementMoovMoneyDTO);
@@ -487,28 +379,9 @@ public class ModePaiementBusiness implements IBasicBusiness<Request<ModePaiement
                 response.setHasError(Boolean.TRUE);
                 return new ModePaiementDTO();
             }
-            ModePaiementDTO rtn = new ModePaiementDTO();
-            rtn.setId( subResponse.getItems().get(0).getId());
-            rtn.setDesignation( subResponse.getItems().get(0).getDesignation());
-            rtn.setDescription( subResponse.getItems().get(0).getDescription());
-            rtn.setTelephoneGenerique( subResponse.getItems().get(0).getTelephoneMoovMoney());
-            rtn.setTypeModePaiementDesignation(subResponse.getItems().get(0).getTypeModePaiementDesignation());
-            rtn.setCompagnieTransportRaisonSociale(subResponse.getItems().get(0).getCompagnieTransportRaisonSociale());
-            rtn.setDeletedAt( subResponse.getItems().get(0).getDeletedAt());
-            rtn.setUpdatedAt( subResponse.getItems().get(0).getUpdatedAt());
-            rtn.setCreatedAt( subResponse.getItems().get(0).getCreatedAt());
-            rtn.setCreatedBy( subResponse.getItems().get(0).getCreatedBy());
-            rtn.setIsDeleted( subResponse.getItems().get(0).getIsDeleted());
-            rtn.setDeletedBy( subResponse.getItems().get(0).getDeletedBy());
-            rtn.setUpdatedBy( subResponse.getItems().get(0).getUpdatedBy());
-            rtn.setIsDeletedParam( subResponse.getItems().get(0).getIsDeletedParam());
-            rtn.setUpdatedAtParam( subResponse.getItems().get(0).getUpdatedAtParam());
-            rtn.setCreatedAtParam( subResponse.getItems().get(0).getCreatedAtParam());
-            rtn.setCreatedByParam( subResponse.getItems().get(0).getCreatedByParam());
-            rtn.setUpdatedByParam(subResponse.getItems().get(0).getUpdatedByParam());
-            rtn.setOrderDirection(subResponse.getItems().get(0).getOrderDirection());
-            return rtn;
-        }else if(modePaiementDTO instanceof ModePaiementEnEspeceDTO modePaiementEnEspeceDTO){
+            ModePaiementDTOCreator.createModePaiementDTO(subResponse.getItems().get(0));
+        }
+        if(modePaiementDTO instanceof ModePaiementEnEspeceDTO modePaiementEnEspeceDTO){
             Request<ModePaiementEnEspeceDTO> subRequest = new Request<>();
             List<ModePaiementEnEspeceDTO> itemsDTO = Collections.synchronizedList(new ArrayList<>());
             itemsDTO.add(modePaiementEnEspeceDTO);
@@ -519,116 +392,15 @@ public class ModePaiementBusiness implements IBasicBusiness<Request<ModePaiement
                 response.setHasError(Boolean.TRUE);
                 return new ModePaiementDTO();
             }
-            ModePaiementDTO rtn = new ModePaiementDTO();
-            rtn.setId( subResponse.getItems().get(0).getId());
-            rtn.setDesignation( subResponse.getItems().get(0).getDesignation());
-            rtn.setDescription( subResponse.getItems().get(0).getDescription());
-            rtn.setTypeModePaiementDesignation(subResponse.getItems().get(0).getTypeModePaiementDesignation());
-            rtn.setCompagnieTransportRaisonSociale(subResponse.getItems().get(0).getCompagnieTransportRaisonSociale());
-            rtn.setDeletedAt( subResponse.getItems().get(0).getDeletedAt());
-            rtn.setUpdatedAt( subResponse.getItems().get(0).getUpdatedAt());
-            rtn.setCreatedAt( subResponse.getItems().get(0).getCreatedAt());
-            rtn.setCreatedBy( subResponse.getItems().get(0).getCreatedBy());
-            rtn.setIsDeleted( subResponse.getItems().get(0).getIsDeleted());
-            rtn.setDeletedBy( subResponse.getItems().get(0).getDeletedBy());
-            rtn.setUpdatedBy( subResponse.getItems().get(0).getUpdatedBy());
-            rtn.setIsDeletedParam( subResponse.getItems().get(0).getIsDeletedParam());
-            rtn.setUpdatedAtParam( subResponse.getItems().get(0).getUpdatedAtParam());
-            rtn.setCreatedAtParam( subResponse.getItems().get(0).getCreatedAtParam());
-            rtn.setCreatedByParam( subResponse.getItems().get(0).getCreatedByParam());
-            rtn.setUpdatedByParam(subResponse.getItems().get(0).getUpdatedByParam());
-            rtn.setOrderDirection(subResponse.getItems().get(0).getOrderDirection());
-
-            return rtn;
+            ModePaiementDTOCreator.createModePaiementDTO(subResponse.getItems().get(0));
         }
         return new ModePaiementDTO();
     }
 
-    public  List<ModePaiementDTO> transformerClasseFilleEnClasseModePaiementDTO(List<ModePaiement> modePaiementList) {
-        List<ModePaiementDTO> itemsDTO = Collections.synchronizedList(new ArrayList<>());
-        for(ModePaiement modePaiement:modePaiementList) {
-            if(modePaiement instanceof ModePaiementMoovMoney modePaiementMoovMoney){
-                ModePaiementDTO rtn = new ModePaiementDTO();
-                rtn.setId(modePaiementMoovMoney.getId());
-                rtn.setDesignation(modePaiementMoovMoney.getDesignation());
-                rtn.setDescription(modePaiementMoovMoney.getDescription());
-                rtn.setTelephoneGenerique(modePaiementMoovMoney.getTelephoneMoovMoney());
-                rtn.setTypeModePaiementDesignation(modePaiementMoovMoney.getTypeModePaiement().getDesignation());
-                rtn.setCompagnieTransportRaisonSociale(modePaiementMoovMoney.getCompagnieTransport().getRaisonSociale());
-                rtn.setDeletedAt(modePaiementMoovMoney.getDeletedAt()!=null?modePaiementMoovMoney.getDeletedAt().toString():null);
-                rtn.setUpdatedAt(modePaiementMoovMoney.getUpdatedAt()!=null?modePaiementMoovMoney.getUpdatedAt().toString():null);
-                rtn.setCreatedAt(modePaiementMoovMoney.getCreatedAt()!=null?modePaiementMoovMoney.getCreatedAt().toString():null);
-                rtn.setCreatedBy(modePaiementMoovMoney.getCreatedBy());
-                rtn.setIsDeleted(modePaiementMoovMoney.getIsDeleted());
-                rtn.setDeletedBy(modePaiementMoovMoney.getDeletedBy());
-                rtn.setUpdatedBy(modePaiementMoovMoney.getUpdatedBy());
-                itemsDTO.add(rtn);
-            }
-            else if(modePaiement instanceof ModePaiementOrangeMoney modePaiementOrangeMoney){
-                ModePaiementDTO rtn = new ModePaiementDTO();
-                rtn.setId(modePaiementOrangeMoney.getId());
-                rtn.setDesignation(modePaiementOrangeMoney.getDesignation());
-                rtn.setDescription(modePaiementOrangeMoney.getDescription());
-                rtn.setTelephoneGenerique(modePaiementOrangeMoney.getTelephoneOrangeMoney());
-                rtn.setTypeModePaiementDesignation(modePaiementOrangeMoney.getTypeModePaiement().getDesignation());
-                rtn.setCompagnieTransportRaisonSociale(modePaiementOrangeMoney.getCompagnieTransport().getRaisonSociale());
-                rtn.setDeletedAt(modePaiementOrangeMoney.getDeletedAt()!=null?modePaiementOrangeMoney.getDeletedAt().toString():null);
-                rtn.setUpdatedAt(modePaiementOrangeMoney.getUpdatedAt()!=null?modePaiementOrangeMoney.getUpdatedAt().toString():null);
-                rtn.setCreatedAt(modePaiementOrangeMoney.getCreatedAt()!=null?modePaiementOrangeMoney.getCreatedAt().toString():null);
-                rtn.setCreatedBy(modePaiementOrangeMoney.getCreatedBy());
-                rtn.setIsDeleted(modePaiementOrangeMoney.getIsDeleted());
-                rtn.setDeletedBy(modePaiementOrangeMoney.getDeletedBy());
-                rtn.setUpdatedBy(modePaiementOrangeMoney.getUpdatedBy());
-                itemsDTO.add(rtn);
-            }else if(modePaiement instanceof ModePaiementMtnMoney modePaiementMtnMoney){
-                ModePaiementDTO rtn = new ModePaiementDTO();
-                rtn.setId(modePaiementMtnMoney.getId());
-                rtn.setDesignation(modePaiementMtnMoney.getDesignation());
-                rtn.setDescription(modePaiementMtnMoney.getDescription());
-                rtn.setTelephoneGenerique(modePaiementMtnMoney.getTelephoneMtnMoney());
-                rtn.setTypeModePaiementDesignation(modePaiementMtnMoney.getTypeModePaiement().getDesignation());
-                rtn.setCompagnieTransportRaisonSociale(modePaiementMtnMoney.getCompagnieTransport().getRaisonSociale());
-                rtn.setDeletedAt(modePaiementMtnMoney.getDeletedAt()!=null?modePaiementMtnMoney.getDeletedAt().toString():null);
-                rtn.setUpdatedAt(modePaiementMtnMoney.getUpdatedAt()!=null?modePaiementMtnMoney.getUpdatedAt().toString():null);
-                rtn.setCreatedAt(modePaiementMtnMoney.getCreatedAt()!=null?modePaiementMtnMoney.getCreatedAt().toString():null);
-                rtn.setCreatedBy(modePaiementMtnMoney.getCreatedBy());
-                rtn.setIsDeleted(modePaiementMtnMoney.getIsDeleted());
-                rtn.setDeletedBy(modePaiementMtnMoney.getDeletedBy());
-                rtn.setUpdatedBy(modePaiementMtnMoney.getUpdatedBy());
-                itemsDTO.add(rtn);
-            }else if(modePaiement instanceof ModePaiementWave modePaiementWave){
-                ModePaiementDTO rtn = new ModePaiementDTO();
-                rtn.setId(modePaiementWave.getId());
-                rtn.setDesignation(modePaiementWave.getDesignation());
-                rtn.setDescription(modePaiementWave.getDescription());
-                rtn.setTelephoneGenerique(modePaiementWave.getTelephoneWave());
-                rtn.setTypeModePaiementDesignation(modePaiementWave.getTypeModePaiement().getDesignation());
-                rtn.setCompagnieTransportRaisonSociale(modePaiementWave.getCompagnieTransport().getRaisonSociale());
-                rtn.setDeletedAt(modePaiementWave.getDeletedAt()!=null?modePaiementWave.getDeletedAt().toString():null);
-                rtn.setUpdatedAt(modePaiementWave.getUpdatedAt()!=null?modePaiementWave.getUpdatedAt().toString():null);
-                rtn.setCreatedAt(modePaiementWave.getCreatedAt()!=null?modePaiementWave.getCreatedAt().toString():null);
-                rtn.setCreatedBy(modePaiementWave.getCreatedBy());
-                rtn.setIsDeleted(modePaiementWave.getIsDeleted());
-                rtn.setDeletedBy(modePaiementWave.getDeletedBy());
-                rtn.setUpdatedBy(modePaiementWave.getUpdatedBy());
-                itemsDTO.add(rtn);
-            }else if(modePaiement instanceof ModePaiementEnEspece modePaiementEnEspece){
-                ModePaiementDTO rtn = new ModePaiementDTO();
-                rtn.setId(modePaiementEnEspece.getId());
-                rtn.setDesignation(modePaiementEnEspece.getDesignation());
-                rtn.setDescription(modePaiementEnEspece.getDescription());
-                rtn.setTypeModePaiementDesignation(modePaiementEnEspece.getTypeModePaiement().getDesignation());
-                rtn.setCompagnieTransportRaisonSociale(modePaiementEnEspece.getCompagnieTransport().getRaisonSociale());
-                rtn.setDeletedAt(modePaiementEnEspece.getDeletedAt()!=null?modePaiementEnEspece.getDeletedAt().toString():null);
-                rtn.setUpdatedAt(modePaiementEnEspece.getUpdatedAt()!=null?modePaiementEnEspece.getUpdatedAt().toString():null);
-                rtn.setCreatedAt(modePaiementEnEspece.getCreatedAt()!=null?modePaiementEnEspece.getCreatedAt().toString():null);
-                rtn.setCreatedBy(modePaiementEnEspece.getCreatedBy());
-                rtn.setIsDeleted(modePaiementEnEspece.getIsDeleted());
-                rtn.setDeletedBy(modePaiementEnEspece.getDeletedBy());
-                rtn.setUpdatedBy(modePaiementEnEspece.getUpdatedBy());
-                itemsDTO.add(rtn);
-            }
-        }
-        return itemsDTO;
+    public  List<ModePaiementDTO> buildModePaiementDTOFromEntity(List<ModePaiement> modePaiementList) {
+        return  modePaiementList.stream()
+                    .filter(Objects::nonNull)
+                    .map(modePaiement -> ModePaiementEntityCreator.createModePaiementDTO(modePaiement))
+                    .collect(Collectors.toList());
     }
 }

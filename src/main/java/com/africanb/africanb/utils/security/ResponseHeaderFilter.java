@@ -6,19 +6,20 @@ import org.springframework.stereotype.Component;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.web.filter.OncePerRequestFilter;
+
 import java.io.IOException;
 
 
 @Slf4j
 @Component
 @Order(1)
-public class ResponseHeaderFilter extends HttpFilter {
+public class ResponseHeaderFilter extends OncePerRequestFilter {
 
     @Override
-    public void doFilter(HttpServletRequest servletRequest, HttpServletResponse servletResponse, FilterChain chain) throws IOException, ServletException {
+    public void doFilterInternal(HttpServletRequest servletRequest, HttpServletResponse servletResponse, FilterChain chain) throws IOException, ServletException {
         servletResponse.setHeader("Access-Control-Allow-Origin", "*");
         servletResponse.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS");
         servletResponse.setHeader("Access-Control-Allow-Credentials", "true");

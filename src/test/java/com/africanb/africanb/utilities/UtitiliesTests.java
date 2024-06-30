@@ -88,16 +88,16 @@ public class UtitiliesTests {
         ModeAbonnement modeAbonnement = new ModeAbonnement();
         modeAbonnement.setDateDebutAbonnement(Date.from(Instant.now()));
         modeAbonnement.setDateFinAbonnement(Date.from(Instant.now()));
-            CompagnieTransport compagnieTransport = new CompagnieTransport();
-            compagnieTransport.setDesignation("compagnieTransport001");
-            compagnieTransport.setRaisonSociale("amm");
-            compagnieTransport.setEmail("test@gmail.com");
+        CompagnieTransport compagnieTransport = new CompagnieTransport();
+        compagnieTransport.setDesignation("compagnieTransport001");
+        compagnieTransport.setRaisonSociale("amm");
+        compagnieTransport.setEmail("test@gmail.com");
         modeAbonnement.setCompagnieTransport(compagnieTransport);
-            Reference periodiciteAbonnement = new Reference();
-            periodiciteAbonnement.setDesignation("Mensuel");
+        Reference periodiciteAbonnement = new Reference();
+        periodiciteAbonnement.setDesignation("Mensuel");
         modeAbonnement.setPeriodiciteAbonnement(periodiciteAbonnement);
-            Reference typeModeAbonnement = new Reference();
-            typeModeAbonnement.setDesignation("Prelevement");
+        Reference typeModeAbonnement = new Reference();
+        typeModeAbonnement.setDesignation("Prelevement");
         modeAbonnement.setTypeModeAbonnement(typeModeAbonnement);
 
         AbonnementPrelevement rtn = Utilities.transformerEntityModeAbonnementEnEntityAbonnementPrelevement(modeAbonnement);

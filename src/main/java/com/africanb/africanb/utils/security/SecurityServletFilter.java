@@ -16,9 +16,10 @@ import org.springframework.stereotype.Component;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebFilter;
-import jakarta.servlet.http.HttpFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.web.filter.OncePerRequestFilter;
+
 import java.io.IOException;
 import java.util.*;
 
@@ -27,7 +28,7 @@ import java.util.*;
 @Component
 @WebFilter(filterName = "Filter", urlPatterns = {"/roles"})
 @Order(3)
-public class SecurityServletFilter extends HttpFilter {
+public class SecurityServletFilter extends OncePerRequestFilter {
 
     private final FunctionalError functionalError;
     private final ExceptionUtils exceptionUtils;
@@ -41,7 +42,7 @@ public class SecurityServletFilter extends HttpFilter {
 
     @SneakyThrows
     @Override
-    protected void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain)  {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)  {
         log.info("filter method begin");
         log.info(request.getRequestURI());
 

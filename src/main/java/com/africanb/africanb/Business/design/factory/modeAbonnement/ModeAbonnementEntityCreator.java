@@ -2,11 +2,9 @@ package com.africanb.africanb.Business.design.factory.modeAbonnement;
 
 import com.africanb.africanb.dao.entity.compagnie.ModeAbonnement.AbonnementPeriodique;
 import com.africanb.africanb.dao.entity.compagnie.ModeAbonnement.AbonnementPrelevement;
-import com.africanb.africanb.helper.dto.compagnie.ModeAbonnement.AbonnementPeriodiqueDTO;
-import com.africanb.africanb.helper.dto.compagnie.ModeAbonnement.AbonnementPrelevementDTO;
 import com.africanb.africanb.helper.dto.compagnie.ModeAbonnement.ModeAbonnementDTO;
 
-public class ModeAbonnementFromEntityCreator {
+public class ModeAbonnementEntityCreator {
 
     public static ModeAbonnementDTO createModeAbonnementDTO(Object object){
         if(object instanceof AbonnementPeriodique){

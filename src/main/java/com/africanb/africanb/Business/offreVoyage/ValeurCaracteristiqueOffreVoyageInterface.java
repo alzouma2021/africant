@@ -8,6 +8,6 @@ import java.util.List;
 import java.util.Locale;
 
 public interface ValeurCaracteristiqueOffreVoyageInterface {
-    ValeurCaracteristiqueOffreVoyageDTO saveValeurCaracteristiqueOffreVoyageDTOEnFonctionDuTypeDeLaPropriete(ValeurCaracteristiqueOffreVoyageDTO valeurCaracteristiqueOffreVoyageDTO, Locale locale) throws ParseException;
-    List<ValeurCaracteristiqueOffreVoyageDTO> convertValeurCaracteristiqueOffreVoyagesFilleToValeurCaracteristiqueOffreVoyageDTO(List<ValeurCaracteristiqueOffreVoyage> valeurCaracteristiqueOffreVoyageList);
+    ValeurCaracteristiqueOffreVoyageDTO saveValeurCaracteristiqueOffreVoyage(ValeurCaracteristiqueOffreVoyageDTO valeurCaracteristiqueOffreVoyageDTO, Locale locale) throws ParseException;
+    List<ValeurCaracteristiqueOffreVoyageDTO> convertClassIntoValeurCaracteristiqueOffreVoyageDTO(List<ValeurCaracteristiqueOffreVoyage> valeurCaracteristiqueOffreVoyageList);
 }

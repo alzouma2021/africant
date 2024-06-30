@@ -12,7 +12,7 @@ import javax.annotation.processing.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-06-29T21:41:07+0000",
+    date = "2024-06-30T16:51:03+0000",
     comments = "version: 1.4.2.Final, compiler: javac, environment: Java 17.0.8 (Oracle Corporation)"
 )
 public class ValeurCaracteristiqueOffreVoyageStringTransformerImpl implements ValeurCaracteristiqueOffreVoyageStringTransformer {

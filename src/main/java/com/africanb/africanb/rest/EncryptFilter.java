@@ -5,9 +5,7 @@ import java.io.IOException;
 import java.util.Locale;
 
 import jakarta.servlet.FilterChain;
-import jakarta.servlet.FilterConfig;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -16,10 +14,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
-public class EncryptFilter extends HttpFilter {
+public class EncryptFilter extends OncePerRequestFilter {
 
     private static final String	defaultTenant	= "null";
     private static final String defaultLanguage = "fr";
@@ -30,8 +29,7 @@ public class EncryptFilter extends HttpFilter {
     }
 
     @Override
-    public void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
-            throws IOException, ServletException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         slf4jLogger.info("begin doFilter");
 
         languageManager(request);
@@ -50,13 +48,8 @@ public class EncryptFilter extends HttpFilter {
         res.setHeader("X-Content-Type-Options", "nosniff");
         res.setHeader("Cache-control", "no-store, no-cache");
         res.setHeader("X-Frame-Options", "DENY");
-        chain.doFilter(request, response);
+        filterChain.doFilter(request, response);
         slf4jLogger.info("end doFilter");
-    }
-
-    @Override
-    public void init(FilterConfig arg0) {
-        // TODO Auto-generated method stub
     }
 
     private static void languageManager(HttpServletRequest req) {

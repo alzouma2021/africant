@@ -11,9 +11,10 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import jakarta.servlet.*;
-import jakarta.servlet.http.HttpFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.web.filter.OncePerRequestFilter;
+
 import java.io.IOException;
 import java.util.Locale;
 
@@ -21,7 +22,7 @@ import java.util.Locale;
 @Slf4j
 @Component
 @Order(2)
-public class ClientCredentialsFilter extends HttpFilter {
+public class ClientCredentialsFilter extends OncePerRequestFilter {
 
     @Value("${server.id}")
     private String serverId;
@@ -36,17 +37,18 @@ public class ClientCredentialsFilter extends HttpFilter {
     }
 
     @Override
-    public void doFilter(HttpServletRequest servletRequest, HttpServletResponse servletResponse, FilterChain chain) throws IOException, ServletException {
+    public void doFilterInternal(HttpServletRequest servletRequest, HttpServletResponse servletResponse, FilterChain chain) throws IOException, ServletException {
         //Get Parameters Client
         Response<UsersDTO> resp = new Response<>();
         Locale locale     = new Locale("Fr", "");
+
+        if (JwtUtils.doesPathNotRequireAuthentication(servletRequest, servletResponse, chain)) return;
 
         String serverIdProvider = servletRequest.getHeader("server_id");
         String clientIdProvider = servletRequest.getHeader("client_id");
         String serverIdConsumer =  serverId;
         String clientIdConsumer =  clientId;
 
-        if (JwtUtils.doesPathNotRequireAuthentication(servletRequest, servletResponse, chain)) return;
         //Check
         if(Utilities.isBlank(serverIdProvider) || Utilities.isBlank(clientIdProvider)){
                 servletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // HTTP 401.
