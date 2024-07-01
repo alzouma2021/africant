@@ -3,6 +3,7 @@ package com.africanb.africanb.Business.offreVoyage;
 
 import com.africanb.africanb.Business.design.factory.valeurCaracteristiqueOffreVoyage.ValeurCaracteristiqueOffreVoyageDTOCreator;
 import com.africanb.africanb.Business.design.factory.valeurCaracteristiqueOffreVoyage.ValeurCaracteristiqueOffreVoyageEntityCreator;
+import com.africanb.africanb.Business.design.factory.valeurCaracteristiqueOffreVoyage.ValeurCaracteristiqueOffreVoyageUtils;
 import com.africanb.africanb.dao.entity.offreVoyage.*;
 import com.africanb.africanb.dao.repository.offreVoyage.OffreVoyageRepository;
 import com.africanb.africanb.dao.repository.offreVoyage.ProprieteOffreVoyageRepository;
@@ -112,8 +113,7 @@ public class ValeurCaracteristiqueOffreVoyageBusiness implements IBasicBusiness<
                 }
             }
             itemDto.setTypeProprieteOffreVoyageDesignation(existingProprieteOffreVoyage.getTypeProprieteOffreVoyage().getDesignation());
-            itemDto=Utilities.transformerValeurCaracteristiqueOffreVoyagEnLaClasseFilleCorrespondateEnFonctionDuTypeDeLaPropriete(itemDto);
-            ValeurCaracteristiqueOffreVoyageDTO entitySaved = saveValeurCaracteristiqueOffreVoyage(itemDto,locale);
+            ValeurCaracteristiqueOffreVoyageDTO entitySaved = saveValeurCaracteristiqueOffreVoyage(ValeurCaracteristiqueOffreVoyageUtils.transformAbstractClassIntoChildClass(itemDto),locale);
             itemsDto.add(entitySaved);
         }
         if (CollectionUtils.isEmpty(itemsDto)) {

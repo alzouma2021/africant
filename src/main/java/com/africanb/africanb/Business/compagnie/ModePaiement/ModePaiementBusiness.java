@@ -2,6 +2,7 @@ package com.africanb.africanb.Business.compagnie.ModePaiement;
 
 import com.africanb.africanb.Business.design.factory.modePaiment.ModePaiementDTOCreator;
 import com.africanb.africanb.Business.design.factory.modePaiment.ModePaiementEntityCreator;
+import com.africanb.africanb.Business.design.factory.modePaiment.ModePaiementUtils;
 import com.africanb.africanb.dao.entity.compagnie.CompagnieTransport;
 import com.africanb.africanb.dao.entity.compagnie.ModeAbonnement.AbonnementPrelevement;
 import com.africanb.africanb.dao.entity.compagnie.ModeAbonnement.ModeAbonnement;
@@ -17,7 +18,6 @@ import com.africanb.africanb.helper.contrat.IBasicBusiness;
 import com.africanb.africanb.helper.contrat.Request;
 import com.africanb.africanb.helper.contrat.Response;
 import com.africanb.africanb.helper.dto.compagnie.ModePaiement.*;
-import com.africanb.africanb.helper.searchFunctions.Utilities;
 import com.africanb.africanb.helper.validation.Validate;
 import com.africanb.africanb.utils.Constants.ProjectConstants;
 import com.africanb.africanb.utils.Reference.Reference;
@@ -136,8 +136,7 @@ public class ModePaiementBusiness implements IBasicBusiness<Request<ModePaiement
                 response.setHasError(true);
                 return response;
             }
-            itemDto=Utilities.transformerLaClasseModePaiementtEnClasseFilleCorrespondante(itemDto);
-            ModePaiementDTO entitySaved= saveModePaiement(itemDto,locale);
+            ModePaiementDTO entitySaved = saveModePaiement(ModePaiementUtils.transformAbstractClassIntoChildClass(itemDto),locale);
             itemsDto.add(entitySaved);
         }
         if (CollectionUtils.isEmpty(itemsDto)) {
@@ -201,8 +200,7 @@ public class ModePaiementBusiness implements IBasicBusiness<Request<ModePaiement
                 response.setHasError(true);
                 return response;
             }
-            itemDto=Utilities.transformerLaClasseModePaiementtEnClasseFilleCorrespondante(itemDto);
-            ModePaiementDTO entitySaved= updateModePaiement(itemDto,locale);
+            ModePaiementDTO entitySaved = updateModePaiement(ModePaiementUtils.transformAbstractClassIntoChildClass(itemDto),locale);
             itemsDto.add(entitySaved);
         }
         if (CollectionUtils.isEmpty(itemsDto)) {

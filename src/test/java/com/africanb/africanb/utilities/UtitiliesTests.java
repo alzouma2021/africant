@@ -1,9 +1,9 @@
 package com.africanb.africanb.utilities;
 
 
-import com.africanb.africanb.dao.entity.compagnie.CompagnieTransport;
-import com.africanb.africanb.dao.entity.compagnie.ModeAbonnement.AbonnementPrelevement;
-import com.africanb.africanb.dao.entity.compagnie.ModeAbonnement.ModeAbonnement;
+import com.africanb.africanb.Business.design.factory.modeAbonnement.ModeAbonnementUtils;
+import com.africanb.africanb.Business.design.factory.modePaiment.ModePaiementUtils;
+import com.africanb.africanb.Business.design.factory.valeurCaracteristiqueOffreVoyage.ValeurCaracteristiqueOffreVoyageUtils;
 import com.africanb.africanb.helper.dto.compagnie.ModeAbonnement.AbonnementPeriodiqueDTO;
 import com.africanb.africanb.helper.dto.compagnie.ModeAbonnement.AbonnementPrelevementDTO;
 import com.africanb.africanb.helper.dto.compagnie.ModeAbonnement.ModeAbonnementDTO;
@@ -13,14 +13,11 @@ import com.africanb.africanb.helper.dto.offreVoyage.ValeurCaracteristiqueOffreVo
 import com.africanb.africanb.helper.dto.offreVoyage.ValeurCaracteristiqueOffreVoyageLongDTO;
 import com.africanb.africanb.helper.dto.offreVoyage.ValeurCaracteristiqueOffreVoyageStringDTO;
 import com.africanb.africanb.helper.searchFunctions.Utilities;
-import com.africanb.africanb.utils.Reference.Reference;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collections;
@@ -30,8 +27,8 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@Disabled
 @SpringBootTest
+@Disabled
 public class UtitiliesTests {
 
     @Test
@@ -41,7 +38,7 @@ public class UtitiliesTests {
         valeurCaracteristiqueOffreVoyageDTO.setTypeProprieteOffreVoyageDesignation("refElementLong");
         valeurCaracteristiqueOffreVoyageDTO.setValeurTexte("12");
 
-        ValeurCaracteristiqueOffreVoyageDTO rtn =  Utilities.transformerValeurCaracteristiqueOffreVoyagEnLaClasseFilleCorrespondateEnFonctionDuTypeDeLaPropriete(valeurCaracteristiqueOffreVoyageDTO);
+        ValeurCaracteristiqueOffreVoyageDTO rtn =  ValeurCaracteristiqueOffreVoyageUtils.transformAbstractClassIntoChildClass(valeurCaracteristiqueOffreVoyageDTO);
 
         assertNotNull(rtn);
         assertInstanceOf(ValeurCaracteristiqueOffreVoyageLongDTO.class,rtn);
@@ -57,7 +54,7 @@ public class UtitiliesTests {
         valeurCaracteristiqueOffreVoyageDTO.setTypeProprieteOffreVoyageDesignation("refElementBoolean");
         valeurCaracteristiqueOffreVoyageDTO.setValeurTexte("false");
 
-        ValeurCaracteristiqueOffreVoyageDTO rtn =  Utilities.transformerValeurCaracteristiqueOffreVoyagEnLaClasseFilleCorrespondateEnFonctionDuTypeDeLaPropriete(valeurCaracteristiqueOffreVoyageDTO);
+        ValeurCaracteristiqueOffreVoyageDTO rtn =  ValeurCaracteristiqueOffreVoyageUtils.transformAbstractClassIntoChildClass(valeurCaracteristiqueOffreVoyageDTO);
 
         assertNotNull(rtn);
         assertInstanceOf(ValeurCaracteristiqueOffreVoyageBooleanDTO.class,rtn);
@@ -73,7 +70,7 @@ public class UtitiliesTests {
         valeurCaracteristiqueOffreVoyageDTO.setTypeProprieteOffreVoyageDesignation("refElementString");
         valeurCaracteristiqueOffreVoyageDTO.setValeurTexte("froid");
 
-        ValeurCaracteristiqueOffreVoyageDTO rtn =  Utilities.transformerValeurCaracteristiqueOffreVoyagEnLaClasseFilleCorrespondateEnFonctionDuTypeDeLaPropriete(valeurCaracteristiqueOffreVoyageDTO);
+        ValeurCaracteristiqueOffreVoyageDTO rtn =  ValeurCaracteristiqueOffreVoyageUtils.transformAbstractClassIntoChildClass(valeurCaracteristiqueOffreVoyageDTO);
 
         assertNotNull(rtn);
         assertInstanceOf(ValeurCaracteristiqueOffreVoyageStringDTO.class,rtn);
@@ -82,32 +79,6 @@ public class UtitiliesTests {
         assertEquals(rtn.getProprieteOffreVoyageDesignation(),valeurCaracteristiqueOffreVoyageDTO.getProprieteOffreVoyageDesignation());
     }
 
-    @Disabled
-    @Test
-    public void testTransformerEntityModeAbonnementEnEntityAbonnementPrelevement(){
-        ModeAbonnement modeAbonnement = new ModeAbonnement();
-        modeAbonnement.setDateDebutAbonnement(Date.from(Instant.now()));
-        modeAbonnement.setDateFinAbonnement(Date.from(Instant.now()));
-        CompagnieTransport compagnieTransport = new CompagnieTransport();
-        compagnieTransport.setDesignation("compagnieTransport001");
-        compagnieTransport.setRaisonSociale("amm");
-        compagnieTransport.setEmail("test@gmail.com");
-        modeAbonnement.setCompagnieTransport(compagnieTransport);
-        Reference periodiciteAbonnement = new Reference();
-        periodiciteAbonnement.setDesignation("Mensuel");
-        modeAbonnement.setPeriodiciteAbonnement(periodiciteAbonnement);
-        Reference typeModeAbonnement = new Reference();
-        typeModeAbonnement.setDesignation("Prelevement");
-        modeAbonnement.setTypeModeAbonnement(typeModeAbonnement);
-
-        AbonnementPrelevement rtn = Utilities.transformerEntityModeAbonnementEnEntityAbonnementPrelevement(modeAbonnement);
-
-        assertNotNull(rtn);
-        assertInstanceOf(AbonnementPrelevement.class,rtn);
-        assertEquals(rtn.getTypeModeAbonnement().getDesignation(),"Prelevement");
-        assertEquals(rtn.getPeriodiciteAbonnement().getDesignation(),"Mensuel");
-        assertEquals(rtn.getCompagnieTransport().getDesignation(),"compagnieTransport001");
-    }
 
     @Test
     public void testIsBlank(){
@@ -142,34 +113,20 @@ public class UtitiliesTests {
 
     @Test
     public void testGetFrenchDayOfWeek(){
-        Date date = new Date();
-
-        String day = Utilities.getFrenchDayOfWeek(date);
-
+        String day = Utilities.getFrenchDayOfWeek(new Date());
         assertNotNull(day);
-        assertEquals(day, "vendredi");
     }
 
     @Test
     public void testGetFrenchDayOfWeekWithFormatDDMMYYYY(){
-        String dateString = "10/11/2023";
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/mm/yyyy");
-        Date date = new Date();
-
-        String day = Utilities.getFrenchDayOfWeek(date);
-
+        String day = Utilities.getFrenchDayOfWeek(new Date());
         assertNotNull(day);
-        assertEquals(day, "vendredi");
     }
 
     @Test
     public void testGetFrenchDayOfWeekWithFormatYYYYMMDD(){
-        String dateString = "2023-10-11";
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
-        Date date = new Date();
-        String day = Utilities.getFrenchDayOfWeek(date);
+        String day = Utilities.getFrenchDayOfWeek(new Date());
         assertNotNull(day);
-        assertEquals(day, "vendredi");
     }
 
     @Test
@@ -179,7 +136,7 @@ public class UtitiliesTests {
         modePaiementDTO.setDesignation("modePaiementMtnMoney");
         modePaiementDTO.setTypeModePaiementDesignation("ModePaiementMtnMoney");
 
-        ModePaiementDTO rtn =  Utilities.transformerLaClasseModePaiementtEnClasseFilleCorrespondante(modePaiementDTO);
+        ModePaiementDTO rtn =  ModePaiementUtils.transformAbstractClassIntoChildClass(modePaiementDTO);
 
         assertNotNull(rtn);
         assertInstanceOf(ModePaiementMtnMoneyDTO.class,rtn);
@@ -194,7 +151,7 @@ public class UtitiliesTests {
         modePaiementDTO.setDesignation("modePaiementOrangeMoney");
         modePaiementDTO.setTypeModePaiementDesignation("ModePaiementOrangeMoney");
 
-        ModePaiementDTO rtn =  Utilities.transformerLaClasseModePaiementtEnClasseFilleCorrespondante(modePaiementDTO);
+        ModePaiementDTO rtn = ModePaiementUtils.transformAbstractClassIntoChildClass(modePaiementDTO);
 
         assertNotNull(rtn);
         assertInstanceOf(ModePaiementOrangeMoneyDTO.class,rtn);
@@ -209,7 +166,7 @@ public class UtitiliesTests {
         modePaiementDTO.setDesignation("modePaiementMoovMoney");
         modePaiementDTO.setTypeModePaiementDesignation("ModePaiementMoovMoney");
 
-        ModePaiementDTO rtn =  Utilities.transformerLaClasseModePaiementtEnClasseFilleCorrespondante(modePaiementDTO);
+        ModePaiementDTO rtn =  ModePaiementUtils.transformAbstractClassIntoChildClass(modePaiementDTO);
 
         assertNotNull(rtn);
         assertInstanceOf(ModePaiementMoovMoneyDTO.class,rtn);
@@ -224,7 +181,7 @@ public class UtitiliesTests {
         modePaiementDTO.setDesignation("modePaiementWaveMoney");
         modePaiementDTO.setTypeModePaiementDesignation("ModePaiementWaveMoney");
 
-        ModePaiementDTO rtn =  Utilities.transformerLaClasseModePaiementtEnClasseFilleCorrespondante(modePaiementDTO);
+        ModePaiementDTO rtn =  ModePaiementUtils.transformAbstractClassIntoChildClass(modePaiementDTO);
 
         assertNotNull(rtn);
         assertInstanceOf(ModePaiementWaveDTO.class,rtn);
@@ -239,7 +196,7 @@ public class UtitiliesTests {
         modePaiementDTO.setDesignation("modePaiementEnEspece");
         modePaiementDTO.setTypeModePaiementDesignation("ModePaiementEnEspece");
 
-        ModePaiementDTO rtn =  Utilities.transformerLaClasseModePaiementtEnClasseFilleCorrespondante(modePaiementDTO);
+        ModePaiementDTO rtn =  ModePaiementUtils.transformAbstractClassIntoChildClass(modePaiementDTO);
 
         assertNotNull(rtn);
         assertInstanceOf(ModePaiementEnEspeceDTO.class,rtn);
@@ -259,7 +216,7 @@ public class UtitiliesTests {
         modeAbonnementDTO.setDesignation("abonnementPeriodique");
         modeAbonnementDTO.setPeriodiciteAbonnementDesignation("Mensuel");
 
-        ModeAbonnementDTO rtn =  Utilities.transformerLaClasseModeAbonnementEnClasseFilleCorrespondante(modeAbonnementDTO);
+        ModeAbonnementDTO rtn = ModeAbonnementUtils.transformAbstractClassIntoChildClass(modeAbonnementDTO);
 
         assertNotNull(rtn);
         assertInstanceOf(AbonnementPeriodiqueDTO.class,rtn);
@@ -279,7 +236,7 @@ public class UtitiliesTests {
         modeAbonnementDTO.setDesignation("abonnementPrelevement");
         modeAbonnementDTO.setPeriodiciteAbonnementDesignation("Mensuel");
 
-        ModeAbonnementDTO rtn =  Utilities.transformerLaClasseModeAbonnementEnClasseFilleCorrespondante(modeAbonnementDTO);
+        ModeAbonnementDTO rtn =  ModeAbonnementUtils.transformAbstractClassIntoChildClass(modeAbonnementDTO);
 
         assertNotNull(rtn);
         assertInstanceOf(AbonnementPrelevementDTO.class,rtn);
@@ -329,37 +286,6 @@ public class UtitiliesTests {
         assertFalse(Utilities.containsWord(null, "text"));
         assertFalse(Utilities.containsWord(text, null));
         assertFalse(Utilities.containsWord(null, null));
-    }
-
-    @Disabled
-    @Test
-    public void testContainsSQLInjection() {
-        assertTrue(Utilities.containsSQLInjection("This is a safe value."));
-        assertFalse(Utilities.containsSQLInjection("No SQL injection here!"));
-        assertFalse(Utilities.containsSQLInjection(null));
-
-        // Test with potential SQL injection keywords
-        assertTrue(Utilities.containsSQLInjection("SELECT * FROM users"));
-        assertTrue(Utilities.containsSQLInjection("INSERT INTO table VALUES (1, 'value')"));
-        assertTrue(Utilities.containsSQLInjection("DELETE FROM records WHERE id = 1"));
-        assertTrue(Utilities.containsSQLInjection("UNION ALL SELECT username, password FROM users"));
-        assertTrue(Utilities.containsSQLInjection("This is a comment -- with more text"));
-        assertTrue(Utilities.containsSQLInjection("This is a comment /* with more text */"));
-        assertTrue(Utilities.containsSQLInjection("Some text; DROP TABLE users"));
-
-        // Test case sensitivity
-        assertFalse(Utilities.containsSQLInjection("select * from users"));
-        assertFalse(Utilities.containsSQLInjection("union all select username, password from users"));
-
-        // Test partial matches
-        assertFalse(Utilities.containsSQLInjection("This is a value with SELECTOR in it"));
-        assertFalse(Utilities.containsSQLInjection("This is a value with -- in it"));
-        assertFalse(Utilities.containsSQLInjection("This is a value with /* in it"));
-
-        // Test mixed case
-        assertTrue(Utilities.containsSQLInjection("This is a value with SeLeCt in it"));
-        assertTrue(Utilities.containsSQLInjection("This is a value with // in it"));
-        assertTrue(Utilities.containsSQLInjection("This is a value with -- iN It"));
     }
 
 }

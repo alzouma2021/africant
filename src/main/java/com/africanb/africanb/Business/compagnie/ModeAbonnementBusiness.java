@@ -2,6 +2,7 @@ package com.africanb.africanb.Business.compagnie;
 
 import com.africanb.africanb.Business.design.factory.modeAbonnement.ModeAbonnementDTOCreator;
 import com.africanb.africanb.Business.design.factory.modeAbonnement.ModeAbonnementEntityCreator;
+import com.africanb.africanb.Business.design.factory.modeAbonnement.ModeAbonnementUtils;
 import com.africanb.africanb.dao.entity.compagnie.CompagnieTransport;
 import com.africanb.africanb.dao.entity.compagnie.ModeAbonnement.ModeAbonnement;
 import com.africanb.africanb.dao.repository.Reference.ReferenceRepository;
@@ -16,7 +17,6 @@ import com.africanb.africanb.helper.contrat.Response;
 import com.africanb.africanb.helper.dto.compagnie.ModeAbonnement.AbonnementPeriodiqueDTO;
 import com.africanb.africanb.helper.dto.compagnie.ModeAbonnement.AbonnementPrelevementDTO;
 import com.africanb.africanb.helper.dto.compagnie.ModeAbonnement.ModeAbonnementDTO;
-import com.africanb.africanb.helper.searchFunctions.Utilities;
 import com.africanb.africanb.helper.validation.Validate;
 import com.africanb.africanb.utils.Constants.ProjectConstants;
 import com.africanb.africanb.utils.Reference.Reference;
@@ -119,8 +119,7 @@ public class ModeAbonnementBusiness implements IBasicBusiness<Request<ModeAbonne
                 response.setHasError(true);
                 return response;
             }
-            itemDto=Utilities.transformerLaClasseModeAbonnementEnClasseFilleCorrespondante(itemDto);
-            ModeAbonnementDTO entitySaved = saveModeAbonnement(itemDto,locale);
+            ModeAbonnementDTO entitySaved = saveModeAbonnement(ModeAbonnementUtils.transformAbstractClassIntoChildClass(itemDto),locale);
             itemsDto.add(entitySaved);
         }
         if (CollectionUtils.isEmpty(itemsDto)) {
@@ -182,8 +181,7 @@ public class ModeAbonnementBusiness implements IBasicBusiness<Request<ModeAbonne
                 response.setHasError(true);
                 return response;
             }
-            itemDto=Utilities.transformerLaClasseModeAbonnementEnClasseFilleCorrespondante(itemDto);
-            ModeAbonnementDTO entitySaved= updateModeAbonnement(itemDto,locale);
+            ModeAbonnementDTO entitySaved = updateModeAbonnement(ModeAbonnementUtils.transformAbstractClassIntoChildClass(itemDto),locale);
             itemsDto.add(entitySaved);
         }
         if (CollectionUtils.isEmpty(itemsDto)) {
@@ -266,7 +264,7 @@ public class ModeAbonnementBusiness implements IBasicBusiness<Request<ModeAbonne
             }
             return ModeAbonnementDTOCreator.createModeAbonnementDTO(subResponse.getItems().get(0));
         }
-        else if(modeAbonnementDTO instanceof AbonnementPrelevementDTO abonnementPrelevementDTO){
+         if(modeAbonnementDTO instanceof AbonnementPrelevementDTO abonnementPrelevementDTO){
             Request<AbonnementPrelevementDTO> subRequest = new Request<>();
             List<AbonnementPrelevementDTO> itemsDTO = Collections.synchronizedList(new ArrayList<>());
             itemsDTO.add(abonnementPrelevementDTO);
@@ -300,7 +298,7 @@ public class ModeAbonnementBusiness implements IBasicBusiness<Request<ModeAbonne
               }
               return ModeAbonnementDTOCreator.createModeAbonnementDTO(subResponse.getItems().get(0));
           }
-          else if(modeAbonnementDTO.getTypeModeAbonnementDesignation()!= null
+          if(modeAbonnementDTO.getTypeModeAbonnementDesignation()!= null
                   && modeAbonnementDTO.getTypeModeAbonnementDesignation().equals(ProjectConstants.REF_ELEMENT_ABONNEMENT_PRELEVEMENT)){
               Request<AbonnementPrelevementDTO> subRequest = new Request<>();
               List<AbonnementPrelevementDTO> itemsDTO = Collections.synchronizedList(new ArrayList<>());
